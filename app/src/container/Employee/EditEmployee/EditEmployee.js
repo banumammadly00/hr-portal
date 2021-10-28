@@ -718,7 +718,7 @@ function CreateEmployee() {
             "familyMembers": familyMemberArr,
             "foreignPassportEndDate": moment(expiredPassportDate).format("MM-DD-YYYY"),
             "foreignPassportNumber": passportNumber,
-            "foreignPassportSeries": selectedPassportSerial !== null ? selectedPassportSerial : null,
+            "foreignPassportSeries": selectedPassportSerial !== null ? selectedPassportSerial.value : null,
             "foreignPassportStartDate": moment(startPassportDate).format("MM-DD-YYYY"),
             "fullName": fullName,
             "gender": selectedGender !== null ? selectedGender.value : "",

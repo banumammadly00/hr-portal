@@ -344,7 +344,7 @@ function CreateOperation() {
             setTab('');
             resetData();
             setSave(false);
-            history.push("/operationSchedule")
+            history.push("/operation")
         });
     }
 
@@ -488,7 +488,7 @@ function CreateOperation() {
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">İşçinin nömrəsi</span>
+                                                    <span className="input-title">Ştatın nömrəsi</span>
                                                     <Select
                                                         placeholder="Ştatın nömrəsini seç"
                                                         value={selectedPosition}
@@ -599,9 +599,9 @@ function CreateOperation() {
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">İşçinin nömrəsi</span>
+                                                    <span className="input-title">Ştatın nömrəsi</span>
                                                     <Select
-                                                        placeholder="İşçinin nömrəsini seç"
+                                                        placeholder="Ştatın nömrəsi seç"
                                                         value={selectedPosition}
                                                         onChange={(val) => {
                                                             setSelectedPosition(val);
@@ -730,7 +730,7 @@ function CreateOperation() {
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">Ştatın nömrəsi</span>
                                                     <Select
-                                                        placeholder="İşçinin nömrəsini seç"
+                                                        placeholder="Ştatın nömrəsini seç"
                                                         value={selectedPosition}
                                                         onChange={(val) => {
                                                             setSelectedPosition(val);
@@ -1104,7 +1104,7 @@ function CreateOperation() {
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">Ştatın nömrəsi</span>
                                                     <Select
-                                                        placeholder="İşçinin nömrəsini seç"
+                                                        placeholder="Ştatın nömrəsini seç"
                                                         value={selectedPosition}
                                                         onChange={(val) => {
                                                             setSelectedPosition(val);
@@ -1738,7 +1738,7 @@ function CreateOperation() {
                                     </Tab>
 
                                     <Tab eventKey="13" title="" disabled={tab !== "13"}>
-                                        <div className="block-in">
+                                        <div className="block-inn">
                                             <Row>
                                                 <Col xs={6}>
                                                     <Form.Group className="form-group">
@@ -1763,7 +1763,7 @@ function CreateOperation() {
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">Ştatın nömrəsi</span>
                                                         <Select
-                                                            placeholder="İşçinin nömrəsini seç"
+                                                            placeholder="Ştatın nömrəsini seç"
                                                             value={selectedPosition}
                                                             onChange={(val) => {
                                                                 setSelectedPosition(val);
@@ -1890,7 +1890,7 @@ function CreateOperation() {
                                                 </Col>
                                             </Row>
                                         </div>
-                                        <div className="block-in">
+                                        <div className="block-inn">
                                             <div className="block-title">
                                                 Faktiki əmək haqqı: AZN (vergilər və digər ödənişlər daxil olmaqla)
                                             </div>
@@ -1926,7 +1926,7 @@ function CreateOperation() {
                                                 </Col>
                                             </Row>
                                         </div>
-                                        <div className="block-in">
+                                        <div className="block-inn">
                                             <div className="block-title">
                                                 Keçirildiyi əmək haqqı (AZN) vergilər və digər ödənişlər daxil olmaqla):
                                             </div>
@@ -1993,7 +1993,7 @@ function CreateOperation() {
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">Ştatın nömrəsi</span>
                                                     <Select
-                                                        placeholder="İşçinin nömrəsini seç"
+                                                        placeholder="Ştatın nömrəsini seç"
                                                         value={selectedPosition}
                                                         onChange={(val) => {
                                                             setSelectedPosition(val);
@@ -2231,7 +2231,7 @@ function CreateOperation() {
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">Ştatın nömrəsi</span>
                                                     <Select
-                                                        placeholder="İşçinin nömrəsini seç"
+                                                        placeholder="Ştatın nömrəsini  seç"
                                                         value={selectedPosition}
                                                         onChange={(val) => {
                                                             setSelectedPosition(val);
@@ -2560,7 +2560,7 @@ function CreateOperation() {
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">Ştatın nömrəsi</span>
                                                     <Select
-                                                        placeholder="İşçinin nömrəsini seç"
+                                                        placeholder="Ştatın nömrəsini seç"
                                                         value={selectedPosition}
                                                         onChange={(val) => {
                                                             setSelectedPosition(val);
