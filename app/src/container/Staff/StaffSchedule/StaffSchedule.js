@@ -70,6 +70,7 @@ function StaffSchedule() {
                         <Table responsive="sm" hover>
                             <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Struktur vahidinin adı</th>
                                 <th>Struktur bölmənin adı</th>
                                 <th>Ştat vahidinin adı</th>
@@ -81,6 +82,7 @@ function StaffSchedule() {
                             {
                                 position.map((item, index) =>
                                     <tr onClick={() => handleRowClick(item)} key={index}>
+                                        <td>{item.id}</td>
                                         <td>{item.departmentName}</td>
                                         <td>{item.subDepartmentName}</td>
                                         <td>{item.vacancyName}</td>

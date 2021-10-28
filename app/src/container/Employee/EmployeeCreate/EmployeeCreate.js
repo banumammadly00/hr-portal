@@ -24,6 +24,7 @@ function EmployeeCreate() {
     const serialNumberOptions = [
         {value: 'AZE', label: 'AZE'},
         {value: 'AA', label: 'AA'},
+        {value: 'MYİ', label: 'MYİ'},
     ]
 
     const passportSerialOptions = [
@@ -74,10 +75,12 @@ function EmployeeCreate() {
     const [expiredWorkPermissionDate, setExpiredWorkPermissionDate] = useState(null);
     const [loadingIndicator, setLoadingIndicator] = useState(false);
     const [errors, setErrors] = useState({
+        IDCardEndDate: '',
         IDCardNumber: '',
         IDCardOrganization: '',
         IDCardPin: '',
         IDCardSeries: '',
+        IDCardStartDate: '',
         addressApartment: '',
         addressBlock: '',
         addressCityId: '',
@@ -86,12 +89,15 @@ function EmployeeCreate() {
         addressHome: '',
         addressStreet: '',
         addressVillage: '',
+        birthday: '',
         birthplace: '',
         businessMailAddress: '',
         businessPhone: '',
         citizenCountry: '',
+        foreignPassportEndDate: '',
         foreignPassportNumber: '',
         foreignPassportSeries: '',
+        foreignPassportStartDate: '',
         fullName: '',
         gender: '',
         homePhone: '',
@@ -219,7 +225,7 @@ function EmployeeCreate() {
             ...provided,
             color: '#040647',
             backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '10px',
+            padding: '10px 16px',
             margin: '0',
             fontSize: '16px',
             "&:first-of-type": {
@@ -234,7 +240,7 @@ function EmployeeCreate() {
             },
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             position: 'relative'
 
         }),
@@ -308,7 +314,7 @@ function EmployeeCreate() {
             ...provided,
             color: '#040647',
             backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '10px',
+            padding: '10px 16px',
             margin: '0',
             fontSize: '16px',
             "&:first-of-type": {
@@ -323,7 +329,7 @@ function EmployeeCreate() {
             },
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             position: 'relative'
 
         }),
@@ -548,7 +554,7 @@ function EmployeeCreate() {
             "addressHome": home,
             "addressStreet": street,
             "addressVillage": settlement,
-            "birthday": startBirthDate!== null ? moment(startBirthDate).format("MM-DD-YYYY")  : null,
+            "birthday": startBirthDate !== null ? moment(startBirthDate).format("MM-DD-YYYY") : null,
             "birthplace": countryBirth,
             "bloodGroup": selectedBloodType !== null ? selectedBloodType.value : "",
             "businessMailAddress": emailBusiness,
@@ -556,19 +562,19 @@ function EmployeeCreate() {
             "citizenCountry": selectedCitizenControl !== null ? selectedCitizenControl.name : "",
             "familyCondition": selectedFamilyCondition !== null ? selectedFamilyCondition.value : "",
             "familyMembers": familyMemberArr,
-            "foreignPassportEndDate": expiredPassportDate!==null ? moment(expiredPassportDate).format("MM-DD-YYYY") : null,
+            "foreignPassportEndDate": expiredPassportDate !== null ? moment(expiredPassportDate).format("MM-DD-YYYY") : null,
             "foreignPassportNumber": passportNumber,
             "foreignPassportSeries": selectedPassportSerial !== null ? selectedPassportSerial.value : null,
-            "foreignPassportStartDate": startPassportDate!==null ? moment(startPassportDate).format("MM-DD-YYYY") : null,
+            "foreignPassportStartDate": startPassportDate !== null ? moment(startPassportDate).format("MM-DD-YYYY") : null,
             "fullName": fullName,
             "gender": selectedGender !== null ? selectedGender.value : "",
             "homePhone": phoneNumber,
-            "idcardEndDate": expiredIdDate!==null ? moment(expiredIdDate).format("MM-DD-YYYY") : null,
+            "idcardEndDate": expiredIdDate !== null ? moment(expiredIdDate).format("MM-DD-YYYY") : null,
             "idcardNumber": idCardNumber,
             "idcardOrganization": idCardOrganization,
             "idcardPin": idCardPin,
             "idcardSeries": selectedSerial !== null ? selectedSerial.value : null,
-            "idcardStartDate": startIdDate!==null ? moment(startIdDate).format("MM-DD-YYYY") : null,
+            "idcardStartDate": startIdDate !== null ? moment(startIdDate).format("MM-DD-YYYY") : null,
             "internalBusinessPhone": businessInternalPhone,
             "mobilePhone1": mobileNumber1,
             "mobilePhone2": mobileNumber2,
@@ -749,6 +755,7 @@ function EmployeeCreate() {
                                                                     onChange={(val) => {
                                                                         setSelectedSerial(val);
                                                                     }}
+                                                                    isSearchable={false}
                                                                     options={serialNumberOptions}
                                                                     getOptionLabel={(option) => (option.label)}
                                                                     styles={customGroupStyles}
@@ -801,6 +808,7 @@ function EmployeeCreate() {
                                                             onChange={(val) => {
                                                                 setSelectedFamilyCondition(val);
                                                             }}
+                                                            isSearchable={false}
                                                             options={familyConditionOptions}
                                                             getOptionLabel={(option) => (option.label)}
                                                             styles={customStyles}
@@ -868,12 +876,19 @@ function EmployeeCreate() {
                                                                 </svg>
                                                             </Button>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.IDCardStartDate !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.IDCardStartDate}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span
-                                                            className="input-title">Şəxsiy. vəs. qüvvədə olma tarixi *</span>
+                                                        <span className="input-title">Şəxsiy. vəs. qüvvədə olma tarixi *</span>
                                                         <Form.Label className="relative m-0">
                                                             <DatePicker selected={expiredIdDate}
                                                                         placeholderText="DD-MM-YYYY"
@@ -930,6 +945,14 @@ function EmployeeCreate() {
                                                                 </svg>
                                                             </Button>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.IDCardEndDate !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.IDCardEndDate}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -937,7 +960,7 @@ function EmployeeCreate() {
                                                         <span className="input-title">Soyadı, adı, ata adı *</span>
                                                         <Form.Label>
                                                             <Form.Control type="text"
-                                                                          placeholder="Ştat vahidinin saynı daxil edin"
+                                                                          placeholder="Soyadı, adı, ata adı daxil edin"
                                                                           value={fullName}
                                                                           onChange={(e => {
                                                                               setFullName(e.target.value);
@@ -1012,6 +1035,14 @@ function EmployeeCreate() {
                                                                 </svg>
                                                             </Button>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.birthday !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.birthday}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1063,6 +1094,7 @@ function EmployeeCreate() {
                                                             placeholder="Cinsini seçin"
                                                             value={selectedGender}
                                                             onChange={setSelectedGender}
+                                                            isSearchable={false}
                                                             options={genderOptions}
                                                             styles={customStyles}
                                                         />
@@ -1084,6 +1116,7 @@ function EmployeeCreate() {
                                                             value={selectedBloodType}
                                                             onChange={setSelectedBloodType}
                                                             options={bloodTypeOptions}
+                                                            isSearchable={false}
                                                             styles={customStyles}
                                                         />
                                                     </Form.Group>
@@ -1136,20 +1169,6 @@ function EmployeeCreate() {
                                                                                   value={workPermissionSerial}
                                                                                   onChange={(e => setWorkPermissionSerial(e.target.value))}/>
                                                                 </Form.Label>
-                                                                <div className="validation-block flex-start">
-                                                                    {
-                                                                        errors.foreignPassportSeries !== '' ?
-                                                                            <span
-                                                                                className="text-validation">{errors.foreignPassportSeries}</span>
-                                                                            : null
-                                                                    }
-                                                                    {
-                                                                        errors.foreignPassportNumber !== '' ?
-                                                                            <span
-                                                                                className="text-validation">{errors.foreignPassportNumber}</span>
-                                                                            : null
-                                                                    }
-                                                                </div>
                                                             </Form.Group>
                                                         </Col>
                                                         <Col xs={4}>
@@ -1317,6 +1336,7 @@ function EmployeeCreate() {
                                                                     onChange={(val) => {
                                                                         setSelectedPassportSerial(val);
                                                                     }}
+                                                                    isSearchable={false}
                                                                     options={passportSerialOptions}
                                                                     getOptionLabel={(option) => (option.label)}
                                                                     styles={customGroupStyles}
@@ -1326,6 +1346,20 @@ function EmployeeCreate() {
                                                                           value={passportNumber}
                                                                           onChange={(e => setPassportNumber(e.target.value))}/>
                                                         </InputGroup>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.foreignPassportSeries !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.foreignPassportSeries}</span>
+                                                                    : null
+                                                            }
+                                                            {
+                                                                errors.foreignPassportNumber !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.foreignPassportNumber}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1387,6 +1421,14 @@ function EmployeeCreate() {
                                                                 </svg>
                                                             </Button>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.foreignPassportStartDate !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.foreignPassportStartDate}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1448,6 +1490,14 @@ function EmployeeCreate() {
                                                                 </svg>
                                                             </Button>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.foreignPassportEndDate !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.foreignPassportEndDate}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                             </Row>
@@ -1817,6 +1867,7 @@ function EmployeeCreate() {
                                                                                     familyMemberArr[index].relationType = val.value;
                                                                                     setFamilyMemberArr([...familyMemberArr], familyMemberArr)
                                                                                 }}
+                                                                                isSearchable={false}
                                                                                 options={relationTypeOptions}
                                                                                 getOptionLabel={(option) => (option.label)}
                                                                                 styles={customStyles}
@@ -1965,13 +2016,10 @@ function EmployeeCreate() {
                                                 <div className="flex-end">
                                                     <button type="button" className="btn-color"
                                                             onClick={() => addFamilyMember()}>
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                                fill="#3083DC"/>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z" stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                                                         </svg>
-                                                        əlavə et
+                                                        <span>əlavə et</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -2711,13 +2759,10 @@ function EmployeeCreate() {
                                                 <div className="flex-end">
                                                     <button type="button" className="btn-color"
                                                             onClick={() => addCertificate()}>
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                                fill="#3083DC"/>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z" stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                                                         </svg>
-                                                        əlavə et
+                                                        <span>əlavə et</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -2767,11 +2812,12 @@ function EmployeeCreate() {
                                                                             className="input-title">Təltifin adı</span>
                                                                         <Form.Label>
                                                                             <Select
-                                                                                placeholder="Təhsil müəssəsini seçin"
+                                                                                placeholder="Təltifin adı seçin"
                                                                                 onChange={(val) => {
                                                                                     rewardArr[index].name = val.name;
                                                                                     setRewardArr([...rewardArr], rewardArr)
                                                                                 }}
+                                                                                isSearchable={false}
                                                                                 options={reward}
                                                                                 getOptionLabel={(option) => (option.name)}
                                                                                 styles={customStyles}
@@ -2785,7 +2831,7 @@ function EmployeeCreate() {
                                                                 className="input-title">Təltifi verən orqanın adı</span>
                                                                         <Form.Label>
                                                                             <Select
-                                                                                placeholder="Təhsil müəssəsini seçin"
+                                                                                placeholder="Təltifi verən orqanı seçin"
                                                                                 onChange={(val) => {
                                                                                     rewardArr[index].organization = val.name;
                                                                                     setRewardArr([...rewardArr], rewardArr)
@@ -2870,13 +2916,10 @@ function EmployeeCreate() {
                                                 <div className="flex-end">
                                                     <button type="button" className="btn-color"
                                                             onClick={() => addReward()}>
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                                fill="#3083DC"/>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z" stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                                                         </svg>
-                                                        əlavə et
+                                                        <span>əlavə et</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -2973,8 +3016,7 @@ function EmployeeCreate() {
                                     </div>
                                     <div className="add-block">
                                         <div className="block-title">
-                                            Sosial sığorta şəhadətnaməsi ( burdan goturulecek, gedecek umumi
-                                            melumata)
+                                            Sosial sığorta şəhadətnaməsi
                                         </div>
                                         <div className="block-inn">
                                             <Row>

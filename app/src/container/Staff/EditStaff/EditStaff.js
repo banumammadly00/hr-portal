@@ -6,6 +6,7 @@ import Select from 'react-select';
 import {mainAxios} from "../../../components/Axios/axios";
 import {useRouteMatch} from 'react-router-dom';
 import {uid} from "react-uid";
+import Indicator from "../../../components/Loading/Indicator";
 
 
 function EditStaff() {
@@ -114,11 +115,22 @@ function EditStaff() {
     const [skillLanguageArr, setSkillLanguageArr] = useState([{level: '', skill: ''}]);
     const [showHeight, setShowHeight] = useState(false);
     const [key, setKey] = useState('home');
-    //const [showOtherInstitution, setShowOtherInstitution] = useState(false);
-    //const [showOtherDepartment, setShowOtherDepartment] = useState(false);
-    //const [showOtherVacancy, setShowOtherVacancy] = useState(false);
-    //const [showOtherSalary, setShowOtherSalary] = useState(false);
-    //const [showOtherFamilyJob, setShowOtherFamilyJob] = useState(false);
+
+    const [loadingIndicator, setLoadingIndicator] = useState(false);
+
+    const [errors, setErrors] = useState({
+        departmentName: '',
+        fullNameAndPosition: '',
+        institutionName: '',
+        jobFamily: '',
+        subDepartmentName: '',
+        vacancyCategory: '',
+        vacancyCount: '',
+        vacancyName: '',
+        workCondition: '',
+        workMode: '',
+        workPlace: ''
+    });
 
     const [selectedInstitution, setSelectedInstitution] = useState(null);
     const [selectedDepartment, setSelectedDepartment] = useState(null);
@@ -128,7 +140,6 @@ function EditStaff() {
     const [selectedSubWorkPaid, setSelectedSubWorkPaid] = useState(null);
     const [selectedSalary, setSelectedSalary] = useState(null);
     const [selectedWorkAddress, setSelectedWorkAddress] = useState(null);
-    //const [selectedSkill, setSelectedSkill] = useState(null);
     const [selectedRequiredFile, setSelectedRequiredFile] = useState(null);
 
     const [selectedWorkCondition, setSelectedWorkCondition] = useState(null);
@@ -141,14 +152,13 @@ function EditStaff() {
     const [selectedFamilyJob, setSelectedFamilyJob] = useState(null);
     const [selectedMilitaryAchieve, setSelectedMilitaryAchieve] = useState(null);
     const [selectedHealth, setSelectedHealth] = useState(null);
-    //const [selectedEvaluation, setSelectedEvaluation] = useState(null);
 
     const customStyles = {
-        option: (provided, state) => ({
+        option: (provided) => ({
             ...provided,
             color: '#040647',
             //backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '10px',
+            padding: '10px 16px',
             margin: '0',
             fontSize: '16px',
             "&:first-of-type": {
@@ -163,16 +173,22 @@ function EditStaff() {
             },
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             position: 'relative'
 
+        }),
+
+        valueContainer: (provided) => ({
+            ...provided,
+            padding: '2px 8px 2px 16px'
         }),
 
         indicatorSeparator: () => {
         },
 
-        indicatorsContainer: (provided, state) => ({
+        indicatorsContainer: (provided) => ({
             ...provided,
+            paddingRight: '8px'
         }),
 
         control: (provided) => ({
@@ -416,57 +432,57 @@ function EditStaff() {
             getSubDepartment(data.departmentName)
 
             for (let i of arr) {
-                if (data.workPlace == i.key) {
+                if (data.workPlace === i.key) {
                     setSelectedWorkAddress(i)
                 }
             }
 
             for (let i of options) {
-                if (data.militaryAchieve == i.value)
+                if (data.militaryAchieve === i.value)
                     setSelectedMilitaryAchieve(i);
             }
 
             for (let i of options) {
-                if (data.healthy == i.value)
+                if (data.healthy === i.value)
                     setSelectedHealth(i);
             }
 
             for (let i of genderOptions) {
-                if (data.genderDemand == i.label)
+                if (data.genderDemand === i.label)
                     setSelectedGender(i);
             }
 
             for (let i of educationDegreeOptions) {
-                if (i.label == data.educationDegree)
+                if (i.label === data.educationDegree)
                     setSelectedEducationDegree(i);
             }
 
             for (let i of subWorkCalculateDegreeOptions) {
-                if (i.label == data.subWorkCalculateDegree) {
+                if (i.label === data.subWorkCalculateDegree) {
                     setSelectedSubWorkPaid(i)
                 }
             }
 
             for (let i of workPaidOptions) {
-                if (i.label == data.workCalculateDegree) {
+                if (i.label === data.workCalculateDegree) {
                     setSelectedWorkPaid(i)
                 }
             }
 
             for (let i of workConditionOptions) {
-                if (i.label == data.workCondition) {
+                if (i.label === data.workCondition) {
                     setSelectedWorkCondition(i)
                 }
             }
 
             for (let i of WorkModeOptions) {
-                if (i.label == data.workMode) {
+                if (i.label === data.workMode) {
                     setSelectedWorkMode(i)
                 }
             }
 
             for (let i of vacancyCategoryOptions) {
-                if (i.label == data.vacancyCategory) {
+                if (i.label === data.vacancyCategory) {
                     setSelectedVacancyCategory(i)
                 }
             }
@@ -476,7 +492,7 @@ function EditStaff() {
                 let obj = {};
                 obj.skill = {key: i.skill, value: 'GOOD'};
                 for (let j of evaluationOptions) {
-                    if (j.label == i.level)
+                    if (j.label === i.level)
                         obj.level = j;
                 }
                 tmpSkills.push(obj)
@@ -503,7 +519,7 @@ function EditStaff() {
                 let obj = {};
                 obj.name = {value: i.name, label: i.name}
                 for (let j of evaluationOptions) {
-                    if (i.level == j.label) {
+                    if (i.level === j.label) {
                         obj.level = j
                     }
                 }
@@ -518,7 +534,7 @@ function EditStaff() {
                 let obj = {};
                 obj.name = {value: i.name, label: i.name}
                 for (let j of evaluationOptions) {
-                    if (i.level == j.label) {
+                    if (i.level === j.label) {
                         obj.level = j
                     }
                 }
@@ -532,7 +548,7 @@ function EditStaff() {
                 let obj = {};
                 obj.name = {value: i.name, label: i.name}
                 for (let j of evaluationOptions) {
-                    if (i.level == j.label) {
+                    if (i.level === j.label) {
                         obj.level = j
                     }
                 }
@@ -545,6 +561,7 @@ function EditStaff() {
 
 
     const sendData = () => {
+        setLoadingIndicator(true);
         let arr = []
         for (let i of skillArr) {
             let obj = {skill: i.skill.key, level: i.level.value}
@@ -590,12 +607,17 @@ function EditStaff() {
             },
             data: data
         }).then((res) => {
-            setKey("profile")
+            setKey("profile");
+            setLoadingIndicator(false);
+        }).catch((error) => {
+            setLoadingIndicator(false);
+            if (error.response.data.message)
+                setErrors(error.response.data.message);
         });
     }
 
     const sendDataKnowledge = () => {
-
+        setLoadingIndicator(true);
         let arrProgram = []
         for (let i of skillProgramArr) {
             let obj = {name: i.name.value, level: i.level.value}
@@ -629,7 +651,7 @@ function EditStaff() {
             },
             data: data
         }).then((res) => {
-            window.location.href = "/staffSchedule"
+            setLoadingIndicator(false);
         });
     }
 
@@ -700,7 +722,14 @@ function EditStaff() {
                                                             getOptionValue={(option) => option.name}
                                                             styles={customStyles}
                                                         />
-                                                        {/*  <span className="text-validation flex-start">Müəssənin adı boş qoyula bilməz</span>*/}
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.institutionName !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.institutionName}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -718,6 +747,13 @@ function EditStaff() {
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.departmentName !== '' ?
+                                                                    <span className="text-validation">{errors.departmentName}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -734,6 +770,13 @@ function EditStaff() {
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.subDepartmentName !== '' ?
+                                                                    <span className="text-validation">{errors.subDepartmentName}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -761,6 +804,13 @@ function EditStaff() {
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.name)}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.vacancyName !== '' ?
+                                                                    <span className="text-validation">{errors.departmentName}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -773,6 +823,13 @@ function EditStaff() {
                                                                 setVacancyCount(e.target.value);
                                                             })}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.vacancyCount !== '' ?
+                                                                    <span className="text-validation">{errors.vacancyCount}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -829,6 +886,13 @@ function EditStaff() {
                                                             options={workConditionOptions}
                                                             styles={customStyles}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.workCondition !== '' ?
+                                                                    <span className="text-validation">{errors.workCondition}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -853,6 +917,13 @@ function EditStaff() {
                                                             options={WorkModeOptions}
                                                             styles={customStyles}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.workMode !== '' ?
+                                                                    <span className="text-validation">{errors.workMode}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
 
@@ -869,6 +940,13 @@ function EditStaff() {
                                                             options={vacancyCategoryOptions}
                                                             styles={customStyles}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.vacancyCategory !== '' ?
+                                                                    <span className="text-validation">{errors.vacancyCategory}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={6}>
@@ -884,6 +962,13 @@ function EditStaff() {
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.name)}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.jobFamily !== '' ?
+                                                                    <span className="text-validation">{errors.jobFamily}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={6}>
@@ -897,6 +982,13 @@ function EditStaff() {
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.key)}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.workPlace !== '' ?
+                                                                    <span className="text-validation">{errors.workPlace}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={6}>
@@ -910,6 +1002,13 @@ function EditStaff() {
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.key)}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.fullNameAndPosition !== '' ?
+                                                                    <span className="text-validation">{errors.fullNameAndPosition}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                             </Row>
@@ -917,9 +1016,9 @@ function EditStaff() {
                                                 {
                                                     skillArr.map((item, index) =>
                                                         <div key={uid(item, index)}
-                                                             className={index == 0 ? '' : 'add-item'}>
+                                                             className={index === 0 ? '' : 'add-item'}>
                                                             {
-                                                                index == 0 ? null :
+                                                                index === 0 ? null :
                                                                     <div className="add-item-top">
                                                                         <p className="m-0"> #{index + 1}. Digər </p>
                                                                         <Button
@@ -987,10 +1086,11 @@ function EditStaff() {
                                                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                              xmlns="http://www.w3.org/2000/svg">
                                                             <path
-                                                                d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                                fill="#3083DC"/>
+                                                                d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                                stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                                strokeLinejoin="round"/>
                                                         </svg>
-                                                        əlavə et
+                                                        <span>əlavə et</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -1130,9 +1230,9 @@ function EditStaff() {
                                                 {
                                                     positionFunctionArr.map((item, index) =>
                                                         <div key={index}
-                                                             className={index == 0 ? '' : 'add-item'}>
+                                                             className={index === 0 ? '' : 'add-item'}>
                                                             {
-                                                                index == 0 ? null :
+                                                                index === 0 ? null :
                                                                     <div className="add-item-top">
                                                                         <p className="m-0"> #{index + 1}. Digər </p>
                                                                         <Button
@@ -1184,10 +1284,11 @@ function EditStaff() {
                                                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                              xmlns="http://www.w3.org/2000/svg">
                                                             <path
-                                                                d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                                fill="#3083DC"/>
+                                                                d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                                stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                                strokeLinejoin="round"/>
                                                         </svg>
-                                                        əlavə et
+                                                        <span>əlavə et</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -1195,7 +1296,7 @@ function EditStaff() {
                                     </div>
                                     <div className="flex-vertical-center">
                                         <Button className="btn-effect" onClick={() => sendData()}>
-                                            Davam et
+                                            Yadda saxla
                                         </Button>
                                     </div>
                                 </Form>
@@ -1212,9 +1313,9 @@ function EditStaff() {
                                             {
                                                 skillProgramArr.map((item, index) =>
                                                     <div key={uid(item, index)}
-                                                         className={index == 0 ? '' : 'add-item'}>
+                                                         className={index === 0 ? '' : 'add-item'}>
                                                         {
-                                                            index == 0 ? null :
+                                                            index === 0 ? null :
                                                                 <div className="add-item-top">
                                                                     <p className="m-0"> #{index + 1}. Digər </p>
                                                                     <Button
@@ -1282,10 +1383,11 @@ function EditStaff() {
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path
-                                                            d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                            fill="#3083DC"/>
+                                                            d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                            stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                            strokeLinejoin="round"/>
                                                     </svg>
-                                                    əlavə et
+                                                    <span>əlavə et</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -1295,9 +1397,9 @@ function EditStaff() {
                                             {
                                                 skillLegalArr.map((item, index) =>
                                                     <div key={uid(item, index)}
-                                                         className={index == 0 ? '' : 'add-item'}>
+                                                         className={index === 0 ? '' : 'add-item'}>
                                                         {
-                                                            index == 0 ? null :
+                                                            index === 0 ? null :
                                                                 <div className="add-item-top">
                                                                     <p className="m-0"> #{index + 1}. Digər </p>
                                                                     <Button
@@ -1366,10 +1468,11 @@ function EditStaff() {
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path
-                                                            d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                            fill="#3083DC"/>
+                                                            d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                            stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                            strokeLinejoin="round"/>
                                                     </svg>
-                                                    əlavə et
+                                                    <span>əlavə et</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -1379,9 +1482,9 @@ function EditStaff() {
                                             {
                                                 skillLanguageArr.map((item, index) =>
                                                     <div key={uid(item, index)}
-                                                         className={index == 0 ? '' : 'add-item'}>
+                                                         className={index === 0 ? '' : 'add-item'}>
                                                         {
-                                                            index == 0 ? null :
+                                                            index === 0 ? null :
                                                                 <div className="add-item-top">
                                                                     <p className="m-0"> #{index + 1}. Digər </p>
                                                                     <Button
@@ -1449,10 +1552,11 @@ function EditStaff() {
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path
-                                                            d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                            fill="#3083DC"/>
+                                                            d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                            stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                            strokeLinejoin="round"/>
                                                     </svg>
-                                                    əlavə et
+                                                    <span>əlavə et</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -1495,6 +1599,10 @@ function EditStaff() {
                     </Tabs>
                 </Container>
             </div>
+            {
+                loadingIndicator ? <Indicator/> : null
+
+            }
         </Aux>
 
     );

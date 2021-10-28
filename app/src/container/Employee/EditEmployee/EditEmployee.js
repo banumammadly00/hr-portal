@@ -10,6 +10,7 @@ import moment from 'moment'
 
 import "react-datepicker/dist/react-datepicker.css";
 import {uid} from "react-uid";
+import Indicator from "../../../components/Loading/Indicator";
 
 function CreateEmployee() {
     let params = useParams();
@@ -145,6 +146,41 @@ function CreateEmployee() {
     const [document, setDocument] = useState([]);
     const [rewardOrganization, setRewardOrganization] = useState([]);
 
+    const [loadingIndicator, setLoadingIndicator] = useState(false);
+    const [errors, setErrors] = useState({
+        IDCardEndDate: '',
+        IDCardNumber: '',
+        IDCardOrganization: '',
+        IDCardPin: '',
+        IDCardSeries: '',
+        IDCardStartDate: '',
+        addressApartment: '',
+        addressBlock: '',
+        addressCityId: '',
+        addressCountryId: '',
+        addressDistrictId: '',
+        addressHome: '',
+        addressStreet: '',
+        addressVillage: '',
+        birthday: '',
+        birthplace: '',
+        businessMailAddress: '',
+        businessPhone: '',
+        citizenCountry: '',
+        foreignPassportEndDate: '',
+        foreignPassportNumber: '',
+        foreignPassportSeries: '',
+        foreignPassportStartDate: '',
+        fullName: '',
+        gender: '',
+        homePhone: '',
+        internalBusinessPhone: '',
+        mobilePhone1: '',
+        mobilePhone2: '',
+        ownMailAddress: '',
+    });
+
+
     const [familyMemberArr, setFamilyMemberArr] = useState([{
         address: '',
         birthday: '',
@@ -185,7 +221,7 @@ function CreateEmployee() {
             ...provided,
             color: '#040647',
             backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '10px',
+            padding: '10px 16px',
             margin: '0',
             fontSize: '16px',
             "&:first-of-type": {
@@ -200,7 +236,7 @@ function CreateEmployee() {
             },
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             position: 'relative'
 
         }),
@@ -267,7 +303,7 @@ function CreateEmployee() {
             ...provided,
             color: '#040647',
             backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '10px',
+            padding: '10px 16px',
             margin: '0',
             fontSize: '16px',
             "&:first-of-type": {
@@ -282,7 +318,7 @@ function CreateEmployee() {
             },
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             position: 'relative'
 
         }),
@@ -306,7 +342,7 @@ function CreateEmployee() {
             boxShadow: 'none',
             border: '1px solid rgba(4, 6, 71, 0.1)',
             borderTopRightRadius: 0,
-            borderBottomRightRadius : 0,
+            borderBottomRightRadius: 0,
             borderRight: 0,
             "&:hover": {
                 borderColor: 'rgba(4, 6, 71, 0.1)',
@@ -507,7 +543,7 @@ function CreateEmployee() {
         }).then((res) => {
             let data = res.data.data;
             for (let i of serialNumberOptions) {
-                if(data.idcardSeries === i.label) {
+                if (data.idcardSeries === i.label) {
                     setSelectedSerial(i)
                 }
             }
@@ -536,7 +572,7 @@ function CreateEmployee() {
             data.citizenCountry === 'Azərbaycan' ? setShowPermission(false) : setShowPermission(true)
             setIdCardOrganization(data.idcardOrganization);
             for (let i of passportSerialOptions) {
-                if(data.foreignPassportSeries === i.label) {
+                if (data.foreignPassportSeries === i.label) {
                     setSelectedPassportSerial(i)
                 }
             }
@@ -657,6 +693,7 @@ function CreateEmployee() {
     }
 
     const sendData = () => {
+        setLoadingIndicator(true);
         for (let i of familyMemberArr) {
             if (i.relationType !== null) {
                 i.relationType = i.relationType.value
@@ -681,7 +718,7 @@ function CreateEmployee() {
             "familyMembers": familyMemberArr,
             "foreignPassportEndDate": moment(expiredPassportDate).format("MM-DD-YYYY"),
             "foreignPassportNumber": passportNumber,
-            "foreignPassportSeries": selectedPassportSerial !==null ? selectedPassportSerial : null,
+            "foreignPassportSeries": selectedPassportSerial !== null ? selectedPassportSerial : null,
             "foreignPassportStartDate": moment(startPassportDate).format("MM-DD-YYYY"),
             "fullName": fullName,
             "gender": selectedGender !== null ? selectedGender.value : "",
@@ -697,8 +734,8 @@ function CreateEmployee() {
             "mobilePhone2": mobileNumber2,
             "ownMailAddress": email,
             "permission": livePermission,
-            "startWorkPermissionDate": startWorkPermissionDate !==null ? moment(startWorkPermissionDate).format("MM-DD-YYYY") : null,
-            "expiredWorkPermissionDate": expiredWorkPermissionDate!== null ? moment(expiredWorkPermissionDate).format("MM-DD-YYYY") : null
+            "startWorkPermissionDate": startWorkPermissionDate !== null ? moment(startWorkPermissionDate).format("MM-DD-YYYY") : null,
+            "expiredWorkPermissionDate": expiredWorkPermissionDate !== null ? moment(expiredWorkPermissionDate).format("MM-DD-YYYY") : null
         }
         mainAxios({
             method: 'put',
@@ -709,9 +746,13 @@ function CreateEmployee() {
             },
             data: data
         }).then((res) => {
-            setKey('company');
+            setLoadingIndicator(false);
             setDataVal(res.data.data);
-            if(uploadFile !== "") SenDataImage(res.data.data)
+            if (uploadFile !== "") SenDataImage(res.data.data)
+        }).catch((error) => {
+            setLoadingIndicator(false);
+            if (error.response.data.message)
+                setErrors(error.response.data.message)
         });
 
     }
@@ -733,6 +774,7 @@ function CreateEmployee() {
     }
 
     const sendDataBusiness = () => {
+        setLoadingIndicator(true);
         let data = {
             "company": company,
             "jobEndDate": moment(endJobDate).format("MM-DD-YYYY"),
@@ -752,11 +794,12 @@ function CreateEmployee() {
             },
             data: data
         }).then((res) => {
-            setKey('education');
+            setLoadingIndicator(false);
         });
     }
 
     const sendDataAcademic = () => {
+        setLoadingIndicator(true);
         let arr = []
         for (let i of quotaArr) {
             arr.push(i.value)
@@ -794,7 +837,7 @@ function CreateEmployee() {
             },
             data: data
         }).then((res) => {
-            window.location.href = "/employeeSchedule"
+            setLoadingIndicator(false);
         });
     }
 
@@ -808,6 +851,7 @@ function CreateEmployee() {
             },
 
         }).then((res) => {
+            setLoadingIndicator(false);
             setDocument(res.data.data.data);
         });
     }
@@ -879,6 +923,7 @@ function CreateEmployee() {
                                                                     onChange={(val) => {
                                                                         setSelectedSerial(val);
                                                                     }}
+                                                                    isSearchable={false}
                                                                     options={serialNumberOptions}
                                                                     getOptionLabel={(option) => (option.label)}
                                                                     styles={customGroupStyles}
@@ -888,6 +933,20 @@ function CreateEmployee() {
                                                                           value={idCardNumber || ''}
                                                                           onChange={(e => setIdCardNumber(e.target.value))}/>
                                                         </InputGroup>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.IDCardNumber !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.IDCardNumber}</span>
+                                                                    : null
+                                                            }
+                                                            {
+                                                                errors.IDCardSeries !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.IDCardSeries}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -898,6 +957,14 @@ function CreateEmployee() {
                                                                           value={idCardPin || ''}
                                                                           onChange={(e => setIdCardPin(e.target.value))}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.IDCardPin !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.IDCardPin}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -909,6 +976,7 @@ function CreateEmployee() {
                                                             onChange={(val) => {
                                                                 setSelectedFamilyCondition(val);
                                                             }}
+                                                            isSearchable={false}
                                                             options={familyConditionOptions}
                                                             getOptionLabel={(option) => (option.label)}
                                                             styles={customStyles}
@@ -974,6 +1042,14 @@ function CreateEmployee() {
                                                                 </svg>
                                                             </Button>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.IDCardStartDate !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.IDCardStartDate}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1035,6 +1111,14 @@ function CreateEmployee() {
                                                                 </svg>
                                                             </Button>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.IDCardEndDate !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.IDCardEndDate}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1042,12 +1126,20 @@ function CreateEmployee() {
                                                         <span className="input-title">Soyadı, adı, ata adı *</span>
                                                         <Form.Label>
                                                             <Form.Control type="text"
-                                                                          placeholder="Ştat vahidinin saynı daxil edin"
+                                                                          placeholder="Soyadı, adı, ata adı  daxil edin"
                                                                           value={fullName || ''}
                                                                           onChange={(e => {
                                                                               setFullName(e.target.value);
                                                                           })}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.fullName !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.fullName}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1108,6 +1200,14 @@ function CreateEmployee() {
                                                                 </svg>
                                                             </Button>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.birthday !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.birthday}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1117,6 +1217,14 @@ function CreateEmployee() {
                                                                       placeholder="Doğum yerini daxil edin"
                                                                       value={countryBirth || ''}
                                                                       onChange={(e) => setCountryBirth(e.target.value)}/>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.birthplace !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.birthplace}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1130,10 +1238,19 @@ function CreateEmployee() {
                                                                 val.name === 'Azərbaycan' ? setShowPermission(false) : setShowPermission(true)
                                                                 setSelectedCitizenControl(val)
                                                             }}
+                                                            isSearchable={false}
                                                             options={citizen}
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.citizenCountry !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.citizenCountry}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1143,9 +1260,18 @@ function CreateEmployee() {
                                                             placeholder="Cinsini seçin"
                                                             value={selectedGender}
                                                             onChange={setSelectedGender}
+                                                            isSearchable={false}
                                                             options={genderOptions}
                                                             styles={customStyles}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.gender !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.gender}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1156,6 +1282,7 @@ function CreateEmployee() {
                                                             value={selectedBloodType}
                                                             onChange={setSelectedBloodType}
                                                             options={bloodTypeOptions}
+                                                            isSearchable={false}
                                                             styles={customStyles}
                                                         />
                                                     </Form.Group>
@@ -1180,6 +1307,14 @@ function CreateEmployee() {
                                                                           placeholder="Şəxsiy. vəs. verən orqanı daxil edin"
                                                                           value={idCardOrganization || ''}
                                                                           onChange={(e) => setIdCardOrganization(e.target.value)}/>
+                                                            <div className="validation-block flex-start">
+                                                                {
+                                                                    errors.IDCardOrganization !== '' ?
+                                                                        <span
+                                                                            className="text-validation">{errors.IDCardOrganization}</span>
+                                                                        : null
+                                                                }
+                                                            </div>
                                                         </Form.Label>
                                                     </Form.Group>
                                                 </Col>
@@ -1367,6 +1502,7 @@ function CreateEmployee() {
                                                                     onChange={(val) => {
                                                                         setSelectedPassportSerial(val);
                                                                     }}
+                                                                    isSearchable={false}
                                                                     options={passportSerialOptions}
                                                                     getOptionLabel={(option) => (option.label)}
                                                                     styles={customGroupStyles}
@@ -1376,6 +1512,20 @@ function CreateEmployee() {
                                                                           value={passportNumber || ''}
                                                                           onChange={(e => setPassportNumber(e.target.value))}/>
                                                         </InputGroup>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.foreignPassportSeries !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.foreignPassportSeries}</span>
+                                                                    : null
+                                                            }
+                                                            {
+                                                                errors.foreignPassportNumber !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.foreignPassportNumber}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1436,6 +1586,14 @@ function CreateEmployee() {
                                                                 </svg>
                                                             </Button>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.foreignPassportStartDate !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.foreignPassportStartDate}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1496,6 +1654,14 @@ function CreateEmployee() {
                                                                 </svg>
                                                             </Button>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.foreignPassportEndDate !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.foreignPassportEndDate}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                             </Row>
@@ -1518,6 +1684,14 @@ function CreateEmployee() {
                                                             getOptionLabel={(option) => (option.key)}
                                                             styles={customStyles}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.addressCountryId !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.addressCountryId}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1533,6 +1707,14 @@ function CreateEmployee() {
                                                             getOptionLabel={(option) => (option.key)}
                                                             styles={customStyles}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.addressCityId !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.addressCityId}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
 
@@ -1549,6 +1731,14 @@ function CreateEmployee() {
                                                             getOptionLabel={(option) => (option.key)}
                                                             styles={customStyles}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.addressDistrictId !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.addressDistrictId}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
 
@@ -1561,6 +1751,14 @@ function CreateEmployee() {
                                                                 value={settlement || ''}
                                                                 onChange={(e => setSettlement(e.target.value))}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.addressVillage !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.addressVillage}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1572,6 +1770,14 @@ function CreateEmployee() {
                                                                 value={street || ''}
                                                                 onChange={(e => setStreet(e.target.value))}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.addressStreet !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.addressStreet}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1583,6 +1789,14 @@ function CreateEmployee() {
                                                                 value={block || ''}
                                                                 onChange={(e => setBlock(e.target.value))}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.addressBlock !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.addressBlock}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={6}>
@@ -1594,6 +1808,14 @@ function CreateEmployee() {
                                                                 value={apartment || ''}
                                                                 onChange={(e => setApartment(e.target.value))}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.addressApartment !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.addressApartment}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={6}>
@@ -1605,6 +1827,14 @@ function CreateEmployee() {
                                                                 value={home || ''}
                                                                 onChange={(e => setHome(e.target.value))}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.addressHome !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.addressHome}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                             </Row>
@@ -1625,6 +1855,14 @@ function CreateEmployee() {
                                                                 value={phoneNumber || ''}
                                                                 onChange={(e => setPhoneNumber(e.target.value))}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.homePhone !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.homePhone}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={6}>
@@ -1637,6 +1875,14 @@ function CreateEmployee() {
                                                                 value={mobileNumber1 || ''}
                                                                 onChange={(e => setMobileNumber1(e.target.value))}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.mobilePhone1 !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.mobilePhone1}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={6}>
@@ -1649,6 +1895,14 @@ function CreateEmployee() {
                                                                 value={mobileNumber2 || ''}
                                                                 onChange={(e => setMobileNumber2(e.target.value))}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.mobilePhone2 !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.mobilePhone2}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={6}>
@@ -1661,6 +1915,14 @@ function CreateEmployee() {
                                                                 value={businessPhone || ''}
                                                                 onChange={(e => setBusinessPhone(e.target.value))}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.businessPhone !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.businessPhone}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1673,6 +1935,14 @@ function CreateEmployee() {
                                                                 value={businessInternalPhone || ''}
                                                                 onChange={(e => setBusinessInternalPhone(e.target.value))}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.internalBusinessPhone !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.internalBusinessPhone}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1684,6 +1954,14 @@ function CreateEmployee() {
                                                                 value={email || ''}
                                                                 onChange={(e => setEmail(e.target.value))}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.ownMailAddress !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.ownMailAddress}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1695,6 +1973,14 @@ function CreateEmployee() {
                                                                 value={emailBusiness || ''}
                                                                 onChange={(e => setEmailBusiness(e.target.value))}/>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.businessMailAddress !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.businessMailAddress}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                             </Row>
@@ -1706,7 +1992,8 @@ function CreateEmployee() {
                                             <div className="addition-content">
                                                 {
                                                     familyMemberArr.map((item, index) =>
-                                                        <div key={uid(item, index)} className={index === 0 ? '' : 'add-item'}>
+                                                        <div key={uid(item, index)}
+                                                             className={index === 0 ? '' : 'add-item'}>
                                                             {
                                                                 index === 0 ? null :
                                                                     <div className="add-item-top">
@@ -1747,6 +2034,7 @@ function CreateEmployee() {
                                                                                     familyMemberArr[index].relationType = val;
                                                                                     setFamilyMemberArr([...familyMemberArr], familyMemberArr)
                                                                                 }}
+                                                                                isSearchable={false}
                                                                                 options={relationTypeOptions}
                                                                                 getOptionLabel={(option) => (option.label)}
                                                                                 styles={customStyles}
@@ -1900,13 +2188,10 @@ function CreateEmployee() {
                                                 <div className="flex-end">
                                                     <button type="button" className="btn-color"
                                                             onClick={() => addFamilyMember()}>
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                                fill="#3083DC"/>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z" stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                                                         </svg>
-                                                        əlavə et
+                                                        <span>əlavə et</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -1914,7 +2199,7 @@ function CreateEmployee() {
                                     </div>
                                     <div className="flex-vertical-center">
                                         <Button className="btn-effect" onClick={() => sendData()}>
-                                            Davam et
+                                            Yadda saxla
                                         </Button>
                                     </div>
                                 </Form>
@@ -2492,6 +2777,7 @@ function CreateEmployee() {
                                                             onChange={(val) => {
                                                                 setSelectedEducationType(val);
                                                             }}
+                                                            isSearchable={false}
                                                             options={educationTypeOptions}
                                                             getOptionLabel={(option) => (option.label)}
                                                             styles={customStyles}
@@ -2640,13 +2926,10 @@ function CreateEmployee() {
                                                 <div className="flex-end">
                                                     <button type="button" className="btn-color"
                                                             onClick={() => addCertificate()}>
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                                fill="#3083DC"/>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z" stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                                                         </svg>
-                                                        əlavə et
+                                                        <span>əlavə et</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -2800,13 +3083,10 @@ function CreateEmployee() {
                                                 <div className="flex-end">
                                                     <button type="button" className="btn-color"
                                                             onClick={() => addReward()}>
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                                fill="#3083DC"/>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z" stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                                                         </svg>
-                                                        əlavə et
+                                                        <span>əlavə et</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -2902,8 +3182,7 @@ function CreateEmployee() {
                                     </div>
                                     <div className="add-block">
                                         <div className="block-title">
-                                            Sosial sığorta şəhadətnaməsi ( burdan goturulecek, gedecek umumi
-                                            melumata)
+                                            Sosial sığorta şəhadətnaməsi
                                         </div>
                                         <div className="block-inn">
                                             <Row>
@@ -3024,7 +3303,7 @@ function CreateEmployee() {
                                     </thead>
                                     <tbody>
                                     {
-                                        document  ?
+                                        document ?
                                             document.map((item, index) =>
                                                 <tr key={index}>
                                                     <td>{item.id}</td>
@@ -3042,6 +3321,9 @@ function CreateEmployee() {
                     </Tabs>
                 </Container>
             </div>
+            {
+                loadingIndicator ? <Indicator/> : null
+            }
         </Aux>
 
     );

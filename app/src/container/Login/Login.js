@@ -144,16 +144,18 @@ function Login() {
                                                     }
                                                 </div>
                                             </Form.Group>
-                                            <Button className={['btn-effect', loading ? 'loading' : ''].join(' ')}
-                                                    type="submit">
-                                                {
-                                                    loading ?
-                                                        <Spinner animation="border" role="status" size="sm">
-                                                            <span className="visually-hidden">Loading...</span>
-                                                        </Spinner> :
-                                                        <span>Log in</span>
-                                                }
-                                            </Button>
+                                            <div className="flex-vertical-center">
+                                                <Button className={['btn-effect', loading ? 'loading' : ''].join(' ')}
+                                                        type="submit">
+                                                    {
+                                                        loading ?
+                                                            <Spinner animation="border" role="status" size="sm">
+                                                                <span className="visually-hidden">Loading...</span>
+                                                            </Spinner> :
+                                                            <span>Log in</span>
+                                                    }
+                                                </Button>
+                                            </div>
                                         </Form>
                                     </Col>
                                 </Row>

@@ -75,6 +75,23 @@ function CreateStaff() {
         {value: 1, label: '1'},
         {value: 2, label: '2'},
         {value: 3, label: '3'},
+        {value: 4, label: '4'},
+        {value: 5, label: '5'},
+        {value: 6, label: '6'},
+        {value: 7, label: '7'},
+        {value: 8, label: '8'},
+        {value: 9, label: '9'},
+        {value: 10, label: '10'},
+        {value: 11, label: '11'},
+        {value: 12, label: '12'},
+        {value: 13, label: '13'},
+        {value: 14, label: '14'},
+        {value: 15, label: '15'},
+        {value: 16, label: '16'},
+        {value: 17, label: '17'},
+        {value: 18, label: '18'},
+        {value: 19, label: '19'},
+        {value: 20, label: '20'},
     ]
 
     const subWorkCalculateDegreeOptions = [
@@ -151,7 +168,7 @@ function CreateStaff() {
             ...provided,
             color: '#040647',
             backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '10px',
+            padding: '10px 16px',
             margin: '0',
             fontSize: '16px',
             "&:first-of-type": {
@@ -166,17 +183,13 @@ function CreateStaff() {
             },
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             position: 'relative'
 
         }),
 
         indicatorSeparator: () => {
         },
-
-        indicatorsContainer: (provided, state) => ({
-            ...provided,
-        }),
 
         control: (provided) => ({
             ...provided,
@@ -194,6 +207,11 @@ function CreateStaff() {
 
         }),
 
+        indicatorsContainer: (provided) => ({
+            ...provided,
+            paddingRight: '8px'
+        }),
+
         container: (provided) => ({
             ...provided,
             width: '100%'
@@ -206,6 +224,10 @@ function CreateStaff() {
             margin: '0',
             borderColor: 'red',
             width: '100%'
+        }),
+        valueContainer: (provided) => ({
+            ...provided,
+            padding: '2px 8px 2px 16px'
         }),
 
         dropdownIndicator: defaultStyles => ({
@@ -360,7 +382,7 @@ function CreateStaff() {
     }
 
     const getHeight = (val) => {
-        val.value == 1 ? setShowHeight(true) : setShowHeight(false)
+        val.value === 1 ? setShowHeight(true) : setShowHeight(false)
     }
 
     const addSkill = () => {
@@ -437,7 +459,7 @@ function CreateStaff() {
             setLoadingIndicator(false);
             setKey('profile')
             setDataVal(res.data.data);
-        }).catch((error)=>{
+        }).catch((error) => {
             setLoadingIndicator(false);
             setErrors(error.response.data.message);
         });
@@ -517,7 +539,8 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.institutionName !== '' ?
-                                                                    <span className="text-validation">{errors.institutionName}</span>
+                                                                    <span
+                                                                        className="text-validation">{errors.institutionName}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -540,7 +563,8 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.departmentName !== '' ?
-                                                                    <span className="text-validation">{errors.departmentName}</span>
+                                                                    <span
+                                                                        className="text-validation">{errors.departmentName}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -548,7 +572,7 @@ function CreateStaff() {
                                                 </Col>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">Struktur bölmənin adı *</span>
+                                                        <span className="input-title">Struktur bölmənin adı</span>
                                                         <Select
                                                             placeholder="Struktur bölmənin adını seçin"
                                                             value={selectedSubDepartment}
@@ -562,7 +586,8 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.subDepartmentName !== '' ?
-                                                                    <span className="text-validation">{errors.subDepartmentName}</span>
+                                                                    <span
+                                                                        className="text-validation">{errors.subDepartmentName}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -595,7 +620,8 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.vacancyName !== '' ?
-                                                                    <span className="text-validation">{errors.departmentName}</span>
+                                                                    <span
+                                                                        className="text-validation">{errors.departmentName}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -614,7 +640,8 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.vacancyCount !== '' ?
-                                                                    <span className="text-validation">{errors.vacancyCount}</span>
+                                                                    <span
+                                                                        className="text-validation">{errors.vacancyCount}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -635,7 +662,8 @@ function CreateStaff() {
                                                 </Col>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">Əməyin ödənilməsi üzrə alt dərəcə</span>
+                                                        <span
+                                                            className="input-title">Əməyin ödənilməsi üzrə alt dərəcə</span>
                                                         <Select
                                                             placeholder="Əməyin ödənilməsi üzrə alt dərəcəni seçin"
                                                             value={selectedSubWorkPaid}
@@ -661,7 +689,7 @@ function CreateStaff() {
                                                         />
                                                     </Form.Group>
                                                 </Col>
-                                                <Col xs={6}>
+                                                <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">Əmək şəraiti *</span>
                                                         <Select
@@ -674,13 +702,14 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.workCondition !== '' ?
-                                                                    <span className="text-validation">{errors.workCondition}</span>
+                                                                    <span
+                                                                        className="text-validation">{errors.workCondition}</span>
                                                                     : null
                                                             }
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-                                               {/* <Col xs={4}>
+                                                {/* <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">Ştat üzrə əmək şəraitinə görə əlavə əmək haqqı</span>
                                                         <Form.Label>
@@ -690,7 +719,7 @@ function CreateStaff() {
                                                         </Form.Label>
                                                     </Form.Group>
                                                 </Col>*/}
-                                                <Col xs={6}>
+                                                <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                             <span
                                                                 className="input-title">Ştat vahidinin iş rejimi *</span>
@@ -704,14 +733,15 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.workMode !== '' ?
-                                                                    <span className="text-validation">{errors.workMode}</span>
+                                                                    <span
+                                                                        className="text-validation">{errors.workMode}</span>
                                                                     : null
                                                             }
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
 
-                                                <Col xs={6}>
+                                                <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                             <span
                                                                 className="input-title">Ştat vahidinin kateqoriyası *</span>
@@ -725,13 +755,14 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.vacancyCategory !== '' ?
-                                                                    <span className="text-validation">{errors.vacancyCategory}</span>
+                                                                    <span
+                                                                        className="text-validation">{errors.vacancyCategory}</span>
                                                                     : null
                                                             }
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-                                                <Col xs={6}>
+                                                <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">İş ailəsi *</span>
                                                         <Select
@@ -747,13 +778,14 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.jobFamily !== '' ?
-                                                                    <span className="text-validation">{errors.jobFamily}</span>
+                                                                    <span
+                                                                        className="text-validation">{errors.jobFamily}</span>
                                                                     : null
                                                             }
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-                                                <Col xs={6}>
+                                                <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">İş yerinin ünvanı *</span>
                                                         <Select
@@ -767,13 +799,14 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.workPlace !== '' ?
-                                                                    <span className="text-validation">{errors.workPlace}</span>
+                                                                    <span
+                                                                        className="text-validation">{errors.workPlace}</span>
                                                                     : null
                                                             }
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-                                                <Col xs={6}>
+                                                <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">Struk b. tabe old. kurator rəh. ad, soyad, ata adı, vəzifə *</span>
                                                         <Select
@@ -787,7 +820,8 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.fullNameAndPosition !== '' ?
-                                                                    <span className="text-validation">{errors.fullNameAndPosition}</span>
+                                                                    <span
+                                                                        className="text-validation">{errors.fullNameAndPosition}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -866,10 +900,11 @@ function CreateStaff() {
                                                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                              xmlns="http://www.w3.org/2000/svg">
                                                             <path
-                                                                d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                                fill="#3083DC"/>
+                                                                d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                                stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                                strokeLinejoin="round"/>
                                                         </svg>
-                                                        əlavə et
+                                                        <span>əlavə et</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -1035,13 +1070,12 @@ function CreateStaff() {
                                                             <Row>
                                                                 <Col xs={12}>
                                                                     <Form.Group className="form-group">
-                                                                        <span className="input-title">Vəzifə funksiyaları * {item}</span>
+                                                                        <span className="input-title">Vəzifə funksiyaları * </span>
                                                                         <Form.Label>
                                                                             <Form.Control as="textarea"
                                                                                           onChange={(e) => {
                                                                                               positionFunctionArr[index] = e.target.value;
                                                                                               setPositionFunctionArr([...positionFunctionArr], positionFunctionArr);
-                                                                                              console.log(positionFunctionArr)
                                                                                           }}
                                                                                           value={item}
                                                                                           placeholder="Vəzifə funksiyalarını daxil edin"
@@ -1060,10 +1094,11 @@ function CreateStaff() {
                                                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                              xmlns="http://www.w3.org/2000/svg">
                                                             <path
-                                                                d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                                fill="#3083DC"/>
+                                                                d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                                stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                                strokeLinejoin="round"/>
                                                         </svg>
-                                                        əlavə et
+                                                        <span>əlavə et</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -1089,9 +1124,9 @@ function CreateStaff() {
                                                 {
                                                     skillProgramArr.map((item, index) =>
                                                         <div key={uid(item, index)}
-                                                             className={index == 0 ? '' : 'add-item'}>
+                                                             className={index === 0 ? '' : 'add-item'}>
                                                             {
-                                                                index == 0 ? null :
+                                                                index === 0 ? null :
                                                                     <div className="add-item-top">
                                                                         <p className="m-0"> #{index + 1}. Digər </p>
                                                                         <Button
@@ -1134,7 +1169,8 @@ function CreateStaff() {
                                                                 </Col>
                                                                 <Col xs={6}>
                                                                     <Form.Group className="form-group">
-                                                                        <span className="input-title">Bilik səviyyəsi</span>
+                                                                        <span
+                                                                            className="input-title">Bilik səviyyəsi</span>
                                                                         <Select
                                                                             onChange={(val) => {
                                                                                 skillProgramArr[index].level = val.value;
@@ -1152,14 +1188,16 @@ function CreateStaff() {
                                                 }
                                             </div>
                                             <div className="flex-end">
-                                                <button className="btn-color" onClick={() => addProgramSkill()} type="button">
+                                                <button className="btn-color" onClick={() => addProgramSkill()}
+                                                        type="button">
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path
-                                                            d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                            fill="#3083DC"/>
+                                                            d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                            stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                            strokeLinejoin="round"/>
                                                     </svg>
-                                                    əlavə et
+                                                    <span>əlavə et</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -1170,9 +1208,9 @@ function CreateStaff() {
                                                 {
                                                     skillLegalArr.map((item, index) =>
                                                         <div key={uid(item, index)}
-                                                             className={index == 0 ? '' : 'add-item'}>
+                                                             className={index === 0 ? '' : 'add-item'}>
                                                             {
-                                                                index == 0 ? null :
+                                                                index === 0 ? null :
                                                                     <div className="add-item-top">
                                                                         <p className="m-0"> #{index + 1}. Digər </p>
                                                                         <Button
@@ -1215,7 +1253,8 @@ function CreateStaff() {
                                                                 </Col>
                                                                 <Col xs={6}>
                                                                     <Form.Group className="form-group">
-                                                                        <span className="input-title">Bilik səviyyəsi</span>
+                                                                        <span
+                                                                            className="input-title">Bilik səviyyəsi</span>
                                                                         <Select
                                                                             onChange={(val) => {
                                                                                 skillLegalArr[index].level = val.value;
@@ -1233,14 +1272,16 @@ function CreateStaff() {
                                                 }
                                             </div>
                                             <div className="flex-end">
-                                                <button className="btn-color" onClick={() => addLegalSkill()} type="button">
+                                                <button className="btn-color" onClick={() => addLegalSkill()}
+                                                        type="button">
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path
-                                                            d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                            fill="#3083DC"/>
+                                                            d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                            stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                            strokeLinejoin="round"/>
                                                     </svg>
-                                                    əlavə et
+                                                    <span>əlavə et</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -1251,9 +1292,9 @@ function CreateStaff() {
                                                 {
                                                     skillLanguageArr.map((item, index) =>
                                                         <div key={uid(item, index)}
-                                                             className={index == 0 ? '' : 'add-item'}>
+                                                             className={index === 0 ? '' : 'add-item'}>
                                                             {
-                                                                index == 0 ? null :
+                                                                index === 0 ? null :
                                                                     <div className="add-item-top">
                                                                         <p className="m-0"> #{index + 1}. Digər </p>
                                                                         <Button
@@ -1296,7 +1337,8 @@ function CreateStaff() {
                                                                 </Col>
                                                                 <Col xs={6}>
                                                                     <Form.Group className="form-group">
-                                                                        <span className="input-title">Bilik səviyyəsi</span>
+                                                                        <span
+                                                                            className="input-title">Bilik səviyyəsi</span>
                                                                         <Select
                                                                             onChange={(val) => {
                                                                                 skillLanguageArr[index].level = val.value;
@@ -1314,7 +1356,8 @@ function CreateStaff() {
                                                 }
                                             </div>
                                             <div className="flex-end">
-                                                <button className="btn-color" onClick={() => addLanguageSkill()}type="button" >
+                                                <button className="btn-color" onClick={() => addLanguageSkill()}
+                                                        type="button">
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -1337,11 +1380,11 @@ function CreateStaff() {
                         </Tab>
                     </Tabs>
                 </Container>
-                {
-                    loadingIndicator ? <Indicator/> : null
-
-                }
             </div>
+            {
+                loadingIndicator ? <Indicator/> : null
+
+            }
         </Aux>
 
     );
