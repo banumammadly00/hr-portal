@@ -14,7 +14,6 @@ const statuses = {
 };
 
 function EmployeeSchedule() {
-    let match = useRouteMatch();
     const history = useHistory();
     const [employee, setEmployee] = useState([])
     const token = localStorage.getItem('token');

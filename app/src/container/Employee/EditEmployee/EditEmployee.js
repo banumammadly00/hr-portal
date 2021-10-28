@@ -11,6 +11,14 @@ import moment from 'moment'
 import "react-datepicker/dist/react-datepicker.css";
 import {uid} from "react-uid";
 import Indicator from "../../../components/Loading/Indicator";
+import Paginate from "../../../components/Pagination/Pagination";
+
+const statuses = {
+    'Təsdiq gözləyir': 'pending',
+    'Təsdiqlənib': 'confirmed',
+    'Ləğv edildi': 'cancelled',
+    'Hesablandı': 'calculated'
+};
 
 function CreateEmployee() {
     let params = useParams();
@@ -180,7 +188,6 @@ function CreateEmployee() {
         ownMailAddress: '',
     });
 
-
     const [familyMemberArr, setFamilyMemberArr] = useState([{
         address: '',
         birthday: '',
@@ -215,6 +222,10 @@ function CreateEmployee() {
     const [endGraduateDate, setEndGraduateDate] = useState(null);
     const [startGraduateFile, setStartGraduateFile] = useState(null);
     const [expiredDriverLicenceDate, setExpiredDriverLicenceDate] = useState(null);
+
+    const [totalRecord, setTotalRecord] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [recordSize, setRecordSize] = useState(15)
 
     const customStyles = {
         option: (provided, state) => ({
@@ -841,7 +852,7 @@ function CreateEmployee() {
         });
     }
 
-    const getDocument = () => {
+    const getDocument = (page) => {
         mainAxios({
             method: 'get',
             url: '/employee/document/' + id,
@@ -849,10 +860,15 @@ function CreateEmployee() {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
+            params: {
+                page: page - 1,
+                size: recordSize
+            }
 
         }).then((res) => {
-            setLoadingIndicator(false);
+            setCurrentPage(page)
             setDocument(res.data.data.data);
+            setTotalRecord(res.data.data.totalElement);
         });
     }
 
@@ -868,7 +884,7 @@ function CreateEmployee() {
         getAcademicInfo();
         getRewardOrganization();
         getCitizenControl();
-        getDocument()
+        getDocument(1)
     }, []);
 
     return (
@@ -3296,6 +3312,7 @@ function CreateEmployee() {
                                 <Table responsive="sm" hover>
                                     <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Əmr</th>
                                         <th>Tarix</th>
                                         <th>Status</th>
@@ -3309,7 +3326,13 @@ function CreateEmployee() {
                                                     <td>{item.id}</td>
                                                     <td>{item.documentType}</td>
                                                     <td>{item.createDate}</td>
-                                                    <td>{item.status}</td>
+                                                    <td>
+                                                        <div className="flex">
+                                                             <span className={statuses[item.status]}>
+                                                                 {item.status}
+                                                             </span>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             )
                                             : null
@@ -3317,6 +3340,7 @@ function CreateEmployee() {
                                     </tbody>
                                 </Table>
                             </div>
+                            <Paginate count={totalRecord} recordSize = {recordSize} currentPage={currentPage} click={(page) => getDocument(page)}/>
                         </Tab>
                     </Tabs>
                 </Container>

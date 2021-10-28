@@ -92,7 +92,7 @@ function OperationSchedule() {
 
     return (
         <Aux>
-            <div className="staff">
+            <div className="staff operation">
                 <Container fluid>
                     <div className="title-block flex">
                         <div className="title">

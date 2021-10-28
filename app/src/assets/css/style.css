@@ -111,6 +111,11 @@ label {
     width: 100%;
 }
 
+.form-control:disabled, .form-control[readonly] {
+    background-color: rgba(233, 236, 239, .66);
+    opacity: 1;
+}
+
 .form-control:-webkit-autofill {
     border-color: rgba(4, 6, 71, 0.1);
     -webkit-box-shadow: 0 0 0 30px white inset
@@ -618,7 +623,7 @@ label {
     color: #193651;
     opacity: 0.6;
     font-weight: 600;
-    padding: 20px 30px 30px 30px ;
+    padding: 20px 30px 20px 30px ;
 }
 
 td {
@@ -1031,6 +1036,18 @@ td {
 
 .operation .title-block button svg {
     margin-right: 10px;
+}
+
+.operation .table {
+    table-layout: fixed;
+}
+
+.operation .table th:first-child {
+    width: 120px;
+}
+
+.operation .table th:nth-child(3) {
+    width: 200px;
 }
 
 .view .card {

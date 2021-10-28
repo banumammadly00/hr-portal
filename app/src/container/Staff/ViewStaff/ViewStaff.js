@@ -1,8 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import Aux from "../../../hoc/Auxiliary";
-import {Container, Tabs, Tab, Table} from 'react-bootstrap';
+import {Container, Tabs, Tab, Table, Button} from 'react-bootstrap';
 import {Link, useRouteMatch} from 'react-router-dom';
 import {mainAxios} from "../../../components/Axios/axios";
+import Paginate from "../../../components/Pagination/Pagination";
+
+const statuses = {
+    'Təsdiq gözləyir': 'pending',
+    'Təsdiqlənib': 'confirmed',
+    'Ləğv edildi': 'cancelled',
+    'Hesablandı': 'calculated'
+};
+
 
 function ViewStaff() {
     const {params: {id}} = useRouteMatch('/staff/view/:id');
@@ -46,6 +55,9 @@ function ViewStaff() {
 
     /*Operation*/
     const [document, setDocument] = useState([]);
+    const [totalRecord, setTotalRecord] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [recordSize, setRecordSize] = useState(15)
 
     const getStaffInfo = () => {
         mainAxios({
@@ -105,24 +117,29 @@ function ViewStaff() {
     }
 
 
-    const getDocument = () => {
+    const getDocument = (page) => {
         mainAxios({
             method: 'get',
-            url: '/document/position/' + id,
+            url: '/position/document/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-
+            params: {
+                page: page - 1,
+                size: recordSize
+            }
         }).then((res) => {
+            setCurrentPage(page)
             setDocument(res.data.data.data);
+            setTotalRecord(res.data.data.totalElement);
         });
     }
 
     useEffect(() => {
         getStaffInfo();
         getKnowledgeInfo();
-        getDocument()
+        getDocument(1)
     }, []);
 
     return (
@@ -563,6 +580,7 @@ function ViewStaff() {
                                 <Table responsive="sm" hover>
                                     <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Əmr</th>
                                         <th>Tarix</th>
                                         <th>Status</th>
@@ -576,7 +594,13 @@ function ViewStaff() {
                                                     <td>{item.id}</td>
                                                     <td>{item.documentType}</td>
                                                     <td>{item.createDate}</td>
-                                                    <td>{item.status}</td>
+                                                    <td>
+                                                        <div className="flex">
+                                                             <span className={statuses[item.status]}>
+                                                                 {item.status}
+                                                             </span>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             )
                                             : null
@@ -584,6 +608,8 @@ function ViewStaff() {
                                     </tbody>
                                 </Table>
                             </div>
+                            <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
+                                      click={(page) => getDocument(page)}/>
                         </Tab>
                     </Tabs>
                 </Container>

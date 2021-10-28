@@ -6,6 +6,14 @@ import {mainAxios} from "../../../components/Axios/axios";
 import userImage from '../../../assets/img/user.png'
 
 import "react-datepicker/dist/react-datepicker.css";
+import Paginate from "../../../components/Pagination/Pagination";
+
+const statuses = {
+    'Təsdiq gözləyir': 'pending',
+    'Təsdiqlənib': 'confirmed',
+    'Ləğv edildi': 'cancelled',
+    'Hesablandı': 'calculated'
+};
 
 function ViewEmployee() {
     const {params: {id}} = useRouteMatch('/employee/view/:id');
@@ -94,6 +102,9 @@ function ViewEmployee() {
 
     /*Operation*/
     const [document, setDocument] = useState([]);
+    const [totalRecord, setTotalRecord] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [recordSize, setRecordSize] = useState(15)
 
     const getEmployeeInfo = () => {
         mainAxios({
@@ -207,7 +218,7 @@ function ViewEmployee() {
         });
     }
 
-    const getDocument = () => {
+    const getDocument = (page) => {
         mainAxios({
             method: 'get',
             url: '/employee/document/' + id,
@@ -215,9 +226,14 @@ function ViewEmployee() {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-
+            params: {
+                page: page - 1,
+                size: recordSize
+            }
         }).then((res) => {
+            setCurrentPage(page)
             setDocument(res.data.data.data);
+            setTotalRecord(res.data.data.totalElement);
         });
     }
 
@@ -225,7 +241,7 @@ function ViewEmployee() {
         getEmployeeInfo();
         getBusinessInfo();
         getAcademicInfo();
-        getDocument()
+        getDocument(1)
     }, []);
 
     return (
@@ -1161,6 +1177,7 @@ function ViewEmployee() {
                                 <Table responsive="sm" hover>
                                     <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Əmr</th>
                                         <th>Tarix</th>
                                         <th>Status</th>
@@ -1174,7 +1191,13 @@ function ViewEmployee() {
                                                     <td>{item.id}</td>
                                                     <td>{item.documentType}</td>
                                                     <td>{item.createDate}</td>
-                                                    <td>{item.status}</td>
+                                                    <td>
+                                                        <div className="flex">
+                                                             <span className={statuses[item.status]}>
+                                                                 {item.status}
+                                                             </span>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             )
                                             : null
@@ -1182,6 +1205,7 @@ function ViewEmployee() {
                                     </tbody>
                                 </Table>
                             </div>
+                            <Paginate count={totalRecord} recordSize = {recordSize} currentPage={currentPage} click={(page) => getDocument(page)}/>
                         </Tab>
                     </Tabs>
                 </Container>

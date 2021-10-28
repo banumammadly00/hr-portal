@@ -6494,7 +6494,7 @@ function CreateOperation() {
                                                     />
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={6}>
+                                            <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşlədiyi struktur bölmə </span>
@@ -6505,7 +6505,7 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={6}>
+                                            <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşlədiyi alt struktur bölmə </span>
@@ -6516,7 +6516,7 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={6}>
+                                            <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">Vəzifəsi </span>
@@ -6526,7 +6526,7 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={6}>
+                                            <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">Ezam olunduğu ölkə\şəhər\rayon </span>
                                                     <Form.Label>
@@ -6538,11 +6538,10 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={12}>
+                                            <Col xs={4}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Ezam olunma tarixi  </span>
-                                                    <div className="flex">
-                                                        <Form.Label className="relative m-0">
+                                                    <span className="input-title">Ezamiyyətin başlama tarixi  </span>
+                                                    <Form.Label className="relative m-0">
                                                             <DatePicker selected={businessTripStart}
                                                                         dateFormat="dd-MM-yyyy"
                                                                         placeholderText="DD-MM-YYYY"
@@ -6601,7 +6600,11 @@ function CreateOperation() {
                                                                 </svg>
                                                             </Button>
                                                         </Form.Label>
-                                                        <span className="break-line"></span>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Ezamiyyətin bitmə tarixi  </span>
                                                         <Form.Label className="relative m-0">
                                                             <DatePicker
                                                                 dateFormat="dd-MM-yyyy"
@@ -6663,7 +6666,6 @@ function CreateOperation() {
                                                                 </svg>
                                                             </Button>
                                                         </Form.Label>
-                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={6}>
@@ -7373,9 +7375,9 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={12}>
+                                            <Col xs={4}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Təlim-məşq toplantısında iştirak edəcəyi tarixlər </span>
+                                                    <span className="input-title">Təlim-məşq toplantısının başladığı tarix </span>
                                                     <div className="flex">
                                                         <Form.Label className="relative m-0">
                                                             <DatePicker selected={startDate}
@@ -7436,7 +7438,13 @@ function CreateOperation() {
                                                                 </svg>
                                                             </Button>
                                                         </Form.Label>
-                                                        <span className="break-line"></span>
+                                                    </div>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Təlim-məşq toplantısının bitdiyi tarix </span>
+                                                    <div className="flex">
                                                         <Form.Label className="relative m-0">
                                                             <DatePicker
                                                                 dateFormat="dd-MM-yyyy"
@@ -7499,10 +7507,9 @@ function CreateOperation() {
                                                             </Button>
                                                         </Form.Label>
                                                     </div>
-
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={6}>
+                                            <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">Təlim-məşq toplantısında iştirak edəcəyi günlər  </span>
                                                     <Form.Label>
