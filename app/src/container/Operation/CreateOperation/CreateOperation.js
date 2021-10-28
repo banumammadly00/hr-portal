@@ -490,7 +490,7 @@ function CreateOperation() {
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">İşçinin nömrəsi</span>
                                                     <Select
-                                                        placeholder="İşçinin nömrəsini seç"
+                                                        placeholder="Ştatın nömrəsini seç"
                                                         value={selectedPosition}
                                                         onChange={(val) => {
                                                             setSelectedPosition(val);

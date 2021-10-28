@@ -727,7 +727,7 @@ function CreateEmployee() {
             "idcardNumber": idCardNumber,
             "idcardOrganization": idCardOrganization,
             "idcardPin": idCardPin,
-            "idcardSeries": selectedSerial !== null ? selectedSerial : null,
+            "idcardSeries": selectedSerial !== null ? selectedSerial.value : null,
             "idcardStartDate": moment(startIdDate).format("MM-DD-YYYY"),
             "internalBusinessPhone": businessInternalPhone,
             "mobilePhone1": mobileNumber1,
