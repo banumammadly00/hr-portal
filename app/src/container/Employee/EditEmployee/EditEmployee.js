@@ -79,13 +79,11 @@ function CreateEmployee() {
     /*General*/
     const [idCardNumber, setIdCardNumber] = useState('');
     const [idCardPin, setIdCardPin] = useState('');
-    //const [idCardSerial, setIdCardSerial] = useState('');
     const [fullName, setFullName] = useState('');
     const [countryBirth, setCountryBirth] = useState('');
     const [livePermission, setLivePermission] = useState('');
     const [idCardOrganization, setIdCardOrganization] = useState('');
     const [passportNumber, setPassportNumber] = useState('');
-    //const [passportSerial, setPassportSerial] = useState('');
     const [settlement, setSettlement] = useState('');
     const [street, setStreet] = useState('');
     const [block, setBlock] = useState('');
@@ -100,7 +98,6 @@ function CreateEmployee() {
     const [emailBusiness, setEmailBusiness] = useState('');
     const [academicDegreeNumber, setAcademicDegreeNumber] = useState('');
     const [academicDegreeOrganization, setAcademicDegreeOrganization] = useState('');
-    const [dataVal, setDataVal] = useState('');
     const [uploadFile, setUploadFile] = useState('');
     const [photo, setPhoto] = useState();
 
@@ -190,21 +187,23 @@ function CreateEmployee() {
 
     const [familyMemberArr, setFamilyMemberArr] = useState([{
         address: '',
-        birthday: '',
+        birthday: null,
         birthplace: '',
         fullName: '',
         position: '',
         relationType: '',
         workPlace: ''
     }]);
+
     const [certificateArr, setCertificateArr] = useState([{
-        endDate: '',
+        endDate: null,
         name: ''
     }]);
+
     const [rewardArr, setRewardArr] = useState([{
-        name: '',
-        organization: '',
-        startDate: ''
+        name: null,
+        organization: null,
+        startDate: null
     }])
 
     const [selectedCity, setSelectedCity] = useState(null);
@@ -713,38 +712,41 @@ function CreateEmployee() {
         let data = {
             "addressApartment": apartment,
             "addressBlock": block,
-            "addressCityId": selectedCity !== null ? selectedCity.value : "",
-            "addressCountryId": selectedCountry !== null ? selectedCountry.value : "",
-            "addressDistrictId": selectedRegion !== null ? selectedRegion.value : "",
+            "addressCityId": selectedCity !== null ? selectedCity.value : null,
+            "addressCountryId": selectedCountry !== null ? selectedCountry.value : null,
+            "addressDistrictId": selectedRegion !== null ? selectedRegion.value : null,
             "addressHome": home,
             "addressStreet": street,
             "addressVillage": settlement,
-            "birthday": moment(startBirthDate).format("MM-DD-YYYY"),
+            "birthday": startBirthDate !== null ? moment(startBirthDate).format("MM-DD-YYYY") : null,
             "birthplace": countryBirth,
-            "bloodGroup": selectedBloodType !== null ? selectedBloodType.value : "",
+            "bloodGroup": selectedBloodType !== null ? selectedBloodType.value : null,
             "businessMailAddress": emailBusiness,
             "businessPhone": businessPhone,
-            "citizenCountry": selectedCitizenControl !== null ? selectedCitizenControl.name : "",
-            "familyCondition": selectedFamilyCondition !== null ? selectedFamilyCondition.value : "",
+            "citizenCountry": selectedCitizenControl !== null ? selectedCitizenControl.name : null,
+            "familyCondition": selectedFamilyCondition !== null ? selectedFamilyCondition.value : null,
             "familyMembers": familyMemberArr,
-            "foreignPassportEndDate": moment(expiredPassportDate).format("MM-DD-YYYY"),
+            "foreignPassportEndDate": expiredPassportDate !== null ? moment(expiredPassportDate).format("MM-DD-YYYY") : null,
             "foreignPassportNumber": passportNumber,
             "foreignPassportSeries": selectedPassportSerial !== null ? selectedPassportSerial.value : null,
-            "foreignPassportStartDate": moment(startPassportDate).format("MM-DD-YYYY"),
+            "foreignPassportStartDate": startPassportDate !== null ? moment(startPassportDate).format("MM-DD-YYYY") : null,
             "fullName": fullName,
-            "gender": selectedGender !== null ? selectedGender.value : "",
+            "gender": selectedGender !== null ? selectedGender.value : null,
             "homePhone": phoneNumber,
-            "idcardEndDate": moment(expiredIdDate).format("MM-DD-YYYY"),
+            "idcardEndDate": expiredIdDate !== null ? moment(expiredIdDate).format("MM-DD-YYYY") : null,
             "idcardNumber": idCardNumber,
             "idcardOrganization": idCardOrganization,
             "idcardPin": idCardPin,
             "idcardSeries": selectedSerial !== null ? selectedSerial.value : null,
-            "idcardStartDate": moment(startIdDate).format("MM-DD-YYYY"),
+            "idcardStartDate": startIdDate !== null ? moment(startIdDate).format("MM-DD-YYYY") : null,
             "internalBusinessPhone": businessInternalPhone,
             "mobilePhone1": mobileNumber1,
             "mobilePhone2": mobileNumber2,
             "ownMailAddress": email,
             "permission": livePermission,
+            "workPermissionSerial": workPermissionSerial,
+            "workPermissionNumber": workPermissionNumber,
+            "workPermissionPeriod": parseFloat(workPermissionPeriod),
             "startWorkPermissionDate": startWorkPermissionDate !== null ? moment(startWorkPermissionDate).format("MM-DD-YYYY") : null,
             "expiredWorkPermissionDate": expiredWorkPermissionDate !== null ? moment(expiredWorkPermissionDate).format("MM-DD-YYYY") : null
         }
@@ -758,7 +760,6 @@ function CreateEmployee() {
             data: data
         }).then((res) => {
             setLoadingIndicator(false);
-            setDataVal(res.data.data);
             if (uploadFile !== "") SenDataImage(res.data.data)
         }).catch((error) => {
             setLoadingIndicator(false);
@@ -788,9 +789,9 @@ function CreateEmployee() {
         setLoadingIndicator(true);
         let data = {
             "company": company,
-            "jobEndDate": moment(endJobDate).format("MM-DD-YYYY"),
+            "jobEndDate": endJobDate !== null ? moment(endJobDate).format("MM-DD-YYYY") : null,
             "jobEndReason": firedReason,
-            "jobStartDate": moment(startJobDate).format("MM-DD-YYYY"),
+            "jobStartDate": startJobDate !== null ? moment(startJobDate).format("MM-DD-YYYY") : null,
             "mainJob": checked,
             "position": employeePosition,
             "section": section,
@@ -816,22 +817,22 @@ function CreateEmployee() {
             arr.push(i.value)
         }
         let data = {
-            "academicDegreeDate": moment(startAcademicDegreeDate).format("MM-DD-YYYY"),
+            "academicDegreeDate": startAcademicDegreeDate !== null ? moment(startAcademicDegreeDate).format("MM-DD-YYYY") : null,
             "academicDegreeNumber": academicDegreeNumber,
             "academicDegreeOrganization": academicDegreeOrganization,
             "certificates": certificateArr,
             "degree": degree,
             "direction": direction,
-            "driverCardCategory": selectedDriverLicence !== null ? selectedDriverLicence.value : "",
-            "driverCardEndDate": moment(expiredDriverLicenceDate).format("MM-DD-YYYY"),
-            "educationType": selectedEducationType !== null ? selectedEducationType.value : "",
-            "entranceDate": moment(startGraduateDate).format("MM-DD-YYYY"),
+            "driverCardCategory": selectedDriverLicence !== null ? selectedDriverLicence.value : null,
+            "driverCardEndDate": expiredDriverLicenceDate !== null ? moment(expiredDriverLicenceDate).format("MM-DD-YYYY") : null,
+            "educationType": selectedEducationType !== null ? selectedEducationType.value : null,
+            "entranceDate": startGraduateDate !== null ? moment(startGraduateDate).format("MM-DD-YYYY") : null,
             "faculty": faculty,
             "governmentAchievements": rewardArr,
-            "graduateDate": moment(endGraduateDate).format("MM-DD-YYYY"),
-            "graduateFileDate": moment(startGraduateFile).format("MM-DD-YYYY"),
+            "graduateDate": endGraduateDate !== null ? moment(endGraduateDate).format("MM-DD-YYYY") : null,
+            "graduateFileDate": startGraduateFile !== null ? moment(startGraduateFile).format("MM-DD-YYYY") : null,
             "graduateFileNumber": graduateFileNumber,
-            "institution": selectedUniversity !== null ? selectedUniversity.name : "",
+            "institution": selectedUniversity !== null ? selectedUniversity.name : null,
             "memberOfColleaguesAlliance": checkColleague,
             "nostrifikasiyaNumber": nostrificationNumber,
             "prisoner": checkPrisoner,
@@ -841,7 +842,7 @@ function CreateEmployee() {
 
         mainAxios({
             method: 'put',
-            url: '/employee/academic-info/' + dataVal,
+            url: '/employee/academic-info/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
