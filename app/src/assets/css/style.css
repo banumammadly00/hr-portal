@@ -1207,6 +1207,25 @@ td {
     border-radius: 4px;
 }
 
+.swal2-icon {
+    width: 62px;
+    height: 62px;
+    margin: 10px auto 10px;
+}
+
+.swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left] {
+    left: 17px;}
+
+.swal2-icon.swal2-error [class^=swal2-x-mark-line] {
+    top: 30px;
+    width: 29px;
+    height: 4px;;
+}
+
+.swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right] {
+    right: 17px;
+}
+
 .swal2-actions:not(.swal2-loading) .swal2-styled:hover {
     background-image: none;
 }
@@ -1220,7 +1239,7 @@ td {
 }
 
 .swal2-container.swal2-center > .swal2-popup {
-    padding: 25px 30px 40px;
+    padding: 30px;
     width: 24em;
 }
 

@@ -8,6 +8,7 @@ import DatePicker from "react-datepicker";
 import userImage from '../../../assets/img/user.png';
 import moment from 'moment';
 import {uid} from 'react-uid';
+import Swal from 'sweetalert2'
 
 import "react-datepicker/dist/react-datepicker.css";
 import Indicator from "../../../components/Loading/Indicator";
@@ -124,13 +125,11 @@ function EmployeeCreate() {
 
     const [idCardNumber, setIdCardNumber] = useState('');
     const [idCardPin, setIdCardPin] = useState('');
-    //const [idCardSerial, setIdCardSerial] = useState('');
     const [fullName, setFullName] = useState('');
     const [countryBirth, setCountryBirth] = useState('');
     const [livePermission, setLivePermission] = useState('');
     const [idCardOrganization, setIdCardOrganization] = useState('');
     const [passportNumber, setPassportNumber] = useState('');
-    //const [passportSerial, setPassportSerial] = useState('');
     const [settlement, setSettlement] = useState('');
     const [street, setStreet] = useState('');
     const [block, setBlock] = useState('');
@@ -601,8 +600,17 @@ function EmployeeCreate() {
             setDataVal(res.data.data);
             if (uploadFile !== "") SenDataImage(res.data.data)
         }).catch((error) => {
-            setLoadingIndicator(false);
-            setErrors(error.response.data.message);
+            setLoadingIndicator(false)
+            Swal.fire({
+                icon: 'error',
+                text: 'Məlumatlar qeyd edilmədi!',
+                cancelButtonText: 'Bağla',
+                showCancelButton: true,
+                showConfirmButton: false,
+            })
+            if(error.response.data.message) {
+                setErrors(error.response.data.message);
+            }
         });
 
     }
@@ -646,10 +654,20 @@ function EmployeeCreate() {
         }).then((res) => {
             setLoadingIndicator(false);
             setKey('education');
+        }).catch((error) => {
+            setLoadingIndicator(false)
+            Swal.fire({
+                icon: 'error',
+                text: 'Məlumatlar qeyd edilmədi!',
+                cancelButtonText: 'Bağla',
+                showCancelButton: true,
+                showConfirmButton: false,
+            })
         });
     }
 
     const sendDataAcademic = () => {
+        setLoadingIndicator(true)
         let arr = []
         for (let i of quotaArr) {
             arr.push(i.value)
@@ -687,7 +705,17 @@ function EmployeeCreate() {
             },
             data: data
         }).then((res) => {
+            setLoadingIndicator(false);
             window.location.href = "/employee"
+        }).catch((error) => {
+            setLoadingIndicator(false);
+            Swal.fire({
+                icon: 'error',
+                text: 'Məlumatlar qeyd edilmədi!',
+                cancelButtonText: 'Bağla',
+                showCancelButton: true,
+                showConfirmButton: false,
+            })
         });
     }
 

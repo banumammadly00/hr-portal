@@ -10,7 +10,7 @@ import Paginate from "../../../components/Pagination/Pagination";
 const statuses = {
     'IN' : 'işləyir',
     'OUT': 'işləmir',
-    'NONE': 'yeni işçi'
+    'NONE': 'yeni'
 };
 
 function EmployeeSchedule() {
