@@ -611,7 +611,7 @@ label {
 }
 
 .table-hover > tbody > tr:hover {
-    --bs-table-accent-bg: rgba(46, 208, 106, 0.1);
+    --bs-table-hover-bg: rgba(48, 131, 220 , 0.06);
 }
 
 .table-hover > tbody > tr.disabled {

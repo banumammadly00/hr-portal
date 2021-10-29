@@ -8,6 +8,7 @@ import {useRouteMatch} from 'react-router-dom';
 import {uid} from "react-uid";
 import Indicator from "../../../components/Loading/Indicator";
 import Paginate from "../../../components/Pagination/Pagination";
+import Swal from "sweetalert2";
 
 const statuses = {
     'Təsdiq gözləyir': 'pending',
@@ -618,10 +619,16 @@ function EditStaff() {
             },
             data: data
         }).then((res) => {
-            setKey("profile");
             setLoadingIndicator(false);
         }).catch((error) => {
             setLoadingIndicator(false);
+            Swal.fire({
+                icon: 'error',
+                text: 'Məlumatlar qeyd edilmədi!',
+                cancelButtonText: 'Bağla',
+                showCancelButton: true,
+                showConfirmButton: false,
+            })
             if (error.response.data.message)
                 setErrors(error.response.data.message);
         });
@@ -663,6 +670,15 @@ function EditStaff() {
             data: data
         }).then((res) => {
             setLoadingIndicator(false);
+        }).catch((error) => {
+            setLoadingIndicator(false);
+            Swal.fire({
+                icon: 'error',
+                text: 'Məlumatlar qeyd edilmədi!',
+                cancelButtonText: 'Bağla',
+                showCancelButton: true,
+                showConfirmButton: false,
+            })
         });
     }
 

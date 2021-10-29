@@ -12,6 +12,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import {uid} from "react-uid";
 import Indicator from "../../../components/Loading/Indicator";
 import Paginate from "../../../components/Pagination/Pagination";
+import Swal from "sweetalert2";
 
 const statuses = {
     'Təsdiq gözləyir': 'pending',
@@ -763,6 +764,13 @@ function CreateEmployee() {
             if (uploadFile !== "") SenDataImage(res.data.data)
         }).catch((error) => {
             setLoadingIndicator(false);
+            Swal.fire({
+                icon: 'error',
+                text: 'Məlumatlar qeyd edilmədi!',
+                cancelButtonText: 'Bağla',
+                showCancelButton: true,
+                showConfirmButton: false,
+            })
             if (error.response.data.message)
                 setErrors(error.response.data.message)
         });
@@ -807,6 +815,15 @@ function CreateEmployee() {
             data: data
         }).then((res) => {
             setLoadingIndicator(false);
+        }).catch((error) => {
+            setLoadingIndicator(false);
+            Swal.fire({
+                icon: 'error',
+                text: 'Məlumatlar qeyd edilmədi!',
+                cancelButtonText: 'Bağla',
+                showCancelButton: true,
+                showConfirmButton: false,
+            })
         });
     }
 
@@ -850,6 +867,15 @@ function CreateEmployee() {
             data: data
         }).then((res) => {
             setLoadingIndicator(false);
+        }).catch((error) => {
+            setLoadingIndicator(false);
+            Swal.fire({
+                icon: 'error',
+                text: 'Məlumatlar qeyd edilmədi!',
+                cancelButtonText: 'Bağla',
+                showCancelButton: true,
+                showConfirmButton: false,
+            })
         });
     }
 
