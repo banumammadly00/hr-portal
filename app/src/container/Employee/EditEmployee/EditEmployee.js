@@ -765,6 +765,12 @@ function CreateEmployee() {
         }).catch((error) => {
             setLoadingIndicator(false);
             Swal.fire({
+                icon: 'success',
+                text: 'Məlumatlar qeyd edildi!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            Swal.fire({
                 icon: 'error',
                 text: 'Məlumatlar qeyd edilmədi!',
                 cancelButtonText: 'Bağla',
@@ -815,6 +821,12 @@ function CreateEmployee() {
             data: data
         }).then((res) => {
             setLoadingIndicator(false);
+            Swal.fire({
+                icon: 'success',
+                text: 'Məlumatlar qeyd edildi!',
+                showConfirmButton: false,
+                timer: 1500
+            });
         }).catch((error) => {
             setLoadingIndicator(false);
             Swal.fire({
@@ -867,6 +879,12 @@ function CreateEmployee() {
             data: data
         }).then((res) => {
             setLoadingIndicator(false);
+            Swal.fire({
+                icon: 'success',
+                text: 'Məlumatlar qeyd edildi!',
+                showConfirmButton: false,
+                timer: 1500
+            });
         }).catch((error) => {
             setLoadingIndicator(false);
             Swal.fire({
@@ -3229,7 +3247,7 @@ function CreateEmployee() {
                                         </div>
                                         <div className="block-inn">
                                             <Row>
-                                                <Col xs={6}>
+                                                <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                             <span
                                                                 className="input-title">S.s şəhadətnaməsinin nömrəsi</span>
@@ -3241,7 +3259,7 @@ function CreateEmployee() {
                                                         </Form.Label>
                                                     </Form.Group>
                                                 </Col>
-                                                <Col xs={6}>
+                                                <Col xs={8}>
                                                     <Form.Group className="form-group">
                                                                 <span
                                                                     className="input-title">İşçinin aid oldu kvota üzrə məlumatlar</span>

@@ -457,6 +457,12 @@ function CreateStaff() {
             data: data
         }).then((res) => {
             setLoadingIndicator(false);
+            Swal.fire({
+                icon: 'success',
+                text: 'Məlumatlar qeyd edildi!',
+                showConfirmButton: false,
+                timer: 1500
+            });
             setKey('profile')
             setDataVal(res.data.data);
         }).catch((error) => {
@@ -491,6 +497,12 @@ function CreateStaff() {
             data: data
         }).then((res) => {
             setLoadingIndicator(false);
+            Swal.fire({
+                icon: 'success',
+                text: 'Məlumatlar qeyd edildi!',
+                showConfirmButton: false,
+                timer: 1500
+            });
             window.location.href = "/staff"
         }).catch((error) => {
             setLoadingIndicator(false);

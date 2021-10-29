@@ -620,6 +620,12 @@ function EditStaff() {
             data: data
         }).then((res) => {
             setLoadingIndicator(false);
+            Swal.fire({
+                icon: 'success',
+                text: 'Məlumatlar qeyd edildi!',
+                showConfirmButton: false,
+                timer: 1500
+            });
         }).catch((error) => {
             setLoadingIndicator(false);
             Swal.fire({
@@ -670,6 +676,12 @@ function EditStaff() {
             data: data
         }).then((res) => {
             setLoadingIndicator(false);
+            Swal.fire({
+                icon: 'success',
+                text: 'Məlumatlar qeyd edildi!',
+                showConfirmButton: false,
+                timer: 1500
+            });
         }).catch((error) => {
             setLoadingIndicator(false);
             Swal.fire({

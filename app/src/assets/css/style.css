@@ -1110,11 +1110,6 @@ td {
     border-width: .2em;
 }
 
-.loading {
-    background: #181818 !important;
-    opacity: 0.3;
-}
-
 .loading-indicator {
     background: rgba(255, 255, 255, 0.58);
     position: fixed;
@@ -1208,12 +1203,12 @@ td {
 }
 
 .swal2-icon {
-    width: 62px;
-    height: 62px;
+/*    width: 62px;
+    height: 62px;*/
     margin: 10px auto 10px;
 }
 
-.swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left] {
+/*.swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left] {
     left: 17px;}
 
 .swal2-icon.swal2-error [class^=swal2-x-mark-line] {
@@ -1224,7 +1219,7 @@ td {
 
 .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right] {
     right: 17px;
-}
+}*/
 
 .swal2-actions:not(.swal2-loading) .swal2-styled:hover {
     background-image: none;
