@@ -198,7 +198,7 @@ function CreateEmployee() {
 
     const [certificateArr, setCertificateArr] = useState([{
         endDate: null,
-        name: ''
+        name: null
     }]);
 
     const [rewardArr, setRewardArr] = useState([{
@@ -848,6 +848,11 @@ function CreateEmployee() {
         for (let i of quotaArr) {
             arr.push(i.value)
         }
+        let arrReward = []
+        for (let i of rewardArr) {
+            let obj = {name: i.name.name, organization: i.organization.name, startDate: i.startDate }
+            arrReward.push(obj)
+        }
         let data = {
             "academicDegreeDate": startAcademicDegreeDate !== null ? moment(startAcademicDegreeDate).format("MM-DD-YYYY") : null,
             "academicDegreeNumber": academicDegreeNumber,
@@ -860,7 +865,7 @@ function CreateEmployee() {
             "educationType": selectedEducationType !== null ? selectedEducationType.value : null,
             "entranceDate": startGraduateDate !== null ? moment(startGraduateDate).format("MM-DD-YYYY") : null,
             "faculty": faculty,
-            "governmentAchievements": rewardArr,
+            "governmentAchievements": arrReward,
             "graduateDate": endGraduateDate !== null ? moment(endGraduateDate).format("MM-DD-YYYY") : null,
             "graduateFileDate": startGraduateFile !== null ? moment(startGraduateFile).format("MM-DD-YYYY") : null,
             "graduateFileNumber": graduateFileNumber,

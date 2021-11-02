@@ -66,6 +66,8 @@ function EmployeeCreate() {
     ]
 
     const [key, setKey] = useState('home');
+    const [activeCompany, setActiveCompany] = useState(true);
+    const [activeEducation, setActiveEducation] = useState(true);
     const [startIdDate, setStartIdDate] = useState(null);
     const [expiredIdDate, setExpiredIdDate] = useState(null);
     const [startBirthDate, setStartBirthDate] = useState(null);
@@ -603,6 +605,7 @@ function EmployeeCreate() {
                 timer: 1500
             });
             setKey('company');
+            setActiveCompany(false)
             setDataVal(res.data.data);
             if (uploadFile !== "") SenDataImage(res.data.data)
         }).catch((error) => {
@@ -666,6 +669,7 @@ function EmployeeCreate() {
                 timer: 1500
             });
             setKey('education');
+            setActiveEducation(false)
         }).catch((error) => {
             setLoadingIndicator(false)
             Swal.fire({
@@ -765,7 +769,7 @@ function EmployeeCreate() {
                         </div>
                     </div>
                     <Tabs activeKey={key} onSelect={(k) => setKey(k)}>
-                        <Tab eventKey="home" title="Ümumi məlumatlar" disabled={key !== "home"}>
+                        <Tab eventKey="home" title="Ümumi məlumatlar" disabled={false}>
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
@@ -2079,7 +2083,7 @@ function EmployeeCreate() {
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="company" title="Şirkət barədə" disabled={key !== "company"}>
+                        <Tab eventKey="company" title="Şirkət barədə" disabled={activeCompany}>
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
@@ -2298,7 +2302,7 @@ function EmployeeCreate() {
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="education" title="Təhsil" disabled={key !== "education"}>
+                        <Tab eventKey="education" title="Təhsil" disabled={activeEducation}>
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">

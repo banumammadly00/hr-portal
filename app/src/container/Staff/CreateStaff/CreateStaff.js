@@ -127,6 +127,7 @@ function CreateStaff() {
     const [skillLanguageArr, setSkillLanguageArr] = useState([{level: null, name: null}]);
     const [showHeight, setShowHeight] = useState(false);
     const [key, setKey] = useState('home');
+    const [activeProfile, setActiveProfile] = useState(true)
     const [dataVal, setDataVal] = useState('');
     const [loadingIndicator, setLoadingIndicator] = useState(false);
     const [errors, setErrors] = useState({
@@ -464,6 +465,7 @@ function CreateStaff() {
                 timer: 1500
             });
             setKey('profile')
+            setActiveProfile(false)
             setDataVal(res.data.data);
         }).catch((error) => {
             setLoadingIndicator(false);
@@ -544,7 +546,7 @@ function CreateStaff() {
                         </div>
                     </div>
                     <Tabs activeKey={key} onSelect={(k) => setKey(k)}>
-                        <Tab eventKey="home" title="Ümumi məlumatlar" disabled={key !== "home"}>
+                        <Tab eventKey="home" title="Ümumi məlumatlar" disabled={false}>
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
@@ -1143,7 +1145,7 @@ function CreateStaff() {
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="profile" title="İxtisas bilikləri" disabled={key !== "profile"}>
+                        <Tab eventKey="profile" title="İxtisas bilikləri" disabled={activeProfile}>
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
