@@ -708,8 +708,7 @@ function CreateEmployee() {
         for (let i of familyMemberArr) {
             if (i.relationType != null) {
                 i.relationType = i.relationType.value
-            }
-            else {
+            } else {
                 i.relationType = null
             }
         }
@@ -850,8 +849,13 @@ function CreateEmployee() {
         }
         let arrReward = []
         for (let i of rewardArr) {
-            let obj = {name: i.name.name, organization: i.organization.name, startDate: i.startDate }
-            arrReward.push(obj)
+            if (i.name != null || i.organization != null || i.startDate != null) {
+                let obj = {name: i.name.name, organization: i.organization.name, startDate: i.startDate}
+                arrReward.push(obj)
+            } else {
+                let obj = {name: null, organization: null, startDate: null}
+                arrReward.push(obj)
+            }
         }
         let data = {
             "academicDegreeDate": startAcademicDegreeDate !== null ? moment(startAcademicDegreeDate).format("MM-DD-YYYY") : null,
@@ -2259,8 +2263,12 @@ function CreateEmployee() {
                                                 <div className="flex-end">
                                                     <button type="button" className="btn-color"
                                                             onClick={() => addFamilyMember()}>
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z" stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                                stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                                strokeLinejoin="round"/>
                                                         </svg>
                                                         <span>əlavə et</span>
                                                     </button>
@@ -2997,8 +3005,12 @@ function CreateEmployee() {
                                                 <div className="flex-end">
                                                     <button type="button" className="btn-color"
                                                             onClick={() => addCertificate()}>
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z" stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                                stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                                strokeLinejoin="round"/>
                                                         </svg>
                                                         <span>əlavə et</span>
                                                     </button>
@@ -3051,7 +3063,7 @@ function CreateEmployee() {
                                                                         <Form.Label>
                                                                             <Select
                                                                                 placeholder="Təhsil müəssəsini seçin"
-                                                                                value={item.name}
+                                                                                value={item.name !== "" || null ? item.name : null}
                                                                                 onChange={(val) => {
                                                                                     rewardArr[index].name = val;
                                                                                     setRewardArr([...rewardArr], rewardArr)
@@ -3154,8 +3166,12 @@ function CreateEmployee() {
                                                 <div className="flex-end">
                                                     <button type="button" className="btn-color"
                                                             onClick={() => addReward()}>
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z" stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                                stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                                strokeLinejoin="round"/>
                                                         </svg>
                                                         <span>əlavə et</span>
                                                     </button>
@@ -3395,7 +3411,8 @@ function CreateEmployee() {
                                     </tbody>
                                 </Table>
                             </div>
-                            <Paginate count={totalRecord} recordSize = {recordSize} currentPage={currentPage} click={(page) => getDocument(page)}/>
+                            <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
+                                      click={(page) => getDocument(page)}/>
                         </Tab>
                     </Tabs>
                 </Container>
