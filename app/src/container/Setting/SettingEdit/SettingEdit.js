@@ -247,7 +247,7 @@ function SettingEdit() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             params : {
-                id: id
+                name: id
             }
         }).then((res) => {
             if(res.data.code === 200) {
@@ -300,7 +300,7 @@ function SettingEdit() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             params : {
-                id: id
+                name: id
             }
         }).then((res) => {
             if(res.data.code === 200) {
@@ -353,7 +353,7 @@ function SettingEdit() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             params : {
-                id: id
+                name: id
             }
         }).then((res) => {
             if(res.data.code === 200) {
@@ -378,7 +378,7 @@ function SettingEdit() {
     const sendSalary = () => {
         setActive(true);
         let data = {
-            salary: salary
+            salary: parseFloat(salary)
         }
         mainAxios({
             method: 'post',
@@ -459,7 +459,7 @@ function SettingEdit() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             params : {
-                id: id
+                name: id
             }
         }).then((res) => {
             if(res.data.code === 200) {
@@ -581,7 +581,9 @@ function SettingEdit() {
         getRegion();
         getCitizenCountry();
         getUniversity();
+        getJobFamily();
         getVacancy();
+        getSkill();
         getSalary()
     }, []);
 
@@ -646,25 +648,6 @@ function SettingEdit() {
                                     </Col>
                                     <Col xs={4}>
                                         <ul className="btn-block list-unstyled m-0 flex-start">
-                                            {/*
-                                                    <li>
-                                                        <button type="button" className="btn-transparent"
-                                                                onClick={() => {
-                                                                    setShowCountry(false);
-                                                                    setCountry('')
-                                                                }}>
-                                                            <svg width="14" height="14" viewBox="0 0 12 12"
-                                                                 fill="none"
-                                                                 xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M5.99688 5.08435L11.0339 0.047383C11.0388 0.0422913 11.0438 0.0372908 11.0489 0.0323831C11.0489 0.0323654 11.0489 0.0323479 11.049 0.0323302L11.1531 0.140279C11.3516 -0.0514605 11.668 -0.0459554 11.8598 0.152578C12.0515 0.351111 12.046 0.667475 11.8475 0.859214L5.99688 5.08435ZM5.99688 5.08435L0.959034 0.0464826L0.95905 0.0464665L0.957171 0.0446523C0.69905 -0.204637 0.287728 -0.197483 0.038437 0.0606401C-0.20476 0.312441 -0.20476 0.711621 0.038437 0.963421L0.0384207 0.963437L0.0402643 0.965281L5.07811 6.00312L0.0402643 11.041L0.0402564 11.041C-0.213419 11.2947 -0.213419 11.706 0.0402564 11.9597L0.0402802 11.9597C0.293992 12.2134 0.705306 12.2134 0.959018 11.9597L0.959033 11.9597L5.99688 6.92189L11.0347 11.9597L11.0347 11.9597L11.0366 11.9616C11.2947 12.2109 11.706 12.2037 11.9553 11.9456L11.9553 11.9456C12.1985 11.6938 12.1985 11.2946 11.9553 11.0428L11.9553 11.0428L11.9535 11.041L6.91568 6.00312L11.9526 0.96616L5.99688 5.08435Z"
-                                                                    fill="#CF3131" stroke="#CF3131"
-                                                                    strokeWidth="0.3"/>
-                                                            </svg>
-                                                            Sil
-                                                        </button>
-                                                    </li>
-*/}
                                             <li>
                                                 <button type="button" className="btn-transparent"
                                                         onClick={() => sendCountry()}>

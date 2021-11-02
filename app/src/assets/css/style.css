@@ -637,7 +637,7 @@ td {
 }
 
 .staff .btn-main {
-    width: 120px;
+    width: 140px;
 }
 
 .pagination-block .sr-only {
@@ -1487,6 +1487,8 @@ td {
     display: block;
     width: 100%;
     padding: 0;
+    max-height: 220px;
+    overflow-y: scroll;
 }
 
 .setting .dropdown-item {

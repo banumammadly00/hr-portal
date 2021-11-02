@@ -187,13 +187,13 @@ function CreateEmployee() {
     });
 
     const [familyMemberArr, setFamilyMemberArr] = useState([{
-        address: '',
+        address: null,
         birthday: null,
-        birthplace: '',
-        fullName: '',
-        position: '',
-        relationType: '',
-        workPlace: ''
+        birthplace: null,
+        fullName: null,
+        position: null,
+        relationType: null,
+        workPlace: null
     }]);
 
     const [certificateArr, setCertificateArr] = useState([{
@@ -505,28 +505,28 @@ function CreateEmployee() {
 
     const addFamilyMember = () => {
         setFamilyMemberArr(familyMemberArr => [...familyMemberArr, {
-            address: '',
-            birthday: '',
-            birthplace: '',
-            fullName: '',
-            position: '',
-            relationType: '',
-            workPlace: ''
+            address: null,
+            birthday: null,
+            birthplace: null,
+            fullName: null,
+            position: null,
+            relationType: null,
+            workPlace: null
         }])
     }
 
     const addCertificate = () => {
         setCertificateArr(certificateArr => [...certificateArr, {
-            endDate: '',
-            name: ''
+            endDate: null,
+            name: null
         }])
     }
 
     const addReward = () => {
         setRewardArr(rewardArr => [...rewardArr, {
-            name: '',
-            organization: '',
-            startDate: ''
+            name: null,
+            organization: null,
+            startDate: null
         }])
     }
 
@@ -706,8 +706,11 @@ function CreateEmployee() {
     const sendData = () => {
         setLoadingIndicator(true);
         for (let i of familyMemberArr) {
-            if (i.relationType !== null) {
+            if (i.relationType != null) {
                 i.relationType = i.relationType.value
+            }
+            else {
+                i.relationType = null
             }
         }
         let data = {
@@ -2092,7 +2095,9 @@ function CreateEmployee() {
                                                                                 placeholder="Ailə üzvü daxil edin"
                                                                                 value={item.relationType}
                                                                                 onChange={(val) => {
+                                                                                    console.log(val)
                                                                                     familyMemberArr[index].relationType = val;
+                                                                                    console.log(familyMemberArr)
                                                                                     setFamilyMemberArr([...familyMemberArr], familyMemberArr)
                                                                                 }}
                                                                                 isSearchable={false}

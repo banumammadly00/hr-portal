@@ -51,11 +51,17 @@ function Login() {
                 history.replace("/employee");
             }
         }).catch(error => {
-            setLoading(false)
-            if (error.response.data.code === 304) {
-                setErrors({userAndPassword: error.response.data.message})
-            } else
-                setErrors(error.response.data.message);
+            setLoading(false);
+            const {response} = error;
+            if (response) {
+                if (error.response.data.code === 304) {
+                    setErrors({userAndPassword: error.response.data.message})
+                } else
+                    setErrors(error.response.data.message);
+            } else {
+                setErrors({userAndPassword: "Şəbəkə ilə bağlı problem var"})
+            }
+
         });
     }
     return (
@@ -87,7 +93,8 @@ function Login() {
                                         {
                                             errors.userAndPassword !== '' ?
                                                 <div>
-                                                    <span className="text-validation text-center">{errors.userAndPassword}</span>
+                                                    <span
+                                                        className="text-validation text-center">{errors.userAndPassword}</span>
                                                 </div>
                                                 : null
                                         }

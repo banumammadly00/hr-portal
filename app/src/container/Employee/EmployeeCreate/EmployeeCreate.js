@@ -178,13 +178,13 @@ function EmployeeCreate() {
 
 
     const [familyMemberArr, setFamilyMemberArr] = useState([{
-        address: '',
+        address: null,
         birthday: null,
-        birthplace: '',
-        fullName: '',
-        position: '',
-        relationType: '',
-        workPlace: ''
+        birthplace: null,
+        fullName: null,
+        position: null,
+        relationType: null,
+        workPlace: null
     }]);
 
     const [city, setCity] = useState([]);

@@ -583,31 +583,31 @@ function EditStaff() {
         let data = {
             "additionalSalary": parseFloat(additionalSalary),
             "areaExperience": parseFloat(areaExperience),
-            "departmentName": selectedDepartment !== null ? selectedDepartment.name : "",
-            "educationDegree": selectedEducationDegree !== null ? selectedEducationDegree.value : "",
+            "departmentName": selectedDepartment !== null ? selectedDepartment.name : null,
+            "educationDegree": selectedEducationDegree !== null ? selectedEducationDegree.value : null,
             "educationSpeciality": selectedEducationSpeciality,
-            "fullNameAndPosition": selectedEmployeePosition !== null ? selectedEmployeePosition.key : "",
+            "fullNameAndPosition": selectedEmployeePosition !== null ? selectedEmployeePosition.key : null,
             "functionalities": positionFunctionArr,
-            "genderDemand": selectedGender !== null ? selectedGender.value : "",
-            "healthy": selectedHealth !== null ? selectedHealth.value : "",
+            "genderDemand": selectedGender !== null ? selectedGender.value : null,
+            "healthy": selectedHealth !== null ? selectedHealth.value : null,
             "height": parseFloat(height),
-            "institutionName": selectedInstitution !== null ? selectedInstitution.name : "",
-            "jobFamily": selectedFamilyJob !== null ? selectedFamilyJob.name : "",
+            "institutionName": selectedInstitution !== null ? selectedInstitution.name : null,
+            "jobFamily": selectedFamilyJob !== null ? selectedFamilyJob.name : null,
             "leaderExperience": parseFloat(leaderExperience),
-            "militaryAchieve": selectedMilitaryAchieve !== null ? selectedMilitaryAchieve.value : "",
+            "militaryAchieve": selectedMilitaryAchieve !== null ? selectedMilitaryAchieve.value : null,
             "obeyDepartmentName": obeyDepartment,
-            "requireFile": selectedRequiredFile !== null ? selectedRequiredFile.value : "",
-            "salary": selectedSalary !== null ? selectedSalary.name : "",
+            "requireFile": selectedRequiredFile !== null ? selectedRequiredFile.value : null,
+            "salary": selectedSalary !== null ? selectedSalary.name : null,
             "skills": arr,
-            "subDepartmentName": selectedSubDepartment !== null ? selectedSubDepartment.name : "",
-            "subWorkCalculateDegree": selectedSubWorkPaid !== null ? selectedSubWorkPaid.value : "",
-            "vacancyCategory": selectedVacancyCategory !== null ? selectedVacancyCategory.value : "",
+            "subDepartmentName": selectedSubDepartment !== null ? selectedSubDepartment.name : null,
+            "subWorkCalculateDegree": selectedSubWorkPaid !== null ? selectedSubWorkPaid.value : null,
+            "vacancyCategory": selectedVacancyCategory !== null ? selectedVacancyCategory.value : null,
             "vacancyCount": parseFloat(vacancyCount),
-            "vacancyName": selectedVacancy !== null ? selectedVacancy.name : "",
-            "workCalculateDegree": selectedWorkPaid !== null ? selectedWorkPaid.value : "",
-            "workCondition": selectedWorkCondition !== null ? selectedWorkCondition.value : "",
-            "workMode": selectedWorkMode !== null ? selectedWorkMode.value : "",
-            "workPlace": selectedWorkAddress !== null ? parseFloat(selectedWorkAddress.value) : ""
+            "vacancyName": selectedVacancy !== null ? selectedVacancy.name : null,
+            "workCalculateDegree": selectedWorkPaid !== null ? selectedWorkPaid.value : null,
+            "workCondition": selectedWorkCondition !== null ? selectedWorkCondition.value : null,
+            "workMode": selectedWorkMode !== null ? selectedWorkMode.value : null,
+            "workPlace": selectedWorkAddress !== null ? parseFloat(selectedWorkAddress.value) : null
         }
 
         mainAxios({
@@ -786,6 +786,7 @@ function EditStaff() {
                                                             onChange={(val) => {
                                                                 setSelectedDepartment(val);
                                                                 getSubDepartment(val.name);
+                                                                setSelectedSubDepartment(null)
                                                             }}
                                                             options={department}
                                                             getOptionLabel={(option) => (option.name)}

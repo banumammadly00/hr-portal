@@ -121,10 +121,10 @@ function CreateStaff() {
     const [areaExperience, setAreaExperience] = useState('');
     const [leaderExperience, setLeaderExperience] = useState('');
     const [height, setHeight] = useState('');
-    const [skillArr, setSkillArr] = useState([{level: '', skill: ''}]);
-    const [skillProgramArr, setSkillProgramArr] = useState([{level: '', name: ''}]);
-    const [skillLegalArr, setSkillLegalArr] = useState([{level: '', name: ''}]);
-    const [skillLanguageArr, setSkillLanguageArr] = useState([{level: '', name: ''}]);
+    const [skillArr, setSkillArr] = useState([{level: null, skill: null}]);
+    const [skillProgramArr, setSkillProgramArr] = useState([{level: null, name: null}]);
+    const [skillLegalArr, setSkillLegalArr] = useState([{level: null, name: null}]);
+    const [skillLanguageArr, setSkillLanguageArr] = useState([{level: null, name: null}]);
     const [showHeight, setShowHeight] = useState(false);
     const [key, setKey] = useState('home');
     const [dataVal, setDataVal] = useState('');
@@ -387,7 +387,7 @@ function CreateStaff() {
     }
 
     const addSkill = () => {
-        setSkillArr([...skillArr, {level: '', skill: ''}])
+        setSkillArr([...skillArr, {level: null, skill: null}])
     }
 
     const addProgramSkill = () => {
@@ -395,11 +395,11 @@ function CreateStaff() {
     }
 
     const addLegalSkill = () => {
-        setSkillLegalArr([...skillLegalArr, {level: '', name: ''}])
+        setSkillLegalArr([...skillLegalArr, {level: null, name: null}])
     }
 
     const addLanguageSkill = () => {
-        setSkillLanguageArr([...skillLanguageArr, {level: '', name: ''}])
+        setSkillLanguageArr([...skillLanguageArr, {level: null, name: null}])
     }
 
     const addPositionFunction = () => {
