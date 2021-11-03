@@ -66,6 +66,7 @@ function ViewEmployee() {
     const [section, setSection] = useState('');
     const [subSection, setSubSection] = useState('');
     const [employeePosition, setEmployeePosition] = useState('');
+    const [employeeDepartment, setEmployeeDepartment] = useState('');
     const [firedReason, setFiredReason] = useState('');
     const [checked, setChecked] = useState(true);
     const [checkPrisoner, setCheckPrisoner] = useState(true);
@@ -175,6 +176,7 @@ function ViewEmployee() {
             setSection(data.section);
             setSubSection(data.subSection);
             setEmployeePosition(data.position);
+            setEmployeeDepartment(data.departmentName);
             setFiredReason(data.jobEndReason);
             setStartJobDate(data.jobStartDate);
             setEndJobDate(data.jobEndDate);
@@ -269,6 +271,7 @@ function ViewEmployee() {
                                         </div>
                                         <div className="user-data">
                                             <p className="user-name">{fullName}</p>
+                                            <p className="user-department">{employeeDepartment}</p>
                                             <p className="user-position">{employeePosition}</p>
                                         </div>
                                     </div>

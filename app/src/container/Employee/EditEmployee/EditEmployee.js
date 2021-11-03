@@ -122,8 +122,8 @@ function CreateEmployee() {
     const [employeePosition, setEmployeePosition] = useState('');
     const [firedReason, setFiredReason] = useState('');
     const [checked, setChecked] = useState(true);
-    const [checkPrisoner, setCheckPrisoner] = useState(true);
-    const [checkColleague, setCheckColleague] = useState(true);
+    const [checkPrisoner, setCheckPrisoner] = useState('');
+    const [checkColleague, setCheckColleague] = useState('');
     const [showPermission, setShowPermission] = useState(false);
 
     const [startJobDate, setStartJobDate] = useState(null);
@@ -649,7 +649,8 @@ function CreateEmployee() {
             setFiredReason(data.jobEndReason);
             setStartJobDate(new Date(data.jobStartDate));
             setEndJobDate(new Date(data.jobEndDate));
-            setChecked(data.mainJob)
+            setChecked(data.mainJob);
+            console.log(checkPrisoner)
         });
     }
 
@@ -668,6 +669,8 @@ function CreateEmployee() {
             setAcademicDegreeOrganization(data.academicDegreeOrganization);
             setFaculty(data.faculty);
             setDirection(data.direction);
+            setCheckPrisoner(data.prisoner);
+            setCheckColleague(data.memberOfColleaguesAlliance)
             setMajor(data.speciality);
             setStartGraduateDate(new Date(data.entranceDate));
             setEndGraduateDate(new Date(data.graduateDate));
