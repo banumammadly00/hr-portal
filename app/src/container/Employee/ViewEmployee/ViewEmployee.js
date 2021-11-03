@@ -209,7 +209,9 @@ function ViewEmployee() {
             setNostrificationNumber(data.nostrifikasiyaNumber)
             setExpiredDriverLicenceDate(data.driverCardEndDate);
             setDriverLicence(data.driverCardCategory);
-            setUniversity(data.institution)
+            setUniversity(data.institution);
+            setCheckPrisoner(data.prisoner);
+            setCheckColleague(data.memberOfColleaguesAlliance)
             /*
                         setWarrantyNumber(data)
             */

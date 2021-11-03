@@ -999,7 +999,7 @@ function CreateEmployee() {
                                                                     onChange={(val) => {
                                                                         setSelectedSerial(val);
                                                                     }}
-                                                                    isSearchable={false}
+                                                                    isSearchable={serialNumberOptions ? serialNumberOptions.length > 5 ? true : false : false}
                                                                     options={serialNumberOptions}
                                                                     getOptionLabel={(option) => (option.label)}
                                                                     styles={customGroupStyles}
@@ -1052,7 +1052,7 @@ function CreateEmployee() {
                                                             onChange={(val) => {
                                                                 setSelectedFamilyCondition(val);
                                                             }}
-                                                            isSearchable={false}
+                                                            isSearchable={familyConditionOptions ? familyConditionOptions.length > 5 ? true : false : false}
                                                             options={familyConditionOptions}
                                                             getOptionLabel={(option) => (option.label)}
                                                             styles={customStyles}
@@ -1314,7 +1314,7 @@ function CreateEmployee() {
                                                                 val.name === 'Azərbaycan' ? setShowPermission(false) : setShowPermission(true)
                                                                 setSelectedCitizenControl(val)
                                                             }}
-                                                            isSearchable={false}
+                                                            isSearchable={citizen ? citizen.length > 5 ? true : false : false}
                                                             options={citizen}
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
@@ -1336,7 +1336,7 @@ function CreateEmployee() {
                                                             placeholder="Cinsini seçin"
                                                             value={selectedGender}
                                                             onChange={setSelectedGender}
-                                                            isSearchable={false}
+                                                            isSearchable={genderOptions ? genderOptions.length > 5 ? true : false : false}
                                                             options={genderOptions}
                                                             styles={customStyles}
                                                         />
@@ -1358,7 +1358,7 @@ function CreateEmployee() {
                                                             value={selectedBloodType}
                                                             onChange={setSelectedBloodType}
                                                             options={bloodTypeOptions}
-                                                            isSearchable={false}
+                                                            isSearchable={bloodTypeOptions ? bloodTypeOptions.length > 5 ? true : false : false}
                                                             styles={customStyles}
                                                         />
                                                     </Form.Group>
@@ -1578,7 +1578,7 @@ function CreateEmployee() {
                                                                     onChange={(val) => {
                                                                         setSelectedPassportSerial(val);
                                                                     }}
-                                                                    isSearchable={false}
+                                                                    isSearchable={passportSerialOptions ? passportSerialOptions.length > 5 ? true : false : false}
                                                                     options={passportSerialOptions}
                                                                     getOptionLabel={(option) => (option.label)}
                                                                     styles={customGroupStyles}
@@ -1674,7 +1674,7 @@ function CreateEmployee() {
                                                 </Col>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">Bitmə tarixi  *</span>
+                                                        <span className="input-title">Bitmə tarixi *</span>
                                                         <Form.Label className="relative m-0">
                                                             <DatePicker selected={expiredPassportDate}
                                                                         dateFormat="dd-MM-yyyy"
@@ -1756,6 +1756,7 @@ function CreateEmployee() {
                                                             onChange={(val) => {
                                                                 setSelectedCountry(val);
                                                             }}
+                                                            isSearchable={country ? country.length > 5 ? true : false : false}
                                                             options={country}
                                                             getOptionLabel={(option) => (option.key)}
                                                             styles={customStyles}
@@ -1779,6 +1780,7 @@ function CreateEmployee() {
                                                             onChange={(val) => {
                                                                 setSelectedCity(val);
                                                             }}
+                                                            isSearchable={city ? city.length > 5 ? true : false : false}
                                                             options={city}
                                                             getOptionLabel={(option) => (option.key)}
                                                             styles={customStyles}
@@ -1793,7 +1795,6 @@ function CreateEmployee() {
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">Rayon *</span>
@@ -1803,6 +1804,7 @@ function CreateEmployee() {
                                                             onChange={(val) => {
                                                                 setSelectedRegion(val);
                                                             }}
+                                                            isSearchable={region ? region.length > 5 ? true : false : false}
                                                             options={region}
                                                             getOptionLabel={(option) => (option.key)}
                                                             styles={customStyles}
@@ -1817,7 +1819,6 @@ function CreateEmployee() {
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">Qəsəbə *</span>
@@ -2107,12 +2108,10 @@ function CreateEmployee() {
                                                                                 placeholder="Ailə üzvü daxil edin"
                                                                                 value={item.relationType}
                                                                                 onChange={(val) => {
-                                                                                    console.log(val)
                                                                                     familyMemberArr[index].relationType = val;
-                                                                                    console.log(familyMemberArr)
                                                                                     setFamilyMemberArr([...familyMemberArr], familyMemberArr)
                                                                                 }}
-                                                                                isSearchable={false}
+                                                                                isSearchable={relationTypeOptions ? relationTypeOptions.length > 5 ? true : false : false}
                                                                                 options={relationTypeOptions}
                                                                                 getOptionLabel={(option) => (option.label)}
                                                                                 styles={customStyles}
@@ -2141,12 +2140,12 @@ function CreateEmployee() {
                                                                         <Form.Label className="relative m-0">
                                                                             <DatePicker
                                                                                 value={item.birthday}
+                                                                                placeholderText="DD-MM-YYYY"
                                                                                 dateFormat="dd-MM-yyyy"
                                                                                 showMonthDropdown
                                                                                 showYearDropdown
                                                                                 showIcon={false}
                                                                                 dropdownMode="select"
-                                                                                placeholderText="DD-MM-YYYY"
                                                                                 onChange={(date) => {
                                                                                     familyMemberArr[index].birthday = moment(date).format("MM-DD-YYYY");
                                                                                     setFamilyMemberArr([...familyMemberArr], familyMemberArr)
@@ -2266,12 +2265,8 @@ function CreateEmployee() {
                                                 <div className="flex-end">
                                                     <button type="button" className="btn-color"
                                                             onClick={() => addFamilyMember()}>
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
-                                                                stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
-                                                                strokeLinejoin="round"/>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z" stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                                                         </svg>
                                                         <span>əlavə et</span>
                                                     </button>
@@ -2611,6 +2606,7 @@ function CreateEmployee() {
                                                             onChange={(val) => {
                                                                 setSelectedUniversity(val);
                                                             }}
+                                                            isSearchable={university ? university.length > 5 ? true : false : false}
                                                             options={university}
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
@@ -2859,7 +2855,7 @@ function CreateEmployee() {
                                                             onChange={(val) => {
                                                                 setSelectedEducationType(val);
                                                             }}
-                                                            isSearchable={false}
+                                                            isSearchable={educationTypeOptions ? educationTypeOptions.length > 5 ? true : false : false}
                                                             options={educationTypeOptions}
                                                             getOptionLabel={(option) => (option.label)}
                                                             styles={customStyles}
@@ -3008,12 +3004,8 @@ function CreateEmployee() {
                                                 <div className="flex-end">
                                                     <button type="button" className="btn-color"
                                                             onClick={() => addCertificate()}>
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
-                                                                stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
-                                                                strokeLinejoin="round"/>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z" stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                                                         </svg>
                                                         <span>əlavə et</span>
                                                     </button>
@@ -3065,12 +3057,12 @@ function CreateEmployee() {
                                                                             className="input-title">Təltifin adı</span>
                                                                         <Form.Label>
                                                                             <Select
-                                                                                placeholder="Təhsil müəssəsini seçin"
-                                                                                value={item.name !== "" || null ? item.name : null}
+                                                                                placeholder="Təltifin adı seçin"
                                                                                 onChange={(val) => {
                                                                                     rewardArr[index].name = val;
                                                                                     setRewardArr([...rewardArr], rewardArr)
                                                                                 }}
+                                                                                isSearchable={reward ? reward.length > 5 ? true : false : false}
                                                                                 options={reward}
                                                                                 getOptionLabel={(option) => (option.name)}
                                                                                 styles={customStyles}
@@ -3084,12 +3076,12 @@ function CreateEmployee() {
                                                                 className="input-title">Təltifi verən orqanın adı</span>
                                                                         <Form.Label>
                                                                             <Select
-                                                                                placeholder="Təhsil müəssəsini seçin"
-                                                                                value={item.organization}
+                                                                                placeholder="Təltifi verən orqanı seçin"
                                                                                 onChange={(val) => {
                                                                                     rewardArr[index].organization = val;
                                                                                     setRewardArr([...rewardArr], rewardArr)
                                                                                 }}
+                                                                                isSearchable={rewardOrganization ? rewardOrganization.length > 5 ? true : false : false}
                                                                                 options={rewardOrganization}
                                                                                 getOptionLabel={(option) => (option.name)}
                                                                                 styles={customStyles}
@@ -3169,12 +3161,8 @@ function CreateEmployee() {
                                                 <div className="flex-end">
                                                     <button type="button" className="btn-color"
                                                             onClick={() => addReward()}>
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
-                                                                stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
-                                                                strokeLinejoin="round"/>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z" stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                                                         </svg>
                                                         <span>əlavə et</span>
                                                     </button>
@@ -3198,6 +3186,7 @@ function CreateEmployee() {
                                                                 onChange={(val) => {
                                                                     setSelectedDriverLicence(val)
                                                                 }}
+                                                                isSearchable={driverLicenceOptions ? driverLicenceOptions.length > 5 ? true : false : false}
                                                                 options={driverLicenceOptions}
                                                                 getOptionLabel={(option) => (option.label)}
                                                                 styles={customStyles}
@@ -3300,6 +3289,7 @@ function CreateEmployee() {
                                                                     setSelectedQuota(val);
                                                                     setQuotaArr(val)
                                                                 }}
+                                                                isSearchable={quota ? quota.length > 5 ? true : false : false}
                                                                 isMulti
                                                                 options={quota}
                                                                 getOptionLabel={(option) => (option.key)}

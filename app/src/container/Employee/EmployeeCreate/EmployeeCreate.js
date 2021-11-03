@@ -801,7 +801,7 @@ function EmployeeCreate() {
                                                                     onChange={(val) => {
                                                                         setSelectedSerial(val);
                                                                     }}
-                                                                    isSearchable={false}
+                                                                    isSearchable={serialNumberOptions ? serialNumberOptions.length > 5 ? true : false : false}
                                                                     options={serialNumberOptions}
                                                                     getOptionLabel={(option) => (option.label)}
                                                                     styles={customGroupStyles}
@@ -854,7 +854,7 @@ function EmployeeCreate() {
                                                             onChange={(val) => {
                                                                 setSelectedFamilyCondition(val);
                                                             }}
-                                                            isSearchable={false}
+                                                            isSearchable={familyConditionOptions ? familyConditionOptions.length > 5 ? true : false : false}
                                                             options={familyConditionOptions}
                                                             getOptionLabel={(option) => (option.label)}
                                                             styles={customStyles}
@@ -1119,6 +1119,7 @@ function EmployeeCreate() {
                                                                 val.name === 'Azərbaycan' ? setShowPermission(false) : setShowPermission(true)
                                                                 setSelectedCitizenControl(val)
                                                             }}
+                                                            isSearchable={citizen ? citizen.length > 5 ? true : false : false}
                                                             options={citizen}
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
@@ -1140,7 +1141,7 @@ function EmployeeCreate() {
                                                             placeholder="Cinsini seçin"
                                                             value={selectedGender}
                                                             onChange={setSelectedGender}
-                                                            isSearchable={false}
+                                                            isSearchable={genderOptions ? genderOptions.length > 5 ? true : false : false}
                                                             options={genderOptions}
                                                             styles={customStyles}
                                                         />
@@ -1162,7 +1163,7 @@ function EmployeeCreate() {
                                                             value={selectedBloodType}
                                                             onChange={setSelectedBloodType}
                                                             options={bloodTypeOptions}
-                                                            isSearchable={false}
+                                                            isSearchable={bloodTypeOptions ? bloodTypeOptions.length > 5 ? true : false : false}
                                                             styles={customStyles}
                                                         />
                                                     </Form.Group>
@@ -1382,7 +1383,7 @@ function EmployeeCreate() {
                                                                     onChange={(val) => {
                                                                         setSelectedPassportSerial(val);
                                                                     }}
-                                                                    isSearchable={false}
+                                                                    isSearchable={passportSerialOptions ? passportSerialOptions.length > 5 ? true : false : false}
                                                                     options={passportSerialOptions}
                                                                     getOptionLabel={(option) => (option.label)}
                                                                     styles={customGroupStyles}
@@ -1562,6 +1563,7 @@ function EmployeeCreate() {
                                                             onChange={(val) => {
                                                                 setSelectedCountry(val);
                                                             }}
+                                                            isSearchable={country ? country.length > 5 ? true : false : false}
                                                             options={country}
                                                             getOptionLabel={(option) => (option.key)}
                                                             styles={customStyles}
@@ -1585,6 +1587,7 @@ function EmployeeCreate() {
                                                             onChange={(val) => {
                                                                 setSelectedCity(val);
                                                             }}
+                                                            isSearchable={city ? city.length > 5 ? true : false : false}
                                                             options={city}
                                                             getOptionLabel={(option) => (option.key)}
                                                             styles={customStyles}
@@ -1608,6 +1611,7 @@ function EmployeeCreate() {
                                                             onChange={(val) => {
                                                                 setSelectedRegion(val);
                                                             }}
+                                                            isSearchable={region ? region.length > 5 ? true : false : false}
                                                             options={region}
                                                             getOptionLabel={(option) => (option.key)}
                                                             styles={customStyles}
@@ -1913,7 +1917,7 @@ function EmployeeCreate() {
                                                                                     familyMemberArr[index].relationType = val.value;
                                                                                     setFamilyMemberArr([...familyMemberArr], familyMemberArr)
                                                                                 }}
-                                                                                isSearchable={false}
+                                                                                isSearchable={relationTypeOptions ? relationTypeOptions.length > 5 ? true : false : false}
                                                                                 options={relationTypeOptions}
                                                                                 getOptionLabel={(option) => (option.label)}
                                                                                 styles={customStyles}
@@ -2406,6 +2410,7 @@ function EmployeeCreate() {
                                                             onChange={(val) => {
                                                                 setSelectedUniversity(val);
                                                             }}
+                                                            isSearchable={university ? university.length > 5 ? true : false : false}
                                                             options={university}
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
@@ -2657,6 +2662,7 @@ function EmployeeCreate() {
                                                             onChange={(val) => {
                                                                 setSelectedEducationType(val);
                                                             }}
+                                                            isSearchable={educationTypeOptions ? educationTypeOptions.length > 5 ? true : false : false}
                                                             options={educationTypeOptions}
                                                             getOptionLabel={(option) => (option.label)}
                                                             styles={customStyles}
@@ -2863,7 +2869,7 @@ function EmployeeCreate() {
                                                                                     rewardArr[index].name = val.name;
                                                                                     setRewardArr([...rewardArr], rewardArr)
                                                                                 }}
-                                                                                isSearchable={false}
+                                                                                isSearchable={reward ? reward.length > 5 ? true : false : false}
                                                                                 options={reward}
                                                                                 getOptionLabel={(option) => (option.name)}
                                                                                 styles={customStyles}
@@ -2882,6 +2888,7 @@ function EmployeeCreate() {
                                                                                     rewardArr[index].organization = val.name;
                                                                                     setRewardArr([...rewardArr], rewardArr)
                                                                                 }}
+                                                                                isSearchable={rewardOrganization ? rewardOrganization.length > 5 ? true : false : false}
                                                                                 options={rewardOrganization}
                                                                                 getOptionLabel={(option) => (option.name)}
                                                                                 styles={customStyles}
@@ -2987,6 +2994,7 @@ function EmployeeCreate() {
                                                                 onChange={(val) => {
                                                                     setSelectedDriverLicence(val)
                                                                 }}
+                                                                isSearchable={driverLicenceOptions ? driverLicenceOptions.length > 5 ? true : false : false}
                                                                 options={driverLicenceOptions}
                                                                 getOptionLabel={(option) => (option.label)}
                                                                 styles={customStyles}
@@ -3090,6 +3098,7 @@ function EmployeeCreate() {
                                                                     setSelectedQuota(val);
                                                                     setQuotaArr(val)
                                                                 }}
+                                                                isSearchable={quota ? quota.length > 5 ? true : false : false}
                                                                 isMulti
                                                                 options={quota}
                                                                 getOptionLabel={(option) => (option.key)}
