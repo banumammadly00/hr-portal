@@ -26,6 +26,10 @@ function StaffSchedule() {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            params: {
+                page: page - 1,
+                size: recordSize
             }
         }).then((res) => {
             setCurrentPage(page);
