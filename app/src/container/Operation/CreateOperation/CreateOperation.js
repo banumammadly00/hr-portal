@@ -483,6 +483,7 @@ function CreateOperation() {
                                                 setKey(val.label)
                                             }}
                                             options={operationName}
+                                            isSearchable={operationName ? operationName.length > 5 ? true : false : false}
                                             getOptionLabel={(option) => (option.key)}
                                             styles={customStyles}
                                         />
@@ -505,6 +506,7 @@ function CreateOperation() {
                                                             getPositionIdData(val.value);
                                                             setPositionId(val.value)
                                                         }}
+                                                        isSearchable={position ? position.length > 5 ? true : false : false}
                                                         options={position}
                                                         getOptionLabel={(option) => option.value}
                                                         styles={customStyles}
@@ -616,6 +618,7 @@ function CreateOperation() {
                                                             getPositionIdData(val.value);
                                                             setPositionId(val.value)
                                                         }}
+                                                        isSearchable={position ? position.length > 5 ? true : false : false}
                                                         options={position}
                                                         getOptionLabel={(option) => option.value}
                                                         styles={customStyles}
@@ -728,6 +731,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -745,6 +749,7 @@ function CreateOperation() {
                                                             getPositionIdData(val.value);
                                                             setPositionId(val.value);
                                                         }}
+                                                        isSearchable={position ? position.length > 5 ? true : false : false}
                                                         options={position}
                                                         getOptionLabel={(option) => option.value}
                                                         styles={customStyles}
@@ -914,6 +919,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -1102,6 +1108,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -1119,6 +1126,7 @@ function CreateOperation() {
                                                             getPositionIdData(val.value);
                                                             setPositionId(val.value)
                                                         }}
+                                                        isSearchable={position ? position.length > 5 ? true : false : false}
                                                         options={position}
                                                         getOptionLabel={(option) => option.value}
                                                         styles={customStyles}
@@ -1320,6 +1328,7 @@ function CreateOperation() {
                                                                 getEmployee(id)
                                                                 setSelectedStaff(val);
                                                             }}
+                                                            isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                             options={staff}
                                                             getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                             styles={customStyles}
@@ -1503,6 +1512,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -1663,6 +1673,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -1718,6 +1729,7 @@ function CreateOperation() {
                                                         placeholder="İş rejimini seçin"
                                                         value={selectedNewWorkMode}
                                                         onChange={setSelectedNewWorkMode}
+                                                        isSearchable={WorkModeOptions ? WorkModeOptions.length > 5 ? true : false : false}
                                                         options={WorkModeOptions}
                                                         styles={customStyles}
                                                     />
@@ -1763,6 +1775,7 @@ function CreateOperation() {
                                                                 getEmployee(id)
                                                                 setSelectedStaff(val);
                                                             }}
+                                                            isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                             options={staff}
                                                             getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                             styles={customStyles}
@@ -1780,6 +1793,7 @@ function CreateOperation() {
                                                                 getPositionIdData(val.value);
                                                                 setPositionId(val.value)
                                                             }}
+                                                            isSearchable={position ? position.length > 5 ? true : false : false}
                                                             options={position}
                                                             getOptionLabel={(option) => option.value}
                                                             styles={customStyles}
@@ -1993,6 +2007,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -2010,6 +2025,7 @@ function CreateOperation() {
                                                             getPositionIdData(val.value);
                                                             setPositionId(val.value)
                                                         }}
+                                                        isSearchable={position ? position.length > 5 ? true : false : false}
                                                         options={position}
                                                         getOptionLabel={(option) => option.value}
                                                         styles={customStyles}
@@ -2231,6 +2247,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -2248,6 +2265,7 @@ function CreateOperation() {
                                                             getPositionIdData(val.value);
                                                             setPositionId(val.value)
                                                         }}
+                                                        isSearchable={position ? position.length > 5 ? true : false : false}
                                                         options={position}
                                                         getOptionLabel={(option) => option.value}
                                                         styles={customStyles}
@@ -2560,6 +2578,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -2577,6 +2596,7 @@ function CreateOperation() {
                                                             getPositionIdData(val.value);
                                                             setPositionId(val.value)
                                                         }}
+                                                        isSearchable={position ? position.length > 5 ? true : false : false}
                                                         options={position}
                                                         getOptionLabel={(option) => option.value}
                                                         styles={customStyles}
@@ -2745,6 +2765,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -3018,6 +3039,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -3279,6 +3301,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -3538,6 +3561,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -3797,6 +3821,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -4056,6 +4081,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -4304,6 +4330,7 @@ function CreateOperation() {
                                                         onChange={(val) => {
                                                             setSelectedVacationReason(val);
                                                         }}
+                                                        isSearchable={vacationReasonOptions ? vacationReasonOptions.length > 5 ? true : false : false}
                                                         options={vacationReasonOptions}
                                                         getOptionLabel={(option) => option.label}
                                                         styles={customStyles}
@@ -4329,6 +4356,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -4733,6 +4761,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -4992,6 +5021,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -5307,6 +5337,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -5388,6 +5419,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -5621,6 +5653,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -6079,6 +6112,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -6537,6 +6571,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -6871,6 +6906,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -6948,6 +6984,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -7025,6 +7062,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -7102,6 +7140,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -7310,6 +7349,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -7387,6 +7427,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -7600,6 +7641,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -7869,6 +7911,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -8066,6 +8109,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -8159,6 +8203,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -8371,6 +8416,7 @@ function CreateOperation() {
                                                             //getEmployee(id)
                                                             setSelectedStaffArr(arr);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         getOptionValue={(option) => (key == 'EMPLOYEE' ? option.id : option.vacancyName)}
@@ -8449,10 +8495,10 @@ function CreateOperation() {
                                                         onChange={(val) => {
                                                             setSelectedReason(val);
                                                         }}
+                                                        isSearchable={reasonOptions ? reasonOptions.length > 5 ? true : false : false}
                                                         options={reasonOptions}
                                                         getOptionLabel={(option) => option.label}
                                                         styles={customStyles}
-                                                        isSearchable={false}
                                                     />
                                                 </Form.Group>
                                             </Col>
@@ -8480,8 +8526,8 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
-                                                        isSearchable={false}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
                                                     />
@@ -8572,6 +8618,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -8636,6 +8683,7 @@ function CreateOperation() {
                                                             setMonthArr(ids)
                                                             setSelectedMonth(arr);
                                                         }}
+                                                        isSearchable={monthOptions ? monthOptions.length > 5 ? true : false : false}
                                                         options={monthOptions}
                                                         styles={customStyles}
                                                     />
@@ -8669,6 +8717,7 @@ function CreateOperation() {
                                                             getEmployee(id)
                                                             setSelectedStaff(val);
                                                         }}
+                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
                                                         options={staff}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
@@ -8713,6 +8762,7 @@ function CreateOperation() {
                                                         placeholder="İntizam tənbehinin növünü seçin"
                                                         value={selectedDiscipline}
                                                         onChange={setSelectedDiscipline}
+                                                        isSearchable={disciplineOptions ? disciplineOptions.length > 5 ? true : false : false}
                                                         options={disciplineOptions}
                                                         styles={customStyles}
                                                     />

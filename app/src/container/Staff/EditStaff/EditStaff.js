@@ -21,7 +21,7 @@ function EditStaff() {
     const {params: {id}} = useRouteMatch('/staff/edit/:id');
 
     const evaluationOptions = [
-        {value: "NONE", label: "Heçbiri"},
+        {value: "NONE", label: "Yoxdur"},
         {value: 'BEST', label: 'Əla'},
         {value: 'MIDDLE', label: 'Orta'},
         {value: 'GOOD', label: 'Yaxşı'}
@@ -198,11 +198,6 @@ function EditStaff() {
         indicatorSeparator: () => {
         },
 
-        indicatorsContainer: (provided) => ({
-            ...provided,
-            paddingRight: '8px'
-        }),
-
         control: (provided) => ({
             ...provided,
             minHeight: '43px',
@@ -217,6 +212,11 @@ function EditStaff() {
                 borderColor: 'rgba(4, 6, 71, 0.1)',
             },
 
+        }),
+
+        indicatorsContainer: (provided) => ({
+            ...provided,
+            paddingRight: '8px'
         }),
 
         container: (provided) => ({
@@ -388,7 +388,7 @@ function EditStaff() {
     }
 
     const addSkill = () => {
-        setSkillArr([...skillArr, {level: '', skill: ''}])
+        setSkillArr([...skillArr, {level: null, skill: null}])
     }
 
     const addProgramSkill = () => {
@@ -396,11 +396,11 @@ function EditStaff() {
     }
 
     const addLegalSkill = () => {
-        setSkillLegalArr([...skillLegalArr, {level: '', name: ''}])
+        setSkillLegalArr([...skillLegalArr, {level: null, name: null}])
     }
 
     const addLanguageSkill = () => {
-        setSkillLanguageArr([...skillLanguageArr, {level: '', name: ''}])
+        setSkillLanguageArr([...skillLanguageArr, {level: null, name: null}])
     }
 
     const addPositionFunction = () => {
@@ -762,6 +762,7 @@ function EditStaff() {
                                                                 setSelectedInstitution(val);
                                                             }}
                                                             options={institution}
+                                                            isSearchable={institution ? institution.length > 5 ? true : false : false}
                                                             getOptionLabel={(option) => (option.name)}
                                                             getOptionValue={(option) => option.name}
                                                             styles={customStyles}
@@ -778,8 +779,7 @@ function EditStaff() {
                                                 </Col>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                            <span
-                                                                className="input-title">Struktur vahidinin adı *</span>
+                                                        <span className="input-title">Struktur vahidinin adı *</span>
                                                         <Select
                                                             placeholder="Struktur vahidinin adını seçin"
                                                             value={selectedDepartment}
@@ -789,6 +789,7 @@ function EditStaff() {
                                                                 setSelectedSubDepartment(null)
                                                             }}
                                                             options={department}
+                                                            isSearchable={department ? department.length > 5 ? true : false : false}
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
                                                         />
@@ -803,8 +804,7 @@ function EditStaff() {
                                                 </Col>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                                    <span
-                                                                        className="input-title">Struktur bölmənin adı</span>
+                                                        <span className="input-title">Struktur bölmənin adı</span>
                                                         <Select
                                                             placeholder="Struktur bölmənin adını seçin"
                                                             value={selectedSubDepartment}
@@ -812,6 +812,7 @@ function EditStaff() {
                                                                 setSelectedSubDepartment(val);
                                                             }}
                                                             options={subDepartment}
+                                                            isSearchable={subDepartment ? subDepartment.length > 5 ? true : false : false}
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
                                                         />
@@ -827,7 +828,7 @@ function EditStaff() {
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                             <span
-                                                                className="input-title">Tabe struktur bölmənin adı *</span>
+                                                                className="input-title">Tabe struktur bölmənin adı</span>
                                                         <Form.Label>
                                                             <Form.Control
                                                                 placeholder="Tabe struktur bölmənin adını daxil edin"
@@ -845,6 +846,7 @@ function EditStaff() {
                                                             onChange={(val) => {
                                                                 setSelectedVacancy(val);
                                                             }}
+                                                            isSearchable={vacancy ? vacancy.length > 5 ? true : false : false}
                                                             options={vacancy}
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.name)}
@@ -884,9 +886,8 @@ function EditStaff() {
                                                         <Select
                                                             placeholder="Əməyin ödənilməsi dərəcəsini seçin"
                                                             value={selectedWorkPaid}
-                                                            onChange={(val) => {
-                                                                setSelectedWorkPaid(val)
-                                                            }}
+                                                            onChange={(val) => {setSelectedWorkPaid(val)}}
+                                                            isSearchable={workPaidOptions ? workPaidOptions.length > 5 ? true : false : false}
                                                             options={workPaidOptions}
                                                             styles={customStyles}
                                                         />
@@ -900,6 +901,7 @@ function EditStaff() {
                                                             placeholder="Əməyin ödənilməsi üzrə alt dərəcəni seçin"
                                                             value={selectedSubWorkPaid}
                                                             onChange={setSelectedSubWorkPaid}
+                                                            isSearchable={subWorkCalculateDegreeOptions ? subWorkCalculateDegreeOptions.length > 5 ? true : false : false}
                                                             options={subWorkCalculateDegreeOptions}
                                                             styles={customStyles}
                                                         />
@@ -908,13 +910,14 @@ function EditStaff() {
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                             <span
-                                                                className="input-title">Ştat üzrə əsas əmək haqqı *</span>
+                                                                className="input-title">Ştat üzrə əsas əmək haqqı</span>
                                                         <Select
                                                             placeholder="Əmək haqqını seçin"
                                                             value={selectedSalary}
                                                             onChange={(val) => {
                                                                 setSelectedSalary(val)
                                                             }}
+                                                            isSearchable={salary ? salary.length > 5 ? true : false : false}
                                                             options={salary}
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.name)}
@@ -929,6 +932,7 @@ function EditStaff() {
                                                             value={selectedWorkCondition}
                                                             onChange={setSelectedWorkCondition}
                                                             options={workConditionOptions}
+                                                            isSearchable={workConditionOptions ? workConditionOptions.length > 5 ? true : false : false}
                                                             styles={customStyles}
                                                         />
                                                         <div className="validation-block flex-start">
@@ -940,7 +944,7 @@ function EditStaff() {
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-                                                <Col xs={4}>
+                                               {/* <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">Ştat üzrə əmək şəraitinə görə əlavə əmək haqqı</span>
                                                         <Form.Label>
@@ -950,7 +954,7 @@ function EditStaff() {
                                                                           onChange={(e) => setAdditionalSalary(e.target.value)}/>
                                                         </Form.Label>
                                                     </Form.Group>
-                                                </Col>
+                                                </Col>*/}
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                             <span
@@ -959,6 +963,7 @@ function EditStaff() {
                                                             placeholder="İş rejimini seçin"
                                                             value={selectedWorkMode}
                                                             onChange={setSelectedWorkMode}
+                                                            isSearchable={WorkModeOptions ? WorkModeOptions.length > 5 ? true : false : false}
                                                             options={WorkModeOptions}
                                                             styles={customStyles}
                                                         />
@@ -982,6 +987,7 @@ function EditStaff() {
                                                             onChange={(val) => {
                                                                 setSelectedVacancyCategory(val)
                                                             }}
+                                                            isSearchable={vacancyCategoryOptions ? vacancyCategoryOptions.length > 5 ? true : false : false}
                                                             options={vacancyCategoryOptions}
                                                             styles={customStyles}
                                                         />
@@ -1003,6 +1009,7 @@ function EditStaff() {
                                                             onChange={(val) => {
                                                                 setSelectedFamilyJob(val);
                                                             }}
+                                                            isSearchable={familyJob ? familyJob.length > 5 ? true : false : false}
                                                             options={familyJob}
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.name)}
@@ -1024,6 +1031,7 @@ function EditStaff() {
                                                             value={selectedWorkAddress}
                                                             onChange={setSelectedWorkAddress}
                                                             options={workAddress}
+                                                            isSearchable={workAddress ? workAddress.length > 5 ? true : false : false}
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.key)}
                                                         />
@@ -1044,6 +1052,7 @@ function EditStaff() {
                                                             value={selectedEmployeePosition}
                                                             onChange={setSelectedEmployeePosition}
                                                             options={employeePosition}
+                                                            isSearchable={employeePosition ? employeePosition.length > 5 ? true : false : false}
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.key)}
                                                         />
@@ -1100,6 +1109,7 @@ function EditStaff() {
                                                                                 skillArr[index].skill = val;
                                                                                 setSkillArr([...skillArr], skillArr)
                                                                             }}
+                                                                            isSearchable={skill ? skill.length > 5 ? true : false : false}
                                                                             options={skill}
                                                                             styles={customStyles}
                                                                             getOptionLabel={(option) => (option.key)}
@@ -1115,6 +1125,7 @@ function EditStaff() {
                                                                                 skillArr[index].level = val;
                                                                                 setSkillArr([...skillArr], skillArr)
                                                                             }}
+                                                                            isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
                                                                             placeholder="Səviyyəni seçin"
                                                                             options={evaluationOptions}
                                                                             styles={customStyles}
@@ -1174,6 +1185,7 @@ function EditStaff() {
                                                             placeholder="Təhsil pilləsini seçin"
                                                             value={selectedEducationDegree}
                                                             onChange={setSelectedEducationDegree}
+                                                            isSearchable={educationDegreeOptions ? educationDegreeOptions.length > 5 ? true : false : false}
                                                             options={educationDegreeOptions}
                                                             styles={customStyles}
                                                         />
@@ -1198,6 +1210,7 @@ function EditStaff() {
                                                             placeholder="Sertifikat tələbini seçin"
                                                             value={selectedRequiredFile}
                                                             onChange={setSelectedRequiredFile}
+                                                            isSearchable={requireFileOptions ? requireFileOptions.length > 5 ? true : false : false}
                                                             options={requireFileOptions}
                                                             styles={customStyles}
                                                         />
@@ -1213,6 +1226,7 @@ function EditStaff() {
                                                                 setSelectedOption(val)
                                                             }}
                                                             placeholder="Boy tələbini seçin"
+                                                            isSearchable={options ? options.length > 5 ? true : false : false}
                                                             options={options}
                                                             styles={customStyles}
                                                         />
@@ -1226,6 +1240,7 @@ function EditStaff() {
                                                             placeholder="Hərbi mükəlləfiyyət tələbini seçin"
                                                             value={selectedMilitaryAchieve}
                                                             onChange={setSelectedMilitaryAchieve}
+                                                            isSearchable={options ? options.length > 5 ? true : false : false}
                                                             options={options}
                                                             styles={customStyles}
                                                         />
@@ -1253,6 +1268,7 @@ function EditStaff() {
                                                             placeholder="Sağlamlıq tələbini seçin"
                                                             value={selectedHealth}
                                                             onChange={setSelectedHealth}
+                                                            isSearchable={options ? options.length > 5 ? true : false : false}
                                                             options={options}
                                                             styles={customStyles}
                                                         />
@@ -1265,6 +1281,7 @@ function EditStaff() {
                                                             placeholder="Cinsiyyət tələbini seçin"
                                                             value={selectedGender}
                                                             onChange={setSelectedGender}
+                                                            isSearchable={genderOptions ? genderOptions.length > 5 ? true : false : false}
                                                             options={genderOptions}
                                                             styles={customStyles}
                                                         />
@@ -1399,6 +1416,7 @@ function EditStaff() {
                                                                         }}
                                                                         options={programOptions}
                                                                         getOptionLabel={(option) => (option.label)}
+                                                                        isSearchable={programOptions ? programOptions.length > 5 ? true : false : false}
                                                                         styles={customStyles}/>
                                                                 </Form.Group>
                                                             </Col>
@@ -1413,6 +1431,7 @@ function EditStaff() {
                                                                         }}
                                                                         placeholder="Bilik səviyyəsini seçin"
                                                                         options={evaluationOptions}
+                                                                        isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
                                                                         getOptionLabel={(option) => (option.label)}
                                                                         styles={customStyles}
                                                                     />
@@ -1483,6 +1502,7 @@ function EditStaff() {
                                                                         }}
                                                                         placeholder="Qanunvericilik aktlarını seçin"
                                                                         options={legalOptions}
+                                                                        isSearchable={legalOptions ? legalOptions.length > 5 ? true : false : false}
                                                                         getOptionLabel={(option) => (option.label)}
                                                                         styles={customStyles}/>
                                                                 </Form.Group>
@@ -1498,6 +1518,7 @@ function EditStaff() {
                                                                         }}
                                                                         placeholder="Bilik səviyyəsini seçin"
                                                                         options={evaluationOptions}
+                                                                        isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
                                                                         getOptionLabel={(option) => (option.label)}
                                                                         styles={customStyles}
                                                                     />
@@ -1566,6 +1587,7 @@ function EditStaff() {
                                                                             skillLanguageArr[index].name = val;
                                                                             setSkillLanguageArr([...skillLanguageArr], skillLanguageArr)
                                                                         }}
+                                                                        isSearchable={languageOptions ? languageOptions.length > 5 ? true : false : false}
                                                                         options={languageOptions}
                                                                         getOptionLabel={(option) => (option.label)}
                                                                         styles={customStyles}/>
@@ -1581,6 +1603,7 @@ function EditStaff() {
                                                                             setSkillLanguageArr([...skillLanguageArr], skillLanguageArr)
                                                                         }}
                                                                         placeholder="Bilik səviyyəsini seçin"
+                                                                        isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
                                                                         options={evaluationOptions}
                                                                         getOptionLabel={(option) => (option.label)}
                                                                         styles={customStyles}

@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 function CreateStaff() {
 
     const evaluationOptions = [
-        {value: "NONE", label: "Heçbiri"},
+        {value: "NONE", label: "Yoxdur"},
         {value: 'BEST', label: 'Əla'},
         {value: 'MIDDLE', label: 'Orta'},
         {value: 'GOOD', label: 'Yaxşı'}
@@ -275,7 +275,7 @@ function CreateStaff() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setDepartment(res.data.data)
+            setDepartment(res.data.data);
         });
     }
 
@@ -562,6 +562,7 @@ function CreateStaff() {
                                                             onChange={(val) => {
                                                                 setSelectedInstitution(val);
                                                             }}
+                                                            isSearchable={institution ? institution.length > 5 ? true : false : false}
                                                             options={institution}
                                                             getOptionLabel={(option) => (option.name)}
                                                             getOptionValue={(option) => option.name}
@@ -586,7 +587,9 @@ function CreateStaff() {
                                                             onChange={(val) => {
                                                                 setSelectedDepartment(val);
                                                                 getSubDepartment(val.name);
+                                                                setSelectedSubDepartment(null)
                                                             }}
+                                                            isSearchable={department ? department.length > 5 ? true : false : false}
                                                             options={department}
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
@@ -594,8 +597,7 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.departmentName !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.departmentName}</span>
+                                                                    <span className="text-validation">{errors.departmentName}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -610,6 +612,7 @@ function CreateStaff() {
                                                             onChange={(val) => {
                                                                 setSelectedSubDepartment(val);
                                                             }}
+                                                            isSearchable={subDepartment ? subDepartment.length > 5 ? true : false : false}
                                                             options={subDepartment}
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
@@ -617,8 +620,7 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.subDepartmentName !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.subDepartmentName}</span>
+                                                                    <span className="text-validation">{errors.subDepartmentName}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -644,6 +646,7 @@ function CreateStaff() {
                                                             onChange={(val) => {
                                                                 setSelectedVacancy(val);
                                                             }}
+                                                            isSearchable={vacancy ? vacancy.length > 5 ? true : false : false}
                                                             options={vacancy}
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.name)}
@@ -651,8 +654,7 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.vacancyName !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.departmentName}</span>
+                                                                    <span className="text-validation">{errors.departmentName}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -671,8 +673,7 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.vacancyCount !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.vacancyCount}</span>
+                                                                    <span className="text-validation">{errors.vacancyCount}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -686,6 +687,7 @@ function CreateStaff() {
                                                             placeholder="Əməyin ödənilməsi dərəcəsini seçin"
                                                             value={selectedWorkPaid}
                                                             onChange={setSelectedWorkPaid}
+                                                            isSearchable={workPaidOptions ? workPaidOptions.length > 5 ? true : false : false}
                                                             options={workPaidOptions}
                                                             styles={customStyles}
                                                         />
@@ -699,6 +701,7 @@ function CreateStaff() {
                                                             placeholder="Əməyin ödənilməsi üzrə alt dərəcəni seçin"
                                                             value={selectedSubWorkPaid}
                                                             onChange={setSelectedSubWorkPaid}
+                                                            isSearchable={subWorkCalculateDegreeOptions ? subWorkCalculateDegreeOptions.length > 5 ? true : false : false}
                                                             options={subWorkCalculateDegreeOptions}
                                                             styles={customStyles}
                                                         />
@@ -714,6 +717,7 @@ function CreateStaff() {
                                                             onChange={(val) => {
                                                                 setSelectedSalary(val)
                                                             }}
+                                                            isSearchable={salary ? salary.length > 5 ? true : false : false}
                                                             options={salary}
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.name)}
@@ -728,13 +732,13 @@ function CreateStaff() {
                                                             value={selectedWorkCondition}
                                                             onChange={setSelectedWorkCondition}
                                                             options={workConditionOptions}
+                                                            isSearchable={workConditionOptions ? workConditionOptions.length > 5 ? true : false : false}
                                                             styles={customStyles}
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.workCondition !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.workCondition}</span>
+                                                                    <span className="text-validation">{errors.workCondition}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -758,21 +762,21 @@ function CreateStaff() {
                                                             placeholder="İş rejimini seçin"
                                                             value={selectedWorkMode}
                                                             onChange={setSelectedWorkMode}
+                                                            isSearchable={WorkModeOptions ? WorkModeOptions.length > 5 ? true : false : false}
                                                             options={WorkModeOptions}
                                                             styles={customStyles}
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.workMode !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.workMode}</span>
+                                                                    <span className="text-validation">{errors.workMode}</span>
                                                                     : null
                                                             }
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
 
-                                                <Col xs={4}>
+                                                <Col xs={6}>
                                                     <Form.Group className="form-group">
                                                             <span
                                                                 className="input-title">Ştat vahidinin kateqoriyası *</span>
@@ -780,20 +784,20 @@ function CreateStaff() {
                                                             placeholder="Kateqoriyanı seçin"
                                                             defaultValue={selectedVacancyCategory}
                                                             onChange={setSelectedVacancyCategory}
+                                                            isSearchable={vacancyCategoryOptions ? vacancyCategoryOptions.length > 5 ? true : false : false}
                                                             options={vacancyCategoryOptions}
                                                             styles={customStyles}
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.vacancyCategory !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.vacancyCategory}</span>
+                                                                    <span className="text-validation">{errors.vacancyCategory}</span>
                                                                     : null
                                                             }
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-                                                <Col xs={4}>
+                                                <Col xs={6}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">İş ailəsi *</span>
                                                         <Select
@@ -802,6 +806,7 @@ function CreateStaff() {
                                                             onChange={(val) => {
                                                                 setSelectedFamilyJob(val);
                                                             }}
+                                                            isSearchable={familyJob ? familyJob.length > 5 ? true : false : false}
                                                             options={familyJob}
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.name)}
@@ -809,14 +814,13 @@ function CreateStaff() {
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.jobFamily !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.jobFamily}</span>
+                                                                    <span className="text-validation">{errors.jobFamily}</span>
                                                                     : null
                                                             }
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-                                                <Col xs={4}>
+                                                <Col xs={6}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">İş yerinin ünvanı *</span>
                                                         <Select
@@ -824,35 +828,35 @@ function CreateStaff() {
                                                             defaultValue={selectedWorkAddress}
                                                             onChange={setSelectedWorkAddress}
                                                             options={workAddress}
+                                                            isSearchable={workAddress ? workAddress.length > 5 ? true : false : false}
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.key)}
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.workPlace !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.workPlace}</span>
+                                                                    <span className="text-validation">{errors.workPlace}</span>
                                                                     : null
                                                             }
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-                                                <Col xs={4}>
+                                                <Col xs={6}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">Struk b. tabe old. kurator rəh. ad, soyad, ata adı, vəzifə *</span>
+                                                        <span className="input-title">Struk b. tabe old. kurator rəh. ad, soyad, ata adı, vəzifə</span>
                                                         <Select
                                                             placeholder="ad, soyad, ata adı, vəzifəni seçin"
                                                             value={selectedEmployeePosition}
                                                             onChange={setSelectedEmployeePosition}
                                                             options={employeePosition}
+                                                            isSearchable={employeePosition ? employeePosition.length > 5 ? true : false : false}
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.key)}
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.fullNameAndPosition !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.fullNameAndPosition}</span>
+                                                                    <span className="text-validation">{errors.fullNameAndPosition}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -863,9 +867,9 @@ function CreateStaff() {
                                                 {
                                                     skillArr.map((item, index) =>
                                                         <div key={uid(item, index)}
-                                                             className={index == 0 ? '' : 'add-item'}>
+                                                             className={index === 0 ? '' : 'add-item'}>
                                                             {
-                                                                index == 0 ? null :
+                                                                index === 0 ? null :
                                                                     <div className="add-item-top">
                                                                         <p className="m-0"> #{index + 1}. Digər </p>
                                                                         <Button
@@ -874,7 +878,7 @@ function CreateStaff() {
                                                                                 skillArr.splice(index, 1);
                                                                                 setSkillArr([...skillArr], skillArr)
                                                                             }}>
-                                                                            <svg width="12" height="12"
+                                                                            <svg width="14" height="14"
                                                                                  viewBox="0 0 14 14" fill="none"
                                                                                  xmlns="http://www.w3.org/2000/svg">
                                                                                 <path
@@ -901,6 +905,7 @@ function CreateStaff() {
                                                                                 let value = val.key
                                                                                 setSkillLevel(value, index);
                                                                             }}
+                                                                            isSearchable={skill ? skill.length > 5 ? true : false : false}
                                                                             options={skill}
                                                                             styles={customStyles}
                                                                             getOptionLabel={(option) => (option.key)}
@@ -915,6 +920,7 @@ function CreateStaff() {
                                                                                 let value = val.value;
                                                                                 setSkillItem(value, index)
                                                                             }}
+                                                                            isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
                                                                             placeholder="Səviyyəni seçin"
                                                                             options={evaluationOptions}
                                                                             styles={customStyles}
@@ -972,6 +978,7 @@ function CreateStaff() {
                                                             placeholder="Təhsil pilləsini seçin"
                                                             value={selectedEducationDegree}
                                                             onChange={setSelectedEducationDegree}
+                                                            isSearchable={educationDegreeOptions ? educationDegreeOptions.length > 5 ? true : false : false}
                                                             options={educationDegreeOptions}
                                                             styles={customStyles}
                                                         />
@@ -995,6 +1002,7 @@ function CreateStaff() {
                                                             placeholder="Sertifikat tələbini seçin"
                                                             value={selectedRequiredFile}
                                                             onChange={setSelectedRequiredFile}
+                                                            isSearchable={requireFileOptions ? requireFileOptions.length > 5 ? true : false : false}
                                                             options={requireFileOptions}
                                                             styles={customStyles}
                                                         />
@@ -1010,6 +1018,7 @@ function CreateStaff() {
                                                                 setSelectedOption(val)
                                                             }}
                                                             placeholder="Boy tələbini seçin"
+                                                            isSearchable={options ? options.length > 5 ? true : false : false}
                                                             options={options}
                                                             styles={customStyles}
                                                         />
@@ -1023,6 +1032,7 @@ function CreateStaff() {
                                                             placeholder="Hərbi mükəlləfiyyət tələbini seçin"
                                                             value={selectedMilitaryAchieve}
                                                             onChange={setSelectedMilitaryAchieve}
+                                                            isSearchable={options ? options.length > 5 ? true : false : false}
                                                             options={options}
                                                             styles={customStyles}
                                                         />
@@ -1049,6 +1059,7 @@ function CreateStaff() {
                                                             placeholder="Sağlamlıq tələbini seçin"
                                                             value={selectedHealth}
                                                             onChange={setSelectedHealth}
+                                                            isSearchable={options ? options.length > 5 ? true : false : false}
                                                             options={options}
                                                             styles={customStyles}
                                                         />
@@ -1061,6 +1072,7 @@ function CreateStaff() {
                                                             placeholder="Cinsiyyət tələbini seçin"
                                                             value={selectedGender}
                                                             onChange={setSelectedGender}
+                                                            isSearchable={genderOptions ? genderOptions.length > 5 ? true : false : false}
                                                             options={genderOptions}
                                                             styles={customStyles}
                                                         />
@@ -1194,6 +1206,7 @@ function CreateStaff() {
                                                                                 skillProgramArr[index].name = val.value;
                                                                                 setSkillProgramArr([...skillProgramArr], skillProgramArr);
                                                                             }}
+                                                                            isSearchable={programOptions ? programOptions.length > 5 ? true : false : false}
                                                                             options={programOptions}
                                                                             styles={customStyles}/>
                                                                     </Form.Group>
@@ -1208,6 +1221,7 @@ function CreateStaff() {
                                                                                 setSkillProgramArr([...skillProgramArr], skillProgramArr);
                                                                             }}
                                                                             placeholder="Bilik səviyyəsini seçin"
+                                                                            isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
                                                                             options={evaluationOptions}
                                                                             styles={customStyles}
                                                                         />
@@ -1278,6 +1292,7 @@ function CreateStaff() {
                                                                                 setSkillLegalArr([...skillLegalArr], skillLegalArr);
                                                                             }}
                                                                             placeholder="Qanunvericilik aktlarını seçin"
+                                                                            isSearchable={legalOptions ? legalOptions.length > 5 ? true : false : false}
                                                                             options={legalOptions}
                                                                             styles={customStyles}/>
                                                                     </Form.Group>
@@ -1292,6 +1307,7 @@ function CreateStaff() {
                                                                                 setSkillLegalArr([...skillLegalArr], skillLegalArr);
                                                                             }}
                                                                             placeholder="Bilik səviyyəsini seçin"
+                                                                            isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
                                                                             options={evaluationOptions}
                                                                             styles={customStyles}
                                                                         />
@@ -1362,6 +1378,7 @@ function CreateStaff() {
                                                                                 skillLanguageArr[index].name = val.value;
                                                                                 setSkillLanguageArr([...skillLanguageArr], skillLanguageArr);
                                                                             }}
+                                                                            isSearchable={languageOptions ? languageOptions.length > 5 ? true : false : false}
                                                                             options={languageOptions}
                                                                             styles={customStyles}/>
                                                                     </Form.Group>
@@ -1376,6 +1393,7 @@ function CreateStaff() {
                                                                                 setSkillLanguageArr([...skillLanguageArr], skillLanguageArr);
                                                                             }}
                                                                             placeholder="Bilik səviyyəsini seçin"
+                                                                            isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
                                                                             options={evaluationOptions}
                                                                             styles={customStyles}
                                                                         />
