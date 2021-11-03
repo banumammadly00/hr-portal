@@ -345,6 +345,14 @@ function CreateOperation() {
             resetData();
             setSave(false);
             history.push("/operation")
+        }).catch((error) => {
+            Swal.fire({
+                icon: 'error',
+                text: 'Məlumatlar qeyd edilmədi!',
+                cancelButtonText: 'Bağla',
+                showCancelButton: true,
+                showConfirmButton: false,
+            })
         });
     }
 
@@ -8473,6 +8481,7 @@ function CreateOperation() {
                                                             setSelectedStaff(val);
                                                         }}
                                                         options={staff}
+                                                        isSearchable={false}
                                                         getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
                                                         styles={customStyles}
                                                     />
