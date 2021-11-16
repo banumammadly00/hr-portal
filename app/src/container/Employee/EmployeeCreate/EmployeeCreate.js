@@ -2337,9 +2337,7 @@ function EmployeeCreate() {
                                 </Form>
                             </div>
                         </Tab>
-
-                        {/*disabled={key !== "education"}*/}
-                        <Tab eventKey="education" title="Təhsil">
+                        <Tab eventKey="education" title="Təhsil" disabled={key !== "education"}>
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
