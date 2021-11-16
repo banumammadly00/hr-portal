@@ -174,6 +174,7 @@ function EmployeeCreate() {
     const [showReward, setShowReward] = useState(false);
     const [showDriverLicence, setShowDriverLicence] = useState(false);
     const [checkColleague, setCheckColleague] = useState(true);
+    const [showButton, setShowButton] = useState(false);
 
     /*Education*/
 
@@ -616,6 +617,7 @@ function EmployeeCreate() {
                 timer: 1500
             });
             setKey('company');
+            setShowButton(true)
             setDataVal(res.data.data);
             if (uploadFile !== "") SenDataImage(res.data.data)
         }).catch((error) => {
@@ -679,6 +681,7 @@ function EmployeeCreate() {
                 timer: 1500
             });
             setKey('education');
+            setShowButton(true)
         }).catch((error) => {
             setLoadingIndicator(false)
             Swal.fire({
@@ -737,7 +740,7 @@ function EmployeeCreate() {
                 showConfirmButton: false,
                 timer: 1500
             });
-            window.location.href = "/employee"
+            //window.location.href = "/employee"
         }).catch((error) => {
             setLoadingIndicator(false);
             Swal.fire({
@@ -778,7 +781,7 @@ function EmployeeCreate() {
                         </div>
                     </div>
                     <Tabs activeKey={key} onSelect={(k) => setKey(k)}>
-                        <Tab eventKey="home" title="Ümumi məlumatlar" disabled={key !== "home"}>
+                        <Tab eventKey="home" title="Ümumi məlumatlar">
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
@@ -2118,7 +2121,7 @@ function EmployeeCreate() {
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="company" title="Əvvəlki iş yeri barədə" disabled={key !== "company"}>
+                        <Tab eventKey="company" title="Əvvəlki iş yeri barədə" >
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
@@ -2328,16 +2331,19 @@ function EmployeeCreate() {
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div className="flex-vertical-center">
-                                        <Button className="btn-effect" onClick={() => sendDataBusiness()}>
-                                            Yadda saxla
-                                        </Button>
-                                    </div>
+                                    {
+                                        showButton ?
+                                            <div className="flex-vertical-center">
+                                                <Button className="btn-effect" onClick={() => sendDataBusiness()}>
+                                                    Davam et
+                                                </Button>
+                                            </div>
+                                            : null
+                                    }
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="education" title="Təhsil" disabled={key !== "education"}>
+                        <Tab eventKey="education" title="Təhsil" >
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
@@ -3041,7 +3047,6 @@ function EmployeeCreate() {
                                                 null
                                         }
                                     </div>
-
                                     <div className="add-block">
                                         <div className="block-title flex-start">
                                             <div className="check-block">
@@ -3146,7 +3151,6 @@ function EmployeeCreate() {
                                                 : null
                                         }
                                     </div>
-
                                     <div className="add-block">
                                         <div className="block-title">
                                             Sosial sığorta şəhadətnaməsi
@@ -3251,11 +3255,15 @@ function EmployeeCreate() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="flex-vertical-center">
-                                        <Button className="btn-effect" onClick={() => sendDataAcademic()}>
-                                            Yadda saxla
-                                        </Button>
-                                    </div>
+                                    {
+                                        showButton ?
+                                            <div className="flex-vertical-center">
+                                                <Button className="btn-effect" onClick={() => sendDataAcademic()}>
+                                                    Yadda saxla
+                                                </Button>
+                                            </div>
+                                            : null
+                                    }
                                 </Form>
                             </div>
                         </Tab>

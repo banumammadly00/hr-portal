@@ -126,6 +126,7 @@ function CreateStaff() {
     const [skillLegalArr, setSkillLegalArr] = useState([{level: null, name: null}]);
     const [skillLanguageArr, setSkillLanguageArr] = useState([{level: null, name: null}]);
     const [showHeight, setShowHeight] = useState(false);
+    const [showButton, setShowButton] = useState(false);
     const [key, setKey] = useState('home');
     const [dataVal, setDataVal] = useState('');
     const [loadingIndicator, setLoadingIndicator] = useState(false);
@@ -463,7 +464,8 @@ function CreateStaff() {
                 showConfirmButton: false,
                 timer: 1500
             });
-            setKey('profile')
+            setKey('profile');
+            setShowButton(true);
             setDataVal(res.data.data);
         }).catch((error) => {
             setLoadingIndicator(false);
@@ -503,7 +505,7 @@ function CreateStaff() {
                 showConfirmButton: false,
                 timer: 1500
             });
-            window.location.href = "/staff"
+            //window.location.href = "/staff"
         }).catch((error) => {
             setLoadingIndicator(false);
             Swal.fire({
@@ -544,7 +546,7 @@ function CreateStaff() {
                         </div>
                     </div>
                     <Tabs activeKey={key} onSelect={(k) => setKey(k)}>
-                        <Tab eventKey="home" title="Ümumi məlumatlar" disabled={key !== "home"}>
+                        <Tab eventKey="home" title="Ümumi məlumatlar" >
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
@@ -1155,7 +1157,7 @@ function CreateStaff() {
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="profile" title="İxtisas bilikləri" disabled={key !== "profile"}>
+                        <Tab eventKey="profile" title="İxtisas bilikləri">
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
@@ -1419,11 +1421,16 @@ function CreateStaff() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="flex-vertical-center">
-                                        <Button className="btn-effect" onClick={() => sendDataKnowledge()}>
-                                            Yadda saxla
-                                        </Button>
-                                    </div>
+                                    {
+                                        showButton ?
+                                            <div className="flex-vertical-center">
+                                                <Button className="btn-effect" onClick={() => sendDataKnowledge()}>
+                                                    Yadda saxla
+                                                </Button>
+                                            </div>
+                                            : null
+                                    }
+
                                 </Form>
                             </div>
                         </Tab>
