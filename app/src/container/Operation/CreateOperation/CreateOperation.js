@@ -1764,6 +1764,17 @@ function CreateOperation() {
                                             <Row>
                                                 <Col xs={6}>
                                                     <Form.Group className="form-group">
+                                                        <span className="input-title">Əmrin əsası</span>
+                                                        <Form.Label>
+                                                            <Form.Control
+                                                                placeholder="Əmrin əsası"
+                                                                value={mainOfOrder}
+                                                                onChange={(e) => setMainOfOrder(e.target.value)}/>
+                                                        </Form.Label>
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col xs={6}>
+                                                    <Form.Group className="form-group">
                                                         <span className="input-title">İşçinin ərizəsinə və təhsil müəssisəsi tərəfindən verilən çağırış </span>
                                                         <Form.Label>
                                                             <Form.Control
@@ -3028,10 +3039,10 @@ function CreateOperation() {
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">İşçinin ərizəsinə və təhsil müəssisəsi tərəfindən verilən çağırış arayışına əsasən</span>
+                                                    <span className="input-title">Əmrin əsası</span>
                                                     <Form.Label>
                                                         <Form.Control
-                                                            placeholder="İşçinin ərizəsinə və təhsil müəssisəsi tərəfindən verilən çağırış"
+                                                            placeholder="Əmrin əsası"
                                                             value={mainOfOrder}
                                                             onChange={(e) => setMainOfOrder(e.target.value)}/>
                                                     </Form.Label>

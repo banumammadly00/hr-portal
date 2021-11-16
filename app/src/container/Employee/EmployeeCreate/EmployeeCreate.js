@@ -1382,7 +1382,7 @@ function EmployeeCreate() {
                                                 : null
                                         }
                                         <div className="block-inn">
-                                            <div className="block-title flex-start">
+                                            <div className="block-title flex-center">
                                                 <div className="check-block">
                                                     <label className="check-button">
                                                         <input type="checkbox"
