@@ -2282,7 +2282,7 @@ function CreateEmployee() {
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="company" title="Şirkət barədə">
+                        <Tab eventKey="company" title="Əvvəlki iş yeri barədə">
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
