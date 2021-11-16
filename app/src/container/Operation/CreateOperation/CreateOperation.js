@@ -5419,10 +5419,10 @@ function CreateOperation() {
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Təlimə göndərilmə zərurəti </span>
+                                                    <span className="input-title">Əmrin əsası </span>
                                                     <Form.Label>
                                                         <Form.Control
-                                                            placeholder="Təlimə göndərilmə zərurəti daxil edin"
+                                                            placeholder="Əmrin əsası"
                                                             value={mainOfOrder}
                                                             onChange={(e) => setMainOfOrder(e.target.value)}/>
                                                     </Form.Label>
