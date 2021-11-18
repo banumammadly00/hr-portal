@@ -259,7 +259,7 @@ function SettingEdit() {
     const getUniversity = () => {
         mainAxios({
             method: 'get',
-            url: '/institution',
+            url: '/institution/education',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -276,7 +276,7 @@ function SettingEdit() {
         }
         mainAxios({
             method: 'post',
-            url: '/institution',
+            url: '/institution/education',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -294,7 +294,7 @@ function SettingEdit() {
     const deleteUniversity = (id) => {
         mainAxios({
             method: 'delete',
-            url: '/institution',
+            url: '/institution/education',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -471,7 +471,7 @@ function SettingEdit() {
     const getSkill = () => {
         mainAxios({
             method: 'get',
-            url: '/skill',
+            url: '/skill/ids',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -1231,7 +1231,7 @@ function SettingEdit() {
                                         skillArr.map((item, index) =>
                                             <Dropdown.Item key={index}>
                                                 {item.key}
-                                                <button type="button" className="btn-transparent btn-delete" onClick={()=> deleteSkill(item.value)}>
+                                                <button type="button" className="btn-transparent btn-delete" onClick={()=> deleteSkill(item.label)}>
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path

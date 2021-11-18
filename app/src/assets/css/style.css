@@ -39,6 +39,11 @@ button:focus {
     outline: none;
 }
 
+.btn-previous, .btn-previous:hover, .btn-previous:active, .btn-previous:focus {
+    font-size: 16px;
+    color: #193651;
+}
+
 .flex, .flex-start, .flex-vertical-center, .flex-end, .flex-vertical-start {
     display: flex;
     align-items: center;
@@ -229,7 +234,7 @@ label {
     left: 0;
     height: 20px;
     width: 20px;
-    border: 1px solid #193651;
+    border: 1px solid #193651cc;
     border-radius: 4px;
     background: transparent;
     transition: ease-in .05s;
@@ -251,7 +256,8 @@ label {
 }
 
 .check-button input:checked ~ .checkmark {
-    background-color: #0F2351;
+    background-color: #193651cc;
+    border-color: rgba(25, 54, 81, .0);
 }
 
 .check-button .checkmark:after {
@@ -309,7 +315,7 @@ label {
     width: 20px;
     background-color: transparent;
     border-radius: 50%;
-    border: 1px solid #193651;
+    border: 1px solid #193651cc;
     cursor: pointer;
 }
 
@@ -333,7 +339,7 @@ label {
     width: 11px;
     height: 11px;
     border-radius: 50%;
-    background: #193651;
+    background: #193651cc;
 }
 
 .login .right {
@@ -643,7 +649,7 @@ td {
 }
 
 .staff .btn-main {
-    width: 140px;
+    width: 120px;
 }
 
 .pagination-block .sr-only {
@@ -758,6 +764,10 @@ td {
     width: 205px;
 }
 
+.create-staff .btn-block li:not(:last-child) {
+    margin-right: 30px;
+}
+
 .block-title {
     font-weight: 500;
     font-size: 16px;
@@ -771,7 +781,7 @@ td {
 }
 
 .nav-tabs {
-    border-bottom: 2px solid rgba(24, 54, 81, .2);
+    border-bottom: 3px solid rgba(24, 54, 81, .1);
     margin-bottom: 25px;
 }
 
@@ -779,11 +789,11 @@ td {
     color: #3083DC;
     background-color: transparent;
     font-weight: 500;
-    border-bottom: 2px solid #599CE3;
+    border-bottom: 3px solid #599CE3;
 }
 
 .nav-tabs .nav-link {
-    margin-bottom: -2px;
+    margin-bottom: -3px;
     border-width: 0 0 2px 0;
     color: #193651;
     font-size: 16px;
@@ -973,7 +983,11 @@ td {
 }
 
 .radio-content {
-    padding: 30px 0 60px;
+    padding: 0 0 60px;
+}
+
+.radio-content-in {
+    padding-bottom: 30px;
 }
 
 
@@ -1275,6 +1289,10 @@ td {
     border: none;
 }
 
+.calendar .fc .fc-toolbar-title {
+    font-size: 20px;
+}
+
 .staff-salary .block {
     overflow-x: scroll;
 }
@@ -1297,6 +1315,13 @@ td {
 
 .staff-salary .table > :not(caption) > * > *, .staff-salary th {
     padding: 20px !important;
+}
+
+.staff-id {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 30px;
+    color: #0a58ca;
 }
 
 .calendar .fc .fc-button-primary {
@@ -1539,6 +1564,10 @@ td {
 
 .setting .block-inn {
     margin-bottom: 30px;
+}
+
+.check-block-list {
+    padding: 10px 0;
 }
 
 @media only screen and (min-width: 1600px){

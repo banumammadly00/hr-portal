@@ -1423,11 +1423,21 @@ function CreateStaff() {
                                     </div>
                                     {
                                         showButton ?
-                                            <div className="flex-vertical-center">
-                                                <Button className="btn-effect" onClick={() => sendDataKnowledge()}>
-                                                    Yadda saxla
-                                                </Button>
-                                            </div>
+                                            <ul className="flex-vertical-center btn-block list-unstyled">
+                                                <li>
+                                                    <Button className="btn-transparent btn-previous" onClick={()=>{setKey('home')}}>
+                                                        <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M15 6H1.5M5.5 1.5L1 6L5.5 10.5" stroke="#193651" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                        </svg>
+                                                        Əvvələ qayıt
+                                                    </Button>
+                                                </li>
+                                                <li>
+                                                    <Button className="btn-effect" onClick={() => sendDataKnowledge()}>
+                                                        Yadda saxla
+                                                    </Button>
+                                                </li>
+                                            </ul>
                                             : null
                                     }
 

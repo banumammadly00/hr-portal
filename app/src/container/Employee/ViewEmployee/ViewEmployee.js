@@ -703,7 +703,7 @@ function ViewEmployee() {
                                 </div>
                             </div>
                         </Tab>
-                        <Tab eventKey="company" title="Şirkət barədə">
+                        <Tab eventKey="company" title="Əvvəlki iş yeri barədə">
                             <div className="block">
                                 <div className="form-list">
                                     <div className="flex view-top">
@@ -824,7 +824,7 @@ function ViewEmployee() {
                                 </div>
                             </div>
                         </Tab>
-                        <Tab eventKey="education" title="Təhsil">
+                        <Tab eventKey="education" title="Təhsil bölməsi">
                             <div className="block">
                                 <div className="flex view-top">
                                     <div className="upload-content flex-start">

@@ -82,7 +82,6 @@ function CreateEmployee() {
     const [idCardPin, setIdCardPin] = useState('');
     const [fullName, setFullName] = useState('');
     const [countryBirth, setCountryBirth] = useState('');
-    const [livePermission, setLivePermission] = useState('');
     const [idCardOrganization, setIdCardOrganization] = useState('');
     const [passportNumber, setPassportNumber] = useState('');
     const [settlement, setSettlement] = useState('');
@@ -101,6 +100,9 @@ function CreateEmployee() {
     const [academicDegreeOrganization, setAcademicDegreeOrganization] = useState('');
     const [uploadFile, setUploadFile] = useState('');
     const [photo, setPhoto] = useState();
+
+    const [showPassport, setShowPassport] = useState(false);
+
 
     const [selectedSerial, setSelectedSerial] = useState(null);
     const [selectedPassportSerial, setSelectedPassportSerial] = useState(null);
@@ -151,6 +153,12 @@ function CreateEmployee() {
     const [citizen, setCitizen] = useState([]);
     const [document, setDocument] = useState([]);
     const [rewardOrganization, setRewardOrganization] = useState([]);
+    const [showEducation, setShowEducation] = useState(false);
+    const [showDegree, setShowDegree] = useState(false);
+    const [checkEducation, setCheckEducation] = useState(true);
+    const [showReward, setShowReward] = useState(false);
+    const [showDriverLicence, setShowDriverLicence] = useState(false);
+
 
     const [loadingIndicator, setLoadingIndicator] = useState(false);
     const [errors, setErrors] = useState({
@@ -578,7 +586,6 @@ function CreateEmployee() {
                 if (data.bloodGroup === i.label)
                     setSelectedBloodType(i);
             }
-            setLivePermission(data.permission);
             setSelectedCitizenControl({name: data.citizenCountry});
             data.citizenCountry === 'Azərbaycan' ? setShowPermission(false) : setShowPermission(true)
             setIdCardOrganization(data.idcardOrganization);
@@ -588,6 +595,7 @@ function CreateEmployee() {
                 }
             }
             setPassportNumber(data.foreignPassportNumber);
+            setShowPassport(data.foreignPassportNumber !== '' ? true : false)
             setStartPassportDate(new Date(data.foreignPassportStartDate));
             setExpiredPassportDate(new Date(data.foreignPassportEndDate));
             setSelectedCountry({key: data.addressCountry.key, value: data.addressCountry.value});
@@ -666,6 +674,7 @@ function CreateEmployee() {
             let data = res.data.data;
             setStartAcademicDegreeDate(new Date(data.academicDegreeDate));
             setAcademicDegreeNumber(data.academicDegreeNumber);
+            setShowDegree(data.academicDegreeNumber !=='')
             setAcademicDegreeOrganization(data.academicDegreeOrganization);
             setFaculty(data.faculty);
             setDirection(data.direction);
@@ -677,11 +686,14 @@ function CreateEmployee() {
             setDegree(data.degree);
             setGraduateFileNumber(data.graduateFileNumber);
             setStartGraduateFile(new Date(data.graduateFileDate));
+            setShowEducation(data.higherEducation)
+            setShowReward(data.governmentAchievements.length > 0)
             for (let i of educationTypeOptions) {
                 if (data.educationType === i.label)
                     setSelectedEducationType(i);
             }
 
+            setShowDriverLicence(data.driverCardCategory !== null)
             setNostrificationNumber(data.nostrifikasiyaNumber)
             setExpiredDriverLicenceDate(new Date(data.driverCardEndDate));
             for (let i of driverLicenceOptions) {
@@ -749,7 +761,6 @@ function CreateEmployee() {
             "mobilePhone1": mobileNumber1,
             "mobilePhone2": mobileNumber2,
             "ownMailAddress": email,
-            "permission": livePermission,
             "workPermissionSerial": workPermissionSerial,
             "workPermissionNumber": workPermissionNumber,
             "workPermissionPeriod": parseFloat(workPermissionPeriod),
@@ -1365,17 +1376,6 @@ function CreateEmployee() {
                                                 </Col>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">Vəsiqə və ya müvəqqəti yaşamaq icazəsi</span>
-                                                        <Form.Label>
-                                                            <Form.Control type="text"
-                                                                          placeholder="Vəsiqə və ya müvəqqəti yaşamaq icazəsini daxil edin"
-                                                                          value={livePermission || ''}
-                                                                          onChange={(e) => setLivePermission(e.target.value)}/>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
                                                             <span
                                                                 className="input-title">Şəxsiy. vəs. verən orqan *</span>
                                                         <Form.Label>
@@ -1383,15 +1383,15 @@ function CreateEmployee() {
                                                                           placeholder="Şəxsiy. vəs. verən orqanı daxil edin"
                                                                           value={idCardOrganization || ''}
                                                                           onChange={(e) => setIdCardOrganization(e.target.value)}/>
-                                                            <div className="validation-block flex-start">
-                                                                {
-                                                                    errors.IDCardOrganization !== '' ?
-                                                                        <span
-                                                                            className="text-validation">{errors.IDCardOrganization}</span>
-                                                                        : null
-                                                                }
-                                                            </div>
                                                         </Form.Label>
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors.IDCardOrganization !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors.IDCardOrganization}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                             </Row>
@@ -1563,184 +1563,200 @@ function CreateEmployee() {
                                                 : null
                                         }
                                         <div className="block-inn">
-                                            <div className="block-title">
+                                            <div className="block-title flex-center">
+                                                <div className="check-block">
+                                                    <label className="check-button">
+                                                        <input type="checkbox"
+                                                               checked={showPassport}
+                                                               onChange={(e) => {
+                                                                   setShowPassport(e.target.checked);
+
+                                                               }}/>
+                                                        <span className="checkmark"></span>
+                                                    </label>
+                                                </div>
                                                 Xarici pasport
                                             </div>
-                                            <Row>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Seriya və nömrə *</span>
-                                                        <InputGroup>
-                                                            <div className="input-add">
-                                                                <Select
-                                                                    placeholder="AZE"
-                                                                    value={selectedPassportSerial}
-                                                                    onChange={(val) => {
-                                                                        setSelectedPassportSerial(val);
-                                                                    }}
-                                                                    isSearchable={passportSerialOptions ? passportSerialOptions.length > 5 ? true : false : false}
-                                                                    options={passportSerialOptions}
-                                                                    getOptionLabel={(option) => (option.label)}
-                                                                    styles={customGroupStyles}
-                                                                />
-                                                            </div>
-                                                            <Form.Control placeholder="Seriya və nömrəni daxil edin"
-                                                                          value={passportNumber || ''}
-                                                                          onChange={(e => setPassportNumber(e.target.value))}/>
-                                                        </InputGroup>
-                                                        <div className="validation-block flex-start">
-                                                            {
-                                                                errors.foreignPassportSeries !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.foreignPassportSeries}</span>
-                                                                    : null
-                                                            }
-                                                            {
-                                                                errors.foreignPassportNumber !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.foreignPassportNumber}</span>
-                                                                    : null
-                                                            }
-                                                        </div>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Verilmə tarixi *</span>
-                                                        <Form.Label className="relative m-0">
-                                                            <DatePicker selected={startPassportDate}
-                                                                        dateFormat="dd-MM-yyyy"
-                                                                        showMonthDropdown
-                                                                        showYearDropdown
-                                                                        dropdownMode="select"
-                                                                        onChange={(date) => setStartPassportDate(date)}/>
-                                                            <Button className="btn-transparent">
-                                                                <svg width="18" height="18"
-                                                                     viewBox="0 0 18 18" fill="none"
-                                                                     xmlns="http://www.w3.org/2000/svg">
-                                                                    <g opacity="0.8"
-                                                                       clipPath="url(#clip0)">
-                                                                        <path
-                                                                            d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
-                                                                            fill="#181818"/>
-                                                                    </g>
-                                                                    <defs>
-                                                                        <clipPath id="clip0">
-                                                                            <rect width="17.399"
-                                                                                  height="18"
-                                                                                  fill="white"
-                                                                                  transform="translate(0.449219)"/>
-                                                                        </clipPath>
-                                                                    </defs>
-                                                                </svg>
-                                                            </Button>
-                                                        </Form.Label>
-                                                        <div className="validation-block flex-start">
-                                                            {
-                                                                errors.foreignPassportStartDate !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.foreignPassportStartDate}</span>
-                                                                    : null
-                                                            }
-                                                        </div>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Bitmə tarixi *</span>
-                                                        <Form.Label className="relative m-0">
-                                                            <DatePicker selected={expiredPassportDate}
-                                                                        dateFormat="dd-MM-yyyy"
-                                                                        showMonthDropdown
-                                                                        showYearDropdown
-                                                                        dropdownMode="select"
-                                                                        onChange={(date) => setExpiredPassportDate(date)}/>
-                                                            <Button className="btn-transparent">
-                                                                <svg width="18" height="18"
-                                                                     viewBox="0 0 18 18" fill="none"
-                                                                     xmlns="http://www.w3.org/2000/svg">
-                                                                    <g opacity="0.8"
-                                                                       clipPath="url(#clip0)">
-                                                                        <path
-                                                                            d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
-                                                                            fill="#181818"/>
-                                                                    </g>
-                                                                    <defs>
-                                                                        <clipPath id="clip0">
-                                                                            <rect width="17.399"
-                                                                                  height="18"
-                                                                                  fill="white"
-                                                                                  transform="translate(0.449219)"/>
-                                                                        </clipPath>
-                                                                    </defs>
-                                                                </svg>
-                                                            </Button>
-                                                        </Form.Label>
-                                                        <div className="validation-block flex-start">
-                                                            {
-                                                                errors.foreignPassportEndDate !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.foreignPassportEndDate}</span>
-                                                                    : null
-                                                            }
-                                                        </div>
-                                                    </Form.Group>
-                                                </Col>
-                                            </Row>
+                                            {
+                                                showPassport ?
+                                                    <Row>
+                                                        <Col xs={4}>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title">Seriya və nömrə *</span>
+                                                                <InputGroup>
+                                                                    <div className="input-add">
+                                                                        <Select
+                                                                            placeholder="AZE"
+                                                                            value={selectedPassportSerial}
+                                                                            onChange={(val) => {
+                                                                                setSelectedPassportSerial(val);
+                                                                            }}
+                                                                            isSearchable={passportSerialOptions ? passportSerialOptions.length > 5 ? true : false : false}
+                                                                            options={passportSerialOptions}
+                                                                            getOptionLabel={(option) => (option.label)}
+                                                                            styles={customGroupStyles}
+                                                                        />
+                                                                    </div>
+                                                                    <Form.Control placeholder="Seriya və nömrəni daxil edin"
+                                                                                  value={passportNumber || ''}
+                                                                                  onChange={(e => setPassportNumber(e.target.value))}/>
+                                                                </InputGroup>
+                                                                <div className="validation-block flex-start">
+                                                                    {
+                                                                        errors.foreignPassportSeries !== '' ?
+                                                                            <span
+                                                                                className="text-validation">{errors.foreignPassportSeries}</span>
+                                                                            : null
+                                                                    }
+                                                                    {
+                                                                        errors.foreignPassportNumber !== '' ?
+                                                                            <span
+                                                                                className="text-validation">{errors.foreignPassportNumber}</span>
+                                                                            : null
+                                                                    }
+                                                                </div>
+                                                            </Form.Group>
+                                                        </Col>
+                                                        <Col xs={4}>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title">Verilmə tarixi *</span>
+                                                                <Form.Label className="relative m-0">
+                                                                    <DatePicker selected={startPassportDate}
+                                                                                dateFormat="dd-MM-yyyy"
+                                                                                showMonthDropdown
+                                                                                showYearDropdown
+                                                                                dropdownMode="select"
+                                                                                onChange={(date) => setStartPassportDate(date)}/>
+                                                                    <Button className="btn-transparent">
+                                                                        <svg width="18" height="18"
+                                                                             viewBox="0 0 18 18" fill="none"
+                                                                             xmlns="http://www.w3.org/2000/svg">
+                                                                            <g opacity="0.8"
+                                                                               clipPath="url(#clip0)">
+                                                                                <path
+                                                                                    d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
+                                                                                    fill="#181818"/>
+                                                                            </g>
+                                                                            <defs>
+                                                                                <clipPath id="clip0">
+                                                                                    <rect width="17.399"
+                                                                                          height="18"
+                                                                                          fill="white"
+                                                                                          transform="translate(0.449219)"/>
+                                                                                </clipPath>
+                                                                            </defs>
+                                                                        </svg>
+                                                                    </Button>
+                                                                </Form.Label>
+                                                                <div className="validation-block flex-start">
+                                                                    {
+                                                                        errors.foreignPassportStartDate !== '' ?
+                                                                            <span
+                                                                                className="text-validation">{errors.foreignPassportStartDate}</span>
+                                                                            : null
+                                                                    }
+                                                                </div>
+                                                            </Form.Group>
+                                                        </Col>
+                                                        <Col xs={4}>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title">Bitmə tarixi *</span>
+                                                                <Form.Label className="relative m-0">
+                                                                    <DatePicker selected={expiredPassportDate}
+                                                                                dateFormat="dd-MM-yyyy"
+                                                                                showMonthDropdown
+                                                                                showYearDropdown
+                                                                                dropdownMode="select"
+                                                                                onChange={(date) => setExpiredPassportDate(date)}/>
+                                                                    <Button className="btn-transparent">
+                                                                        <svg width="18" height="18"
+                                                                             viewBox="0 0 18 18" fill="none"
+                                                                             xmlns="http://www.w3.org/2000/svg">
+                                                                            <g opacity="0.8"
+                                                                               clipPath="url(#clip0)">
+                                                                                <path
+                                                                                    d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
+                                                                                    fill="#181818"/>
+                                                                            </g>
+                                                                            <defs>
+                                                                                <clipPath id="clip0">
+                                                                                    <rect width="17.399"
+                                                                                          height="18"
+                                                                                          fill="white"
+                                                                                          transform="translate(0.449219)"/>
+                                                                                </clipPath>
+                                                                            </defs>
+                                                                        </svg>
+                                                                    </Button>
+                                                                </Form.Label>
+                                                                <div className="validation-block flex-start">
+                                                                    {
+                                                                        errors.foreignPassportEndDate !== '' ?
+                                                                            <span
+                                                                                className="text-validation">{errors.foreignPassportEndDate}</span>
+                                                                            : null
+                                                                    }
+                                                                </div>
+                                                            </Form.Group>
+                                                        </Col>
+                                                    </Row>
+                                                    :
+                                                    null
+                                            }
                                         </div>
                                         <div className="block-inn">
                                             <div className="block-title">
@@ -2337,6 +2353,7 @@ function CreateEmployee() {
                                                         <Form.Label className="relative m-0">
                                                             <DatePicker selected={startJobDate}
                                                                         dateFormat="dd-MM-yyyy"
+                                                                        placeholderText="DD-MM-YYYY"
                                                                         showMonthDropdown
                                                                         showYearDropdown
                                                                         dropdownMode="select"
@@ -2397,6 +2414,7 @@ function CreateEmployee() {
                                                         <Form.Label className="relative m-0">
                                                             <DatePicker selected={endJobDate}
                                                                         dateFormat="dd-MM-yyyy"
+                                                                        placeholderText="DD-MM-YYYY"
                                                                         showMonthDropdown
                                                                         showYearDropdown
                                                                         dropdownMode="select"
@@ -2499,383 +2517,326 @@ function CreateEmployee() {
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="education" title="Təhsil">
+                        <Tab eventKey="education" title="Təhsil bölməsi">
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
                                         <div className="block-title">
-                                            Elmi dərəcə
-                                        </div>
-                                        <div className="block-inn">
-                                            <Row>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title"> Verilmə tarixi</span>
-                                                        <Form.Label className="relative m-0">
-                                                            <DatePicker selected={startAcademicDegreeDate}
-                                                                        dateFormat="dd-MM-yyyy"
-                                                                        showMonthDropdown
-                                                                        showYearDropdown
-                                                                        dropdownMode="select"
-                                                                        onChange={(date) => setStartAcademicDegreeDate(date)}/>
-                                                            <Button className="btn-transparent">
-                                                                <svg width="18" height="18"
-                                                                     viewBox="0 0 18 18" fill="none"
-                                                                     xmlns="http://www.w3.org/2000/svg">
-                                                                    <g opacity="0.8"
-                                                                       clipPath="url(#clip0)">
-                                                                        <path
-                                                                            d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
-                                                                            fill="#181818"/>
-                                                                    </g>
-                                                                    <defs>
-                                                                        <clipPath id="clip0">
-                                                                            <rect width="17.399"
-                                                                                  height="18"
-                                                                                  fill="white"
-                                                                                  transform="translate(0.449219)"/>
-                                                                        </clipPath>
-                                                                    </defs>
-                                                                </svg>
-                                                            </Button>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Sənədin nömrəsi</span>
-                                                        <Form.Label>
-                                                            <Form.Control placeholder="Sənədin nömrəsi daxil et"
-                                                                          value={academicDegreeNumber || ''}
-                                                                          onChange={(e => setAcademicDegreeNumber(e.target.value))}/>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Verən orqan</span>
-                                                        <Form.Label>
-                                                            <Form.Control placeholder="Verən orqan daxil et"
-                                                                          value={academicDegreeOrganization || ''}
-                                                                          onChange={(e => setAcademicDegreeOrganization(e.target.value))}/>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                    </div>
-                                    <div className="add-block">
-                                        <div className="block-title">
                                             Təhsil bölməsi
                                         </div>
-                                        <div className="block-inn">
-                                            <Row>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Təhsil müəssəsinin adı</span>
-                                                        <Select
-                                                            placeholder="Təhsil müəssəsini seçin"
-                                                            value={selectedUniversity}
-                                                            onChange={(val) => {
-                                                                setSelectedUniversity(val);
-                                                            }}
-                                                            isSearchable={university ? university.length > 5 ? true : false : false}
-                                                            options={university}
-                                                            getOptionLabel={(option) => (option.name)}
-                                                            styles={customStyles}
-                                                        />
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Fakültə</span>
-                                                        <Form.Label>
-                                                            <Form.Control placeholder="Fakültə daxil et"
-                                                                          value={faculty || ''}
-                                                                          onChange={(e => setFaculty(e.target.value))}/>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">İstiqamət</span>
-                                                        <Form.Label>
-                                                            <Form.Control placeholder="İstiqamət daxil et"
-                                                                          value={direction || ''}
-                                                                          onChange={(e => setDirection(e.target.value))}/>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title"> İxtisas</span>
-                                                        <Form.Label className="relative m-0">
-                                                            <Form.Control placeholder="İxtisas daxil et"
-                                                                          value={major || ''}
-                                                                          onChange={(e => setMajor(e.target.value))}/>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title"> Daxil olma tarixi</span>
-                                                        <Form.Label className="relative m-0">
-                                                            <DatePicker selected={startGraduateDate}
-                                                                        dateFormat="dd-MM-yyyy"
-                                                                        showMonthDropdown
-                                                                        showYearDropdown
-                                                                        dropdownMode="select"
-                                                                        onChange={(date) => setStartGraduateDate(date)}/>
-                                                            <Button className="btn-transparent">
-                                                                <svg width="18" height="18"
-                                                                     viewBox="0 0 18 18" fill="none"
-                                                                     xmlns="http://www.w3.org/2000/svg">
-                                                                    <g opacity="0.8"
-                                                                       clipPath="url(#clip0)">
-                                                                        <path
-                                                                            d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
-                                                                            fill="#181818"/>
-                                                                    </g>
-                                                                    <defs>
-                                                                        <clipPath id="clip0">
-                                                                            <rect width="17.399"
-                                                                                  height="18"
-                                                                                  fill="white"
-                                                                                  transform="translate(0.449219)"/>
-                                                                        </clipPath>
-                                                                    </defs>
-                                                                </svg>
-                                                            </Button>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title"> Bitmə tarixi</span>
-                                                        <Form.Label className="relative m-0">
-                                                            <DatePicker selected={endGraduateDate}
-                                                                        dateFormat="dd-MM-yyyy"
-                                                                        showMonthDropdown
-                                                                        showYearDropdown
-                                                                        dropdownMode="select"
-                                                                        onChange={(date) => setEndGraduateDate(date)}/>
-                                                            <Button className="btn-transparent">
-                                                                <svg width="18" height="18"
-                                                                     viewBox="0 0 18 18" fill="none"
-                                                                     xmlns="http://www.w3.org/2000/svg">
-                                                                    <g opacity="0.8"
-                                                                       clipPath="url(#clip0)">
-                                                                        <path
-                                                                            d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
-                                                                            fill="#181818"/>
-                                                                    </g>
-                                                                    <defs>
-                                                                        <clipPath id="clip0">
-                                                                            <rect width="17.399"
-                                                                                  height="18"
-                                                                                  fill="white"
-                                                                                  transform="translate(0.449219)"/>
-                                                                        </clipPath>
-                                                                    </defs>
-                                                                </svg>
-                                                            </Button>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Təhsil dərəcəsi</span>
-                                                        <Form.Label>
-                                                            <Form.Control placeholder="Təhsil dərəcəsi daxil et"
-                                                                          value={degree || ''}
-                                                                          onChange={(e => setDegree(e.target.value))}/>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Sənədin nömrəsi</span>
-                                                        <Form.Label>
-                                                            <Form.Control placeholder="Sənədin nömrəsi daxil et"
-                                                                          value={graduateFileNumber || ''}
-                                                                          onChange={(e => setGraduateFileNumber(e.target.value))}/>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title"> Sənədin verilmə tarixi</span>
-                                                        <Form.Label className="relative m-0">
-                                                            <DatePicker selected={startGraduateFile}
-                                                                        dateFormat="dd-MM-yyyy"
-                                                                        showMonthDropdown
-                                                                        showYearDropdown
-                                                                        dropdownMode="select"
-                                                                        onChange={(date) => setStartGraduateFile(date)}/>
-                                                            <Button className="btn-transparent">
-                                                                <svg width="18" height="18"
-                                                                     viewBox="0 0 18 18" fill="none"
-                                                                     xmlns="http://www.w3.org/2000/svg">
-                                                                    <g opacity="0.8"
-                                                                       clipPath="url(#clip0)">
-                                                                        <path
-                                                                            d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
-                                                                            fill="#181818"/>
-                                                                    </g>
-                                                                    <defs>
-                                                                        <clipPath id="clip0">
-                                                                            <rect width="17.399"
-                                                                                  height="18"
-                                                                                  fill="white"
-                                                                                  transform="translate(0.449219)"/>
-                                                                        </clipPath>
-                                                                    </defs>
-                                                                </svg>
-                                                            </Button>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-
-                                                <Col xs={6}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Təhsil forması</span>
-                                                        <Select
-                                                            placeholder="Təhsil forması seçin"
-                                                            value={selectedEducationType}
-                                                            onChange={(val) => {
-                                                                setSelectedEducationType(val);
-                                                            }}
-                                                            isSearchable={educationTypeOptions ? educationTypeOptions.length > 5 ? true : false : false}
-                                                            options={educationTypeOptions}
-                                                            getOptionLabel={(option) => (option.label)}
-                                                            styles={customStyles}
-                                                        />
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={6
-                                                }>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Nostrifikasiya şəhadətnaməsinin nömrəsi</span>
-                                                        <Form.Label>
-                                                            <Form.Control
-                                                                placeholder="Nostrifikasiya şəhadətnaməsinin nömrəsi daxil et"
-                                                                value={nostrificationNumber || ''}
-                                                                onChange={(e => setNostrificationNumber(e.target.value))}/>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-                                            </Row>
+                                        <div className="radio-content-in">
+                                            <div className="flex-start">
+                                                <div className="radio-block">
+                                                    <label className="radio-label">
+                                                        <input type="radio" name="education"
+                                                               checked={checkEducation}
+                                                               onChange={() => {
+                                                                   setCheckEducation(true);
+                                                                   setShowEducation(false)
+                                                               }}/>
+                                                        <span className="radio-mark"></span>
+                                                    </label>
+                                                    <span className="radio-title">Orta təhsilli</span>
+                                                </div>
+                                                <div className="radio-block">
+                                                    <label className="radio-label">
+                                                        <input type="radio" name="education"
+                                                               checked={!checkEducation}
+                                                               onChange={() => {
+                                                                   setCheckEducation(false);
+                                                                   setShowEducation(true)
+                                                               }}/>
+                                                        <span className="radio-mark"></span>
+                                                    </label>
+                                                    <span className="radio-title">Ali təhsilli </span>
+                                                </div>
+                                            </div>
                                         </div>
+                                        {
+                                            showEducation ?
+                                                <div className="block-inn">
+                                                    <Row>
+                                                        <Col xs={4}>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title">Təhsil müəssəsinin adı</span>
+                                                                <Select
+                                                                    placeholder="Təhsil müəssəsini seçin"
+                                                                    value={selectedUniversity}
+                                                                    onChange={(val) => {
+                                                                        setSelectedUniversity(val);
+                                                                    }}
+                                                                    isSearchable={university ? university.length > 5 ? true : false : false}
+                                                                    options={university}
+                                                                    getOptionLabel={(option) => (option.name)}
+                                                                    styles={customStyles}
+                                                                />
+                                                            </Form.Group>
+                                                        </Col>
+                                                        <Col xs={4}>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title">Fakültə</span>
+                                                                <Form.Label>
+                                                                    <Form.Control placeholder="Fakültə daxil et"
+                                                                                  value={faculty || ''}
+                                                                                  onChange={(e => setFaculty(e.target.value))}/>
+                                                                </Form.Label>
+                                                            </Form.Group>
+                                                        </Col>
+                                                        <Col xs={4}>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title">İstiqamət</span>
+                                                                <Form.Label>
+                                                                    <Form.Control placeholder="İstiqamət daxil et"
+                                                                                  value={direction || ''}
+                                                                                  onChange={(e => setDirection(e.target.value))}/>
+                                                                </Form.Label>
+                                                            </Form.Group>
+                                                        </Col>
+
+                                                        <Col xs={4}>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title"> İxtisas</span>
+                                                                <Form.Label className="relative m-0">
+                                                                    <Form.Control placeholder="İxtisas daxil et"
+                                                                                  value={major || ''}
+                                                                                  onChange={(e => setMajor(e.target.value))}/>
+                                                                </Form.Label>
+                                                            </Form.Group>
+                                                        </Col>
+                                                        <Col xs={4}>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title"> Daxil olma tarixi</span>
+                                                                <Form.Label className="relative m-0">
+                                                                    <DatePicker selected={startGraduateDate}
+                                                                                dateFormat="dd-MM-yyyy"
+                                                                                showMonthDropdown
+                                                                                showYearDropdown
+                                                                                dropdownMode="select"
+                                                                                onChange={(date) => setStartGraduateDate(date)}/>
+                                                                    <Button className="btn-transparent">
+                                                                        <svg width="18" height="18"
+                                                                             viewBox="0 0 18 18" fill="none"
+                                                                             xmlns="http://www.w3.org/2000/svg">
+                                                                            <g opacity="0.8"
+                                                                               clipPath="url(#clip0)">
+                                                                                <path
+                                                                                    d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
+                                                                                    fill="#181818"/>
+                                                                            </g>
+                                                                            <defs>
+                                                                                <clipPath id="clip0">
+                                                                                    <rect width="17.399"
+                                                                                          height="18"
+                                                                                          fill="white"
+                                                                                          transform="translate(0.449219)"/>
+                                                                                </clipPath>
+                                                                            </defs>
+                                                                        </svg>
+                                                                    </Button>
+                                                                </Form.Label>
+                                                            </Form.Group>
+                                                        </Col>
+                                                        <Col xs={4}>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title"> Bitmə tarixi</span>
+                                                                <Form.Label className="relative m-0">
+                                                                    <DatePicker selected={endGraduateDate}
+                                                                                dateFormat="dd-MM-yyyy"
+                                                                                showMonthDropdown
+                                                                                showYearDropdown
+                                                                                dropdownMode="select"
+                                                                                onChange={(date) => setEndGraduateDate(date)}/>
+                                                                    <Button className="btn-transparent">
+                                                                        <svg width="18" height="18"
+                                                                             viewBox="0 0 18 18" fill="none"
+                                                                             xmlns="http://www.w3.org/2000/svg">
+                                                                            <g opacity="0.8"
+                                                                               clipPath="url(#clip0)">
+                                                                                <path
+                                                                                    d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
+                                                                                    fill="#181818"/>
+                                                                            </g>
+                                                                            <defs>
+                                                                                <clipPath id="clip0">
+                                                                                    <rect width="17.399"
+                                                                                          height="18"
+                                                                                          fill="white"
+                                                                                          transform="translate(0.449219)"/>
+                                                                                </clipPath>
+                                                                            </defs>
+                                                                        </svg>
+                                                                    </Button>
+                                                                </Form.Label>
+                                                            </Form.Group>
+                                                        </Col>
+
+                                                        <Col xs={4}>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title">Təhsil dərəcəsi</span>
+                                                                <Form.Label>
+                                                                    <Form.Control placeholder="Təhsil dərəcəsi daxil et"
+                                                                                  value={degree || ''}
+                                                                                  onChange={(e => setDegree(e.target.value))}/>
+                                                                </Form.Label>
+                                                            </Form.Group>
+                                                        </Col>
+                                                        <Col xs={4}>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title">Sənədin nömrəsi</span>
+                                                                <Form.Label>
+                                                                    <Form.Control placeholder="Sənədin nömrəsi daxil et"
+                                                                                  value={graduateFileNumber || ''}
+                                                                                  onChange={(e => setGraduateFileNumber(e.target.value))}/>
+                                                                </Form.Label>
+                                                            </Form.Group>
+                                                        </Col>
+                                                        <Col xs={4}>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title"> Sənədin verilmə tarixi</span>
+                                                                <Form.Label className="relative m-0">
+                                                                    <DatePicker selected={startGraduateFile}
+                                                                                dateFormat="dd-MM-yyyy"
+                                                                                showMonthDropdown
+                                                                                showYearDropdown
+                                                                                dropdownMode="select"
+                                                                                onChange={(date) => setStartGraduateFile(date)}/>
+                                                                    <Button className="btn-transparent">
+                                                                        <svg width="18" height="18"
+                                                                             viewBox="0 0 18 18" fill="none"
+                                                                             xmlns="http://www.w3.org/2000/svg">
+                                                                            <g opacity="0.8"
+                                                                               clipPath="url(#clip0)">
+                                                                                <path
+                                                                                    d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
+                                                                                    fill="#181818"/>
+                                                                                <path
+                                                                                    d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
+                                                                                    fill="#181818"/>
+                                                                            </g>
+                                                                            <defs>
+                                                                                <clipPath id="clip0">
+                                                                                    <rect width="17.399"
+                                                                                          height="18"
+                                                                                          fill="white"
+                                                                                          transform="translate(0.449219)"/>
+                                                                                </clipPath>
+                                                                            </defs>
+                                                                        </svg>
+                                                                    </Button>
+                                                                </Form.Label>
+                                                            </Form.Group>
+                                                        </Col>
+
+                                                        <Col xs={6}>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title">Təhsil forması</span>
+                                                                <Select
+                                                                    placeholder="Təhsil forması seçin"
+                                                                    value={selectedEducationType}
+                                                                    onChange={(val) => {
+                                                                        setSelectedEducationType(val);
+                                                                    }}
+                                                                    isSearchable={educationTypeOptions ? educationTypeOptions.length > 5 ? true : false : false}
+                                                                    options={educationTypeOptions}
+                                                                    getOptionLabel={(option) => (option.label)}
+                                                                    styles={customStyles}
+                                                                />
+                                                            </Form.Group>
+                                                        </Col>
+                                                        <Col xs={6
+                                                        }>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title">Nostrifikasiya şəhadətnaməsinin nömrəsi</span>
+                                                                <Form.Label>
+                                                                    <Form.Control
+                                                                        placeholder="Nostrifikasiya şəhadətnaməsinin nömrəsi daxil et"
+                                                                        value={nostrificationNumber || ''}
+                                                                        onChange={(e => setNostrificationNumber(e.target.value))}/>
+                                                                </Form.Label>
+                                                            </Form.Group>
+                                                        </Col>
+                                                    </Row>
+                                                </div>
+                                                : null
+                                        }
                                     </div>
                                     <div className="add-block">
                                         <div className="block-title">
@@ -3015,252 +2976,6 @@ function CreateEmployee() {
                                     </div>
                                     <div className="add-block">
                                         <div className="block-title">
-                                            Dövlət təltifləri, fəxri adlar
-                                        </div>
-                                        <div className="block-inn">
-                                            <div className="addition-content">
-                                                {
-                                                    rewardArr.map((item, index) =>
-                                                        <div key={uid(item, index)}
-                                                             className={index === 0 ? '' : 'add-item'}>
-                                                            {
-                                                                index === 0 ? null :
-                                                                    <div className="add-item-top">
-                                                                        <p className="m-0"> #{index + 1}. Digər </p>
-                                                                        <Button
-                                                                            className="btn-transparent btn-remove flex-center"
-                                                                            onClick={() => {
-                                                                                rewardArr.splice(index, 1);
-                                                                                setRewardArr([...rewardArr], rewardArr)
-                                                                            }}>
-                                                                            <svg width="14" height="14"
-                                                                                 viewBox="0 0 14 14" fill="none"
-                                                                                 xmlns="http://www.w3.org/2000/svg">
-                                                                                <path
-                                                                                    d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
-                                                                                    fill="#CF3131"/>
-                                                                                <path
-                                                                                    d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
-                                                                                    fill="#CF3131"/>
-                                                                                <path
-                                                                                    d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
-                                                                                    fill="#CF3131"/>
-                                                                            </svg>
-                                                                            <span>Sil</span>
-                                                                        </Button>
-                                                                    </div>
-                                                            }
-                                                            <Row key={index}>
-                                                                <Col xs={4}>
-                                                                    <Form.Group className="form-group">
-                                                                        <span
-                                                                            className="input-title">Təltifin adı</span>
-                                                                        <Form.Label>
-                                                                            <Select
-                                                                                placeholder="Təltifin adı seçin"
-                                                                                onChange={(val) => {
-                                                                                    rewardArr[index].name = val;
-                                                                                    setRewardArr([...rewardArr], rewardArr)
-                                                                                }}
-                                                                                isSearchable={reward ? reward.length > 5 ? true : false : false}
-                                                                                options={reward}
-                                                                                getOptionLabel={(option) => (option.name)}
-                                                                                styles={customStyles}
-                                                                            />
-                                                                        </Form.Label>
-                                                                    </Form.Group>
-                                                                </Col>
-                                                                <Col xs={4}>
-                                                                    <Form.Group className="form-group">
-                                                            <span
-                                                                className="input-title">Təltifi verən orqanın adı</span>
-                                                                        <Form.Label>
-                                                                            <Select
-                                                                                placeholder="Təltifi verən orqanı seçin"
-                                                                                onChange={(val) => {
-                                                                                    rewardArr[index].organization = val;
-                                                                                    setRewardArr([...rewardArr], rewardArr)
-                                                                                }}
-                                                                                isSearchable={rewardOrganization ? rewardOrganization.length > 5 ? true : false : false}
-                                                                                options={rewardOrganization}
-                                                                                getOptionLabel={(option) => (option.name)}
-                                                                                styles={customStyles}
-                                                                            />
-                                                                        </Form.Label>
-                                                                    </Form.Group>
-                                                                </Col>
-                                                                <Col xs={4}>
-                                                                    <Form.Group className="form-group">
-                                                                <span
-                                                                    className="input-title">Təltifin verilmə tarixi</span>
-                                                                        <Form.Label className="relative m-0">
-                                                                            <DatePicker value={item.startDate}
-                                                                                        dateFormat="dd-MM-yyyy"
-                                                                                        showMonthDropdown
-                                                                                        placeholderText="DD-MM-YYYY"
-                                                                                        showYearDropdown
-                                                                                        dropdownMode="select"
-                                                                                        onChange={(date) => {
-                                                                                            rewardArr[index].startDate = moment(date).format("MM-DD-YYYY");
-                                                                                            setRewardArr([...rewardArr], rewardArr)
-                                                                                        }}/>
-                                                                            <Button className="btn-transparent">
-                                                                                <svg width="18" height="18"
-                                                                                     viewBox="0 0 18 18" fill="none"
-                                                                                     xmlns="http://www.w3.org/2000/svg">
-                                                                                    <g opacity="0.8"
-                                                                                       clipPath="url(#clip0)">
-                                                                                        <path
-                                                                                            d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
-                                                                                            fill="#181818"/>
-                                                                                        <path
-                                                                                            d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
-                                                                                            fill="#181818"/>
-                                                                                        <path
-                                                                                            d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
-                                                                                            fill="#181818"/>
-                                                                                        <path
-                                                                                            d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
-                                                                                            fill="#181818"/>
-                                                                                        <path
-                                                                                            d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
-                                                                                            fill="#181818"/>
-                                                                                        <path
-                                                                                            d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
-                                                                                            fill="#181818"/>
-                                                                                        <path
-                                                                                            d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
-                                                                                            fill="#181818"/>
-                                                                                        <path
-                                                                                            d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
-                                                                                            fill="#181818"/>
-                                                                                        <path
-                                                                                            d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
-                                                                                            fill="#181818"/>
-                                                                                        <path
-                                                                                            d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
-                                                                                            fill="#181818"/>
-                                                                                    </g>
-                                                                                    <defs>
-                                                                                        <clipPath id="clip0">
-                                                                                            <rect width="17.399"
-                                                                                                  height="18"
-                                                                                                  fill="white"
-                                                                                                  transform="translate(0.449219)"/>
-                                                                                        </clipPath>
-                                                                                    </defs>
-                                                                                </svg>
-                                                                            </Button>
-                                                                        </Form.Label>
-                                                                    </Form.Group>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    )
-                                                }
-                                                <div className="flex-end">
-                                                    <button type="button" className="btn-color"
-                                                            onClick={() => addReward()}>
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z" stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-                                                        </svg>
-                                                        <span>əlavə et</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="add-block">
-                                        <div className="block-title">
-                                            Sürücülük vəsiqəsi
-                                        </div>
-                                        <div className="block-inn">
-                                            <Row>
-                                                <Col xs={6}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Kateqoriya</span>
-                                                        <Form.Label>
-                                                            <Select
-                                                                placeholder="Kateqoriya daxil edin"
-                                                                value={selectedDriverLicence}
-                                                                onChange={(val) => {
-                                                                    setSelectedDriverLicence(val)
-                                                                }}
-                                                                isSearchable={driverLicenceOptions ? driverLicenceOptions.length > 5 ? true : false : false}
-                                                                options={driverLicenceOptions}
-                                                                getOptionLabel={(option) => (option.label)}
-                                                                styles={customStyles}
-                                                            />
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-
-                                                <Col xs={6}>
-                                                    <Form.Group className="form-group">
-                                                                <span
-                                                                    className="input-title">Qüvvədə olma müddəti</span>
-                                                        <Form.Label className="relative m-0">
-                                                            <DatePicker selected={expiredDriverLicenceDate}
-                                                                        dateFormat="dd-MM-yyyy"
-                                                                        showMonthDropdown
-                                                                        showYearDropdown
-                                                                        dropdownMode="select"
-                                                                        onChange={(date) => setExpiredDriverLicenceDate(date)}/>
-                                                            <Button className="btn-transparent">
-                                                                <svg width="18" height="18"
-                                                                     viewBox="0 0 18 18" fill="none"
-                                                                     xmlns="http://www.w3.org/2000/svg">
-                                                                    <g opacity="0.8"
-                                                                       clipPath="url(#clip0)">
-                                                                        <path
-                                                                            d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
-                                                                            fill="#181818"/>
-                                                                    </g>
-                                                                    <defs>
-                                                                        <clipPath id="clip0">
-                                                                            <rect width="17.399"
-                                                                                  height="18"
-                                                                                  fill="white"
-                                                                                  transform="translate(0.449219)"/>
-                                                                        </clipPath>
-                                                                    </defs>
-                                                                </svg>
-                                                            </Button>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                    </div>
-                                    <div className="add-block">
-                                        <div className="block-title">
                                             Sosial sığorta şəhadətnaməsi
                                         </div>
                                         <div className="block-inn">
@@ -3299,69 +3014,454 @@ function CreateEmployee() {
                                                     </Form.Group>
                                                 </Col>
                                             </Row>
-                                            <div className="radio-question">
-                                                <Row>
-                                                    <Col xs={6}>
-                                                        <div className="radio-content">
-                                                            <h5>Məhkum olmusunuzmu?</h5>
-                                                            <div className="flex-start">
-                                                                <div className="radio-block">
-                                                                    <label className="radio-label">
-                                                                        <input type="radio" name="prisoner"
-                                                                               checked={checkPrisoner}
-                                                                               onChange={(e) => {
-                                                                                   setCheckPrisoner(true)
-                                                                               }}/>
-                                                                        <span className="radio-mark"></span>
-                                                                    </label>
-                                                                    <span className="radio-title">Bəli</span>
-                                                                </div>
-                                                                <div className="radio-block">
-                                                                    <label className="radio-label">
-                                                                        <input type="radio" name="prisoner"
-                                                                               checked={!checkPrisoner}
-                                                                               onChange={(e) => {
-                                                                                   setCheckPrisoner(false)
-                                                                               }}/>
-                                                                        <span className="radio-mark"></span>
-                                                                    </label>
-                                                                    <span className="radio-title">Xeyr</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </Col>
-                                                    <Col xs={6}>
-                                                        <div className="radio-content">
-                                                            <h5>Həmkarlar ittifaqının üzvüsünüzmü?</h5>
-                                                            <div className="flex-start">
-                                                                <div className="radio-block">
-                                                                    <label className="radio-label">
-                                                                        <input type="radio" name="colleague"
-                                                                               checked={checkColleague}
-                                                                               onChange={(e) => {
-                                                                                   setCheckColleague(true)
-                                                                               }}/>
-                                                                        <span className="radio-mark"></span>
-                                                                    </label>
-                                                                    <span className="radio-title">Bəli</span>
-                                                                </div>
-                                                                <div className="radio-block">
-                                                                    <label className="radio-label">
-                                                                        <input type="radio" name="colleague"
-                                                                               checked={!checkColleague}
-                                                                               onChange={(e) => {
-                                                                                   setCheckColleague(false)
-                                                                               }}/>
-                                                                        <span className="radio-mark"></span>
-                                                                    </label>
-                                                                    <span className="radio-title">Xeyr</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                            </div>
                                         </div>
+                                    </div>
+                                    <div className="check-block-list">
+                                        <div className="add-block">
+                                            <div className="block-title flex-center">
+                                                <div className="check-block">
+                                                    <label className="check-button">
+                                                        <input type="checkbox"
+                                                               checked={showDegree}
+                                                               onChange={(e) => {
+                                                                   setShowDegree(e.target.checked);
+                                                               }}/>
+                                                        <span className="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                                Elmi dərəcə
+                                            </div>
+                                            {
+                                                showDegree ?
+                                                    <div className="block-inn">
+                                                        <Row>
+                                                            <Col xs={4}>
+                                                                <Form.Group className="form-group">
+                                                                    <span className="input-title"> Verilmə tarixi</span>
+                                                                    <Form.Label className="relative m-0">
+                                                                        <DatePicker selected={startAcademicDegreeDate}
+                                                                                    dateFormat="dd-MM-yyyy"
+                                                                                    showMonthDropdown
+                                                                                    showYearDropdown
+                                                                                    dropdownMode="select"
+                                                                                    onChange={(date) => setStartAcademicDegreeDate(date)}/>
+                                                                        <Button className="btn-transparent">
+                                                                            <svg width="18" height="18"
+                                                                                 viewBox="0 0 18 18" fill="none"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <g opacity="0.8"
+                                                                                   clipPath="url(#clip0)">
+                                                                                    <path
+                                                                                        d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
+                                                                                        fill="#181818"/>
+                                                                                </g>
+                                                                                <defs>
+                                                                                    <clipPath id="clip0">
+                                                                                        <rect width="17.399"
+                                                                                              height="18"
+                                                                                              fill="white"
+                                                                                              transform="translate(0.449219)"/>
+                                                                                    </clipPath>
+                                                                                </defs>
+                                                                            </svg>
+                                                                        </Button>
+                                                                    </Form.Label>
+                                                                </Form.Group>
+                                                            </Col>
+                                                            <Col xs={4}>
+                                                                <Form.Group className="form-group">
+                                                                    <span className="input-title">Sənədin nömrəsi</span>
+                                                                    <Form.Label>
+                                                                        <Form.Control placeholder="Sənədin nömrəsi daxil et"
+                                                                                      value={academicDegreeNumber || ''}
+                                                                                      onChange={(e => setAcademicDegreeNumber(e.target.value))}/>
+                                                                    </Form.Label>
+                                                                </Form.Group>
+                                                            </Col>
+                                                            <Col xs={4}>
+                                                                <Form.Group className="form-group">
+                                                                    <span className="input-title">Verən orqan</span>
+                                                                    <Form.Label>
+                                                                        <Form.Control placeholder="Verən orqan daxil et"
+                                                                                      value={academicDegreeOrganization || ''}
+                                                                                      onChange={(e => setAcademicDegreeOrganization(e.target.value))}/>
+                                                                    </Form.Label>
+                                                                </Form.Group>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                    : null
+                                            }
+                                        </div>
+                                        <div className="add-block">
+                                            <div className="block-title flex-center">
+                                                <div className="check-block">
+                                                    <label className="check-button">
+                                                        <input type="checkbox"
+                                                               checked={showReward}
+                                                               onChange={(e) => {
+                                                                   setShowReward(e.target.checked)
+                                                               }}/>
+                                                        <span className="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                                Dövlət təltifləri, fəxri adlar
+                                            </div>
+                                            {
+                                                showReward ?
+                                                    <div className="block-inn">
+                                                        <div className="addition-content">
+                                                            {
+                                                                rewardArr.map((item, index) =>
+                                                                        <div key={uid(item, index)}
+                                                                             className={index === 0 ? '' : 'add-item'}>
+                                                                            {
+                                                                                index === 0 ? null :
+                                                                                    <div className="add-item-top">
+                                                                                        <p className="m-0"> #{index + 1}. Digər </p>
+                                                                                        <Button
+                                                                                            className="btn-transparent btn-remove flex-center"
+                                                                                            onClick={() => {
+                                                                                                rewardArr.splice(index, 1);
+                                                                                                setRewardArr([...rewardArr], rewardArr)
+                                                                                            }}>
+                                                                                            <svg width="14" height="14"
+                                                                                                 viewBox="0 0 14 14" fill="none"
+                                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                                <path
+                                                                                                    d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
+                                                                                                    fill="#CF3131"/>
+                                                                                                <path
+                                                                                                    d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
+                                                                                                    fill="#CF3131"/>
+                                                                                                <path
+                                                                                                    d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
+                                                                                                    fill="#CF3131"/>
+                                                                                            </svg>
+                                                                                            <span>Sil</span>
+                                                                                        </Button>
+                                                                                    </div>
+                                                                            }
+                                                                            <Row key={index}>
+                                                                                <Col xs={4}>
+                                                                                    <Form.Group className="form-group">
+                                                                        <span
+                                                                            className="input-title">Təltifin adı</span>
+                                                                                        <Form.Label>
+                                                                                            <Select
+                                                                                                placeholder="Təltifin adı seçin"
+                                                                                                onChange={(val) => {
+                                                                                                    rewardArr[index].name = val;
+                                                                                                    setRewardArr([...rewardArr], rewardArr)
+                                                                                                }}
+                                                                                                isSearchable={reward ? reward.length > 5 ? true : false : false}
+                                                                                                options={reward}
+                                                                                                getOptionLabel={(option) => (option.name)}
+                                                                                                styles={customStyles}
+                                                                                            />
+                                                                                        </Form.Label>
+                                                                                    </Form.Group>
+                                                                                </Col>
+                                                                                <Col xs={4}>
+                                                                                    <Form.Group className="form-group">
+                                                            <span
+                                                                className="input-title">Təltifi verən orqanın adı</span>
+                                                                                        <Form.Label>
+                                                                                            <Select
+                                                                                                placeholder="Təltifi verən orqanı seçin"
+                                                                                                onChange={(val) => {
+                                                                                                    rewardArr[index].organization = val;
+                                                                                                    setRewardArr([...rewardArr], rewardArr)
+                                                                                                }}
+                                                                                                isSearchable={rewardOrganization ? rewardOrganization.length > 5 ? true : false : false}
+                                                                                                options={rewardOrganization}
+                                                                                                getOptionLabel={(option) => (option.name)}
+                                                                                                styles={customStyles}
+                                                                                            />
+                                                                                        </Form.Label>
+                                                                                    </Form.Group>
+                                                                                </Col>
+                                                                                <Col xs={4}>
+                                                                                    <Form.Group className="form-group">
+                                                                <span
+                                                                    className="input-title">Təltifin verilmə tarixi</span>
+                                                                                        <Form.Label className="relative m-0">
+                                                                                            <DatePicker value={item.startDate}
+                                                                                                        dateFormat="dd-MM-yyyy"
+                                                                                                        showMonthDropdown
+                                                                                                        placeholderText="DD-MM-YYYY"
+                                                                                                        showYearDropdown
+                                                                                                        dropdownMode="select"
+                                                                                                        onChange={(date) => {
+                                                                                                            rewardArr[index].startDate = moment(date).format("MM-DD-YYYY");
+                                                                                                            setRewardArr([...rewardArr], rewardArr)
+                                                                                                        }}/>
+                                                                                            <Button className="btn-transparent">
+                                                                                                <svg width="18" height="18"
+                                                                                                     viewBox="0 0 18 18" fill="none"
+                                                                                                     xmlns="http://www.w3.org/2000/svg">
+                                                                                                    <g opacity="0.8"
+                                                                                                       clipPath="url(#clip0)">
+                                                                                                        <path
+                                                                                                            d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
+                                                                                                            fill="#181818"/>
+                                                                                                        <path
+                                                                                                            d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
+                                                                                                            fill="#181818"/>
+                                                                                                        <path
+                                                                                                            d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
+                                                                                                            fill="#181818"/>
+                                                                                                        <path
+                                                                                                            d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
+                                                                                                            fill="#181818"/>
+                                                                                                        <path
+                                                                                                            d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
+                                                                                                            fill="#181818"/>
+                                                                                                        <path
+                                                                                                            d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
+                                                                                                            fill="#181818"/>
+                                                                                                        <path
+                                                                                                            d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
+                                                                                                            fill="#181818"/>
+                                                                                                        <path
+                                                                                                            d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
+                                                                                                            fill="#181818"/>
+                                                                                                        <path
+                                                                                                            d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
+                                                                                                            fill="#181818"/>
+                                                                                                        <path
+                                                                                                            d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
+                                                                                                            fill="#181818"/>
+                                                                                                    </g>
+                                                                                                    <defs>
+                                                                                                        <clipPath id="clip0">
+                                                                                                            <rect width="17.399"
+                                                                                                                  height="18"
+                                                                                                                  fill="white"
+                                                                                                                  transform="translate(0.449219)"/>
+                                                                                                        </clipPath>
+                                                                                                    </defs>
+                                                                                                </svg>
+                                                                                            </Button>
+                                                                                        </Form.Label>
+                                                                                    </Form.Group>
+                                                                                </Col>
+                                                                            </Row>
+                                                                        </div>
+                                                                )
+                                                            }
+                                                            <div className="flex-end">
+                                                                <button type="button" className="btn-color"
+                                                                        onClick={() => addReward()}>
+                                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <path d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z" stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                                                                    </svg>
+                                                                    <span>əlavə et</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    :
+                                                    null
+                                            }
+                                        </div>
+                                        <div className="add-block">
+                                            <div className="block-title flex-center">
+                                                <div className="check-block">
+                                                    <label className="check-button">
+                                                        <input type="checkbox"
+                                                               checked={showDriverLicence}
+                                                               onChange={(e) => {
+                                                                   setShowDriverLicence(e.target.checked);
+                                                                   setSelectedDriverLicence(null);
+                                                                   setExpiredDriverLicenceDate(null)
+                                                               }}/>
+                                                        <span className="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                                Sürücülük vəsiqəsi
+                                            </div>
+                                            {
+                                                showDriverLicence ?
+                                                    <div className="block-inn">
+                                                        <Row>
+                                                            <Col xs={6}>
+                                                                <Form.Group className="form-group">
+                                                                    <span className="input-title">Kateqoriya</span>
+                                                                    <Form.Label>
+                                                                        <Select
+                                                                            placeholder="Kateqoriya daxil edin"
+                                                                            value={selectedDriverLicence}
+                                                                            onChange={(val) => {
+                                                                                setSelectedDriverLicence(val)
+                                                                            }}
+                                                                            isSearchable={driverLicenceOptions ? driverLicenceOptions.length > 5 ? true : false : false}
+                                                                            options={driverLicenceOptions}
+                                                                            getOptionLabel={(option) => (option.label)}
+                                                                            styles={customStyles}
+                                                                        />
+                                                                    </Form.Label>
+                                                                </Form.Group>
+                                                            </Col>
+
+                                                            <Col xs={6}>
+                                                                <Form.Group className="form-group">
+                                                                <span
+                                                                    className="input-title">Qüvvədə olma müddəti</span>
+                                                                    <Form.Label className="relative m-0">
+                                                                        <DatePicker selected={expiredDriverLicenceDate}
+                                                                                    dateFormat="dd-MM-yyyy"
+                                                                                    showMonthDropdown
+                                                                                    showYearDropdown
+                                                                                    dropdownMode="select"
+                                                                                    onChange={(date) => setExpiredDriverLicenceDate(date)}/>
+                                                                        <Button className="btn-transparent">
+                                                                            <svg width="18" height="18"
+                                                                                 viewBox="0 0 18 18" fill="none"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <g opacity="0.8"
+                                                                                   clipPath="url(#clip0)">
+                                                                                    <path
+                                                                                        d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
+                                                                                        fill="#181818"/>
+                                                                                    <path
+                                                                                        d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
+                                                                                        fill="#181818"/>
+                                                                                </g>
+                                                                                <defs>
+                                                                                    <clipPath id="clip0">
+                                                                                        <rect width="17.399"
+                                                                                              height="18"
+                                                                                              fill="white"
+                                                                                              transform="translate(0.449219)"/>
+                                                                                    </clipPath>
+                                                                                </defs>
+                                                                            </svg>
+                                                                        </Button>
+                                                                    </Form.Label>
+                                                                </Form.Group>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+
+                                                    : null
+                                            }
+                                        </div>
+                                    </div>
+
+
+                                    <div className="radio-question">
+                                        <Row>
+                                            <Col xs={6}>
+                                                <div className="radio-content">
+                                                    <h5>Məhkum olmusunuzmu?</h5>
+                                                    <div className="flex-start">
+                                                        <div className="radio-block">
+                                                            <label className="radio-label">
+                                                                <input type="radio" name="prisoner"
+                                                                       checked={checkPrisoner}
+                                                                       onChange={(e) => {
+                                                                           setCheckPrisoner(true)
+                                                                       }}/>
+                                                                <span className="radio-mark"></span>
+                                                            </label>
+                                                            <span className="radio-title">Bəli</span>
+                                                        </div>
+                                                        <div className="radio-block">
+                                                            <label className="radio-label">
+                                                                <input type="radio" name="prisoner"
+                                                                       checked={!checkPrisoner}
+                                                                       onChange={(e) => {
+                                                                           setCheckPrisoner(false)
+                                                                       }}/>
+                                                                <span className="radio-mark"></span>
+                                                            </label>
+                                                            <span className="radio-title">Xeyr</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <div className="radio-content">
+                                                    <h5>Həmkarlar ittifaqının üzvüsünüzmü?</h5>
+                                                    <div className="flex-start">
+                                                        <div className="radio-block">
+                                                            <label className="radio-label">
+                                                                <input type="radio" name="colleague"
+                                                                       checked={checkColleague}
+                                                                       onChange={(e) => {
+                                                                           setCheckColleague(true)
+                                                                       }}/>
+                                                                <span className="radio-mark"></span>
+                                                            </label>
+                                                            <span className="radio-title">Bəli</span>
+                                                        </div>
+                                                        <div className="radio-block">
+                                                            <label className="radio-label">
+                                                                <input type="radio" name="colleague"
+                                                                       checked={!checkColleague}
+                                                                       onChange={(e) => {
+                                                                           setCheckColleague(false)
+                                                                       }}/>
+                                                                <span className="radio-mark"></span>
+                                                            </label>
+                                                            <span className="radio-title">Xeyr</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                        </Row>
                                     </div>
                                     <div className="flex-vertical-center">
                                         <Button className="btn-effect" onClick={() => sendDataAcademic()}>

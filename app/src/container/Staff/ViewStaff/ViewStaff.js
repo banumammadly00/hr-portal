@@ -160,7 +160,10 @@ function ViewStaff() {
                     <Tabs activeKey={key} onSelect={(k) => setKey(k)}>
                         <Tab eventKey="home" title="Ümumi məlumatlar">
                             <div className="block">
-                                <div className="flex-end view-top">
+                                <div className="flex view-top">
+                                    <div className="staff-id">
+                                        #{id}
+                                    </div>
                                     <Link to={`/staff/edit/${id}`} className="btn-border">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
@@ -458,7 +461,10 @@ function ViewStaff() {
                         </Tab>
                         <Tab eventKey="knowledge" title="İxtisas bilikləri">
                             <div className="block">
-                                <div className="flex-end view-top">
+                                <div className="flex view-top">
+                                    <div className="staff-id">
+                                        #{id}
+                                    </div>
                                     <Link to={`/staff/edit/${id}`} className="btn-border">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
