@@ -112,7 +112,7 @@ function OperationSchedule() {
                                         d="M15.8346 10.8337H10.8346V15.8337H9.16797V10.8337H4.16797V9.16699H9.16797V4.16699H10.8346V9.16699H15.8346V10.8337Z"
                                         fill="white"/>
                                 </svg>
-                                Əmr yarat
+                                Əlavə et
                             </Link>
                         </div>
                     </div>
