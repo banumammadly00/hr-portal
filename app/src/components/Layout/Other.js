@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Aux from '../../hoc/Auxiliary'
 import ProtectedRoute from "./ProtectedRoute";
 import {
-    BrowserRouter as Router,
+    BrowserRouter as Router, Route,
     Switch,
 } from "react-router-dom";
 import StaffSchedule from "../../container/Staff/StaffSchedule/StaffSchedule";
@@ -38,18 +38,18 @@ function Other () {
                 <Sidebar click ={toggleDrawer} toggle ={toggle} />
                 <main className={['main', toggle ? 'active' : ''].join(' ')}>
                     <Switch>
-                        <ProtectedRoute exact path="/employee" component={EmployeeSchedule}/>
-                        <ProtectedRoute path="/employee/create" component={EmployeeCreate}/>
-                        <ProtectedRoute  exact path="/employee/edit/:id" component={EditEmployee}/>
-                        <ProtectedRoute exact path="/employee/view/:id" component={ViewEmployee}/>
-                        <ProtectedRoute path="/salaryEmployee" component={SalaryEmployee}/>
-                        <ProtectedRoute exact path="/staff" component={StaffSchedule}/>
-                        <ProtectedRoute exact path="/staff/edit/:id" component={EditStaff}/>
-                        <ProtectedRoute path="/staff/create" component={CreateStaff}/>
-                        <ProtectedRoute exact path="/staff/view/:id" component={ViewStaff}/>
-                        <ProtectedRoute exact path="/operation" component={OperationSchedule}/>
-                        <ProtectedRoute path="/operation/create" component={CreateOperation}/>
-                        <ProtectedRoute path="/setting" component={Setting}/>
+                        <Route exact path="/" component={EmployeeSchedule}/>
+                        <Route path="/employee/create" component={EmployeeCreate}/>
+                        <Route  exact path="/employee/edit/:id" component={EditEmployee}/>
+                        <Route exact path="/employee/view/:id" component={ViewEmployee}/>
+                        <Route path="/salaryEmployee" component={SalaryEmployee}/>
+                        <Route exact path="/staff" component={StaffSchedule}/>
+                        <Route exact path="/staff/edit/:id" component={EditStaff}/>
+                        <Route path="/staff/create" component={CreateStaff}/>
+                        <Route exact path="/staff/view/:id" component={ViewStaff}/>
+                        <Route exact path="/operation" component={OperationSchedule}/>
+                        <Route path="/operation/create" component={CreateOperation}/>
+                        <Route path="/setting" component={Setting}/>
                     </Switch>
                 </main>
 

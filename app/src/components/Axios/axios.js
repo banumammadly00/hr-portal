@@ -1,10 +1,11 @@
 import axios from 'axios'
 
 const mainAxios = axios.create({
-    baseURL: 'https://hr-portal-api.herokuapp.com'
+    baseURL: 'https://hr-portal-api-v2.herokuapp.com'
    /* baseURL: 'http://hr01.pob.portofbaku.com:8080/hrportal'*/
 });
 
+/*
 mainAxios.interceptors.response.use(
     response => response,
     error => {
@@ -30,6 +31,7 @@ mainAxios.interceptors.response.use(
 
     }
 )
+*/
 
 export {
     mainAxios,

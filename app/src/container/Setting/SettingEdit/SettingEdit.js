@@ -26,17 +26,42 @@ function SettingEdit() {
     const [university, setUniversity] = useState('');
     const [showUniversity, setShowUniversity] = useState(false);
 
+
+    const [certificateArr, setCertificateArr] = useState([]);
+    const [certificate, setCertificate] = useState('');
+    const [showCertificate, setShowCertificate] = useState(false);
+
     const [vacancyArr, setVacancyArr] = useState([]);
     const [vacancy, setVacancy] = useState('');
     const [showVacancy, setShowVacancy] = useState(false);
 
-    const [salaryArr, setSalaryArr] = useState([]);
-    const [salary, setSalary] = useState('');
-    const [showSalary, setShowSalary] = useState(false);
+    const [gradeArr, setGradeArr] = useState([]);
+    const [grade, setGrade] = useState('');
+    const [showGrade, setShowGrade] = useState(false);
 
-    const [jobFamilyArr, setJobFamilyArr] = useState([]);
-    const [jobFamily, setJobFamily] = useState('');
-    const [showJobFamily, setShowJobFamily] = useState(false);
+    const [subGradeArr, setSubGradeArr] = useState([]);
+    const [subGrade, setSubGrade] = useState('');
+    const [showSubGrade, setShowSubGrade] = useState(false);
+
+    const [languageArr, setLanguageArr] = useState([]);
+    const [language, setLanguage] = useState('');
+    const [showLanguage, setShowLanguage] = useState(false);
+
+    const [computerArr, setComputerArr] = useState([]);
+    const [computer, setComputer] = useState('');
+    const [showComputer, setShowComputer] = useState(false);
+
+    const [specialityArr, setSpecialityArr] = useState([]);
+    const [speciality, setSpeciality] = useState('');
+    const [showSpeciality, setShowSpeciality] = useState(false);
+
+    const [enterpriseArr, setEnterpriseArr] = useState([]);
+    const [enterprise, setEnterprise] = useState('');
+    const [showEnterprise, setShowEnterprise] = useState(false);
+
+    const [organizationArr, setOrganizationArr] = useState([]);
+    const [organization, setOrganization] = useState('');
+    const [showOrganization, setShowOrganization] = useState(false);
 
     const [skillArr, setSkillArr] = useState([]);
     const [skill, setSkill] = useState('');
@@ -51,221 +76,198 @@ function SettingEdit() {
     const getCountry = () => {
         mainAxios({
             method: 'get',
-            url: '/address/country',
+            url: '/countries',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setCountryArr(res.data.data);
+            setCountryArr(res.data);
         });
     }
 
     const sendCountry = () => {
         setActive(true);
+        let data = {
+            name: country
+        }
         mainAxios({
             method: 'post',
-            url: '/address/country',
+            url: '/countries',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params: {
-                country: country
-            }
+            data: data
         }).then((res) => {
-            if (res.data.code === 200) {
-                getCountry();
-                setCountry('');
-                setActive(false);
-            }
+            getCountry();
+            setCountry('');
+            setActive(false);
         });
     }
 
     const deleteCountry = (id) => {
         mainAxios({
             method: 'delete',
-            url: '/address/country',
+            url: '/countries/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params : {
-                id: id
-            }
         }).then((res) => {
-            if(res.data.code === 200) {
-                getCountry()
-            }
+            getCountry()
         });
     }
 
     const getCity = () => {
         mainAxios({
             method: 'get',
-            url: '/address/city',
+            url: '/cities',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setCityArr(res.data.data)
+            setCityArr(res.data)
         });
     }
 
     const sendCity = () => {
         setActive(true);
+        let data = {
+            name: city
+        }
         mainAxios({
             method: 'post',
-            url: '/address/city',
+            url: '/cities',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params: {
-                city: city
-            }
+            data: data
         }).then((res) => {
-            if (res.data.code === 200) {
-                getCity();
-                setCity('');
-                setActive(false);
-            }
+            getCity();
+            setCity('');
+            setActive(false);
         });
     }
 
     const deleteCity = (id) => {
         mainAxios({
             method: 'delete',
-            url: '/address/city',
+            url: '/cities/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params : {
-                id: id
-            }
         }).then((res) => {
-            if(res.data.code === 200) {
-                getCity()
-            }
+            getCity()
         });
     }
 
     const getRegion = () => {
         mainAxios({
             method: 'get',
-            url: '/address/district',
+            url: '/districts',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setRegionArr(res.data.data)
+            setRegionArr(res.data)
         });
     }
 
     const sendRegion = () => {
         setActive(true);
+        let data = {
+            name: region
+        }
         mainAxios({
             method: 'post',
-            url: '/address/district',
+            url: '/districts',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params: {
-                district: region
-            }
+            data: data
         }).then((res) => {
-            if (res.data.code === 200) {
-                getRegion();
-                setRegion('');
-                setActive(false);
-            }
+            getRegion();
+            setRegion('');
+            setActive(false);
         });
     }
 
     const deleteRegion = (id) => {
         mainAxios({
             method: 'delete',
-            url: '/address/district',
+            url: '/districts/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params : {
-                id: id
-            }
         }).then((res) => {
-            if(res.data.code === 200) {
-                getCountry()
-            }
+            getCountry()
         });
     }
 
     const getCitizenCountry = () => {
         mainAxios({
             method: 'get',
-            url: '/citizen-country',
+            url: '/motherland',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setCitizenCountryArr(res.data.data)
+            console.log(res.data)
+            setCitizenCountryArr(res.data)
         });
     }
 
     const sendCitizenCountry = () => {
         setActive(true);
+        let data = {
+            name: citizenCountry
+        }
         mainAxios({
             method: 'post',
-            url: '/citizen-country',
+            url: '/motherland',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params: {
-                country: citizenCountry
-            }
+            data: data
         }).then((res) => {
-            if (res.data.code === 200) {
-                getCitizenCountry();
-                setCitizenCountry('');
-                setActive(false);
-            }
+            getCitizenCountry();
+            setCitizenCountry('');
+            setActive(false);
         });
     }
 
     const deleteCitizenCountry = (id) => {
         mainAxios({
             method: 'delete',
-            url: '/citizen-country',
+            url: '/motherland/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params : {
-                name: id
-            }
         }).then((res) => {
-            if(res.data.code === 200) {
-                getCitizenCountry()
-            }
+            getCitizenCountry()
         });
     }
 
     const getUniversity = () => {
         mainAxios({
             method: 'get',
-            url: '/institution',
+            url: '/education-institutions',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setUniversityArr(res.data.data)
+            setUniversityArr(res.data)
         });
     }
 
@@ -276,49 +278,88 @@ function SettingEdit() {
         }
         mainAxios({
             method: 'post',
-            url: '/institution',
+            url: '/education-institutions',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             data: data
         }).then((res) => {
-            if (res.data.code === 200) {
-                getUniversity();
-                setUniversity('');
-                setActive(false);
-            }
+            getUniversity();
+            setUniversity('');
+            setActive(false);
         });
     }
 
     const deleteUniversity = (id) => {
         mainAxios({
             method: 'delete',
-            url: '/institution',
+            url: '/education-institutions/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params : {
-                name: id
-            }
         }).then((res) => {
-            if(res.data.code === 200) {
-                getUniversity()
-            }
+            getUniversity()
+        });
+    }
+
+    const getCertificate = () => {
+        mainAxios({
+            method: 'get',
+            url: '/certificates',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            setCertificateArr(res.data)
+        });
+    }
+
+    const sendCertificate = () => {
+        setActive(true);
+        let data = {
+            name: certificate
+        }
+        mainAxios({
+            method: 'post',
+            url: '/certificates',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            data: data
+        }).then((res) => {
+            getCertificate();
+            setCertificate('');
+            setActive(false);
+        });
+    }
+
+    const deleteCertificate = (id) => {
+        mainAxios({
+            method: 'delete',
+            url: '/certificates/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            getCertificate()
         });
     }
 
     const getVacancy = () => {
         mainAxios({
             method: 'get',
-            url: '/vacancy',
+            url: '/positions',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setVacancyArr(res.data.data)
+            setVacancyArr(res.data)
         });
     }
 
@@ -329,208 +370,410 @@ function SettingEdit() {
         }
         mainAxios({
             method: 'post',
-            url: '/vacancy',
+            url: '/positions',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             data: data
         }).then((res) => {
-            if (res.data.code === 200) {
-                getVacancy();
-                setVacancy('');
-                setActive(false);
-            }
+            getVacancy();
+            setVacancy('');
+            setActive(false);
         });
     }
 
     const deleteVacancy = (id) => {
         mainAxios({
             method: 'delete',
-            url: '/vacancy',
+            url: '/positions/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params : {
-                name: id
-            }
         }).then((res) => {
-            if(res.data.code === 200) {
-                getVacancy()
-            }
+            getVacancy()
         });
     }
 
-    const getSalary = () => {
+    const getGrade = () => {
         mainAxios({
             method: 'get',
-            url: '/salary',
+            url: '/grades',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setSalaryArr(res.data.data)
+            setGradeArr(res.data)
         });
     }
 
-    const sendSalary = () => {
+    const sendGrade = () => {
         setActive(true);
         let data = {
-            salary: parseFloat(salary)
+            grade: parseFloat(grade)
         }
         mainAxios({
             method: 'post',
-            url: '/salary',
+            url: '/grades',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             data: data
         }).then((res) => {
-            if (res.data.code === 200) {
-                getSalary();
-                setSalary('');
-                setActive(false);
-            }
+            getGrade();
+            setGrade('');
+            setActive(false);
         });
     }
 
-    const deleteSalary = (id) => {
+    const deleteGrade = (id) => {
         mainAxios({
             method: 'delete',
-            url: '/salary',
+            url: '/grades/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params : {
-                id: id
-            }
         }).then((res) => {
-            if(res.data.code === 200) {
-                getSalary()
-            }
+            getGrade()
         });
     }
 
-    const getJobFamily = () => {
+    const getSubGrade = () => {
         mainAxios({
             method: 'get',
-            url: '/job-family',
+            url: '/sub-grades',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setJobFamilyArr(res.data.data)
+            setSubGradeArr(res.data)
         });
     }
 
-    const sendJobFamily = () => {
+    const sendSubGrade = () => {
         setActive(true);
         let data = {
-            name: jobFamily
+            subGrade: subGrade
         }
         mainAxios({
             method: 'post',
-            url: '/job-family',
+            url: '/sub-grades',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             data: data
         }).then((res) => {
-            if (res.data.code === 200) {
-                getJobFamily();
-                setJobFamily('');
-                setActive(false);
-            }
+            getSubGrade();
+            setSubGrade('');
+            setActive(false);
         });
     }
 
-    const deleteJobFamily = (id) => {
+    const deleteSubGrade = (id) => {
         mainAxios({
             method: 'delete',
-            url: '/job-family',
+            url: '/sub-grades/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params : {
-                name: id
-            }
         }).then((res) => {
-            if(res.data.code === 200) {
-                getJobFamily()
-            }
+            getSubGrade()
         });
     }
 
     const getSkill = () => {
         mainAxios({
             method: 'get',
-            url: '/skill',
+            url: '/skills',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setSkillArr(res.data.data)
+            setSkillArr(res.data)
         });
     }
 
     const sendSkill = () => {
         setActive(true);
+        let data = {
+            name: skill
+        }
         mainAxios({
             method: 'post',
-            url: '/skill',
+            url: '/skills',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params: {
-                skill : skill
-            }
+            data: data
         }).then((res) => {
-            if (res.data.code === 200) {
-                getSkill();
-                setSkill('');
-                setActive(false);
-            }
+            getSkill();
+            setSkill('');
+            setActive(false);
         });
     }
 
     const deleteSkill = (id) => {
         mainAxios({
             method: 'delete',
-            url: '/skill',
+            url: '/skills/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params : {
-                id: id
-            }
         }).then((res) => {
-            if(res.data.code === 200) {
-                getSkill()
-            }
+            getSkill()
         });
     }
 
+    const getLanguage = () => {
+        mainAxios({
+            method: 'get',
+            url: '/languages',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            setLanguageArr(res.data)
+        });
+    }
+
+    const sendLanguage = () => {
+        setActive(true);
+        let data = {
+            name: language
+        }
+        mainAxios({
+            method: 'post',
+            url: '/languages',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            data: data
+        }).then((res) => {
+            getLanguage();
+            setLanguage('');
+            setActive(false);
+        });
+    }
+
+    const deleteLanguage = (id) => {
+        mainAxios({
+            method: 'delete',
+            url: '/languages/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            getLanguage()
+        });
+    }
+
+    const getComputer = () => {
+        mainAxios({
+            method: 'get',
+            url: '/computers',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            setComputerArr(res.data)
+        });
+    }
+
+    const sendComputer = () => {
+        setActive(true);
+        let data = {
+            name: computer
+        }
+        mainAxios({
+            method: 'post',
+            url: '/computers',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            data: data
+        }).then((res) => {
+            getComputer();
+            setComputer('');
+            setActive(false);
+        });
+    }
+
+    const deleteComputer = (id) => {
+        mainAxios({
+            method: 'delete',
+            url: '/computers/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            getComputer()
+        });
+    }
+
+    const getSpeciality = () => {
+        mainAxios({
+            method: 'get',
+            url: '/specialities',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            setSpecialityArr(res.data)
+        });
+    }
+
+    const sendSpeciality = () => {
+        setActive(true);
+        let data = {
+            name: speciality
+        }
+        mainAxios({
+            method: 'post',
+            url: '/specialities',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            data: data
+        }).then((res) => {
+            getSpeciality();
+            setSpeciality('');
+            setActive(false);
+        });
+    }
+
+    const deleteSpeciality = (id) => {
+        mainAxios({
+            method: 'delete',
+            url: '/specialities/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            getSpeciality()
+        });
+    }
+
+    const getEnterprise = () => {
+        mainAxios({
+            method: 'get',
+            url: '/work-institutions',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            setEnterpriseArr(res.data)
+        });
+    }
+
+    const sendEnterprise = () => {
+        setActive(true);
+        let data = {
+            name: enterprise
+        }
+        mainAxios({
+            method: 'post',
+            url: '/work-institutions',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            data: data
+        }).then((res) => {
+            getEnterprise();
+            setEnterprise('');
+            setActive(false);
+        });
+    }
+
+    const deleteEnterprise = (id) => {
+        mainAxios({
+            method: 'delete',
+            url: '/work-institutions/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            getEnterprise()
+        });
+    }
+
+    const getOrganization = () => {
+        mainAxios({
+            method: 'get',
+            url: '/organizations',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            setOrganizationArr(res.data)
+        });
+    }
+
+    const sendOrganization = () => {
+        setActive(true);
+        let data = {
+            name: organization
+        }
+        mainAxios({
+            method: 'post',
+            url: '/organizations',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            data: data
+        }).then((res) => {
+            getOrganization();
+            setOrganization('');
+            setActive(false);
+        });
+    }
+
+    const deleteOrganization = (id) => {
+        mainAxios({
+            method: 'delete',
+            url: '/organizations/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            getOrganization()
+        });
+    }
 
     const getDepartment = () => {
         mainAxios({
             method: 'get',
-            url: '/department',
+            url: '/departments',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setDepartmentArr(res.data.data)
+            setDepartmentArr(res.data)
         });
     }
 
@@ -541,36 +784,29 @@ function SettingEdit() {
         }
         mainAxios({
             method: 'post',
-            url: '/department',
+            url: '/departments',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            data : data
+            data: data
         }).then((res) => {
-            if (res.data.code === 200) {
-                getDepartment();
-                setDepartment('');
-                setActive(false);
-            }
+            getDepartment();
+            setDepartment('');
+            setActive(false);
         });
     }
 
     const deleteDepartment = (id) => {
         mainAxios({
             method: 'delete',
-            url: '/department',
+            url: '/departments/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            params : {
-                id: id
-            }
         }).then((res) => {
-            if(res.data.code === 200) {
-                getDepartment()
-            }
+            getDepartment()
         });
     }
 
@@ -581,10 +817,17 @@ function SettingEdit() {
         getRegion();
         getCitizenCountry();
         getUniversity();
-        getJobFamily();
+        getCertificate();
+        getLanguage();
+        getComputer();
+        getSpeciality();
+        getEnterprise();
+        getOrganization();
         getVacancy();
         getSkill();
-        getSalary()
+        getGrade();
+        getSubGrade()
+        getDepartment()
     }, []);
 
     return (
@@ -602,19 +845,22 @@ function SettingEdit() {
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     {
-                                        countryArr.map((item, index) =>
-                                            <Dropdown.Item key={index}>
-                                                {item.key}
-                                                <button type="button" className="btn-transparent btn-delete" onClick={()=> deleteCountry(item.value)}>
-                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
-                                                            fill="#040647"/>
-                                                    </svg>
-                                                </button>
-                                            </Dropdown.Item>
-                                        )
+                                        countryArr ?
+                                            countryArr.map((item, index) =>
+                                                <Dropdown.Item key={index}>
+                                                    {item.name}
+                                                    <button type="button" className="btn-transparent btn-delete"
+                                                            onClick={() => deleteCountry(item.id)}>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                                fill="#040647"/>
+                                                        </svg>
+                                                    </button>
+                                                </Dropdown.Item>
+                                            )
+                                            : null
                                     }
                                 </Dropdown.Menu>
                             </Dropdown>
@@ -680,19 +926,22 @@ function SettingEdit() {
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     {
-                                        cityArr.map((item, index) =>
-                                            <Dropdown.Item key={index}>
-                                                {item.key}
-                                                <button type="button" className="btn-transparent btn-delete" onClick={()=> deleteCity(item.value)}>
-                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
-                                                            fill="#040647"/>
-                                                    </svg>
-                                                </button>
-                                            </Dropdown.Item>
-                                        )
+                                        cityArr ?
+                                            cityArr.map((item, index) =>
+                                                <Dropdown.Item key={index}>
+                                                    {item.name}
+                                                    <button type="button" className="btn-transparent btn-delete"
+                                                            onClick={() => deleteCity(item.id)}>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                                fill="#040647"/>
+                                                        </svg>
+                                                    </button>
+                                                </Dropdown.Item>
+                                            )
+                                            : null
                                     }
                                 </Dropdown.Menu>
                             </Dropdown>
@@ -758,19 +1007,22 @@ function SettingEdit() {
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     {
-                                        regionArr.map((item, index) =>
-                                            <Dropdown.Item key={index}>
-                                                {item.key}
-                                                <button type="button" className="btn-transparent btn-delete" onClick={()=> deleteRegion(item.value)}>
-                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
-                                                            fill="#040647"/>
-                                                    </svg>
-                                                </button>
-                                            </Dropdown.Item>
-                                        )
+                                        regionArr ?
+                                            regionArr.map((item, index) =>
+                                                <Dropdown.Item key={index}>
+                                                    {item.name}
+                                                    <button type="button" className="btn-transparent btn-delete"
+                                                            onClick={() => deleteRegion(item.id)}>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                                fill="#040647"/>
+                                                        </svg>
+                                                    </button>
+                                                </Dropdown.Item>
+                                            )
+                                            : null
                                     }
                                 </Dropdown.Menu>
                             </Dropdown>
@@ -836,19 +1088,22 @@ function SettingEdit() {
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     {
-                                        citizenCountryArr.map((item, index) =>
-                                            <Dropdown.Item key={index}>
-                                                {item.name}
-                                                <button type="button" className="btn-transparent btn-delete" onClick={()=> deleteCitizenCountry(item.name)}>
-                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
-                                                            fill="#040647"/>
-                                                    </svg>
-                                                </button>
-                                            </Dropdown.Item>
-                                        )
+                                        citizenCountryArr ?
+                                            citizenCountryArr.map((item, index) =>
+                                                <Dropdown.Item key={index}>
+                                                    {item.name}
+                                                    <button type="button" className="btn-transparent btn-delete"
+                                                            onClick={() => deleteCitizenCountry(item.id)}>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                                fill="#040647"/>
+                                                        </svg>
+                                                    </button>
+                                                </Dropdown.Item>
+                                            )
+                                            : null
                                     }
                                 </Dropdown.Menu>
                             </Dropdown>
@@ -914,19 +1169,22 @@ function SettingEdit() {
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     {
-                                        universityArr.map((item, index) =>
-                                            <Dropdown.Item key={index}>
-                                                {item.name}
-                                                <button type="button" className="btn-transparent btn-delete" onClick={()=> deleteUniversity(item.name)}>
-                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
-                                                            fill="#040647"/>
-                                                    </svg>
-                                                </button>
-                                            </Dropdown.Item>
-                                        )
+                                        universityArr ?
+                                            universityArr.map((item, index) =>
+                                                <Dropdown.Item key={index}>
+                                                    {item.name}
+                                                    <button type="button" className="btn-transparent btn-delete"
+                                                            onClick={() => deleteUniversity(item.id)}>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                                fill="#040647"/>
+                                                        </svg>
+                                                    </button>
+                                                </Dropdown.Item>
+                                            )
+                                            : null
                                     }
                                 </Dropdown.Menu>
                             </Dropdown>
@@ -985,6 +1243,87 @@ function SettingEdit() {
                     <Row>
                         <Col xs={6}>
                             <div className="block-title flex">
+                                Sertifikatlar
+                            </div>
+                            <Dropdown autoClose="outside">
+                                <Dropdown.Toggle className={active ? 'active' : ''}>
+                                    Sertifikatlar
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {
+                                        certificateArr.map((item, index) =>
+                                            <Dropdown.Item key={index}>
+                                                {item.name}
+                                                <button type="button" className="btn-transparent btn-delete"
+                                                        onClick={() => deleteCertificate(item.id)}>
+                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                            fill="#040647"/>
+                                                    </svg>
+                                                </button>
+                                            </Dropdown.Item>
+                                        )
+                                    }
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <div className="flex-end">
+                                <button type="button" className="btn-color"
+                                        onClick={() => setShowCertificate(true)}>
+                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
+                                            fill="#3083DC"/>
+                                    </svg>
+                                    Əlavə et
+                                </button>
+                            </div>
+                        </Col>
+                    </Row>
+                    {
+                        showCertificate ?
+                            <div className="addition">
+                                <Row className="flex-center">
+                                    <Col xs={6}>
+                                        <Form.Group className="m-0">
+                                            <Form.Label>
+                                                <Form.Control
+                                                    value={certificate}
+                                                    placeholder="Sertifikatı  daxil edin"
+                                                    onChange={(e => setCertificate(e.target.value))}/>
+                                            </Form.Label>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col xs={4}>
+                                        <ul className="btn-block list-unstyled m-0 flex-start">
+                                            <li>
+                                                <button type="button" className="btn-transparent"
+                                                        onClick={() => sendCertificate()}>
+                                                    <svg width="16" height="12" viewBox="0 0 16 12"
+                                                         fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M15.3696 0.327361C14.8557 -0.139829 14.0564 -0.103215 13.5867 0.413197L5.88442 8.89458L2.16332 5.11165C1.67212 4.61415 0.874137 4.60658 0.37791 5.0965C-0.11959 5.58515 -0.127168 6.38441 0.362755 6.88191L5.02072 11.6169C5.25937 11.8593 5.58259 11.9945 5.92097 11.9945C5.92854 11.9945 5.9374 11.9945 5.94497 11.9957C6.29347 11.9881 6.62178 11.8391 6.85535 11.5816L15.4554 2.11156C15.9239 1.59381 15.886 0.795825 15.3696 0.327361Z"
+                                                            fill="#2ED06A"/>
+                                                    </svg>
+                                                    Yadda saxla
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </Col>
+                                </Row>
+                            </div>
+                            : null
+                    }
+                </div>
+
+
+                <div className="block-inn">
+                    <Row>
+                        <Col xs={6}>
+                            <div className="block-title flex">
                                 Vakansiyalar
                             </div>
                             <Dropdown autoClose="outside">
@@ -996,7 +1335,8 @@ function SettingEdit() {
                                         vacancyArr.map((item, index) =>
                                             <Dropdown.Item key={index}>
                                                 {item.name}
-                                                <button type="button" className="btn-transparent btn-delete" onClick={()=> deleteVacancy(item.name)}>
+                                                <button type="button" className="btn-transparent btn-delete"
+                                                        onClick={() => deleteVacancy(item.name)}>
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -1063,18 +1403,19 @@ function SettingEdit() {
                     <Row>
                         <Col xs={6}>
                             <div className="block-title flex">
-                                Maaş
+                                Grade
                             </div>
                             <Dropdown autoClose="outside">
                                 <Dropdown.Toggle className={active ? 'active' : ''}>
-                                    Maaş
+                                    Grade
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     {
-                                        salaryArr.map((item, index) =>
+                                        gradeArr.map((item, index) =>
                                             <Dropdown.Item key={index}>
-                                                {item.name}
-                                                <button type="button" className="btn-transparent btn-delete" onClick={()=> deleteSalary(item.name)}>
+                                                {item.grade}
+                                                <button type="button" className="btn-transparent btn-delete"
+                                                        onClick={() => deleteGrade(item.id)}>
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -1089,7 +1430,7 @@ function SettingEdit() {
                             </Dropdown>
                             <div className="flex-end">
                                 <button type="button" className="btn-color"
-                                        onClick={() => setShowSalary(true)}>
+                                        onClick={() => setShowGrade(true)}>
                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -1102,17 +1443,17 @@ function SettingEdit() {
                         </Col>
                     </Row>
                     {
-                        showSalary ?
+                        showGrade ?
                             <div className="addition">
                                 <Row className="flex-center">
                                     <Col xs={6}>
                                         <Form.Group className="m-0">
                                             <Form.Label>
                                                 <Form.Control
-                                                    value={salary}
+                                                    value={grade}
                                                     type="number"
-                                                    placeholder="Maaş  daxil edin"
-                                                    onChange={(e => setSalary(e.target.value))}/>
+                                                    placeholder="Grade  daxil edin"
+                                                    onChange={(e => setGrade(e.target.value))}/>
                                             </Form.Label>
                                         </Form.Group>
                                     </Col>
@@ -1120,7 +1461,7 @@ function SettingEdit() {
                                         <ul className="btn-block list-unstyled m-0 flex-start">
                                             <li>
                                                 <button type="button" className="btn-transparent"
-                                                        onClick={() => sendSalary()}>
+                                                        onClick={() => sendGrade()}>
                                                     <svg width="16" height="12" viewBox="0 0 16 12"
                                                          fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
@@ -1142,18 +1483,19 @@ function SettingEdit() {
                     <Row>
                         <Col xs={6}>
                             <div className="block-title flex">
-                                Struk b. tabe old. kurator rəh. ad, soyad, ata adı, vəzifə
+                                Subgrade
                             </div>
                             <Dropdown autoClose="outside">
                                 <Dropdown.Toggle className={active ? 'active' : ''}>
-                                    Struk b. tabe old. kurator rəh. ad, soyad, ata adı, vəzifə
+                                    Subgrade
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     {
-                                        jobFamilyArr.map((item, index) =>
+                                        subGradeArr.map((item, index) =>
                                             <Dropdown.Item key={index}>
-                                                {item.name}
-                                                <button type="button" className="btn-transparent btn-delete" onClick={()=> deleteJobFamily(item.name)}>
+                                                {item.subGrade}
+                                                <button type="button" className="btn-transparent btn-delete"
+                                                        onClick={() => deleteSubGrade(item.id)}>
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -1168,7 +1510,7 @@ function SettingEdit() {
                             </Dropdown>
                             <div className="flex-end">
                                 <button type="button" className="btn-color"
-                                        onClick={() => setShowJobFamily(true)}>
+                                        onClick={() => setShowSubGrade(true)}>
                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -1181,16 +1523,17 @@ function SettingEdit() {
                         </Col>
                     </Row>
                     {
-                        showJobFamily ?
+                        showSubGrade ?
                             <div className="addition">
                                 <Row className="flex-center">
                                     <Col xs={6}>
                                         <Form.Group className="m-0">
                                             <Form.Label>
                                                 <Form.Control
-                                                    value={jobFamily}
-                                                    placeholder="Struk b. tabe old. kurator rəh. ad, soyad, ata adı, vəzifə  daxil edin"
-                                                    onChange={(e => setJobFamily(e.target.value))}/>
+                                                    value={subGrade}
+                                                    type="text"
+                                                    placeholder="Subgrade  daxil edin"
+                                                    onChange={(e => setSubGrade(e.target.value))}/>
                                             </Form.Label>
                                         </Form.Group>
                                     </Col>
@@ -1198,7 +1541,7 @@ function SettingEdit() {
                                         <ul className="btn-block list-unstyled m-0 flex-start">
                                             <li>
                                                 <button type="button" className="btn-transparent"
-                                                        onClick={() => sendJobFamily()}>
+                                                        onClick={() => sendSubGrade()}>
                                                     <svg width="16" height="12" viewBox="0 0 16 12"
                                                          fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
@@ -1216,6 +1559,486 @@ function SettingEdit() {
                             : null
                     }
                 </div>
+                <div className="block-inn">
+                    <Row>
+                        <Col xs={6}>
+                            <div className="block-title flex">
+                                Dil biliyi
+                            </div>
+                            <Dropdown autoClose="outside">
+                                <Dropdown.Toggle className={active ? 'active' : ''}>
+                                    Dil biliyi
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {
+                                        languageArr.map((item, index) =>
+                                            <Dropdown.Item key={index}>
+                                                {item.name}
+                                                <button type="button" className="btn-transparent btn-delete"
+                                                        onClick={() => deleteLanguage(item.id)}>
+                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                            fill="#040647"/>
+                                                    </svg>
+                                                </button>
+                                            </Dropdown.Item>
+                                        )
+                                    }
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <div className="flex-end">
+                                <button type="button" className="btn-color"
+                                        onClick={() => setShowLanguage(true)}>
+                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
+                                            fill="#3083DC"/>
+                                    </svg>
+                                    Əlavə et
+                                </button>
+                            </div>
+                        </Col>
+                    </Row>
+                    {
+                        showLanguage ?
+                            <div className="addition">
+                                <Row className="flex-center">
+                                    <Col xs={6}>
+                                        <Form.Group className="m-0">
+                                            <Form.Label>
+                                                <Form.Control
+                                                    value={language}
+                                                    placeholder="Struk b. tabe old. kurator rəh. ad, soyad, ata adı, vəzifə  daxil edin"
+                                                    onChange={(e => setLanguage(e.target.value))}/>
+                                            </Form.Label>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col xs={4}>
+                                        <ul className="btn-block list-unstyled m-0 flex-start">
+                                            <li>
+                                                <button type="button" className="btn-transparent"
+                                                        onClick={() => sendLanguage()}>
+                                                    <svg width="16" height="12" viewBox="0 0 16 12"
+                                                         fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M15.3696 0.327361C14.8557 -0.139829 14.0564 -0.103215 13.5867 0.413197L5.88442 8.89458L2.16332 5.11165C1.67212 4.61415 0.874137 4.60658 0.37791 5.0965C-0.11959 5.58515 -0.127168 6.38441 0.362755 6.88191L5.02072 11.6169C5.25937 11.8593 5.58259 11.9945 5.92097 11.9945C5.92854 11.9945 5.9374 11.9945 5.94497 11.9957C6.29347 11.9881 6.62178 11.8391 6.85535 11.5816L15.4554 2.11156C15.9239 1.59381 15.886 0.795825 15.3696 0.327361Z"
+                                                            fill="#2ED06A"/>
+                                                    </svg>
+                                                    Yadda saxla
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </Col>
+                                </Row>
+                            </div>
+                            : null
+                    }
+                </div>
+                <div className="block-inn">
+                    <Row>
+                        <Col xs={6}>
+                            <div className="block-title flex">
+                                Komputer biliyi
+                            </div>
+                            <Dropdown autoClose="outside">
+                                <Dropdown.Toggle className={active ? 'active' : ''}>
+                                    Komputer biliyi
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {
+                                        computerArr.map((item, index) =>
+                                            <Dropdown.Item key={index}>
+                                                {item.name}
+                                                <button type="button" className="btn-transparent btn-delete"
+                                                        onClick={() => deleteComputer(item.id)}>
+                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                            fill="#040647"/>
+                                                    </svg>
+                                                </button>
+                                            </Dropdown.Item>
+                                        )
+                                    }
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <div className="flex-end">
+                                <button type="button" className="btn-color"
+                                        onClick={() => setShowComputer(true)}>
+                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
+                                            fill="#3083DC"/>
+                                    </svg>
+                                    Əlavə et
+                                </button>
+                            </div>
+                        </Col>
+                    </Row>
+                    {
+                        showComputer ?
+                            <div className="addition">
+                                <Row className="flex-center">
+                                    <Col xs={6}>
+                                        <Form.Group className="m-0">
+                                            <Form.Label>
+                                                <Form.Control
+                                                    value={computer}
+                                                    placeholder="Struk b. tabe old. kurator rəh. ad, soyad, ata adı, vəzifə  daxil edin"
+                                                    onChange={(e => setComputer(e.target.value))}/>
+                                            </Form.Label>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col xs={4}>
+                                        <ul className="btn-block list-unstyled m-0 flex-start">
+                                            <li>
+                                                <button type="button" className="btn-transparent"
+                                                        onClick={() => sendComputer()}>
+                                                    <svg width="16" height="12" viewBox="0 0 16 12"
+                                                         fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M15.3696 0.327361C14.8557 -0.139829 14.0564 -0.103215 13.5867 0.413197L5.88442 8.89458L2.16332 5.11165C1.67212 4.61415 0.874137 4.60658 0.37791 5.0965C-0.11959 5.58515 -0.127168 6.38441 0.362755 6.88191L5.02072 11.6169C5.25937 11.8593 5.58259 11.9945 5.92097 11.9945C5.92854 11.9945 5.9374 11.9945 5.94497 11.9957C6.29347 11.9881 6.62178 11.8391 6.85535 11.5816L15.4554 2.11156C15.9239 1.59381 15.886 0.795825 15.3696 0.327361Z"
+                                                            fill="#2ED06A"/>
+                                                    </svg>
+                                                    Yadda saxla
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </Col>
+                                </Row>
+                            </div>
+                            : null
+                    }
+                </div>
+                <div className="block-inn">
+                    <Row>
+                        <Col xs={6}>
+                            <div className="block-title flex">
+                                Təhsil ixtisası
+                            </div>
+                            <Dropdown autoClose="outside">
+                                <Dropdown.Toggle className={active ? 'active' : ''}>
+                                    Təhsil ixtisası
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {
+                                        specialityArr.map((item, index) =>
+                                            <Dropdown.Item key={index}>
+                                                {item.name}
+                                                <button type="button" className="btn-transparent btn-delete"
+                                                        onClick={() => deleteSpeciality(item.id)}>
+                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                            fill="#040647"/>
+                                                    </svg>
+                                                </button>
+                                            </Dropdown.Item>
+                                        )
+                                    }
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <div className="flex-end">
+                                <button type="button" className="btn-color"
+                                        onClick={() => setShowSpeciality(true)}>
+                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
+                                            fill="#3083DC"/>
+                                    </svg>
+                                    Əlavə et
+                                </button>
+                            </div>
+                        </Col>
+                    </Row>
+                    {
+                        showSpeciality ?
+                            <div className="addition">
+                                <Row className="flex-center">
+                                    <Col xs={6}>
+                                        <Form.Group className="m-0">
+                                            <Form.Label>
+                                                <Form.Control
+                                                    value={speciality}
+                                                    placeholder="Təhsil ixtisası  daxil edin"
+                                                    onChange={(e => setSpeciality(e.target.value))}/>
+                                            </Form.Label>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col xs={4}>
+                                        <ul className="btn-block list-unstyled m-0 flex-start">
+                                            <li>
+                                                <button type="button" className="btn-transparent"
+                                                        onClick={() => sendSpeciality()}>
+                                                    <svg width="16" height="12" viewBox="0 0 16 12"
+                                                         fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M15.3696 0.327361C14.8557 -0.139829 14.0564 -0.103215 13.5867 0.413197L5.88442 8.89458L2.16332 5.11165C1.67212 4.61415 0.874137 4.60658 0.37791 5.0965C-0.11959 5.58515 -0.127168 6.38441 0.362755 6.88191L5.02072 11.6169C5.25937 11.8593 5.58259 11.9945 5.92097 11.9945C5.92854 11.9945 5.9374 11.9945 5.94497 11.9957C6.29347 11.9881 6.62178 11.8391 6.85535 11.5816L15.4554 2.11156C15.9239 1.59381 15.886 0.795825 15.3696 0.327361Z"
+                                                            fill="#2ED06A"/>
+                                                    </svg>
+                                                    Yadda saxla
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </Col>
+                                </Row>
+                            </div>
+                            : null
+                    }
+                </div>
+
+                <div className="block-inn">
+                    <Row>
+                        <Col xs={6}>
+                            <div className="block-title flex">
+                                Subgrade
+                            </div>
+                            <Dropdown autoClose="outside">
+                                <Dropdown.Toggle className={active ? 'active' : ''}>
+                                    Subgrade
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {
+                                        subGradeArr.map((item, index) =>
+                                            <Dropdown.Item key={index}>
+                                                {item.subGrade}
+                                                <button type="button" className="btn-transparent btn-delete"
+                                                        onClick={() => deleteSubGrade(item.id)}>
+                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                            fill="#040647"/>
+                                                    </svg>
+                                                </button>
+                                            </Dropdown.Item>
+                                        )
+                                    }
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <div className="flex-end">
+                                <button type="button" className="btn-color"
+                                        onClick={() => setShowSubGrade(true)}>
+                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
+                                            fill="#3083DC"/>
+                                    </svg>
+                                    Əlavə et
+                                </button>
+                            </div>
+                        </Col>
+                    </Row>
+                    {
+                        showSubGrade ?
+                            <div className="addition">
+                                <Row className="flex-center">
+                                    <Col xs={6}>
+                                        <Form.Group className="m-0">
+                                            <Form.Label>
+                                                <Form.Control
+                                                    value={subGrade}
+                                                    type="text"
+                                                    placeholder="Subgrade  daxil edin"
+                                                    onChange={(e => setSubGrade(e.target.value))}/>
+                                            </Form.Label>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col xs={4}>
+                                        <ul className="btn-block list-unstyled m-0 flex-start">
+                                            <li>
+                                                <button type="button" className="btn-transparent"
+                                                        onClick={() => sendSubGrade()}>
+                                                    <svg width="16" height="12" viewBox="0 0 16 12"
+                                                         fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M15.3696 0.327361C14.8557 -0.139829 14.0564 -0.103215 13.5867 0.413197L5.88442 8.89458L2.16332 5.11165C1.67212 4.61415 0.874137 4.60658 0.37791 5.0965C-0.11959 5.58515 -0.127168 6.38441 0.362755 6.88191L5.02072 11.6169C5.25937 11.8593 5.58259 11.9945 5.92097 11.9945C5.92854 11.9945 5.9374 11.9945 5.94497 11.9957C6.29347 11.9881 6.62178 11.8391 6.85535 11.5816L15.4554 2.11156C15.9239 1.59381 15.886 0.795825 15.3696 0.327361Z"
+                                                            fill="#2ED06A"/>
+                                                    </svg>
+                                                    Yadda saxla
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </Col>
+                                </Row>
+                            </div>
+                            : null
+                    }
+                </div>
+
+                <div className="block-inn">
+                    <Row>
+                        <Col xs={6}>
+                            <div className="block-title flex">
+                                Müəssisələr
+                            </div>
+                            <Dropdown autoClose="outside">
+                                <Dropdown.Toggle className={active ? 'active' : ''}>
+                                    Müəssisələr
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {
+                                        enterpriseArr.map((item, index) =>
+                                            <Dropdown.Item key={index}>
+                                                {item.name}
+                                                <button type="button" className="btn-transparent btn-delete"
+                                                        onClick={() => deleteEnterprise(item.id)}>
+                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                            fill="#040647"/>
+                                                    </svg>
+                                                </button>
+                                            </Dropdown.Item>
+                                        )
+                                    }
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <div className="flex-end">
+                                <button type="button" className="btn-color"
+                                        onClick={() => setShowEnterprise(true)}>
+                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
+                                            fill="#3083DC"/>
+                                    </svg>
+                                    Əlavə et
+                                </button>
+                            </div>
+                        </Col>
+                    </Row>
+                    {
+                        showEnterprise ?
+                            <div className="addition">
+                                <Row className="flex-center">
+                                    <Col xs={6}>
+                                        <Form.Group className="m-0">
+                                            <Form.Label>
+                                                <Form.Control
+                                                    value={enterprise}
+                                                    placeholder="  Müəssisə  daxil edin"
+                                                    onChange={(e => setEnterprise(e.target.value))}/>
+                                            </Form.Label>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col xs={4}>
+                                        <ul className="btn-block list-unstyled m-0 flex-start">
+                                            <li>
+                                                <button type="button" className="btn-transparent"
+                                                        onClick={() => sendEnterprise()}>
+                                                    <svg width="16" height="12" viewBox="0 0 16 12"
+                                                         fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M15.3696 0.327361C14.8557 -0.139829 14.0564 -0.103215 13.5867 0.413197L5.88442 8.89458L2.16332 5.11165C1.67212 4.61415 0.874137 4.60658 0.37791 5.0965C-0.11959 5.58515 -0.127168 6.38441 0.362755 6.88191L5.02072 11.6169C5.25937 11.8593 5.58259 11.9945 5.92097 11.9945C5.92854 11.9945 5.9374 11.9945 5.94497 11.9957C6.29347 11.9881 6.62178 11.8391 6.85535 11.5816L15.4554 2.11156C15.9239 1.59381 15.886 0.795825 15.3696 0.327361Z"
+                                                            fill="#2ED06A"/>
+                                                    </svg>
+                                                    Yadda saxla
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </Col>
+                                </Row>
+                            </div>
+                            : null
+                    }
+                </div>
+
+                <div className="block-inn">
+                    <Row>
+                        <Col xs={6}>
+                            <div className="block-title flex">
+                                Təltifi verən orqanın adı
+                            </div>
+                            <Dropdown autoClose="outside">
+                                <Dropdown.Toggle className={active ? 'active' : ''}>
+                                    Təltifi verən orqanın adı
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {
+                                        organizationArr.map((item, index) =>
+                                            <Dropdown.Item key={index}>
+                                                {item.name}
+                                                <button type="button" className="btn-transparent btn-delete"
+                                                        onClick={() => deleteOrganization(item.id)}>
+                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                            fill="#040647"/>
+                                                    </svg>
+                                                </button>
+                                            </Dropdown.Item>
+                                        )
+                                    }
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <div className="flex-end">
+                                <button type="button" className="btn-color"
+                                        onClick={() => setShowOrganization(true)}>
+                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
+                                            fill="#3083DC"/>
+                                    </svg>
+                                    Əlavə et
+                                </button>
+                            </div>
+                        </Col>
+                    </Row>
+                    {
+                        showOrganization ?
+                            <div className="addition">
+                                <Row className="flex-center">
+                                    <Col xs={6}>
+                                        <Form.Group className="m-0">
+                                            <Form.Label>
+                                                <Form.Control
+                                                    value={organization}
+                                                    placeholder="Təltifi verən orqanı  daxil edin"
+                                                    onChange={(e => setOrganization(e.target.value))}/>
+                                            </Form.Label>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col xs={4}>
+                                        <ul className="btn-block list-unstyled m-0 flex-start">
+                                            <li>
+                                                <button type="button" className="btn-transparent"
+                                                        onClick={() => sendOrganization()}>
+                                                    <svg width="16" height="12" viewBox="0 0 16 12"
+                                                         fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M15.3696 0.327361C14.8557 -0.139829 14.0564 -0.103215 13.5867 0.413197L5.88442 8.89458L2.16332 5.11165C1.67212 4.61415 0.874137 4.60658 0.37791 5.0965C-0.11959 5.58515 -0.127168 6.38441 0.362755 6.88191L5.02072 11.6169C5.25937 11.8593 5.58259 11.9945 5.92097 11.9945C5.92854 11.9945 5.9374 11.9945 5.94497 11.9957C6.29347 11.9881 6.62178 11.8391 6.85535 11.5816L15.4554 2.11156C15.9239 1.59381 15.886 0.795825 15.3696 0.327361Z"
+                                                            fill="#2ED06A"/>
+                                                    </svg>
+                                                    Yadda saxla
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </Col>
+                                </Row>
+                            </div>
+                            : null
+                    }
+                </div>
+
+
                 <div className="block-inn">
                     <Row>
                         <Col xs={6}>
@@ -1228,19 +2051,22 @@ function SettingEdit() {
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     {
-                                        skillArr.map((item, index) =>
-                                            <Dropdown.Item key={index}>
-                                                {item.key}
-                                                <button type="button" className="btn-transparent btn-delete" onClick={()=> deleteSkill(item.value)}>
-                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
-                                                            fill="#040647"/>
-                                                    </svg>
-                                                </button>
-                                            </Dropdown.Item>
-                                        )
+                                        skillArr ?
+                                            skillArr.map((item, index) =>
+                                                <Dropdown.Item key={index}>
+                                                    {item.name}
+                                                    <button type="button" className="btn-transparent btn-delete"
+                                                            onClick={() => deleteSkill(item.id)}>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                                fill="#040647"/>
+                                                        </svg>
+                                                    </button>
+                                                </Dropdown.Item>
+                                            )
+                                            : null
                                     }
                                 </Dropdown.Menu>
                             </Dropdown>
@@ -1307,19 +2133,22 @@ function SettingEdit() {
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     {
-                                        departmentArr.map((item, index) =>
-                                            <Dropdown.Item key={index}>
-                                                {item.name}
-                                                <button type="button" className="btn-transparent btn-delete" onClick={()=> deleteDepartment(item.name)}>
-                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
-                                                            fill="#040647"/>
-                                                    </svg>
-                                                </button>
-                                            </Dropdown.Item>
-                                        )
+                                        departmentArr ?
+                                            departmentArr.map((item, index) =>
+                                                <Dropdown.Item key={index}>
+                                                    {item.name}
+                                                    <button type="button" className="btn-transparent btn-delete"
+                                                            onClick={() => deleteDepartment(item.id)}>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                                fill="#040647"/>
+                                                        </svg>
+                                                    </button>
+                                                </Dropdown.Item>
+                                            )
+                                            : null
                                     }
                                 </Dropdown.Menu>
                             </Dropdown>
@@ -1373,8 +2202,6 @@ function SettingEdit() {
                             : null
                     }
                 </div>
-
-
             </div>
         </Aux>
     );

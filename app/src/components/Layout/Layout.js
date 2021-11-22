@@ -1,9 +1,13 @@
 import React from 'react';
 import Aux from '../../hoc/Auxiliary'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+/*
 import Login from "../../container/Login/Login";
+*/
 import Other from "./Other";
+/*
 import ProtectedRoute from "./ProtectedRoute";
+*/
 
 export default class Layout extends React.Component {
     render() {
@@ -11,8 +15,8 @@ export default class Layout extends React.Component {
             <Aux>
                 <Router>
                     <Switch>
-                        <Route exact path="/" component={Login}/>
-                        <ProtectedRoute component={Other}/>
+                        {/*<Route exact path="/" component={Login}/>*/}
+                        <Route component={Other}/>
                     </Switch>
                 </Router>
             </Aux>

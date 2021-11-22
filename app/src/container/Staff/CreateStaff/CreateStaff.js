@@ -105,6 +105,11 @@ function CreateStaff() {
         {value: 'CARD', label: 'Vəsiqə'},
     ]
 
+    const [key, setKey] = useState('general');
+    const [dataVal, setDataVal] = useState('');
+    const [loadingIndicator, setLoadingIndicator] = useState(false);
+    const [errors, setErrors] = useState({});
+
     const [selectedOption, setSelectedOption] = useState(null);
     const [institution, setInstitution] = useState([]);
     const [department, setDepartment] = useState([]);
@@ -121,27 +126,11 @@ function CreateStaff() {
     const [areaExperience, setAreaExperience] = useState('');
     const [leaderExperience, setLeaderExperience] = useState('');
     const [height, setHeight] = useState('');
-    const [skillArr, setSkillArr] = useState([{level: null, skill: null}]);
-    const [skillProgramArr, setSkillProgramArr] = useState([{level: null, name: null}]);
+    const [skillArr, setSkillArr] = useState([{requiredSkillId: null, level: null}]);
+    const [skillProgramArr, setSkillProgramArr] = useState([{computerId: null, level: null}]);
     const [skillLegalArr, setSkillLegalArr] = useState([{level: null, name: null}]);
-    const [skillLanguageArr, setSkillLanguageArr] = useState([{level: null, name: null}]);
+    const [skillLanguageArr, setSkillLanguageArr] = useState([{languageId: null, level: null}]);
     const [showHeight, setShowHeight] = useState(false);
-    const [key, setKey] = useState('home');
-    const [dataVal, setDataVal] = useState('');
-    const [loadingIndicator, setLoadingIndicator] = useState(false);
-    const [errors, setErrors] = useState({
-        departmentName: '',
-        fullNameAndPosition: '',
-        institutionName: '',
-        jobFamily: '',
-        subDepartmentName: '',
-        vacancyCategory: '',
-        vacancyCount: '',
-        vacancyName: '',
-        workCondition: '',
-        workMode: '',
-        workPlace: ''
-    });
 
     const [selectedInstitution, setSelectedInstitution] = useState(null);
     const [selectedDepartment, setSelectedDepartment] = useState(null);
@@ -254,41 +243,40 @@ function CreateStaff() {
     const getInstitution = () => {
         mainAxios({
             method: 'get',
-            url: '/institution',
+            url: '/work-institutions',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            //let arr = res.data.data;
             //arr.push({name: 'Digər'})
-            setInstitution(res.data.data)
+            setInstitution(res.data)
         });
     }
 
     const getDepartment = () => {
         mainAxios({
             method: 'get',
-            url: '/department',
+            url: '/departments',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setDepartment(res.data.data);
+            setDepartment(res.data);
         });
     }
 
     const getSubDepartment = (id) => {
         mainAxios({
             method: 'get',
-            url: '/department/sub-department/' + id,
+            url: '/sub-departments/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setSubDepartment(res.data.data);
+            setSubDepartment(res.data);
 
         });
     }
@@ -296,13 +284,13 @@ function CreateStaff() {
     const getVacancy = () => {
         mainAxios({
             method: 'get',
-            url: '/vacancy',
+            url: '/positions',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            let arr = res.data.data;
+            let arr = res.data;
             //arr.push({name: 'Digər'})
             setVacancy(arr);
 
@@ -344,13 +332,13 @@ function CreateStaff() {
     const getSkill = () => {
         mainAxios({
             method: 'get',
-            url: '/skill',
+            url: '/skills',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setSkill(res.data.data);
+            setSkill(res.data);
         });
     }
 
@@ -391,7 +379,7 @@ function CreateStaff() {
     }
 
     const addProgramSkill = () => {
-        setSkillProgramArr([...skillProgramArr, {level: '', name: ''}])
+        setSkillProgramArr([...skillProgramArr, {computerId: null, level: null}])
     }
 
     const addLegalSkill = () => {
@@ -406,49 +394,47 @@ function CreateStaff() {
         setPositionFunctionArr(positionFunctionArr => [...positionFunctionArr, " "])
     }
 
-    const setSkillLevel = (value, index) => {
-        skillArr[index].skill = value;
-        setSkillArr([...skillArr], skillArr)
-    }
-
-    const setSkillItem = (value, index) => {
-        skillArr[index].level = value;
-        setSkillArr([...skillArr], skillArr)
-    }
-
     const sendData = () => {
         setLoadingIndicator(true);
         let data = {
-            "areaExperience": parseFloat(areaExperience),
-            "departmentName": selectedDepartment !== null ? selectedDepartment.name : null,
-            "educationDegree": selectedEducationDegree !== null ? selectedEducationDegree.value : null,
-            "educationSpeciality": selectedEducationSpeciality,
-            "fullNameAndPosition": selectedEmployeePosition !== null ? selectedEmployeePosition.key : null,
+            "count": parseFloat(vacancyCount),
+            "curatorId": selectedEmployeePosition !== null ? selectedEmployeePosition.key : null,
+            "departmentId":  selectedDepartment !== null ? selectedDepartment.name : null,
+            "educationStatus": selectedEducationDegree !== null ? selectedEducationDegree.value : null,
+            "experience": {
+                "area": parseFloat(areaExperience),
+                "leader": parseFloat(leaderExperience)
+            },
             "functionalities": positionFunctionArr,
-            "genderDemand": selectedGender !== null ? selectedGender.value : null,
+            "gender": selectedGender !== null ? selectedGender.value : null,
+            "gradeRange": {
+                "max": 0,
+                "min": 0
+            },
             "healthy": selectedHealth !== null ? selectedHealth.value : null,
             "height": parseFloat(height),
-            "institutionName": selectedInstitution !== null ? selectedInstitution.name : null,
-            "jobFamily": selectedFamilyJob !== null ? selectedFamilyJob.name : null,
-            "leaderExperience": parseFloat(leaderExperience),
-            "militaryAchieve": selectedMilitaryAchieve !== null ? selectedMilitaryAchieve.value : null,
-            "obeyDepartmentName": obeyDepartment,
-            "requireFile": selectedRequiredFile !== null ? selectedRequiredFile.value : null,
-            "salary": selectedSalary !== null ? selectedSalary.name : null,
-            "skills": skillArr,
-            "subDepartmentName": selectedSubDepartment !== null ? selectedSubDepartment.name : null,
-            "subWorkCalculateDegree": selectedSubWorkPaid !== null ? selectedSubWorkPaid.value : null,
-            "vacancyCategory": selectedVacancyCategory !== null ? selectedVacancyCategory.value : null,
-            "vacancyCount": parseFloat(vacancyCount),
-            "vacancyName": selectedVacancy !== null ? selectedVacancy.name : null,
-            "workCalculateDegree": selectedWorkPaid !== null ? selectedWorkPaid.value : null,
+            "institutionId":  selectedInstitution !== null ? selectedInstitution.name : null,
+            "militaryRequire": selectedMilitaryAchieve !== null ? selectedMilitaryAchieve.value : null,
+            "positionCategory": selectedVacancyCategory !== null ? selectedVacancyCategory.value : null,
+            "positionId": selectedVacancy !== null ? selectedVacancy.id : null,
+            "requiredKnowledgeSet": skillArr,
+            "specialityId": 0,
+            "subDepartmentId": selectedSubDepartment !== null ? selectedSubDepartment.id : null,
             "workCondition": selectedWorkCondition !== null ? selectedWorkCondition.value : null,
             "workMode": selectedWorkMode !== null ? selectedWorkMode.value : null,
-            "workPlace": selectedWorkAddress !== null ? selectedWorkAddress.value : null
+            "workPlace": selectedWorkAddress !== null ? selectedWorkAddress.value : null,
+            "jobFamilyId": selectedFamilyJob !== null ? selectedFamilyJob.name : null
+
+            //"educationSpeciality": selectedEducationSpeciality,
+           ///"obeyDepartmentName": obeyDepartment, ??
+            /*"requireFile": selectedRequiredFile !== null ? selectedRequiredFile.value : null,
+            "salary": selectedSalary !== null ? selectedSalary.name : null,
+            "subWorkCalculateDegree": selectedSubWorkPaid !== null ? selectedSubWorkPaid.value : null,
+            "workCalculateDegree": selectedWorkPaid !== null ? selectedWorkPaid.value : null,*/
         }
         mainAxios({
             method: 'post',
-            url: '/position',
+            url: '/vacancies',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -482,14 +468,14 @@ function CreateStaff() {
     const sendDataKnowledge = () => {
         setLoadingIndicator(true);
         let data = {
-            "computerKnowledge": skillProgramArr,
-            "languageKnowledge": skillLanguageArr,
+            "computerKnowledgeSet": skillProgramArr,
+            "languageKnowledgeSet": skillLanguageArr,
             "legislationStatements": skillLegalArr
         }
 
         mainAxios({
             method: 'put',
-            url: '/position/knowledge/' + dataVal,
+            url: '/vacancies/' + dataVal,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -544,7 +530,7 @@ function CreateStaff() {
                         </div>
                     </div>
                     <Tabs activeKey={key} onSelect={(k) => setKey(k)}>
-                        <Tab eventKey="home" title="Ümumi məlumatlar" disabled={key !== "home"}>
+                        <Tab eventKey="general" title="Ümumi məlumatlar">
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
@@ -902,8 +888,8 @@ function CreateStaff() {
                                                                         <Select
                                                                             placeholder="Kompetensiyaları seçin"
                                                                             onChange={(val) => {
-                                                                                let value = val.key
-                                                                                setSkillLevel(value, index);
+                                                                                skillLanguageArr[index].requiredSkillId = val.value;
+                                                                                setSkillLanguageArr([...skillLanguageArr], skillLanguageArr);
                                                                             }}
                                                                             isSearchable={skill ? skill.length > 5 ? true : false : false}
                                                                             options={skill}
@@ -917,8 +903,8 @@ function CreateStaff() {
                                                                         <span className="input-title">Tələb olunan səviyyə</span>
                                                                         <Select
                                                                             onChange={(val) => {
-                                                                                let value = val.value;
-                                                                                setSkillItem(value, index)
+                                                                                skillLanguageArr[index].level = val.value;
+                                                                                setSkillLanguageArr([...skillLanguageArr], skillLanguageArr);
                                                                             }}
                                                                             isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
                                                                             placeholder="Səviyyəni seçin"
@@ -1155,7 +1141,7 @@ function CreateStaff() {
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="profile" title="İxtisas bilikləri" disabled={key !== "profile"}>
+                        <Tab eventKey="knowledge" title="İxtisas bilikləri">
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">

@@ -1764,6 +1764,17 @@ function CreateOperation() {
                                             <Row>
                                                 <Col xs={6}>
                                                     <Form.Group className="form-group">
+                                                        <span className="input-title">İşçinin ərizəsinə və təhsil müəssisəsi tərəfindən verilən çağırış </span>
+                                                        <Form.Label>
+                                                            <Form.Control
+                                                                placeholder="İşçinin ərizəsinə və təhsil müəssisəsi tərəfindən verilən çağırış"
+                                                                value={mainOfOrder}
+                                                                onChange={(e) => setMainOfOrder(e.target.value)}/>
+                                                        </Form.Label>
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col xs={6}>
+                                                    <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşçinin soyadı, adı, ata adı *</span>
                                                         <Select
