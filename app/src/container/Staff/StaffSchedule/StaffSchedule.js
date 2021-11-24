@@ -19,10 +19,9 @@ function StaffSchedule() {
     }
 
     const getPosition = (page) => {
-        console.log(currentPage , 'before')
         mainAxios({
             method: 'get',
-            url: '/position',
+            url: '/vacancies',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -33,9 +32,8 @@ function StaffSchedule() {
             }
         }).then((res) => {
             setCurrentPage(page);
-            setPosition(res.data.data.data);
-            setTotalRecord(res.data.data.totalElement);
-            console.log(currentPage)
+            setPosition(res.data.content);
+            setTotalRecord(res.data.totalElements)
         });
     }
 
@@ -79,7 +77,6 @@ function StaffSchedule() {
                                 <th>Struktur bölmənin adı</th>
                                 <th>Ştat vahidinin adı</th>
                                 <th>Ştat vahidinin sayı</th>
-                                <th>Ştat üzrə əsas əmək haqqı</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -87,11 +84,10 @@ function StaffSchedule() {
                                 position.map((item, index) =>
                                     <tr onClick={() => handleRowClick(item)} key={index}>
                                         <td>{item.id}</td>
-                                        <td>{item.departmentName}</td>
-                                        <td>{item.subDepartmentName}</td>
-                                        <td>{item.vacancyName}</td>
-                                        <td>{item.vacancyCount}</td>
-                                        <td>{item.salary}</td>
+                                        <td>{item.department !== null ? item.department.name : ''}</td>
+                                        <td>{item.department !== null ? item.subDepartment.name : ''}</td>
+                                        <td>{item.position !== null ? item.position.name : ''}</td>
+                                        <td>{item.count}</td>
                                     </tr>
                                 )
                             }

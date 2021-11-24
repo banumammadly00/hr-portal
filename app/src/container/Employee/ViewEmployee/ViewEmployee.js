@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Aux from "../../../hoc/Auxiliary";
-import {Container, Row, Col, Tabs, Tab, Image, Table} from 'react-bootstrap';
+import {Container, Row, Col, Tabs, Tab, Image, Table, Form, Button} from 'react-bootstrap';
 import {Link, useRouteMatch} from 'react-router-dom';
 import {mainAxios} from "../../../components/Axios/axios";
 import userImage from '../../../assets/img/user.png'
@@ -81,6 +81,8 @@ function ViewEmployee() {
     const [contactData, setContactData] = useState(false);
 
     /*--------------Company------------*/
+    const [companyArr, setCompanyArr] = useState([]);
+
     const [company, setCompany] = useState('');
     const [department, setDepartment] = useState('');
     const [subDepartment, setSubDepartment] = useState('');
@@ -114,6 +116,9 @@ function ViewEmployee() {
     const [driverData, setDriverData] = useState(false);
     const [academicDegData, setAcademicDegData] = useState(false);
 
+    /*----------Bank----------*/
+    const [bankAccount, setBankAccount] = useState('')
+
     /*-------------Operation-------------*/
     const [document, setDocument] = useState([]);
     const [totalRecord, setTotalRecord] = useState('');
@@ -129,6 +134,11 @@ function ViewEmployee() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
+
+            let accountData = res.data.account;
+            if(accountData !==null) {
+                setBankAccount(accountData.number)
+            }
             let personalData = res.data.personalInformation;
             if (personalData !== null) {
                 setStartBirthDate(personalData.birthday);
@@ -145,7 +155,7 @@ function ViewEmployee() {
                 setStartIdDate(personalData.idCard.startDate);
                 setSetMilitaryStatus(personalData.militaryStatus);
                 personalData.gender !== 'Kişi' ? setShowMilitary(false) : setShowMilitary(true);
-                let motherLandName = personalData.motherLand !==null ? personalData.motherLand.name : null
+                let motherLandName = personalData.motherLand !== null ? personalData.motherLand.name : null
                 setCitizenControl(motherLandName);
                 motherLandName !== 'Azərbaycan' ? setShowPermission(true) : setShowPermission(false)
                 personalData.photo !== null ?
@@ -206,16 +216,17 @@ function ViewEmployee() {
                 }
             }
 
-            let businessData = res.data.businessInformation
-            if (businessData !== null) {
-                setCompany(businessData.company);
-                setDepartment(businessData.department);
-                setSubDepartment(businessData.subDepartment);
+            let businessData = res.data.businessInformationSet
+            if (businessData.length > 0) {
+                setCompanyArr(businessData)
+               // setCompany(businessData.company);
+                //setDepartment(businessData.department);
+              /*  setSubDepartment(businessData.subDepartment);
                 setPosition(businessData.position);
                 setFiredReason(businessData.dismissalReason);
                 setStartJobDate(businessData.startDate);
                 setEndJobDate(businessData.endDate);
-                setChecked(businessData.mainJob)
+                setChecked(businessData.mainJob)*/
             }
 
             let educationData = res.data.educationInformation
@@ -877,117 +888,123 @@ function ViewEmployee() {
                                                 </div>
                                             </div>
                                         </div>
-                                        {
-                                            universityArr.map((item, index) =>
-                                                <div className="card-in" key={index}>
-                                                    {
-                                                        index === 0 ? null :
-                                                            <div className="add-item-top">
-                                                                <p className="m-0"> #{index + 1}. Digər </p>
-                                                            </div>
-                                                    }
-                                                    <div className="card-item flex-start">
-                                                        <div className="card-title">
-                                                            Təhsil dərəcəsi
-                                                        </div>
-                                                        <div className="card-text">
-                                                            {item.degree}
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-item flex-start">
-                                                        <div className="card-title">
-                                                            Təhsil müəssəsinin adı
-                                                        </div>
-                                                        <div className="card-text">
-                                                            {item.institution}
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-item flex-start">
-                                                        <div className="card-title">
-                                                            Fakültə
-                                                        </div>
-                                                        <div className="card-text">
-                                                            {item.faculty}
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-item flex-start">
-                                                        <div className="card-title">
-                                                            İstiqamət
-                                                        </div>
-                                                        <div className="card-text">
-                                                            {item.direction}
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-item flex-start">
-                                                        <div className="card-title">
-                                                            İxtisas
-                                                        </div>
-                                                        <div className="card-text">
-                                                            {item.speciality}
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-item flex-start">
-                                                        <div className="card-title">
-                                                            Daxil olma tarixi
-                                                        </div>
-                                                        <div className="card-text">
-                                                            {item.entranceDate}
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-item flex-start">
-                                                        <div className="card-title">
-                                                            Bitmə tarixi
-                                                        </div>
-                                                        <div className="card-text">
-                                                            {item.graduateDate}
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-item flex-start">
-                                                        <div className="card-title">
-                                                            Sənədin nömrəsi
-                                                        </div>
-                                                        <div className="card-text">
-                                                            {
-                                                                item.diploma !== null ?
-                                                                    item.diploma.number
-                                                                    : null
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-item flex-start">
-                                                        <div className="card-title">
-                                                            Sənədin verilmə tarixi
-                                                        </div>
-                                                        <div className="card-text">
-                                                            {
-                                                                item.diploma !== null ?
-                                                                    item.diploma.givenDate
-                                                                    : null
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-item flex-start">
-                                                        <div className="card-title">
-                                                            Təhsil forması
-                                                        </div>
-                                                        <div className="card-text">
-                                                            {item.educationType}
-                                                        </div>
-                                                    </div>
-                                                    {
-                                                        item.abroadStudyNo !== null ?
-                                                            <div className="card-item flex-start">
-                                                                <div className="card-title">
-                                                                    Nostrifikasiya şəhadətnaməsinin nömrəsi
-                                                                </div>
-                                                                <div className="card-text">
-                                                                    {item.abroadStudyNo}
-                                                                </div>
-                                                            </div>
-                                                            : null
-                                                    }
-                                                </div>
-                                            )
+                                           {
+                                           universityArr.length > 0 ?
+                                               universityArr.map((item, index) =>
+                                                   <div className="card-in" key={index}>
+                                                       {
+                                                           index === 0 ? null :
+                                                               <div className="add-item-top">
+                                                                   <p className="m-0"> #{index + 1}. Digər </p>
+                                                               </div>
+                                                       }
+                                                       <div className="card-item flex-start">
+                                                           <div className="card-title">
+                                                               Təhsil dərəcəsi
+                                                           </div>
+                                                           <div className="card-text">
+                                                               {item.degree}
+                                                           </div>
+                                                       </div>
+                                                       <div className="card-item flex-start">
+                                                           <div className="card-title">
+                                                               Təhsil müəssəsinin adı
+                                                           </div>
+                                                           <div className="card-text">
+                                                               {
+                                                                   item.institution !==null ?
+                                                                       item.institution.name
+                                                                       : null
+                                                               }
+                                                           </div>
+                                                       </div>
+                                                       <div className="card-item flex-start">
+                                                           <div className="card-title">
+                                                               Fakültə
+                                                           </div>
+                                                           <div className="card-text">
+                                                               {item.faculty}
+                                                           </div>
+                                                       </div>
+                                                       <div className="card-item flex-start">
+                                                           <div className="card-title">
+                                                               İstiqamət
+                                                           </div>
+                                                           <div className="card-text">
+                                                               {item.direction}
+                                                           </div>
+                                                       </div>
+                                                       <div className="card-item flex-start">
+                                                           <div className="card-title">
+                                                               İxtisas
+                                                           </div>
+                                                           <div className="card-text">
+                                                               {item.speciality}
+                                                           </div>
+                                                       </div>
+                                                       <div className="card-item flex-start">
+                                                           <div className="card-title">
+                                                               Daxil olma tarixi
+                                                           </div>
+                                                           <div className="card-text">
+                                                               {item.entranceDate}
+                                                           </div>
+                                                       </div>
+                                                       <div className="card-item flex-start">
+                                                           <div className="card-title">
+                                                               Bitmə tarixi
+                                                           </div>
+                                                           <div className="card-text">
+                                                               {item.graduateDate}
+                                                           </div>
+                                                       </div>
+                                                       <div className="card-item flex-start">
+                                                           <div className="card-title">
+                                                               Sənədin nömrəsi
+                                                           </div>
+                                                           <div className="card-text">
+                                                               {
+                                                                   item.diploma !== null ?
+                                                                       item.diploma.number
+                                                                       : null
+                                                               }
+                                                           </div>
+                                                       </div>
+                                                       <div className="card-item flex-start">
+                                                           <div className="card-title">
+                                                               Sənədin verilmə tarixi
+                                                           </div>
+                                                           <div className="card-text">
+                                                               {
+                                                                   item.diploma !== null ?
+                                                                       item.diploma.givenDate
+                                                                       : null
+                                                               }
+                                                           </div>
+                                                       </div>
+                                                       <div className="card-item flex-start">
+                                                           <div className="card-title">
+                                                               Təhsil forması
+                                                           </div>
+                                                           <div className="card-text">
+                                                               {item.educationType}
+                                                           </div>
+                                                       </div>
+                                                       {
+                                                           item.abroadStudyNo !== null ?
+                                                               <div className="card-item flex-start">
+                                                                   <div className="card-title">
+                                                                       Nostrifikasiya şəhadətnaməsinin nömrəsi
+                                                                   </div>
+                                                                   <div className="card-text">
+                                                                       {item.abroadStudyNo}
+                                                                   </div>
+                                                               </div>
+                                                               : null
+                                                       }
+                                                   </div>
+                                               )
+                                               : null
                                         }
                                     </div>
                                 </div>
@@ -1011,7 +1028,11 @@ function ViewEmployee() {
                                                                 Sertifikatın (vəsiqənin) adı
                                                             </div>
                                                             <div className="card-text">
-                                                                {item.name}
+                                                                {
+                                                                    item.certificate !== null ?
+                                                                        item.name
+                                                                        : null
+                                                                }
                                                             </div>
                                                         </div>
                                                         <div className="card-item flex-start">
@@ -1117,8 +1138,6 @@ function ViewEmployee() {
                                 </div>
                             </div>
                         </Tab>
-
-
                         <Tab eventKey="company" title="Əvvəlki iş yeri">
                             <div className="block">
                                 <div className="form-list">
@@ -1155,93 +1174,156 @@ function ViewEmployee() {
                                             Limana qədər əmək fəaliyyəti barədə məlumatlar
                                         </div>
                                         <div className="card">
-                                            <div className="card-item flex-start">
-                                                <div className="card-title">
-                                                    İşçinin işlədiyi şirkət
-                                                </div>
-                                                <div className="card-text">
-                                                    {company}
-                                                </div>
-                                            </div>
-                                            <div className="card-item flex-start">
-                                                <div className="card-title">
-                                                    Struktur bölmə
-                                                </div>
-                                                <div className="card-text">
-                                                    {department}
-                                                </div>
-                                            </div>
-                                            <div className="card-item flex-start">
-                                                <div className="card-title">
-                                                    Alt struktur bölmə
-                                                </div>
-                                                <div className="card-text">
-                                                    {subDepartment}
-                                                </div>
-                                            </div>
-                                            <div className="card-item flex-start">
-                                                <div className="card-title">
-                                                    İşçinin işlədiyi vəzifə
-                                                </div>
-                                                <div className="card-text">
-                                                    {position}
-                                                </div>
-                                            </div>
-                                            <div className="card-item flex-start">
-                                                <div className="card-title">
-                                                    İşə qəbul tarixi
-                                                </div>
-                                                <div className="card-text">
-                                                    {startJobDate}
-                                                </div>
-                                            </div>
-                                            <div className="card-item flex-start">
-                                                <div className="card-title">
-                                                    İşdən azad tarixi
-                                                </div>
-                                                <div className="card-text">
-                                                    {endJobDate}
-                                                </div>
-                                            </div>
-                                            <div className="card-item flex-start">
-                                                <div className="card-title">
-                                                    İşdən azad olma maddəsi
-                                                </div>
-                                                <div className="card-text">
-                                                    {firedReason}
-                                                </div>
-                                            </div>
-                                            <div className="radio-content">
-                                                <h5>Əsas iş yeridir yoxsa əlavə iş yeri?</h5>
-                                                <div className="flex-start">
-                                                    <div className="radio-block">
-                                                        <label className="radio-label">
-                                                            <input type="radio" name="radio" checked={checked}
-                                                                   disabled={true} onChange={(e) => {
-                                                                setChecked(true)
-                                                            }}/>
-                                                            <span className="radio-mark"></span>
-                                                        </label>
-                                                        <span className="radio-title">Əsas iş yeri</span>
+                                            {
+                                                companyArr.length > 0 ?
+                                                    companyArr.map((item, index) =>
+                                                        <div className="card-in" key={index}>
+                                                            {
+                                                                index === 0 ? null :
+                                                                    <div className="add-item-top">
+                                                                        <p className="m-0"> #{index + 1}. Digər </p>
+                                                                    </div>
+                                                            }
+                                                            <div className="radio-content">
+                                                                <h5>Əsas iş yeridir yoxsa əlavə iş yeri?</h5>
+                                                                <div className="flex-start">
+                                                                    <div className="radio-block">
+                                                                        <label className="radio-label">
+                                                                            <input type="radio"  name={`${index}radio`} checked={item.mainJob}
+                                                                                   disabled={true} onChange={(e) => {
+                                                                                setChecked(true)
+                                                                            }}/>
+                                                                            <span className="radio-mark"></span>
+                                                                        </label>
+                                                                        <span className="radio-title">Əsas iş yeri</span>
+                                                                    </div>
+                                                                    <div className="radio-block">
+                                                                        <label className="radio-label">
+                                                                            <input type="radio"  name={`${index}radio`} checked={!item.mainJob}
+                                                                                   disabled={true} onChange={(e) => {
+                                                                                setChecked(false)
+                                                                            }}/>
+                                                                            <span className="radio-mark"></span>
+                                                                        </label>
+                                                                        <span className="radio-title">Əlavə iş yeri</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    İşçinin işlədiyi şirkət
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.company}
+                                                                </div>
+                                                            </div>
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    Struktur bölmə
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.department}
+                                                                </div>
+                                                            </div>
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    Alt struktur bölmə
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.subDepartment}
+                                                                </div>
+                                                            </div>
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    İşə qəbul tarixi
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.startJobDate}
+                                                                </div>
+                                                            </div>
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    İşdən azad tarixi
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.endJobDate}
+                                                                </div>
+                                                            </div>
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    İşdən azad olma maddəsi
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.firedReason}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                    :
+                                                    <div className="card-in">
+                                                        <div className="card-item flex-start">
+                                                            <div className="card-title">
+                                                                Məlumat yoxdur
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div className="radio-block">
-                                                        <label className="radio-label">
-                                                            <input type="radio" name="radio" checked={!checked}
-                                                                   disabled={true} onChange={(e) => {
-                                                                setChecked(false)
-                                                            }}/>
-                                                            <span className="radio-mark"></span>
-                                                        </label>
-                                                        <span className="radio-title">Əlavə iş yeri</span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </Tab>
-
+                        <Tab eventKey="bank" title="Bank məlumatları">
+                            <div className="block">
+                                <Form className="form-list">
+                                    <div className="flex view-top">
+                                        <div className="upload-content flex-start">
+                                            <div className="upload-img">
+                                                <Image src={photo ? photo : userImage}/>
+                                            </div>
+                                            <div className="user-data">
+                                                <p className="user-name">{fullName}</p>
+                                                <p className="user-department">{department}</p>
+                                                <p className="user-position">{position}</p>
+                                            </div>
+                                        </div>
+                                        <Link to={`/employee/edit/${id}`} className="btn-border">
+                                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <g opacity="0.8" clipPath="url(#clip0)">
+                                                    <path
+                                                        d="M11.1928 3.03327L14.8544 6.69485L5.58591 15.9634L1.92638 12.3018L11.1928 3.03327ZM17.6329 2.15019L16 0.51725C15.3689 -0.113823 14.3442 -0.113823 13.7109 0.51725L12.1468 2.08144L15.8084 5.74305L17.6329 3.9185C18.1224 3.42901 18.1224 2.63965 17.6329 2.15019ZM0.0101894 17.4484C-0.0564472 17.7483 0.214319 18.0171 0.514252 17.9441L4.5945 16.9548L0.934967 13.2933L0.0101894 17.4484Z"
+                                                        fill="#3083DC"/>
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0">
+                                                        <rect width="18" height="18" fill="white"/>
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+                                            Dəyişiklik et
+                                        </Link>
+                                    </div>
+                                    <div className="add-block">
+                                        <div className="block-inn">
+                                            <div className="block-title">
+                                                Bank haqqında məlumatlar
+                                            </div>
+                                            <div className="card">
+                                                <div className="card-item flex-start">
+                                                    <div className="card-title">
+                                                        Bank hesabı
+                                                    </div>
+                                                    <div className="card-text">
+                                                        {bankAccount}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Form>
+                            </div>
+                        </Tab>
                         <Tab eventKey="other" title="Digər məlumatlar">
                             <div className="block">
                                 <div className="form-list">
@@ -1279,49 +1361,49 @@ function ViewEmployee() {
                                         </div>
                                         <div className="card">
                                             {
-                                               rewardArr.length > 0 ?
-                                                   rewardArr.map((item, index) =>
-                                                       <div className="card-in" key={index}>
-                                                           {
-                                                               index === 0 ? null :
-                                                                   <div className="add-item-top">
-                                                                       <p className="m-0"> #{index + 1}. Digər </p>
-                                                                   </div>
-                                                           }
-                                                           <div className="card-item flex-start">
-                                                               <div className="card-title">
-                                                                   Təltifin adı
-                                                               </div>
-                                                               <div className="card-text">
-                                                                   {item.name}
-                                                               </div>
-                                                           </div>
-                                                           <div className="card-item flex-start">
-                                                               <div className="card-title">
-                                                                   Təltifi verən orqanın adı
-                                                               </div>
-                                                               <div className="card-text">
-                                                                   {item.organization}
-                                                               </div>
-                                                           </div>
-                                                           <div className="card-item flex-start">
-                                                               <div className="card-title">
-                                                                   Təltifin verilmə tarixi
-                                                               </div>
-                                                               <div className="card-text">
-                                                                   {item.startDate}
-                                                               </div>
-                                                           </div>
-                                                       </div>
-                                                   )
-                                                   :
-                                                   <div className="card-in">
-                                                       <div className="card-item flex-start">
-                                                           <div className="card-title">
-                                                               Məlumat yoxdur
-                                                           </div>
-                                                       </div>
-                                                   </div>
+                                                rewardArr.length > 0 ?
+                                                    rewardArr.map((item, index) =>
+                                                        <div className="card-in" key={index}>
+                                                            {
+                                                                index === 0 ? null :
+                                                                    <div className="add-item-top">
+                                                                        <p className="m-0"> #{index + 1}. Digər </p>
+                                                                    </div>
+                                                            }
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    Təltifin adı
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.name}
+                                                                </div>
+                                                            </div>
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    Təltifi verən orqanın adı
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.organization}
+                                                                </div>
+                                                            </div>
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    Təltifin verilmə tarixi
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.startDate}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                    :
+                                                    <div className="card-in">
+                                                        <div className="card-item flex-start">
+                                                            <div className="card-title">
+                                                                Məlumat yoxdur
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                             }
                                         </div>
 

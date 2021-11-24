@@ -36,10 +36,10 @@ function ViewStaff() {
     const [skillLegalArr, setSkillLegalArr] = useState([]);
     const [skillLanguageArr, setSkillLanguageArr] = useState([]);
 
+    const [minGrade, setMinGrade] = useState('');
+    const [maxGrade, setMaxGrade] = useState('');
+
     const [educationDegree, setEducationDegree] = useState('');
-    const [workPaid, setWorkPaid] = useState('');
-    const [subWorkPaid, setSubWorkPaid] = useState('');
-    const [salary, setSalary] = useState('');
     const [workAddress, setWorkAddress] = useState('');
     const [requiredFile, setRequiredFile] = useState(null);
 
@@ -62,37 +62,42 @@ function ViewStaff() {
     const getStaffInfo = () => {
         mainAxios({
             method: 'get',
-            url: '/position/general-info/' + id,
+            url: '/vacancies/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            let data = res.data.data;
-            setInstitution(data.institutionName);
-            setDepartment(data.departmentName);
-            setSubDepartment(data.subDepartmentName);
-            setObeyDepartment(data.obeyDepartmentName);
-            setVacancy(data.vacancyName);
-            setVacancyCount(data.vacancyCount);
-            setSalary(data.salary);
-            setFamilyJob(data.jobFamily);
-            setEmployeePosition(data.fullNameAndPosition);
-            setLeaderExperience(data.leaderExperience);
-            setAreaExperience(data.areaExperience);
-            setWorkPaid(data.workCalculateDegree);
-            setSubWorkPaid(data.subWorkCalculateDegree);
+            let data = res.data.generalInformation;
+            setInstitution(data.workInstitution !==null ? data.workInstitution.name : null);
+            setDepartment(data.department !== null ? data.department.name : null);
+            setSubDepartment(data.subDepartment !== null ? data.subDepartment.name : null );
+            setObeyDepartment(data.subordinateDepartment);
+            setVacancy(data.position !==null ? data.position.name : null);
+            setVacancyCount(data.count);
+            setFamilyJob(data.jobFamily !==null ? data.jobFamily.name : null);
+            let leaderData = res.data.generalInformation.experience
+            if(leaderData!==null) {
+                setLeaderExperience(data.leader);
+                setAreaExperience(data.area);
+            }
+            let gradeData = res.data.generalInformation.gradeRange
+            if(leaderData!==null) {
+                setMinGrade(gradeData.min);
+                setMaxGrade(gradeData.max);
+            }
+            setEmployeePosition(data.curator);
             setWorkCondition(data.workCondition);
-            setVacancyCategory(data.vacancyCategory);
+            setVacancyCategory(data.positionCategory);
             setWorkMode(data.workMode);
             setWorkAddress(data.workPlace);
-            setSkillArr(data.skills);
-            setEducationSpeciality(data.educationSpeciality);
-            setGender(data.genderDemand);
-            setEducationDegree(data.educationDegree);
+            //setSkillArr(data.requiredKnowledgeSet);
+            setEducationSpeciality(data.speciality !==null ? data.speciality.name : null);
+            setGender(data.gender);
+            setEducationDegree(data.educationStatus);
             setHealth(data.healthy ? 'Bəli' : 'Xeyr');
             setMilitaryAchieve(data.militaryAchieve ? 'Bəli' : 'Xeyr');
-            setRequiredFile(data.requireFile)
+            setRequiredFile(data.requireCertificate ? 'Bəli' : 'Xeyr')
             setHeight(data.height)
             data.height > 0 ? setShowHeight(true) : setShowHeight(false);
             setHeightDemand(data.height > 0 ? 'Bəli' : 'Xeyr');
@@ -237,26 +242,18 @@ function ViewStaff() {
                                             </div>
                                             <div className="card-item flex-start">
                                                 <div className="card-title">
-                                                    Əməyin ödənilməsi dərəcəsi
+                                                    Min dərəcə
                                                 </div>
                                                 <div className="card-text">
-                                                    {workPaid}
+                                                    {minGrade}
                                                 </div>
                                             </div>
                                             <div className="card-item flex-start">
                                                 <div className="card-title">
-                                                    Əməyin ödənilməsi üzrə alt dərəcə
+                                                    Max dərəcə
                                                 </div>
                                                 <div className="card-text">
-                                                    {subWorkPaid}
-                                                </div>
-                                            </div>
-                                            <div className="card-item flex-start">
-                                                <div className="card-title">
-                                                    Ştat üzrə əsas əmək haqqı *
-                                                </div>
-                                                <div className="card-text">
-                                                    {salary}
+                                                    {maxGrade}
                                                 </div>
                                             </div>
                                             <div className="card-item flex-start">

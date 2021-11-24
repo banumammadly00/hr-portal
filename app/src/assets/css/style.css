@@ -195,7 +195,7 @@ label {
     color: #2ED06A;
 }
 
-.btn-main, .btn-main:hover, .btn-border:focus {
+.btn-main, .btn-main:hover, .btn-main:focus {
     background-color: rgba(48, 131, 220, .8);
     color: #FFFFFF;
     border-radius: 4px;
@@ -1282,9 +1282,9 @@ td {
 .break-line:after {
     content: '';
     display: block;
-    width: 10px;
+    width: 21px;
     height: 1px;
-    background: #000;
+    background: #A7A7A7;
 }
 
 .calendar .fc-theme-standard .fc-scrollgrid {
@@ -1570,6 +1570,17 @@ td {
 
 .check-block-list {
     padding: 10px 0;
+}
+
+.filter-block .block {
+    margin-bottom: 15px;
+    min-height: auto;
+    padding: 15px;
+    align-items: flex-end;
+}
+
+.filter-block .btn-main {
+    width: 145px;
 }
 
 @media only screen and (min-width: 1600px){

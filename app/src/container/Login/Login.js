@@ -13,11 +13,7 @@ function Login() {
     const [email, setEmail] = useState('');
     const [passwordBtn, setPasswordBtn] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState({
-        password: '',
-        username: '',
-        userAndPassword: ''
-    });
+    const [errors, setErrors] = useState({});
 
     const togglePassword = () => {
         setPasswordBtn(!passwordBtn)
@@ -45,21 +41,24 @@ function Login() {
             },
             data: data
         }).then((res) => {
-            setLoading(false)
-            if (res.data.code === 200) {
-                localStorage.setItem('token', res.data.data);
-                history.replace("/employee");
+            setLoading(false);
+            if (res.status === 200) {
+                localStorage.setItem('token', res.data.token);
+                if(res.data.token !== null) {
+                    history.replace("/employee");
+                }
             }
         }).catch(error => {
             setLoading(false);
             const {response} = error;
             if (response) {
-                if (error.response.data.code === 304) {
-                    setErrors({userAndPassword: error.response.data.message})
-                } else
-                    setErrors(error.response.data.message);
+                setErrors(error.response.data.validations);
+
+               /* if (error.response.data.status === 400) {
+                    setErrors(error.response.data.validations);
+                }*/
             } else {
-                setErrors({userAndPassword: "Şəbəkə ilə bağlı problem var"})
+                setErrors({networkError: "Şəbəkə ilə bağlı problem var"})
             }
 
         });
@@ -75,7 +74,6 @@ function Login() {
                                     <div className="logo">
                                         <Link to="/">
                                             <Image src={require('../../assets/img/Port-of-Baku.png').default}/>
-                                            {/*<img src={require('../../assets/img/logo.svg').default} alt="special"/>*/}
                                         </Link>
                                     </div>
                                     <div className="short-desc">
@@ -90,14 +88,6 @@ function Login() {
                                 <Row>
                                     <Col xl={{span: 8, offset: 2}} lg={{span: 10, offset: 1}} md={{span: 8, offset: 2}}>
                                         <h2 className="text-center">Log in to HR</h2>
-                                        {
-                                            errors.userAndPassword !== '' ?
-                                                <div>
-                                                    <span
-                                                        className="text-validation text-center">{errors.userAndPassword}</span>
-                                                </div>
-                                                : null
-                                        }
                                         <Form className="form-list" onSubmit={sendData}>
                                             <Form.Group className="form-group">
                                                 <span className="input-title">Email</span>

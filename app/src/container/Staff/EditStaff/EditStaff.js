@@ -21,29 +21,10 @@ function EditStaff() {
     const {params: {id}} = useRouteMatch('/staff/edit/:id');
 
     const evaluationOptions = [
-        {value: "NONE", label: "Yoxdur"},
         {value: 'BEST', label: 'Əla'},
         {value: 'MIDDLE', label: 'Orta'},
         {value: 'GOOD', label: 'Yaxşı'}
     ];
-
-    const languageOptions = [
-        {value: "English", label: "Ingilis dili"},
-        {value: 'Russian', label: 'Rus dili'},
-        {value: 'Turkish', label: 'Türk dili'},
-    ];
-
-    const programOptions = [
-        {value: "MS Office", label: "MS Office"},
-        {value: '1 C', label: '1 C'},
-        {value: 'Caspel', label: 'Caspel'},
-    ];
-
-    const legalOptions = [
-        {value: "Əmək məcəlləsi", label: "Əmək məcəlləsi"},
-        {value: 'Mülki məcəllə', label: 'Mülki məcəllə'},
-        {value: 'Dövlət satınalma qaydaları', label: 'Dövlət satınalma qaydaları'},
-    ]
 
     const genderOptions = [
         {value: 'MALE', label: "Kişi"},
@@ -82,84 +63,93 @@ function EditStaff() {
         {value: 'WORKER', label: 'Fəhlə'},
     ]
 
-    const workPaidOptions = [
+    const workPlaceOptions = [
+        {value: 'WORK_PLACE_1', label: 'Bakı inzibati bina'},
+        {value: 'WORK_PLACE_2', label: 'Dəniz vağzalı'},
+        {value: 'WORK_PLACE_3', label: 'Dübəndi terminalı'},
+        {value: 'WORK_PLACE_4', label: 'Qaradağ anbarı'},
+        {value: 'WORK_PLACE_5', label: 'Ələt'},
+    ]
+
+    const gradeOptions = [
         {value: 1, label: '1'},
         {value: 2, label: '2'},
         {value: 3, label: '3'},
+        {value: 4, label: '4'},
+        {value: 5, label: '5'},
+        {value: 6, label: '6'},
+        {value: 7, label: '7'},
+        {value: 8, label: '8'},
+        {value: 9, label: '9'},
+        {value: 10, label: '10'},
+        {value: 11, label: '11'},
+        {value: 12, label: '12'},
+        {value: 13, label: '13'},
+        {value: 14, label: '14'},
+        {value: 15, label: '15'},
+        {value: 16, label: '16'},
+        {value: 17, label: '17'},
+        {value: 18, label: '18'},
+        {value: 19, label: '19'},
     ]
 
-    const subWorkCalculateDegreeOptions = [
-        {value: 'A', label: 'A'},
-        {value: 'B', label: 'B'},
-    ]
-
-    const requireFileOptions = [
-        {value: 'CERTIFICATE', label: 'Sertifikat'},
-        {value: 'CARD', label: 'Vəsiqə'},
-    ]
-
-    const [selectedOption, setSelectedOption] = useState(null);
-
-    const [institution, setInstitution] = useState([]);
-    const [department, setDepartment] = useState([]);
-    const [subDepartment, setSubDepartment] = useState([]);
-    const [vacancy, setVacancy] = useState([]);
-    const [salary, setSalary] = useState([]);
-    const [familyJob, setFamilyJob] = useState([]);
-    const [document, setDocument] = useState([]);
-    const [skill, setSkill] = useState([]);
-    const [positionFunctionArr, setPositionFunctionArr] = useState([" "]);
-    const [employeePosition, setEmployeePosition] = useState([]);
-    const [workAddress, setWorkAddress] = useState([]);
-    const [obeyDepartment, setObeyDepartment] = useState('');
-    const [additionalSalary, setAdditionalSalary] = useState('');
-    const [vacancyCount, setVacancyCount] = useState('');
-    const [areaExperience, setAreaExperience] = useState('');
-    const [leaderExperience, setLeaderExperience] = useState('');
-    const [height, setHeight] = useState('');
-    const [skillArr, setSkillArr] = useState([{level: '', skill: ''}]);
-    const [skillProgramArr, setSkillProgramArr] = useState([{level: '', skill: ''}]);
-    const [skillLegalArr, setSkillLegalArr] = useState([{level: '', skill: ''}]);
-    const [skillLanguageArr, setSkillLanguageArr] = useState([{level: '', skill: ''}]);
-    const [showHeight, setShowHeight] = useState(false);
-    const [key, setKey] = useState('home');
-
+    /*check&visibility*/
+    const [showButton, setShowButton] = useState(false);
+    const [key, setKey] = useState('general');
     const [loadingIndicator, setLoadingIndicator] = useState(false);
+    const [errors, setErrors] = useState({});
 
-    const [errors, setErrors] = useState({
-        departmentName: '',
-        fullNameAndPosition: '',
-        institutionName: '',
-        jobFamily: '',
-        subDepartmentName: '',
-        vacancyCategory: '',
-        vacancyCount: '',
-        vacancyName: '',
-        workCondition: '',
-        workMode: '',
-        workPlace: ''
-    });
-
-    const [selectedInstitution, setSelectedInstitution] = useState(null);
-    const [selectedDepartment, setSelectedDepartment] = useState(null);
-    const [selectedSubDepartment, setSelectedSubDepartment] = useState(null);
-    const [selectedEducationDegree, setSelectedEducationDegree] = useState(null);
-    const [selectedWorkPaid, setSelectedWorkPaid] = useState(null);
-    const [selectedSubWorkPaid, setSelectedSubWorkPaid] = useState(null);
-    const [selectedSalary, setSelectedSalary] = useState(null);
-    const [selectedWorkAddress, setSelectedWorkAddress] = useState(null);
-    const [selectedRequiredFile, setSelectedRequiredFile] = useState(null);
-
+    /*---------------General---------------*/
+    /*select*/
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedMinGrade, setSelectedMinGrade] = useState(null);
+    const [selectedMaxGrade, setSelectedMaxGrade] = useState(null);
     const [selectedWorkCondition, setSelectedWorkCondition] = useState(null);
     const [selectedWorkMode, setSelectedWorkMode] = useState(null);
     const [selectedVacancy, setSelectedVacancy] = useState(null);
     const [selectedVacancyCategory, setSelectedVacancyCategory] = useState(null);
-    const [selectedEmployeePosition, setSelectedEmployeePosition] = useState(null);
-    const [selectedEducationSpeciality, setSelectedEducationSpeciality] = useState('');
+    const [selectedCurator, setSelectedCurator] = useState(null);
     const [selectedGender, setSelectedGender] = useState(null);
     const [selectedFamilyJob, setSelectedFamilyJob] = useState(null);
     const [selectedMilitaryAchieve, setSelectedMilitaryAchieve] = useState(null);
     const [selectedHealth, setSelectedHealth] = useState(null);
+    const [selectedInstitution, setSelectedInstitution] = useState(null);
+    const [selectedDepartment, setSelectedDepartment] = useState(null);
+    const [selectedSubDepartment, setSelectedSubDepartment] = useState(null);
+    const [selectedEducationDegree, setSelectedEducationDegree] = useState(null);
+    const [selectedWorkAddress, setSelectedWorkAddress] = useState(null);
+    const [selectedRequiredFile, setSelectedRequiredFile] = useState(null);
+    const [selectedSpeciality, setSelectedSpeciality] = useState(null);
+    /*array*/
+    const [institution, setInstitution] = useState([]);
+    const [department, setDepartment] = useState([]);
+    const [subDepartment, setSubDepartment] = useState([]);
+    const [vacancy, setVacancy] = useState([]);
+    const [familyJob, setFamilyJob] = useState([]);
+    const [skill, setSkill] = useState([]);
+    const [positionFunctionArr, setPositionFunctionArr] = useState([""]);
+    const [skillArr, setSkillArr] = useState([{requiredSkillId: null, level: null}]);
+    const [curator, setCurator] = useState([]);
+    const [speciality, setSpeciality] = useState([]);
+    const [computerSkill, setComputerSkill] = useState([]);
+    const [languageSkill, setLanguageSkill] = useState([]);
+    const [legislationSkill, setLegislationSkill] = useState([]);
+    /*input*/
+    const [obeyDepartment, setObeyDepartment] = useState('');
+    const [vacancyCount, setVacancyCount] = useState('');
+    const [areaExperience, setAreaExperience] = useState('');
+    const [leaderExperience, setLeaderExperience] = useState('');
+    const [height, setHeight] = useState('');
+    /*checked*/
+    const [showHeight, setShowHeight] = useState(false);
+
+    /*-----------Knowledge------------*/
+    const [skillProgramArr, setSkillProgramArr] = useState([{computerId: null, level: null}]);
+    const [skillLegalArr, setSkillLegalArr] = useState([{legislationId: null, level: null}]);
+    const [skillLanguageArr, setSkillLanguageArr] = useState([{languageId: null, level: null}]);
+
+    const [selectedEmployeePosition, setSelectedEmployeePosition] = useState(null);
+    const [selectedEducationSpeciality, setSelectedEducationSpeciality] = useState('');
 
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
@@ -256,39 +246,54 @@ function EditStaff() {
     const getInstitution = () => {
         mainAxios({
             method: 'get',
-            url: '/institution',
+            url: '/work-institutions',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setInstitution(res.data.data)
+            //arr.push({name: 'Digər'})
+            setInstitution(res.data)
         });
     }
 
     const getDepartment = () => {
         mainAxios({
             method: 'get',
-            url: '/department',
+            url: '/departments',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setDepartment(res.data.data);
+            setDepartment(res.data);
         });
     }
 
     const getSubDepartment = (id) => {
         mainAxios({
             method: 'get',
-            url: '/department/sub-department/' + id,
+            url: `/departments/${id}/sub-departments/`,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setSubDepartment(res.data.data);
+            setSubDepartment(res.data);
+
+        });
+    }
+
+    const getCurators = () => {
+        mainAxios({
+            method: 'get',
+            url: `/employees/curators`,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            setCurator(res.data);
 
         });
     }
@@ -296,31 +301,15 @@ function EditStaff() {
     const getVacancy = () => {
         mainAxios({
             method: 'get',
-            url: '/vacancy',
+            url: '/positions',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            let arr = res.data.data;
+            let arr = res.data;
             //arr.push({name: 'Digər'})
             setVacancy(arr);
-
-        });
-    }
-
-    const getSalary = () => {
-        mainAxios({
-            method: 'get',
-            url: '/salary',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-        }).then((res) => {
-            let arr = res.data.data;
-            //arr.push({name: 'Digər'})
-            setSalary(arr);
 
         });
     }
@@ -328,58 +317,80 @@ function EditStaff() {
     const getFamilyJob = () => {
         mainAxios({
             method: 'get',
-            url: '/job-family',
+            url: '/job-families',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            let arr = res.data.data;
             //arr.push({name: 'Digər'})
-            setFamilyJob(arr);
+            setFamilyJob(res.data);
 
+        });
+    }
+
+    const getSpeciality = () => {
+        mainAxios({
+            method: 'get',
+            url: '/specialities',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            setSpeciality(res.data)
         });
     }
 
     const getSkill = () => {
         mainAxios({
             method: 'get',
-            url: '/skill',
+            url: '/skills',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setSkill(res.data.data);
+            setSkill(res.data);
         });
     }
 
-    const getEmployeePosition = () => {
+    const getComputerSkill = () => {
         mainAxios({
             method: 'get',
-            url: '/employee/fullname-position',
+            url: '/computers',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setEmployeePosition(res.data.data);
-
+            setComputerSkill(res.data)
         });
     }
 
-    const getWorkAddress = () => {
+    const getLanguageSkill = () => {
         mainAxios({
             method: 'get',
-            url: '/position/work-address',
+            url: '/languages',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setWorkAddress(res.data.data);
-            getPositionInfo(res.data.data);
+            setLanguageSkill(res.data)
+        });
+    }
 
+    const getLegislationSkill = () => {
+        mainAxios({
+            method: 'get',
+            url: '/legislations',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            setLegislationSkill(res.data)
         });
     }
 
@@ -388,19 +399,19 @@ function EditStaff() {
     }
 
     const addSkill = () => {
-        setSkillArr([...skillArr, {level: null, skill: null}])
+        setSkillArr([...skillArr, {requiredSkillId: null, level: null}])
     }
 
     const addProgramSkill = () => {
-        setSkillProgramArr([...skillProgramArr, {level: '', name: ''}])
+        setSkillProgramArr([...skillProgramArr, {computerId: null, level: null}])
     }
 
     const addLegalSkill = () => {
-        setSkillLegalArr([...skillLegalArr, {level: null, name: null}])
+        setSkillLegalArr([...skillLegalArr, {legislationId: null, level: null}])
     }
 
     const addLanguageSkill = () => {
-        setSkillLanguageArr([...skillLanguageArr, {level: null, name: null}])
+        setSkillLanguageArr([...skillLanguageArr, {languageId: null, level: null}])
     }
 
     const addPositionFunction = () => {
@@ -415,204 +426,212 @@ function EditStaff() {
     const getPositionInfo = (arr) => {
         mainAxios({
             method: 'get',
-            url: '/position/general-info/' + id,
+            url: '/vacancies/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            let data = res.data.data;
-            setSelectedInstitution({name: data.institutionName});
-            setSelectedDepartment({name: data.departmentName});
-            setSelectedSubDepartment({name: data.subDepartmentName});
-            setObeyDepartment(data.obeyDepartmentName);
-            setSelectedVacancy({name: data.vacancyName});
-            setVacancyCount(data.vacancyCount);
-            setSelectedSalary({name: data.salary});
-            setAdditionalSalary(data.additionalSalary);
-            setSelectedFamilyJob({name: data.jobFamily});
-            setSelectedEmployeePosition({key: data.fullNameAndPosition});
-            setLeaderExperience(data.leaderExperience);
-            setAreaExperience(data.areaExperience);
-            setSelectedEducationSpeciality(data.educationSpeciality);
-            setSelectedRequiredFile({label: data.requireFile})
-            setHeight(data.height)
-            data.height > 0 ?
-                setSelectedOption({value: 1, label: 'Bəli'}) :
-                setSelectedOption({value: 0, label: 'Xeyr'});
-            data.height > 0 ? setShowHeight(true) : setShowHeight(false);
-            getSubDepartment(data.departmentName)
-
-            for (let i of arr) {
-                if (data.workPlace === i.key) {
-                    setSelectedWorkAddress(i)
+            let data = res.data.generalInformation;
+            if (data !== null) {
+                setVacancyCount(data.count);
+                let leaderData = data.experience
+                if (leaderData !== null) {
+                    setLeaderExperience(leaderData.leader);
+                    setAreaExperience(leaderData.area);
                 }
-            }
 
-            for (let i of options) {
-                if (data.militaryAchieve === i.value)
-                    setSelectedMilitaryAchieve(i);
-            }
-
-            for (let i of options) {
-                if (data.healthy === i.value)
-                    setSelectedHealth(i);
-            }
-
-            for (let i of genderOptions) {
-                if (data.genderDemand === i.label)
-                    setSelectedGender(i);
-            }
-
-            for (let i of educationDegreeOptions) {
-                if (i.label === data.educationDegree)
-                    setSelectedEducationDegree(i);
-            }
-
-            for (let i of subWorkCalculateDegreeOptions) {
-                if (i.label === data.subWorkCalculateDegree) {
-                    setSelectedSubWorkPaid(i)
+                let gradeData = data.gradeRange
+                if (gradeData !== null) {
+                    setSelectedMaxGrade({value: gradeData.max, label: gradeData.max});
+                    setSelectedMinGrade({value: gradeData.min, label: gradeData.min});
                 }
-            }
+                setPositionFunctionArr(data.functionalities);
+                setSelectedInstitution(data.workInstitution)
+                setSelectedFamilyJob(data.jobFamily);
+                setSelectedDepartment(data.department);
+                setObeyDepartment(data.subordinateDepartment);
+                setSelectedVacancy(data.position);
+                setSelectedSubDepartment(data.subDepartment);
+                setSelectedEmployeePosition(data.curator);
+                setSelectedSpeciality(data.speciality)
+                setHeight(data.height)
+                data.height > 0 ? setShowHeight(true) : setShowHeight(false);
 
-            for (let i of workPaidOptions) {
-                if (i.label === data.workCalculateDegree) {
-                    setSelectedWorkPaid(i)
+                for (let i of options) {
+                    if (data.militaryRequire == i.value)
+                        setSelectedMilitaryAchieve(i);
                 }
-            }
-
-            for (let i of workConditionOptions) {
-                if (i.label === data.workCondition) {
-                    setSelectedWorkCondition(i)
+                for (let i of options) {
+                    if (data.requireCertificate == i.value)
+                        setSelectedRequiredFile(i);
                 }
-            }
 
-            for (let i of WorkModeOptions) {
-                if (i.label === data.workMode) {
-                    setSelectedWorkMode(i)
-                }
-            }
+                let heightVal = data.height > 0 ? 1 : 0
 
-            for (let i of vacancyCategoryOptions) {
-                if (i.label === data.vacancyCategory) {
-                    setSelectedVacancyCategory(i)
-                }
-            }
-
-            let tmpSkills = [];
-            for (let i of data.skills) {
-                let obj = {};
-                obj.skill = {key: i.skill, value: 'GOOD'};
-                for (let j of evaluationOptions) {
-                    if (j.label === i.level)
-                        obj.level = j;
-                }
-                tmpSkills.push(obj)
-            }
-            if (tmpSkills.length > 0)
-                setSkillArr(tmpSkills);
-
-            setPositionFunctionArr(data.functionalities);
-        });
-    }
-
-    const getKnowledgeInfo = () => {
-        mainAxios({
-            method: 'get',
-            url: '/position/knowledge/' + id,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-        }).then((res) => {
-            let data = res.data.data;
-            let tmpProgramSkills = [];
-            for (let i of data.computerKnowledge) {
-                let obj = {};
-                obj.name = {value: i.name, label: i.name}
-                for (let j of evaluationOptions) {
-                    if (i.level === j.label) {
-                        obj.level = j
+                for (let i of options) {
+                    if(heightVal == i.value) {
+                        setSelectedOption(i)
                     }
                 }
-                tmpProgramSkills.push(obj);
-            }
 
-            if (tmpProgramSkills.length > 0)
-                setSkillProgramArr(tmpProgramSkills)
 
-            let tmpLegalSkills = [];
-            for (let i of data.legislationStatements) {
-                let obj = {};
-                obj.name = {value: i.name, label: i.name}
-                for (let j of evaluationOptions) {
-                    if (i.level === j.label) {
-                        obj.level = j
+                for (let i of genderOptions) {
+                    if (data.gender === i.label)
+                        setSelectedGender(i);
+                }
+
+                for (let i of options) {
+                    if (data.healthy == i.value)
+                        setSelectedHealth(i);
+                }
+
+                for (let i of workConditionOptions) {
+                    if (i.label === data.workCondition) {
+                        setSelectedWorkCondition(i)
                     }
                 }
-                tmpLegalSkills.push(obj);
-            }
-            if (tmpLegalSkills.length > 0)
-                setSkillLegalArr(tmpLegalSkills);
 
-            let tmpLanguageSkills = [];
-            for (let i of data.languageKnowledge) {
-                let obj = {};
-                obj.name = {value: i.name, label: i.name}
-                for (let j of evaluationOptions) {
-                    if (i.level === j.label) {
-                        obj.level = j
+                for (let i of WorkModeOptions) {
+                    if (i.label === data.workMode) {
+                        setSelectedWorkMode(i)
                     }
                 }
-                tmpLanguageSkills.push(obj);
+
+                for (let i of vacancyCategoryOptions) {
+                    if (i.label === data.positionCategory) {
+                        setSelectedVacancyCategory(i)
+                    }
+                }
+
+                for (let i of educationDegreeOptions) {
+                    if (i.label === data.educationStatus)
+                        setSelectedEducationDegree(i);
+                }
+                for (let i of workPlaceOptions) {
+                    if (data.workPlace === i.label) {
+                        setSelectedWorkAddress(i)
+                    }
+                }
+
+                let tmpLegislationSkills = [];
+                for (let i of data.legislationStatementSet) {
+                    let obj = {};
+                    obj.legislationId = i.legislation
+                    for (let j of evaluationOptions) {
+                        if (i.level === j.label) {
+                            obj.level = j
+                        }
+                    }
+                    tmpLegislationSkills.push(obj);
+                }
+                if (tmpLegislationSkills.length > 0)
+                    setSkillLegalArr(tmpLegislationSkills);
             }
-            if (tmpLanguageSkills.length > 0)
-                setSkillLanguageArr(tmpLanguageSkills);
+
+            let knowledgeData = res.data.specialityKnowledge
+
+            if(knowledgeData !== null) {
+                let tmpLanguageSkills = [];
+                for (let i of knowledgeData.languageKnowledgeSet) {
+                    let obj = {};
+                    obj.languageId = i.language
+                    for (let j of evaluationOptions) {
+                        if (i.level === j.label) {
+                            obj.level = j
+                        }
+                    }
+                    tmpLanguageSkills.push(obj);
+                }
+                if (tmpLanguageSkills.length > 0)
+                    setSkillLanguageArr(tmpLanguageSkills);
+
+                let tmpSkills = [];
+                for (let i of knowledgeData.requiredKnowledgeSet) {
+                    let obj = {};
+                    obj.requiredSkillId = i.requiredSkill;
+                    for (let j of evaluationOptions) {
+                        if (j.label === i.level)
+                            obj.level = j;
+                    }
+                    tmpSkills.push(obj)
+                }
+                if (tmpSkills.length > 0)
+                    setSkillArr(tmpSkills);
+
+                let tmpProgramSkills = [];
+                for (let i of knowledgeData.computerKnowledgeSet) {
+                    let obj = {};
+                    obj.computerId = i.computer
+                    for (let j of evaluationOptions) {
+                        if (i.level === j.label) {
+                            obj.level = j
+                        }
+                    }
+                    tmpProgramSkills.push(obj);
+                }
+
+                if (tmpProgramSkills.length > 0)
+                    setSkillProgramArr(tmpProgramSkills)
+            }
+
         });
     }
 
 
     const sendData = () => {
         setLoadingIndicator(true);
-        let arr = []
-        for (let i of skillArr) {
-            let obj = {skill: i.skill.key, level: i.level.value}
-            arr.push(obj)
+
+        for (let i of skillLegalArr) {
+            if (i.legislationId != null) {
+                i.legislationId = i.legislationId.id
+            } else {
+                i.legislationId = null
+            }
+
+            if (i.level != null) {
+                i.level = i.level.value
+            } else {
+                i.level = null
+            }
         }
 
         let data = {
-            "additionalSalary": parseFloat(additionalSalary),
-            "areaExperience": parseFloat(areaExperience),
-            "departmentName": selectedDepartment !== null ? selectedDepartment.name : null,
-            "educationDegree": selectedEducationDegree !== null ? selectedEducationDegree.value : null,
-            "educationSpeciality": selectedEducationSpeciality,
-            "fullNameAndPosition": selectedEmployeePosition !== null ? selectedEmployeePosition.key : null,
-            "functionalities": positionFunctionArr,
-            "genderDemand": selectedGender !== null ? selectedGender.value : null,
-            "healthy": selectedHealth !== null ? selectedHealth.value : null,
-            "height": parseFloat(height),
-            "institutionName": selectedInstitution !== null ? selectedInstitution.name : null,
-            "jobFamily": selectedFamilyJob !== null ? selectedFamilyJob.name : null,
-            "leaderExperience": parseFloat(leaderExperience),
-            "militaryAchieve": selectedMilitaryAchieve !== null ? selectedMilitaryAchieve.value : null,
-            "obeyDepartmentName": obeyDepartment,
-            "requireFile": selectedRequiredFile !== null ? selectedRequiredFile.value : null,
-            "salary": selectedSalary !== null ? selectedSalary.name : null,
-            "skills": arr,
-            "subDepartmentName": selectedSubDepartment !== null ? selectedSubDepartment.name : null,
-            "subWorkCalculateDegree": selectedSubWorkPaid !== null ? selectedSubWorkPaid.value : null,
-            "vacancyCategory": selectedVacancyCategory !== null ? selectedVacancyCategory.value : null,
-            "vacancyCount": parseFloat(vacancyCount),
-            "vacancyName": selectedVacancy !== null ? selectedVacancy.name : null,
-            "workCalculateDegree": selectedWorkPaid !== null ? selectedWorkPaid.value : null,
-            "workCondition": selectedWorkCondition !== null ? selectedWorkCondition.value : null,
-            "workMode": selectedWorkMode !== null ? selectedWorkMode.value : null,
-            "workPlace": selectedWorkAddress !== null ? parseFloat(selectedWorkAddress.value) : null
+            "generalInformation": {
+                "count": parseFloat(vacancyCount),
+                "curatorId": selectedCurator !== null ? selectedCurator.id : null,
+                "departmentId": selectedDepartment !== null ? selectedDepartment.id : null,
+                "educationStatus": selectedEducationDegree !== null ? selectedEducationDegree.value : null,
+                "experience": {
+                    "area": parseFloat(areaExperience),
+                    "leader": parseFloat(leaderExperience)
+                },
+                "functionalities": positionFunctionArr,
+                "gender": selectedGender !== null ? selectedGender.value : null,
+                "gradeRange": {
+                    "max": selectedMinGrade !== null ? selectedMinGrade.value : null,
+                    "min": selectedMaxGrade !== null ? selectedMaxGrade.value : null
+                },
+                "healthy": selectedHealth !== null ? selectedHealth.value : null,
+                "height": parseFloat(height),
+                "legislationStatementSet": skillLegalArr,
+                "institutionId": selectedInstitution !== null ? selectedInstitution.id : null,
+                "militaryRequire": selectedMilitaryAchieve !== null ? selectedMilitaryAchieve.value : null,
+                "positionCategory": selectedVacancyCategory !== null ? selectedVacancyCategory.value : null,
+                "positionId": selectedVacancy !== null ? selectedVacancy.id : null,
+                "specialityId": selectedSpeciality !== null ? selectedSpeciality.id : null,
+                "subDepartmentId": selectedSubDepartment !== null ? selectedSubDepartment.id : null,
+                "workCondition": selectedWorkCondition !== null ? selectedWorkCondition.value : null,
+                "workMode": selectedWorkMode !== null ? selectedWorkMode.value : null,
+                "workPlace": selectedWorkAddress !== null ? selectedWorkAddress.value : null,
+                "jobFamilyId": selectedFamilyJob !== null ? selectedFamilyJob.id : null,
+                "subordinateDepartment": obeyDepartment,
+                "requireCertificate": selectedRequiredFile !== null ? selectedRequiredFile.value : null
+            }
         }
-
         mainAxios({
             method: 'put',
-            url: '/position/general-info/' + id,
+            url: '/vacancies/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -626,6 +645,7 @@ function EditStaff() {
                 showConfirmButton: false,
                 timer: 1500
             });
+            setErrors({})
         }).catch((error) => {
             setLoadingIndicator(false);
             Swal.fire({
@@ -635,40 +655,69 @@ function EditStaff() {
                 showCancelButton: true,
                 showConfirmButton: false,
             })
-            if (error.response.data.message)
-                setErrors(error.response.data.message);
+            if (error.response.data.validations) {
+                setErrors(error.response.data.validations)
+            } else {
+                setErrors({})
+            }
         });
     }
 
     const sendDataKnowledge = () => {
         setLoadingIndicator(true);
-        let arrProgram = []
         for (let i of skillProgramArr) {
-            let obj = {name: i.name.value, level: i.level.value}
-            arrProgram.push(obj)
+            if (i.computerId != null) {
+                i.computerId = i.computerId.id
+            } else {
+                i.computerId = null
+            }
+
+            if (i.level != null) {
+                i.level = i.level.value
+            } else {
+                i.level = null
+            }
         }
 
-        let arrLegal = []
-        for (let i of skillLegalArr) {
-            let obj = {name: i.name.value, level: i.level.value}
-            arrLegal.push(obj)
-        }
-
-        let arrLanguage = []
         for (let i of skillLanguageArr) {
-            let obj = {name: i.name.value, level: i.level.value}
-            arrLanguage.push(obj)
+            if (i.languageId != null) {
+                i.languageId = i.languageId.id
+            } else {
+                i.languageId = null
+            }
+
+            if (i.level != null) {
+                i.level = i.level.value
+            } else {
+                i.level = null
+            }
+        }
+
+        for (let i of skillArr) {
+            if (i.requiredSkillId != null) {
+                i.requiredSkillId = i.requiredSkillId.id
+            } else {
+                i.requiredSkillId = null
+            }
+
+            if (i.level != null) {
+                i.level = i.level.value
+            } else {
+                i.level = null
+            }
         }
 
         let data = {
-            "computerKnowledge": arrProgram,
-            "languageKnowledge": arrLegal,
-            "legislationStatements": arrLanguage
+            "specialityKnowledge": {
+                "requiredKnowledgeSet": skillArr,
+                "computerKnowledgeSet": skillProgramArr,
+                "languageKnowledgeSet": skillLanguageArr,
+            }
         }
 
         mainAxios({
             method: 'put',
-            url: '/position/knowledge/' + id,
+            url: '/vacancies/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -694,36 +743,37 @@ function EditStaff() {
         });
     }
 
-    const getDocument = (page) => {
-        mainAxios({
-            method: 'get',
-            url: '/position/document/' + id,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-            params: {
-                page: page - 1,
-                size: recordSize
-            }
-        }).then((res) => {
-            setCurrentPage(page)
-            setDocument(res.data.data.data);
-            setTotalRecord(res.data.data.totalElement);
-        });
-    }
+    /*    const getDocument = (page) => {
+            mainAxios({
+                method: 'get',
+                url: '/position/document/' + id,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                params: {
+                    page: page - 1,
+                    size: recordSize
+                }
+            }).then((res) => {
+                setCurrentPage(page)
+                setDocument(res.data.data.data);
+                setTotalRecord(res.data.data.totalElement);
+            });
+        }*/
 
     useEffect(() => {
         getInstitution();
         getDepartment();
         getVacancy();
-        getSalary();
         getFamilyJob();
         getSkill();
-        getEmployeePosition();
-        getWorkAddress();
-        getKnowledgeInfo();
-        getDocument(1)
+        getCurators();
+        getSpeciality();
+        getComputerSkill();
+        getLegislationSkill();
+        getLanguageSkill();
+        getPositionInfo()
     }, []);
 
     return (
@@ -743,7 +793,7 @@ function EditStaff() {
                         </div>
                     </div>
                     <Tabs activeKey={key} onSelect={(k) => setKey(k)}>
-                        <Tab eventKey="home" title="Ümumi məlumatlar">
+                        <Tab eventKey="general" title="Ümumi məlumatlar">
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
@@ -761,17 +811,16 @@ function EditStaff() {
                                                             onChange={(val) => {
                                                                 setSelectedInstitution(val);
                                                             }}
-                                                            options={institution}
                                                             isSearchable={institution ? institution.length > 5 ? true : false : false}
+                                                            options={institution}
                                                             getOptionLabel={(option) => (option.name)}
-                                                            getOptionValue={(option) => option.name}
                                                             styles={customStyles}
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors.institutionName !== '' ?
+                                                                errors['institutionId'] !== '' ?
                                                                     <span
-                                                                        className="text-validation">{errors.institutionName}</span>
+                                                                        className="text-validation">{errors['institutionId']}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -785,18 +834,19 @@ function EditStaff() {
                                                             value={selectedDepartment}
                                                             onChange={(val) => {
                                                                 setSelectedDepartment(val);
-                                                                getSubDepartment(val.name);
+                                                                getSubDepartment(val.id);
                                                                 setSelectedSubDepartment(null)
                                                             }}
-                                                            options={department}
                                                             isSearchable={department ? department.length > 5 ? true : false : false}
+                                                            options={department}
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors.departmentName !== '' ?
-                                                                    <span className="text-validation">{errors.departmentName}</span>
+                                                                errors['departmentId'] !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors['departmentId']}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -811,15 +861,16 @@ function EditStaff() {
                                                             onChange={(val) => {
                                                                 setSelectedSubDepartment(val);
                                                             }}
-                                                            options={subDepartment}
                                                             isSearchable={subDepartment ? subDepartment.length > 5 ? true : false : false}
+                                                            options={subDepartment}
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
                                                                 errors.subDepartmentName !== '' ?
-                                                                    <span className="text-validation">{errors.subDepartmentName}</span>
+                                                                    <span
+                                                                        className="text-validation">{errors.subDepartmentName}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -831,15 +882,15 @@ function EditStaff() {
                                                                 className="input-title">Tabe struktur bölmənin adı</span>
                                                         <Form.Label>
                                                             <Form.Control
+                                                                value={obeyDepartment || ''}
                                                                 placeholder="Tabe struktur bölmənin adını daxil edin"
-                                                                value={obeyDepartment}
                                                                 onChange={(e => setObeyDepartment(e.target.value))}/>
                                                         </Form.Label>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">Ştat vahidinin adı *</span>
+                                                        <span className="input-title">Ştat vahidinin adı</span>
                                                         <Select
                                                             placeholder="Ştat vahidin adını seçin"
                                                             value={selectedVacancy}
@@ -853,8 +904,9 @@ function EditStaff() {
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors.vacancyName !== '' ?
-                                                                    <span className="text-validation">{errors.departmentName}</span>
+                                                                errors['positionId'] !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors['positionId']}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -862,18 +914,20 @@ function EditStaff() {
                                                 </Col>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">Ştat vahidinin sayı *</span>
+                                                        <span className="input-title">Ştat vahidinin sayı</span>
                                                         <Form.Label>
                                                             <Form.Control type="number"
+                                                                          value={vacancyCount}
                                                                           placeholder="Ştat vahidinin saynı daxil edin"
-                                                                          value={vacancyCount} onChange={(e => {
-                                                                setVacancyCount(e.target.value);
-                                                            })}/>
+                                                                          onChange={(e => {
+                                                                              setVacancyCount(e.target.value);
+                                                                          })}/>
                                                         </Form.Label>
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors.vacancyCount !== '' ?
-                                                                    <span className="text-validation">{errors.vacancyCount}</span>
+                                                                errors['count'] !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors['count']}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -881,52 +935,7 @@ function EditStaff() {
                                                 </Col>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                            <span
-                                                                className="input-title">Əməyin ödənilməsi dərəcəsi</span>
-                                                        <Select
-                                                            placeholder="Əməyin ödənilməsi dərəcəsini seçin"
-                                                            value={selectedWorkPaid}
-                                                            onChange={(val) => {setSelectedWorkPaid(val)}}
-                                                            isSearchable={workPaidOptions ? workPaidOptions.length > 5 ? true : false : false}
-                                                            options={workPaidOptions}
-                                                            styles={customStyles}
-                                                        />
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span
-                                                            className="input-title">Əməyin ödənilməsi üzrə alt dərəcə</span>
-                                                        <Select
-                                                            placeholder="Əməyin ödənilməsi üzrə alt dərəcəni seçin"
-                                                            value={selectedSubWorkPaid}
-                                                            onChange={setSelectedSubWorkPaid}
-                                                            isSearchable={subWorkCalculateDegreeOptions ? subWorkCalculateDegreeOptions.length > 5 ? true : false : false}
-                                                            options={subWorkCalculateDegreeOptions}
-                                                            styles={customStyles}
-                                                        />
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                            <span
-                                                                className="input-title">Ştat üzrə əsas əmək haqqı</span>
-                                                        <Select
-                                                            placeholder="Əmək haqqını seçin"
-                                                            value={selectedSalary}
-                                                            onChange={(val) => {
-                                                                setSelectedSalary(val)
-                                                            }}
-                                                            isSearchable={salary ? salary.length > 5 ? true : false : false}
-                                                            options={salary}
-                                                            styles={customStyles}
-                                                            getOptionLabel={(option) => (option.name)}
-                                                        />
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Əmək şəraiti *</span>
+                                                        <span className="input-title">Əmək şəraiti</span>
                                                         <Select
                                                             placeholder="Əmək şəraitini seçin"
                                                             value={selectedWorkCondition}
@@ -937,28 +946,19 @@ function EditStaff() {
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors.workCondition !== '' ?
-                                                                    <span className="text-validation">{errors.workCondition}</span>
+                                                                errors['workCondition'] !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors['workCondition']}</span>
                                                                     : null
                                                             }
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-                                               {/* <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Ştat üzrə əmək şəraitinə görə əlavə əmək haqqı</span>
-                                                        <Form.Label>
-                                                            <Form.Control type="number"
-                                                                          placeholder="Əlavə əmək haqqını"
-                                                                          value={additionalSalary}
-                                                                          onChange={(e) => setAdditionalSalary(e.target.value)}/>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>*/}
+
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                             <span
-                                                                className="input-title">Ştat vahidinin iş rejimi *</span>
+                                                                className="input-title">Ştat vahidinin iş rejimi</span>
                                                         <Select
                                                             placeholder="İş rejimini seçin"
                                                             value={selectedWorkMode}
@@ -969,40 +969,40 @@ function EditStaff() {
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors.workMode !== '' ?
-                                                                    <span className="text-validation">{errors.workMode}</span>
+                                                                errors['workMode'] !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors['workMode']}</span>
                                                                     : null
                                                             }
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
 
-                                                <Col xs={6}>
+                                                <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                             <span
-                                                                className="input-title">Ştat vahidinin kateqoriyası *</span>
+                                                                className="input-title">Ştat vahidinin kateqoriyası </span>
                                                         <Select
                                                             placeholder="Kateqoriyanı seçin"
                                                             value={selectedVacancyCategory}
-                                                            onChange={(val) => {
-                                                                setSelectedVacancyCategory(val)
-                                                            }}
+                                                            onChange={setSelectedVacancyCategory}
                                                             isSearchable={vacancyCategoryOptions ? vacancyCategoryOptions.length > 5 ? true : false : false}
                                                             options={vacancyCategoryOptions}
                                                             styles={customStyles}
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors.vacancyCategory !== '' ?
-                                                                    <span className="text-validation">{errors.vacancyCategory}</span>
+                                                                errors['positionCategory'] !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors['positionCategory']}</span>
                                                                     : null
                                                             }
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-                                                <Col xs={6}>
+                                                <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">İş ailəsi *</span>
+                                                        <span className="input-title">İş ailəsi </span>
                                                         <Select
                                                             placeholder="İş ailəsini seçin"
                                                             value={selectedFamilyJob}
@@ -1014,31 +1014,61 @@ function EditStaff() {
                                                             styles={customStyles}
                                                             getOptionLabel={(option) => (option.name)}
                                                         />
-                                                        <div className="validation-block flex-start">
-                                                            {
-                                                                errors.jobFamily !== '' ?
-                                                                    <span className="text-validation">{errors.jobFamily}</span>
-                                                                    : null
-                                                            }
-                                                        </div>
                                                     </Form.Group>
                                                 </Col>
-                                                <Col xs={6}>
+                                                <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">İş yerinin ünvanı *</span>
+                                                        <span className="input-title">İş yerinin ünvanı </span>
                                                         <Select
                                                             placeholder="İş yerinin ünvanını seçin"
                                                             value={selectedWorkAddress}
                                                             onChange={setSelectedWorkAddress}
-                                                            options={workAddress}
-                                                            isSearchable={workAddress ? workAddress.length > 5 ? true : false : false}
+                                                            options={workPlaceOptions}
+                                                            isSearchable={workPlaceOptions ? workPlaceOptions.length > 5 ? true : false : false}
                                                             styles={customStyles}
-                                                            getOptionLabel={(option) => (option.key)}
+                                                            getOptionLabel={(option) => (option.label)}
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors.workPlace !== '' ?
-                                                                    <span className="text-validation">{errors.workPlace}</span>
+                                                                errors['workPlace'] !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors['workPlace']}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col xs={4}>
+                                                    <Form.Group className="form-group">
+                                                        <span className="input-title">Struk b. tabe old. kurator rəh. ad, soyad, ata adı, vəzifə</span>
+                                                        <Select
+                                                            placeholder="ad, soyad, ata adı, vəzifəni seçin"
+                                                            value={selectedCurator}
+                                                            onChange={(val) => setSelectedCurator(val)}
+                                                            options={curator}
+                                                            isSearchable={curator ? curator.length > 5 ? true : false : false}
+                                                            styles={customStyles}
+                                                            getOptionLabel={(option) => (option.fullName)}
+                                                        />
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col xs={6}>
+                                                    <Form.Group className="form-group">
+                                                        <span className="input-title">Min dərəcə </span>
+                                                        <Select
+                                                            placeholder="Min dərəcəni seçin"
+                                                            value={selectedMinGrade}
+                                                            onChange={setSelectedMinGrade}
+                                                            options={gradeOptions}
+                                                            isSearchable={gradeOptions ? gradeOptions.length > 5 ? true : false : false}
+                                                            styles={customStyles}
+                                                            getOptionLabel={(option) => (option.label)}
+                                                        />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors['gradeRange.min'] !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors['gradeRange.min']}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -1046,108 +1076,116 @@ function EditStaff() {
                                                 </Col>
                                                 <Col xs={6}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">Struk b. tabe old. kurator rəh. ad, soyad, ata adı, vəzifə</span>
+                                                        <span className="input-title">Max dərəcə </span>
                                                         <Select
-                                                            placeholder="ad, soyad, ata adı, vəzifəni seçin"
-                                                            value={selectedEmployeePosition}
-                                                            onChange={setSelectedEmployeePosition}
-                                                            options={employeePosition}
-                                                            isSearchable={employeePosition ? employeePosition.length > 5 ? true : false : false}
+                                                            placeholder="Max dərəcəni seçin"
+                                                            value={selectedMaxGrade}
+                                                            onChange={setSelectedMaxGrade}
+                                                            options={gradeOptions}
+                                                            isSearchable={gradeOptions ? gradeOptions.length > 5 ? true : false : false}
                                                             styles={customStyles}
-                                                            getOptionLabel={(option) => (option.key)}
+                                                            getOptionLabel={(option) => (option.label)}
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors.fullNameAndPosition !== '' ?
-                                                                    <span className="text-validation">{errors.fullNameAndPosition}</span>
+                                                                errors['gradeRange.max'] !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors['gradeRange.max']}</span>
                                                                     : null
                                                             }
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
                                             </Row>
-                                            <div className="addition-content">
-                                                {
-                                                    skillArr.map((item, index) =>
-                                                        <div key={uid(item, index)}
-                                                             className={index === 0 ? '' : 'add-item'}>
-                                                            {
-                                                                index === 0 ? null :
-                                                                    <div className="add-item-top">
-                                                                        <p className="m-0"> #{index + 1}. Digər </p>
-                                                                        <Button
-                                                                            className="btn-transparent btn-remove flex-center"
-                                                                            onClick={() => {
-                                                                                skillProgramArr.splice(index, 1);
-                                                                                setSkillProgramArr([...skillProgramArr], skillProgramArr)
-                                                                            }}>
-                                                                            <svg width="14" height="14"
-                                                                                 viewBox="0 0 14 14" fill="none"
-                                                                                 xmlns="http://www.w3.org/2000/svg">
-                                                                                <path
-                                                                                    d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
-                                                                                    fill="#CF3131"/>
-                                                                                <path
-                                                                                    d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
-                                                                                    fill="#CF3131"/>
-                                                                                <path
-                                                                                    d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
-                                                                                    fill="#CF3131"/>
-                                                                            </svg>
-                                                                            <span>Sil</span>
-                                                                        </Button>
-                                                                    </div>
-                                                            }
-                                                            <Row>
-                                                                <Col xs={6}>
-                                                                    <Form.Group className="form-group">
-                                                                        <span className="input-title">Vəzifənin tələb etdiyi kompetensiyalar</span>
-                                                                        <Select
-                                                                            placeholder="Kompetensiyaları seçin"
-                                                                            value={item.skill}
-                                                                            onChange={(val) => {
-                                                                                skillArr[index].skill = val;
-                                                                                setSkillArr([...skillArr], skillArr)
-                                                                            }}
-                                                                            isSearchable={skill ? skill.length > 5 ? true : false : false}
-                                                                            options={skill}
-                                                                            styles={customStyles}
-                                                                            getOptionLabel={(option) => (option.key)}
-                                                                        />
-                                                                    </Form.Group>
-                                                                </Col>
-                                                                <Col xs={6}>
-                                                                    <Form.Group className="form-group">
-                                                                        <span className="input-title">Tələb olunan səviyyə</span>
-                                                                        <Select
-                                                                            value={item.level}
-                                                                            onChange={(val) => {
-                                                                                skillArr[index].level = val;
-                                                                                setSkillArr([...skillArr], skillArr)
-                                                                            }}
-                                                                            isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
-                                                                            placeholder="Səviyyəni seçin"
-                                                                            options={evaluationOptions}
-                                                                            styles={customStyles}
-                                                                            getOptionLabel={(option) => (option.label)}
-                                                                        />
-                                                                    </Form.Group>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    )
-                                                }
-                                                <div className="flex-end">
-                                                    <button className="btn-color" onClick={() => addSkill()}>
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
-                                                                stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
-                                                                strokeLinejoin="round"/>
-                                                        </svg>
-                                                        <span>əlavə et</span>
-                                                    </button>
+                                            <div className="add-block">
+                                                <div className="block-inn">
+                                                    <div className="addition-content">
+                                                        {
+                                                            skillLegalArr.map((item, index) =>
+                                                                <div key={uid(item, index)}
+                                                                     className={index === 0 ? '' : 'add-item'}>
+                                                                    {
+                                                                        index === 0 ? null :
+                                                                            <div className="add-item-top">
+                                                                                <p className="m-0"> #{index + 1}.
+                                                                                    Digər </p>
+                                                                                <Button
+                                                                                    className="btn-transparent btn-remove flex-center"
+                                                                                    onClick={() => {
+                                                                                        skillLegalArr.splice(index, 1);
+                                                                                        setSkillLegalArr([...skillLegalArr], skillLegalArr)
+                                                                                    }}>
+                                                                                    <svg width="14" height="14"
+                                                                                         viewBox="0 0 14 14" fill="none"
+                                                                                         xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path
+                                                                                            d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
+                                                                                            fill="#CF3131"/>
+                                                                                        <path
+                                                                                            d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
+                                                                                            fill="#CF3131"/>
+                                                                                        <path
+                                                                                            d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
+                                                                                            fill="#CF3131"/>
+                                                                                    </svg>
+                                                                                    <span>Sil</span>
+                                                                                </Button>
+                                                                            </div>
+                                                                    }
+                                                                    <Row>
+                                                                        <Col xs={6}>
+                                                                            <Form.Group className="form-group">
+                                                                    <span
+                                                                        className="input-title">Qanunvericilik aktları</span>
+                                                                                <Select
+                                                                                    value={item.legislationId}
+                                                                                    onChange={(val) => {
+                                                                                        skillLegalArr[index].legislationId = val;
+                                                                                        setSkillLegalArr([...skillLegalArr], skillLegalArr);
+                                                                                    }}
+                                                                                    placeholder="Qanunvericilik aktlarını seçin"
+                                                                                    isSearchable={legislationSkill ? legislationSkill.length > 5 ? true : false : false}
+                                                                                    options={legislationSkill}
+                                                                                    getOptionLabel={(option) => (option.name)}
+                                                                                    styles={customStyles}/>
+                                                                            </Form.Group>
+                                                                        </Col>
+                                                                        <Col xs={6}>
+                                                                            <Form.Group className="form-group">
+                                                                        <span
+                                                                            className="input-title">Bilik səviyyəsi</span>
+                                                                                <Select
+                                                                                    value={item.level}
+                                                                                    onChange={(val) => {
+                                                                                        skillLegalArr[index].level = val;
+                                                                                        setSkillLegalArr([...skillLegalArr], skillLegalArr);
+                                                                                    }}
+                                                                                    placeholder="Bilik səviyyəsini seçin"
+                                                                                    isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
+                                                                                    options={evaluationOptions}
+                                                                                    styles={customStyles}
+                                                                                />
+                                                                            </Form.Group>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </div>
+                                                            )
+                                                        }
+                                                    </div>
+                                                    <div className="flex-end">
+                                                        <button className="btn-color" onClick={() => addLegalSkill()}
+                                                                type="button">
+                                                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                                    stroke="#3083DC" strokeWidth="1.3"
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"/>
+                                                            </svg>
+                                                            <span>əlavə et</span>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1161,8 +1199,8 @@ function EditStaff() {
                                                         <span className="input-title">Rəhbər üzrə staj tələbi</span>
                                                         <Form.Label>
                                                             <Form.Control type="number"
+                                                                          value={leaderExperience || ''}
                                                                           placeholder="Rəhbər üzrə staj tələbini daxil edin"
-                                                                          value={leaderExperience}
                                                                           onChange={(e => setLeaderExperience(e.target.value))}/>
                                                         </Form.Label>
                                                     </Form.Group>
@@ -1172,8 +1210,8 @@ function EditStaff() {
                                                         <span className="input-title">Sahə üzrə staj tələbi</span>
                                                         <Form.Label>
                                                             <Form.Control type="number"
+                                                                          value={areaExperience || ''}
                                                                           placeholder="Sahə üzrə staj tələbini daxil edin"
-                                                                          value={areaExperience}
                                                                           onChange={(e => setAreaExperience(e.target.value))}/>
                                                         </Form.Label>
                                                     </Form.Group>
@@ -1195,12 +1233,15 @@ function EditStaff() {
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">Təhsil ixtisası</span>
-                                                        <Form.Label>
-                                                            <Form.Control type="text"
-                                                                          placeholder="Təhsil ixtisasını edin"
-                                                                          value={selectedEducationSpeciality}
-                                                                          onChange={(e) => setSelectedEducationSpeciality(e.target.value)}/>
-                                                        </Form.Label>
+                                                        <Select
+                                                            placeholder="Təhsil pilləsini seçin"
+                                                            value={selectedSpeciality}
+                                                            onChange={(val) => setSelectedSpeciality(val)}
+                                                            isSearchable={speciality ? speciality.length > 5 ? true : false : false}
+                                                            options={speciality}
+                                                            getOptionLabel={(option) => (option.name)}
+                                                            styles={customStyles}
+                                                        />
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1210,8 +1251,8 @@ function EditStaff() {
                                                             placeholder="Sertifikat tələbini seçin"
                                                             value={selectedRequiredFile}
                                                             onChange={setSelectedRequiredFile}
-                                                            isSearchable={requireFileOptions ? requireFileOptions.length > 5 ? true : false : false}
-                                                            options={requireFileOptions}
+                                                            isSearchable={options ? options.length > 5 ? true : false : false}
+                                                            options={options}
                                                             styles={customStyles}
                                                         />
                                                     </Form.Group>
@@ -1254,7 +1295,6 @@ function EditStaff() {
                                                                 <Form.Label>
                                                                     <Form.Control type="number"
                                                                                   placeholder="Boy tələbini daxil edin"
-                                                                                  value={height}
                                                                                   onChange={(e) => setHeight(e.target.value)}/>
                                                                 </Form.Label>
                                                             </Form.Group>
@@ -1291,8 +1331,7 @@ function EditStaff() {
                                             <div className="addition-content">
                                                 {
                                                     positionFunctionArr.map((item, index) =>
-                                                        <div key={index}
-                                                             className={index === 0 ? '' : 'add-item'}>
+                                                        <div key={index} className={index === 0 ? '' : 'add-item'}>
                                                             {
                                                                 index === 0 ? null :
                                                                     <div className="add-item-top">
@@ -1320,17 +1359,17 @@ function EditStaff() {
                                                                         </Button>
                                                                     </div>
                                                             }
-                                                            <Row key={index}>
+                                                            <Row>
                                                                 <Col xs={12}>
                                                                     <Form.Group className="form-group">
-                                                                        <span className="input-title">Vəzifə funksiyaları *</span>
+                                                                        <span className="input-title">Vəzifə funksiyaları </span>
                                                                         <Form.Label>
                                                                             <Form.Control as="textarea"
-                                                                                          value={item}
                                                                                           onChange={(e) => {
-                                                                                              let val = e.target.value;
-                                                                                              setPositionFunction(val, index)
+                                                                                              positionFunctionArr[index] = e.target.value;
+                                                                                              setPositionFunctionArr([...positionFunctionArr], positionFunctionArr);
                                                                                           }}
+                                                                                          value={item}
                                                                                           placeholder="Vəzifə funksiyalarını daxil edin"
                                                                             />
                                                                         </Form.Label>
@@ -1342,6 +1381,7 @@ function EditStaff() {
                                                 }
                                                 <div className="flex-end">
                                                     <button className="btn-color"
+                                                            type="button"
                                                             onClick={() => addPositionFunction()}>
                                                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                              xmlns="http://www.w3.org/2000/svg">
@@ -1358,13 +1398,13 @@ function EditStaff() {
                                     </div>
                                     <div className="flex-vertical-center">
                                         <Button className="btn-effect" onClick={() => sendData()}>
-                                            Yadda saxla
+                                            Davam et
                                         </Button>
                                     </div>
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="profile" title="İxtisas bilikləri">
+                        <Tab eventKey="knowledge" title="İxtisas bilikləri">
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
@@ -1372,78 +1412,81 @@ function EditStaff() {
                                             Vəzifənin tələb etdiyi Kompüter bilikləri
                                         </div>
                                         <div className="block-inn">
-                                            {
-                                                skillProgramArr.map((item, index) =>
-                                                    <div key={uid(item, index)}
-                                                         className={index === 0 ? '' : 'add-item'}>
-                                                        {
-                                                            index === 0 ? null :
-                                                                <div className="add-item-top">
-                                                                    <p className="m-0"> #{index + 1}. Digər </p>
-                                                                    <Button
-                                                                        className="btn-transparent btn-remove flex-center"
-                                                                        onClick={() => {
-                                                                            skillProgramArr.splice(index, 1);
-                                                                            setSkillProgramArr([...skillProgramArr], skillProgramArr)
-                                                                        }}>
-                                                                        <svg width="14" height="14"
-                                                                             viewBox="0 0 14 14" fill="none"
-                                                                             xmlns="http://www.w3.org/2000/svg">
-                                                                            <path
-                                                                                d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
-                                                                                fill="#CF3131"/>
-                                                                            <path
-                                                                                d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
-                                                                                fill="#CF3131"/>
-                                                                            <path
-                                                                                d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
-                                                                                fill="#CF3131"/>
-                                                                        </svg>
-                                                                        <span>Sil</span>
-                                                                    </Button>
-                                                                </div>
-                                                        }
-                                                        <Row key={index}>
-                                                            <Col xs={6}>
-                                                                <Form.Group className="form-group">
-                                                                    <span className="input-title">Proqram adı</span>
-                                                                    <Select
-                                                                        value={item.name}
-                                                                        placeholder="Proqram adı seçin"
-                                                                        onChange={(val) => {
-                                                                            skillProgramArr[index].name = val;
-                                                                            setSkillProgramArr([...skillProgramArr], skillProgramArr)
-                                                                        }}
-                                                                        options={programOptions}
-                                                                        getOptionLabel={(option) => (option.label)}
-                                                                        isSearchable={programOptions ? programOptions.length > 5 ? true : false : false}
-                                                                        styles={customStyles}/>
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col xs={6}>
-                                                                <Form.Group className="form-group">
-                                                                    <span className="input-title">Bilik səviyyəsi</span>
-                                                                    <Select
-                                                                        value={item.level}
-                                                                        onChange={(val) => {
-                                                                            skillProgramArr[index].level = val;
-                                                                            setSkillProgramArr([...skillProgramArr], skillProgramArr)
-                                                                        }}
-                                                                        placeholder="Bilik səviyyəsini seçin"
-                                                                        options={evaluationOptions}
-                                                                        isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
-                                                                        getOptionLabel={(option) => (option.label)}
-                                                                        styles={customStyles}
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                )
-                                            }
+                                            <div className="addition-content">
+                                                {
+                                                    skillProgramArr.map((item, index) =>
+                                                        <div key={uid(item, index)}
+                                                             className={index === 0 ? '' : 'add-item'}>
+                                                            {
+                                                                index === 0 ? null :
+                                                                    <div className="add-item-top">
+                                                                        <p className="m-0"> #{index + 1}. Digər </p>
+                                                                        <Button
+                                                                            className="btn-transparent btn-remove flex-center"
+                                                                            onClick={() => {
+                                                                                skillProgramArr.splice(index, 1);
+                                                                                setSkillProgramArr([...skillProgramArr], skillProgramArr)
+                                                                            }}>
+                                                                            <svg width="14" height="14"
+                                                                                 viewBox="0 0 14 14" fill="none"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path
+                                                                                    d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
+                                                                                    fill="#CF3131"/>
+                                                                                <path
+                                                                                    d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
+                                                                                    fill="#CF3131"/>
+                                                                                <path
+                                                                                    d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
+                                                                                    fill="#CF3131"/>
+                                                                            </svg>
+                                                                            <span>Sil</span>
+                                                                        </Button>
+                                                                    </div>
+                                                            }
+                                                            <Row>
+                                                                <Col xs={6}>
+                                                                    <Form.Group className="form-group">
+                                                                            <span
+                                                                                className="input-title">Proqram adı</span>
+                                                                        <Select
+                                                                            placeholder="Bilik səviyyəsini seçin"
+                                                                            value={item.computerId}
+                                                                            onChange={(val) => {
+                                                                                skillProgramArr[index].computerId = val;
+                                                                                setSkillProgramArr([...skillProgramArr], skillProgramArr);
+                                                                            }}
+                                                                            isSearchable={computerSkill ? computerSkill.length > 5 ? true : false : false}
+                                                                            options={computerSkill}
+                                                                            getOptionLabel={(option) => (option.name)}
+                                                                            styles={customStyles}/>
+                                                                    </Form.Group>
+                                                                </Col>
+                                                                <Col xs={6}>
+                                                                    <Form.Group className="form-group">
+                                                                        <span
+                                                                            className="input-title">Bilik səviyyəsi</span>
+                                                                        <Select
+                                                                            value={item.level}
+                                                                            onChange={(val) => {
+                                                                                skillProgramArr[index].level = val;
+                                                                                setSkillProgramArr([...skillProgramArr], skillProgramArr);
+                                                                            }}
+                                                                            placeholder="Bilik səviyyəsini seçin"
+                                                                            isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
+                                                                            options={evaluationOptions}
+                                                                            styles={customStyles}
+                                                                        />
+                                                                    </Form.Group>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                    )
+                                                }
+                                            </div>
                                             <div className="flex-end">
-                                                <button className="btn-color" type="button"
-                                                        onClick={() => addProgramSkill()}>
+                                                <button className="btn-color" onClick={() => addProgramSkill()}
+                                                        type="button">
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -1458,185 +1501,221 @@ function EditStaff() {
                                     </div>
                                     <div className="add-block">
                                         <div className="block-inn">
-                                            {
-                                                skillLegalArr.map((item, index) =>
-                                                    <div key={uid(item, index)}
-                                                         className={index === 0 ? '' : 'add-item'}>
-                                                        {
-                                                            index === 0 ? null :
-                                                                <div className="add-item-top">
-                                                                    <p className="m-0"> #{index + 1}. Digər </p>
-                                                                    <Button
-                                                                        className="btn-transparent btn-remove flex-center"
-                                                                        onClick={() => {
-                                                                            skillLegalArr.splice(index, 1);
-                                                                            setSkillLegalArr([...skillLegalArr], skillLegalArr)
-                                                                        }}>
-                                                                        <svg width="14" height="14"
-                                                                             viewBox="0 0 14 14" fill="none"
-                                                                             xmlns="http://www.w3.org/2000/svg">
-                                                                            <path
-                                                                                d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
-                                                                                fill="#CF3131"/>
-                                                                            <path
-                                                                                d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
-                                                                                fill="#CF3131"/>
-                                                                            <path
-                                                                                d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
-                                                                                fill="#CF3131"/>
-                                                                        </svg>
-                                                                        <span>Sil</span>
-                                                                    </Button>
-                                                                </div>
-                                                        }
-                                                        <Row>
-                                                            <Col xs={6}>
-                                                                <Form.Group className="form-group">
-                                                                    <span
-                                                                        className="input-title">Qanunvericilik aktları</span>
-                                                                    <Select
-                                                                        value={item.name}
-                                                                        onChange={(val) => {
-                                                                            skillLegalArr[index].name = val;
-                                                                            setSkillLegalArr([...skillLegalArr], skillLegalArr)
-                                                                        }}
-                                                                        placeholder="Qanunvericilik aktlarını seçin"
-                                                                        options={legalOptions}
-                                                                        isSearchable={legalOptions ? legalOptions.length > 5 ? true : false : false}
-                                                                        getOptionLabel={(option) => (option.label)}
-                                                                        styles={customStyles}/>
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col xs={6}>
-                                                                <Form.Group className="form-group">
-                                                                    <span className="input-title">Bilik səviyyəsi</span>
-                                                                    <Select
-                                                                        value={item.level}
-                                                                        onChange={(val) => {
-                                                                            skillLegalArr[index].level = val;
-                                                                            setSkillLegalArr([...skillLegalArr], skillLegalArr)
-                                                                        }}
-                                                                        placeholder="Bilik səviyyəsini seçin"
-                                                                        options={evaluationOptions}
-                                                                        isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
-                                                                        getOptionLabel={(option) => (option.label)}
-                                                                        styles={customStyles}
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                )
-                                            }
+                                            <div className="addition-content">
+                                                {
+                                                    skillLanguageArr.map((item, index) =>
+                                                        <div key={uid(item, index)}
+                                                             className={index === 0 ? '' : 'add-item'}>
+                                                            {
+                                                                index === 0 ? null :
+                                                                    <div className="add-item-top">
+                                                                        <p className="m-0"> #{index + 1}. Digər </p>
+                                                                        <Button
+                                                                            className="btn-transparent btn-remove flex-center"
+                                                                            onClick={() => {
+                                                                                skillLanguageArr.splice(index, 1);
+                                                                                setSkillLanguageArr([...skillLanguageArr], skillLanguageArr)
+                                                                            }}>
+                                                                            <svg width="14" height="14"
+                                                                                 viewBox="0 0 14 14" fill="none"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path
+                                                                                    d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
+                                                                                    fill="#CF3131"/>
+                                                                                <path
+                                                                                    d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
+                                                                                    fill="#CF3131"/>
+                                                                                <path
+                                                                                    d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
+                                                                                    fill="#CF3131"/>
+                                                                            </svg>
+                                                                            <span>Sil</span>
+                                                                        </Button>
+                                                                    </div>
+                                                            }
+                                                            <Row>
+                                                                <Col xs={6}>
+                                                                    <Form.Group className="form-group">
+                                                                            <span
+                                                                                className="input-title">Dil biliyi</span>
+                                                                        <Select
+                                                                            placeholder="Dil biliyini seçin"
+                                                                            value={item.languageId}
+                                                                            onChange={(val) => {
+                                                                                skillLanguageArr[index].languageId = val;
+                                                                                setSkillLanguageArr([...skillLanguageArr], skillLanguageArr);
+                                                                            }}
+                                                                            isSearchable={languageSkill ? languageSkill.length > 5 ? true : false : false}
+                                                                            options={languageSkill}
+                                                                            getOptionLabel={(option) => (option.name)}
+                                                                            styles={customStyles}/>
+                                                                    </Form.Group>
+                                                                </Col>
+                                                                <Col xs={6}>
+                                                                    <Form.Group className="form-group">
+                                                                        <span
+                                                                            className="input-title">Bilik səviyyəsi</span>
+                                                                        <Select
+                                                                            value={item.level}
+                                                                            onChange={(val) => {
+                                                                                skillLanguageArr[index].level = val;
+                                                                                setSkillLanguageArr([...skillLanguageArr], skillLanguageArr);
+                                                                            }}
+                                                                            placeholder="Bilik səviyyəsini seçin"
+                                                                            isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
+                                                                            options={evaluationOptions}
+                                                                            styles={customStyles}
+                                                                        />
+                                                                    </Form.Group>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                    )
+                                                }
+                                            </div>
                                             <div className="flex-end">
-                                                <button className="btn-color" type="button"
-                                                        onClick={() => addLegalSkill()}>
+                                                <button className="btn-color" onClick={() => addLanguageSkill()}
+                                                        type="button">
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path
-                                                            d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
-                                                            stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
-                                                            strokeLinejoin="round"/>
+                                                            d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
+                                                            fill="#3083DC"/>
                                                     </svg>
-                                                    <span>əlavə et</span>
+
+                                                    Əlavə et
                                                 </button>
                                             </div>
                                         </div>
+
                                     </div>
                                     <div className="add-block">
                                         <div className="block-inn">
-                                            {
-                                                skillLanguageArr.map((item, index) =>
-                                                    <div key={uid(item, index)}
-                                                         className={index === 0 ? '' : 'add-item'}>
-                                                        {
-                                                            index === 0 ? null :
-                                                                <div className="add-item-top">
-                                                                    <p className="m-0"> #{index + 1}. Digər </p>
-                                                                    <Button
-                                                                        className="btn-transparent btn-remove flex-center"
-                                                                        onClick={() => {
-                                                                            skillLanguageArr.splice(index, 1);
-                                                                            setSkillLanguageArr([...skillLanguageArr], skillLanguageArr)
-                                                                        }}>
-                                                                        <svg width="14" height="14"
-                                                                             viewBox="0 0 14 14" fill="none"
-                                                                             xmlns="http://www.w3.org/2000/svg">
-                                                                            <path
-                                                                                d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
-                                                                                fill="#CF3131"/>
-                                                                            <path
-                                                                                d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
-                                                                                fill="#CF3131"/>
-                                                                            <path
-                                                                                d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
-                                                                                fill="#CF3131"/>
-                                                                        </svg>
-                                                                        <span>Sil</span>
-                                                                    </Button>
-                                                                </div>
-                                                        }
-                                                        <Row>
-                                                            <Col xs={6}>
-                                                                <Form.Group className="form-group">
-                                                                    <span className="input-title">Dil biliyi</span>
-                                                                    <Select
-                                                                        placeholder="Dil biliyini seçin"
-                                                                        value={item.name}
-                                                                        onChange={(val) => {
-                                                                            skillLanguageArr[index].name = val;
-                                                                            setSkillLanguageArr([...skillLanguageArr], skillLanguageArr)
-                                                                        }}
-                                                                        isSearchable={languageOptions ? languageOptions.length > 5 ? true : false : false}
-                                                                        options={languageOptions}
-                                                                        getOptionLabel={(option) => (option.label)}
-                                                                        styles={customStyles}/>
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col xs={6}>
-                                                                <Form.Group className="form-group">
-                                                                    <span className="input-title">Bilik səviyyəsi</span>
-                                                                    <Select
-                                                                        value={item.level}
-                                                                        onChange={(val) => {
-                                                                            skillLanguageArr[index].level = val;
-                                                                            setSkillLanguageArr([...skillLanguageArr], skillLanguageArr)
-                                                                        }}
-                                                                        placeholder="Bilik səviyyəsini seçin"
-                                                                        isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
-                                                                        options={evaluationOptions}
-                                                                        getOptionLabel={(option) => (option.label)}
-                                                                        styles={customStyles}
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                )
-                                            }
-                                            <div className="flex-end">
-                                                <button className="btn-color" type="button"
-                                                        onClick={() => addLanguageSkill()}>
-                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
-                                                            stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
-                                                            strokeLinejoin="round"/>
-                                                    </svg>
-                                                    <span>əlavə et</span>
-                                                </button>
+                                            <div className="addition-content">
+                                                {
+                                                    skillArr.map((item, index) =>
+                                                        <div key={uid(item, index)}
+                                                             className={index === 0 ? '' : 'add-item'}>
+                                                            {
+                                                                index === 0 ? null :
+                                                                    <div className="add-item-top">
+                                                                        <p className="m-0"> #{index + 1}. Digər </p>
+                                                                        <Button
+                                                                            className="btn-transparent btn-remove flex-center"
+                                                                            onClick={() => {
+                                                                                skillArr.splice(index, 1);
+                                                                                setSkillArr([...skillArr], skillArr)
+                                                                            }}>
+                                                                            <svg width="14" height="14"
+                                                                                 viewBox="0 0 14 14" fill="none"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path
+                                                                                    d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
+                                                                                    fill="#CF3131"/>
+                                                                                <path
+                                                                                    d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
+                                                                                    fill="#CF3131"/>
+                                                                                <path
+                                                                                    d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
+                                                                                    fill="#CF3131"/>
+                                                                            </svg>
+                                                                            <span>Sil</span>
+                                                                        </Button>
+                                                                    </div>
+                                                            }
+                                                            <Row>
+                                                                <Col xs={6}>
+                                                                    <Form.Group className="form-group">
+                                                                        <span className="input-title">Vəzifənin tələb etdiyi kompetensiyalar</span>
+                                                                        <Select
+                                                                            placeholder="Kompetensiyaları seçin"
+                                                                            value={item.requiredSkillId}
+                                                                            onChange={(val) => {
+                                                                                skillArr[index].requiredSkillId = val;
+                                                                                setSkillArr([...skillArr], skillArr);
+                                                                            }}
+                                                                            isSearchable={skill ? skill.length > 5 ? true : false : false}
+                                                                            options={skill}
+                                                                            styles={customStyles}
+                                                                            getOptionLabel={(option) => (option.name)}
+                                                                        />
+                                                                        <div className="validation-block flex-start">
+                                                                            {
+                                                                                errors['requiredKnowledgeSet[].requiredSkillId'] !== '' ?
+                                                                                    <span
+                                                                                        className="text-validation">{errors['requiredKnowledgeSet[].requiredSkillId']}</span>
+                                                                                    : null
+                                                                            }
+                                                                        </div>
+                                                                    </Form.Group>
+                                                                </Col>
+                                                                <Col xs={6}>
+                                                                    <Form.Group className="form-group">
+                                                                        <span className="input-title">Tələb olunan səviyyə</span>
+                                                                        <Select
+                                                                            value={item.level}
+                                                                            onChange={(val) => {
+                                                                                skillArr[index].level = val;
+                                                                                setSkillArr([...skillArr], skillArr);
+                                                                            }}
+                                                                            isSearchable={evaluationOptions ? evaluationOptions.length > 5 ? true : false : false}
+                                                                            placeholder="Səviyyəni seçin"
+                                                                            options={evaluationOptions}
+                                                                            styles={customStyles}
+                                                                        />
+                                                                    </Form.Group>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                    )
+                                                }
+                                                <div className="flex-end">
+                                                    <button type="button" className="btn-color"
+                                                            onClick={() => addSkill()}>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                                stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                                strokeLinejoin="round"/>
+                                                        </svg>
+                                                        <span>əlavə et</span>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="flex-vertical-center">
-                                        <Button className="btn-effect" onClick={() => sendDataKnowledge()}>
-                                            Yadda saxla
-                                        </Button>
-                                    </div>
+                                    <Button className="btn-effect" onClick={() => sendDataKnowledge()}>
+                                        Yadda saxla
+                                    </Button>
+                                    {
+                                        showButton ?
+                                            <ul className="flex-vertical-center btn-block list-unstyled">
+                                                <li>
+                                                    <Button className="btn-transparent btn-previous" onClick={() => {
+                                                        setKey('company')
+                                                    }}>
+                                                        <svg width="16" height="12" viewBox="0 0 16 12" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M15 6H1.5M5.5 1.5L1 6L5.5 10.5" stroke="#193651"
+                                                                  strokeWidth="2" strokeLinecap="round"
+                                                                  strokeLinejoin="round"/>
+                                                        </svg>
+                                                        Əvvələ qayıt
+                                                    </Button>
+                                                </li>
+                                                <li>
+                                                    <Button className="btn-effect" onClick={() => sendDataKnowledge()}>
+                                                        Yadda saxla
+                                                    </Button>
+                                                </li>
+                                            </ul>
+                                            : null
+                                    }
                                 </Form>
                             </div>
                         </Tab>
+                        {/*
                         <Tab eventKey="operation" title="Əmrlər">
                             <div className="block">
                                 <Table responsive="sm" hover>
@@ -1670,8 +1749,10 @@ function EditStaff() {
                                     </tbody>
                                 </Table>
                             </div>
-                            <Paginate count={totalRecord} recordSize = {recordSize} currentPage={currentPage} click={(page) => getDocument(page)}/>
+                            <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
+                                      click={(page) => getDocument(page)}/>
                         </Tab>
+*/}
                     </Tabs>
                 </Container>
             </div>
