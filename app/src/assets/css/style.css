@@ -1579,8 +1579,19 @@ td {
     align-items: flex-end;
 }
 
+.filter-block .filter-left {
+    display: flex;
+    width: calc(100% - 145px);
+    justify-content: flex-start;
+}
+
 .filter-block .btn-main {
     width: 145px;
+}
+
+.filter-block .filter-item {
+    width: 300px;
+    margin-right: 20px;
 }
 
 @media only screen and (min-width: 1600px){

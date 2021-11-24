@@ -240,83 +240,105 @@ function EmployeeSchedule() {
                             showFilter ?
                                 <div className="filter-block">
                                     <div className="block flex">
-                                        <Col xs={2}>
-                                            <Form.Group className="form-group m-0">
-                                                <span className="input-title">Struktur vahidinin adı</span>
-                                                <Select
-                                                    placeholder="Struktur vahidini seçin"
-                                                    selected={selectedDepartment}
-                                                    onChange={(val) => {
-                                                        setSelectedDepartment(val);
-                                                    }}
-                                                    isSearchable={department ? department.length > 5 ? true : false : false}
-                                                    options={department}
-                                                    getOptionLabel={(option) => (option.name)}
-                                                    styles={customStyles}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={2}>
-                                            <Form.Group className="form-group m-0">
-                                                <span className="input-title">Struktur bölmənin adı</span>
-                                                <Select
-                                                    placeholder="Struktur bölməni seçin"
-                                                    selected={selectedSubDepartment}
-                                                    onChange={(val) => {
-                                                        setSelectedSubDepartment(val);
-                                                    }}
-                                                    isSearchable={subDepartment ? subDepartment.length > 5 ? true : false : false}
-                                                    options={subDepartment}
-                                                    getOptionLabel={(option) => (option.name)}
-                                                    styles={customStyles}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={2}>
-                                            <Form.Group className="form-group m-0">
-                                                <span className="input-title">Ştat vahidinin adı</span>
-                                                <Select
-                                                    placeholder="Ştat vahidini seçin"
-                                                    selected={selectedPosition}
-                                                    onChange={(val) => {
-                                                        setSelectedPosition(val);
-                                                    }}
-                                                    isSearchable={position ? position.length > 5 ? true : false : false}
-                                                    options={position}
-                                                    getOptionLabel={(option) => (option.name)}
-                                                    styles={customStyles}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={2}>
-                                            <Form.Group className="form-group m-0">
-                                                <span className="input-title">İş ailəsi</span>
-                                                <Select
-                                                    placeholder="İş ailəsi seçin"
-                                                    selected={selectedJobStatus}
-                                                    onChange={(val) => {
-                                                        setSelectedJobStatus(val);
-                                                    }}
-                                                    isSearchable={jobStatusOptions ? jobStatusOptions.length > 5 ? true : false : false}
-                                                    options={jobStatusOptions}
-                                                    getOptionLabel={(option) => (option.label)}
-                                                    styles={customStyles}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={2}>
-                                            <Form.Group className="form-group m-0">
-                                                <span className="input-title">İşçinin adı</span>
-                                                <Form.Label>
-                                                    <Form.Control placeholder="İşçinin adı daxil edin"
-                                                                  value={fullName}
-                                                                  onChange={(e => setFullName(e.target.value))}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
+                                        <div className="filter-left">
+                                            <div className="filter-item">
+                                                <Form.Group className="form-group m-0">
+                                                    <span className="input-title">Struktur vahidinin adı</span>
+                                                    <Select
+                                                        placeholder="Struktur vahidini seçin"
+                                                        selected={selectedDepartment}
+                                                        onChange={(val) => {
+                                                            setSelectedDepartment(val);
+                                                        }}
+                                                        isSearchable={department ? department.length > 5 ? true : false : false}
+                                                        options={department}
+                                                        getOptionLabel={(option) => (option.name)}
+                                                        styles={customStyles}
+                                                    />
+                                                </Form.Group>
+                                            </div>
+                                            <div className="filter-item">
+                                                <Form.Group className="form-group m-0">
+                                                    <span className="input-title">Struktur bölmənin adı</span>
+                                                    <Select
+                                                        placeholder="Struktur bölməni seçin"
+                                                        selected={selectedSubDepartment}
+                                                        onChange={(val) => {
+                                                            setSelectedSubDepartment(val);
+                                                        }}
+                                                        isSearchable={subDepartment ? subDepartment.length > 5 ? true : false : false}
+                                                        options={subDepartment}
+                                                        getOptionLabel={(option) => (option.name)}
+                                                        styles={customStyles}
+                                                    />
+                                                </Form.Group>
+                                            </div>
+                                            <div className="filter-item">
+                                                <Form.Group className="form-group m-0">
+                                                    <span className="input-title">Ştat vahidinin adı</span>
+                                                    <Select
+                                                        placeholder="Ştat vahidini seçin"
+                                                        selected={selectedPosition}
+                                                        onChange={(val) => {
+                                                            setSelectedPosition(val);
+                                                        }}
+                                                        isSearchable={position ? position.length > 5 ? true : false : false}
+                                                        options={position}
+                                                        getOptionLabel={(option) => (option.name)}
+                                                        styles={customStyles}
+                                                    />
+                                                </Form.Group>
+                                            </div>
+                                            <div className="filter-item">
+                                                <Form.Group className="form-group m-0">
+                                                    <span className="input-title">İş ailəsi</span>
+                                                    <Select
+                                                        placeholder="İş ailəsi seçin"
+                                                        selected={selectedJobStatus}
+                                                        onChange={(val) => {
+                                                            setSelectedJobStatus(val);
+                                                        }}
+                                                        isSearchable={jobStatusOptions ? jobStatusOptions.length > 5 ? true : false : false}
+                                                        options={jobStatusOptions}
+                                                        getOptionLabel={(option) => (option.label)}
+                                                        styles={customStyles}
+                                                    />
+                                                </Form.Group>
+                                            </div>
+                                            <div className="filter-item">
+                                                <Form.Group className="form-group m-0">
+                                                    <span className="input-title">İşçinin adı</span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="İşçinin adı daxil edin"
+                                                                      value={fullName}
+                                                                      onChange={(e => setFullName(e.target.value))}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </div>
+                                            <div className="filter-item">
+                                                <Form.Group className="form-group m-0">
+                                                    <span className="input-title">İşçinin adı</span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="İşçinin adı daxil edin"
+                                                                      value={fullName}
+                                                                      onChange={(e => setFullName(e.target.value))}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </div>
+                                            <div className="filter-item">
+                                                <Form.Group className="form-group m-0">
+                                                    <span className="input-title">İşçinin adı</span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="İşçinin adı daxil edin"
+                                                                      value={fullName}
+                                                                      onChange={(e => setFullName(e.target.value))}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </div>
+                                        </div>
                                         <Button className="btn-main" onClick={()=> getEmployee(1)}>
                                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M6.4316 11.9218C9.46375 11.9218 11.9218 9.46375 11.9218 6.4316C11.9218 3.39945 9.46375 0.941406 6.4316 0.941406C3.39945 0.941406 0.941406 3.39945 0.941406 6.4316C0.941406 9.46375 3.39945 11.9218 6.4316 11.9218Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M6.4316 11.9218C9.46375 11.9218 11.9218 9.46375 11.9218 6.4316C11.9218 3.39945 9.46375 0.941406 6.4316 0.941406C3.39945 0.941406 0.941406 3.39945 0.941406 6.4316C0.941406 9.46375 3.39945 11.9218 6.4316 11.9218Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                                                 <path d="M15.0574 15.0584L10.3516 10.3525" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                                             </svg>
                                             Axtar
