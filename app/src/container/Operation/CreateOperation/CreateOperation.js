@@ -46,14 +46,40 @@ const monthOptions = [
     {value: 12, label: 'December'},
 ]
 
+const jobTimeOptions = [
+    {value: 'PART_TIME', label: 'Tam'},
+    {value: 'FULL_TIME', label: 'Natamam'},
+]
+
 
 function CreateOperation() {
     let history = useHistory();
 
 
-    const [operationName, setOperationName] = useState([]);
-    const [staff, setStaff] = useState([]);
-    const [position, setPosition] = useState([])
+    const [operationType, setOperationType] = useState([]);
+    const [operationTypeArr, setOperationTypeArr] = useState([]);
+
+    /*------Employee----------*/
+    const [employee, setEmployee] = useState([]);
+
+
+    /*------Vacancy----------*/
+    const [vacancy, setVacancy] = useState([]);
+    const [vacancyPosition, setVacancyPosition] = useState('');
+    const [vacancyDepartment, setVacancyDepartment] = useState('');
+    const [vacancySubDepartment, setVacancySubDepartment] = useState('');
+    const [vacancyId, setVacancyId] = useState('');
+    const [grade, setGrade] = useState([])
+    const [gradeArr, setGradeArr] = useState([]);
+    const [selectedGrade, setSelectedGrade] = useState(null);
+    const [subGrade, setSubGrade] = useState([]);
+    const [selectedSubGrade, setSelectedSubGrade] = useState(null);
+
+
+    /*------General----------*/
+    const [testPeriod, setTestPeriod] = useState('');
+    const [individualAddition, setIndividualAddition] = useState('');
+    const [selectedJobTime, setSelectedJobTime] = useState(null)
 
 
     const [selectedOperationName, setSelectedOperationName] = useState(null);
@@ -101,12 +127,10 @@ function CreateOperation() {
     const [vacancyName, setVacancyName] = useState('');
     const [workMode, setWorkMode] = useState('');
     const [mainOfOrder, setMainOfOrder] = useState('');
-    const [testPeriod, setTestPeriod] = useState('');
     const [additionalSalary, setAdditionalSalary] = useState('');
     const [ownAdditionalSalary, setOwnAdditionalSalary] = useState('');
     const [newSalary, setNewSalary] = useState('');
     const [newAdditionalSalary, setNewAdditionalSalary] = useState('');
-    const [newOwnAdditionalSalary, setNewOwnAdditionalSalary] = useState('');
     //const [newDepartmentName, setNewDepartmentName] = useState('');
     //const [newVacancyName, setNewVacancyName] = useState('');
     const [financialHelp, setFinancialHelp] = useState('');
@@ -140,194 +164,250 @@ function CreateOperation() {
     const getOperationName = () => {
         mainAxios({
             method: 'get',
-            url: '/document/types',
+            url: '/operations/types',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setOperationName(res.data.data);
+            setOperationTypeArr(res.data);
         });
     }
 
-    const getStaff = (value) => {
-        if (value == "EMPLOYEE") {
-            mainAxios({
-                method: 'get',
-                url: '/employee',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-            }).then((res) => {
-                setStaff(res.data.data.data);
-            });
-        } else if (value == "STUFF") {
-            mainAxios({
-                method: 'get',
-                url: '/position',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-            }).then((res) => {
-                setStaff(res.data.data.data);
-            });
-        }
-    }
-
-    const getEmployee = (id) => {
+    const getEmployee = () => {
         mainAxios({
             method: 'get',
-            url: 'document/employee/' + id,
+            url: '/employees/all',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            let data = res.data.data
-            setDepartment(data.departmentName);
-            setSubDepartment(data.subDepartmentName);
-            setVacancyName(data.vacancyName);
-            setSalary(data.salary)
-            setOwnAdditionalSalary(data.ownAdditionalSalary);
-            setAdditionalSalary(data.additionalSalary);
-            setWorkMode(data.workMode)
-        });
-    }
-
-    const getPosition = () => {
-        mainAxios({
-            method: 'get',
-            url: '/document/position',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-        }).then((res) => {
-            let data = res.data.data;
+            let data = res.data;
             let arr = [];
-            data.forEach(function (element) {
-                arr.push({label: element, value: element})
-            });
-            setPosition(arr)
+            if (data.length > 0)
+                data.forEach(function (element) {
+                    arr.push({id: element.id, name: element.fullName !== null ? element.fullName : null})
+                });
+            setEmployee(arr);
         });
     }
 
-    const getPositionIdData = (id) => {
+    const getGrade = () => {
         mainAxios({
             method: 'get',
-            url: '/document/position/' + id,
+            url: '/grades',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            let data = res.data.data
-            setPositionDepartment(data.departmentName);
-            setPositionSubDepartment(data.subDepartmentName);
-            setPositionSalary(data.salary);
-            setPositionVacancyName(data.vacancyName);
-            setPositionVacancyCount(data.vacancyCount);
-            setPositionVacancyCategory(data.vacancyCategory);
-            setPositionWorkMode(data.workMode);
-            setPositionWorkPlace(data.workPlace);
-            setPositionAdditionalSalary(data.additionalSalary)
+            let data = res.data;
+            setGrade(data);
+        });
+    }
+
+    const getSubGrade = () => {
+        mainAxios({
+            method: 'get',
+            url: '/sub-grades',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            let data = res.data;
+            setSubGrade(data);
+        });
+    }
+
+    const getEmployeeData = (id) => {
+        mainAxios({
+            method: 'get',
+            url: '/employees/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            let data = res.data.content
+            /*     setDepartment(data.departmentName);
+                 setSubDepartment(data.subDepartmentName);
+                 setVacancyName(data.vacancyName);
+                 setSalary(data.salary)
+                 setOwnAdditionalSalary(data.ownAdditionalSalary);
+                 setAdditionalSalary(data.additionalSalary);
+                 setWorkMode(data.workMode)*/
+        });
+    }
+
+    const getVacancy = () => {
+        mainAxios({
+            method: 'get',
+            url: '/vacancies/all',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            let data = res.data;
+            let arr = [];
+            if (data.length > 0)
+                data.forEach(function (element) {
+                    arr.push({id: element.id, name: element.position !== null ? element.position.name : null})
+                });
+            setVacancy(arr)
+        });
+    }
+
+    const getVacancyData = (id) => {
+        mainAxios({
+            method: 'get',
+            url: '/vacancies/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            let generalData = res.data.generalInformation;
+            if (generalData !== null) {
+                setVacancyDepartment(generalData.department !== null ? generalData.department.name : null);
+                setVacancySubDepartment(generalData.subDepartment !== null ? generalData.subDepartment.name : null);
+                setVacancyPosition(generalData.position !== null ? generalData.position.name : null);
+
+                let gradeData = generalData.gradeRange
+                if (gradeData !== null) {
+                    let arr = []
+                    for (let i = gradeData.min; i <= gradeData.max; i++) {
+                        for (let j of grade) {
+                            if (i === j.grade) {
+                                arr.push(j)
+                            }
+                        }
+                    }
+                    setGradeArr(arr)
+                } else {
+                    setGradeArr(grade)
+                }
+            }
+
+
+            /*            ;
+                        setPositionSalary(data.salary);
+                        setPositionVacancyName(data.vacancyName);
+                        setPositionVacancyCount(data.vacancyCount);
+                        setPositionVacancyCategory(data.vacancyCategory);
+                        setPositionWorkMode(data.workMode);
+                        setPositionWorkPlace(data.workPlace);
+                        setPositionAdditionalSalary(data.additionalSalary)*/
         });
     }
 
     const resetData = () => {
-        setSelectedStaff(null);
-        setSelectedPosition(null);
-        setMainOfOrder('');
-        setDepartment('');
-        setSubDepartment('');
-        setSalary('');
-        setAdditionalSalary('');
-        setOwnAdditionalSalary('');
-        setPositionSalary('');
-        setPositionVacancyCount('');
-        setPositionSubDepartment('');
-        setPositionDepartment('');
-        setPositionVacancyCategory('');
-        setPositionAdditionalSalary('');
-        setPositionWorkMode('');
-        setPositionWorkPlace('');
-        setPositionVacancyName('');
-        setOwnAdditionalSalary(null);
-        setNewOwnAdditionalSalary('');
-        setChangePeriod('');
-        setNewAdditionalSalary('');
-        setJoinDate(null);
-        setChangeDate(null);
-        setTestPeriod('');
-        setNoteArr([""])
+        /*        setSelectedStaff(null);
+                setSelectedPosition(null);
+                setMainOfOrder('');
+                setDepartment('');
+                setSubDepartment('');
+                setSalary('');
+                setAdditionalSalary('');
+                setOwnAdditionalSalary('');
+                setPositionSalary('');
+                setPositionVacancyCount('');
+                setPositionSubDepartment('');
+                setPositionDepartment('');
+                setPositionVacancyCategory('');
+                setPositionAdditionalSalary('');
+                setPositionWorkMode('');
+                setPositionWorkPlace('');
+                setPositionVacancyName('');
+                setOwnAdditionalSalary(null);
+                setNewOwnAdditionalSalary('');
+                setChangePeriod('');
+                setNewAdditionalSalary('');
+                setJoinDate(null);
+                setChangeDate(null);
+                setTestPeriod('');
+                setNoteArr([""])*/
     }
 
     const senData = () => {
         const data = {
+            "header": {
+                "department": "string",
+                "fullName": "string",
+                "main": mainOfOrder !== "" ? mainOfOrder : null,
+                "note": "string"
+            },
+            "hire": {
+                "date": joinDate !== null ? moment(joinDate).format("YYYY-MM-DD") : null,
+                "gradeId": selectedGrade !== null ? selectedGrade.id : null,
+                "individualAddition": individualAddition !== '' ? parseFloat(individualAddition) : null,
+                "subGradeId": selectedSubGrade !== null ? selectedSubGrade.id : null,
+                "testPeriod": testPeriod !== "" ? parseFloat(testPeriod) : null,
+                "jobTime": selectedJobTime !== null ? selectedJobTime.value : null
+            },
+            "type": operationType !== '' ? operationType : null,
+            "vacancyId": vacancyId ? vacancyId : null,
+            "employeeId": employeeId ? employeeId : null
 
-            /*       "alternateWorkerSalary": 0,
-                     "assignmentTerm": "string",
-                     "eventFromBusinessTripDate": "string",
-                     "eventToBusinessTripDate": "string",
-                     "newTerm": 0,
-                     "otherNotes": "string",
-                     "year": 0,*/
 
-            "achievementAmount": achievement !== "" ? parseFloat(achievement) : null,
-            "amount": amount !== "" ? parseFloat(amount) : null,
-            "businessTripLocation": businessTripLocation !== "" ? businessTripLocation : null,
-            "businessTripTerm": businessTripPeriod !== "" ? parseFloat(businessTripPeriod) : null,
-            "callBackDate": callBackDate !== null ? moment(callBackDate).format("MM-DD-YYYY") : null,
-            "callBackReason": callBackReason !== "" ? callBackReason : null,
-            "catchAmount": catchAmount !== "" ? parseFloat(catchAmount) : null,
-            "catchMonths": monthArr,
-            "changeDate": changeDate !== null ? moment(changeDate).format("MM-DD-YYYY") : null,
-            "changePeriod": changePeriod !== "" ? parseFloat(changePeriod) : null,
-            "compensation": compensation !== "" ? parseFloat(compensation) : null,
-            "dayInEvent": dayInEvent !== "" ? parseFloat(dayInEvent) : null,
-            "dayInEvent2": dayOutEvent !== "" ? parseFloat(dayOutEvent) : null,
-            "disciplineType": selectedDiscipline !== null ? selectedDiscipline.value : null,
-            "dismissalDate": firedDate !== null ? moment(firedDate).format("MM-DD-YYYY") : null,
-            "dismissalReason": firedReason !== "" ? firedReason : null,
-            "documentType": documentId ? documentId : null,
-            "employeeId": employeeId ? employeeId : null,
-            "employeeIds": employeeIds,
-            "eventToBusinessTripDate": businessTripStart !== null ? moment(businessTripStart).format("MM-DD-YYYY") : null,
-            "eventFromBusinessTripDate": businessTripEnd !== null ? moment(businessTripEnd).format("MM-DD-YYYY") : null,
-            "eventFrom": startDate !== null ? moment(startDate).format("MM-DD-YYYY") : null,
-            "eventFrom2": startVacationHeldDate !== null ? moment(startVacationHeldDate).format("MM-DD-YYYY") : null,
-            "eventName": eventName !== "" ? eventName : null,
-            "eventTo": endDate !== null ? moment(endDate).format("MM-DD-YYYY") : null,
-            "eventTo2": endVacationHeldDate !== null ? moment(endVacationHeldDate).format("MM-DD-YYYY") : null,
-            "financialHelp": financialHelp !== "" ? parseFloat(financialHelp) : null,
-            "givenNonWorkDay": givenNonWorkDay !== null ? moment(givenNonWorkDay).format("MM-DD-YYYY") : null,
-            "joinDate": joinDate !== null ? moment(joinDate).format("MM-DD-YYYY") : null,
-            "mainOfOrder": mainOfOrder !== "" ? mainOfOrder : null,
-            "newAdditionalSalary": newAdditionalSalary !== "" ? newAdditionalSalary : null,
-            "newOwnAdditionalSalary": newOwnAdditionalSalary !== '' ? newOwnAdditionalSalary : null,
-            "newSalary": newSalary !== "" ? newSalary : null,
-            "newWorkMode": selectedNewWorkMode !== null ? selectedNewWorkMode.value : null,
-            "nonWorkDay": nonWorkDay !== null ? moment(nonWorkDay).format("MM-DD-YYYY") : null,
-            "notes": noteArr.length > 0 ? noteArr : null,
-            "ownAdditionalSalary": ownAdditionalSalary !== "" ? parseFloat(ownAdditionalSalary) : null,
-            "positionId": positionId ? positionId : null,
-            "presentationOwnerDepartment": presentationDepartment !== "" ? presentationDepartment : null,
-            "presentationOwnerName": presentationFullName !== "" ? presentationFullName : null,
-            "presentationOwnerPosition": presentationPosition !== "" ? presentationPosition : null,
-            "testPeriod": testPeriod !== "" ? parseFloat(testPeriod) : null,
-            "reason": selectedReason !== null ? selectedReason.label : null,
-            "serialNumber1": null,
-            "serialNumber2": null,
-            "titleDepartment": null,
-            "titleFullName": null,
-            "vacationReason": selectedVacationReason !== null ? selectedVacationReason.label : null,
+            /*            "achievementAmount": achievement !== "" ? parseFloat(achievement) : null,
+                        "amount": amount !== "" ? parseFloat(amount) : null,
+                        "businessTripLocation": businessTripLocation !== "" ? businessTripLocation : null,
+                        "businessTripTerm": businessTripPeriod !== "" ? parseFloat(businessTripPeriod) : null,
+                        "callBackDate": callBackDate !== null ? moment(callBackDate).format("MM-DD-YYYY") : null,
+                        "callBackReason": callBackReason !== "" ? callBackReason : null,
+                        "catchAmount": catchAmount !== "" ? parseFloat(catchAmount) : null,
+                        "catchMonths": monthArr,
+                        "changeDate": changeDate !== null ? moment(changeDate).format("MM-DD-YYYY") : null,
+                        "changePeriod": changePeriod !== "" ? parseFloat(changePeriod) : null,
+                        "compensation": compensation !== "" ? parseFloat(compensation) : null,
+                        "dayInEvent": dayInEvent !== "" ? parseFloat(dayInEvent) : null,
+                        "dayInEvent2": dayOutEvent !== "" ? parseFloat(dayOutEvent) : null,
+                        "disciplineType": selectedDiscipline !== null ? selectedDiscipline.value : null,
+                        "dismissalDate": firedDate !== null ? moment(firedDate).format("MM-DD-YYYY") : null,
+                        "dismissalReason": firedReason !== "" ? firedReason : null,
+                        "documentType": documentId ? documentId : null,
+                        "employeeIds": employeeIds,
+                        "eventToBusinessTripDate": businessTripStart !== null ? moment(businessTripStart).format("MM-DD-YYYY") : null,
+                        "eventFromBusinessTripDate": businessTripEnd !== null ? moment(businessTripEnd).format("MM-DD-YYYY") : null,
+                        "eventFrom": startDate !== null ? moment(startDate).format("MM-DD-YYYY") : null,
+                        "eventFrom2": startVacationHeldDate !== null ? moment(startVacationHeldDate).format("MM-DD-YYYY") : null,
+                        "eventName": eventName !== "" ? eventName : null,
+                        "eventTo": endDate !== null ? moment(endDate).format("MM-DD-YYYY") : null,
+                        "eventTo2": endVacationHeldDate !== null ? moment(endVacationHeldDate).format("MM-DD-YYYY") : null,
+                        "financialHelp": financialHelp !== "" ? parseFloat(financialHelp) : null,
+                        "givenNonWorkDay": givenNonWorkDay !== null ? moment(givenNonWorkDay).format("MM-DD-YYYY") : null*/,
+            /*
+                        "joinDate": joinDate !== null ? moment(joinDate).format("MM-DD-YYYY") : null,
+            */
+            /*
+                        "mainOfOrder": mainOfOrder !== "" ? mainOfOrder : null,
+            */
+            /*            "newAdditionalSalary": newAdditionalSalary !== "" ? newAdditionalSalary : null,
+                        "newOwnAdditionalSalary": newOwnAdditionalSalary !== '' ? newOwnAdditionalSalary : null,
+                        "newSalary": newSalary !== "" ? newSalary : null,
+                        "newWorkMode": selectedNewWorkMode !== null ? selectedNewWorkMode.value : null,
+                        "nonWorkDay": nonWorkDay !== null ? moment(nonWorkDay).format("MM-DD-YYYY") : null,
+                        "notes": noteArr.length > 0 ? noteArr : null,
+                        "ownAdditionalSalary": ownAdditionalSalary !== "" ? parseFloat(ownAdditionalSalary) : null,
+                        "positionId": positionId ? positionId : null,
+                        "presentationOwnerDepartment": presentationDepartment !== "" ? presentationDepartment : null,
+                        "presentationOwnerName": presentationFullName !== "" ? presentationFullName : null,
+                        "presentationOwnerPosition": presentationPosition !== "" ? presentationPosition : null,
+                        "testPeriod": testPeriod !== "" ? parseFloat(testPeriod) : null,
+                        "reason": selectedReason !== null ? selectedReason.label : null,
+                        "serialNumber1": null,
+                        "serialNumber2": null,
+                        "titleDepartment": null,
+                        "titleFullName": null,
+                        "vacationReason": selectedVacationReason !== null ? selectedVacationReason.label : null,*/
         }
 
         mainAxios({
             method: 'post',
-            url: '/document',
+            url: '/operations',
             data: data,
             headers: {
                 'Content-Type': 'application/json',
@@ -445,7 +525,10 @@ function CreateOperation() {
 
     useEffect(() => {
         getOperationName();
-        getPosition()
+        getVacancy();
+        getEmployee();
+        getGrade();
+        getSubGrade();
     }, []);
 
     return (
@@ -476,14 +559,13 @@ function CreateOperation() {
                                             onChange={(val) => {
                                                 setSelectedOperationName(val);
                                                 resetData()
-                                                setDocumentId(val.value)
-                                                getStaff(val.label);
+                                                setOperationType(val.type)
                                                 setSave(true);
                                                 setTab(val.value)
                                                 setKey(val.label)
                                             }}
-                                            options={operationName}
-                                            isSearchable={operationName ? operationName.length > 5 ? true : false : false}
+                                            options={operationTypeArr}
+                                            isSearchable={operationTypeArr ? operationTypeArr.length > 5 ? true : false : false}
                                             getOptionLabel={(option) => (option.key)}
                                             styles={customStyles}
                                         />
@@ -493,6 +575,7 @@ function CreateOperation() {
                             <div className="operation-tab">
                                 <Tabs activeKey={tab}>
 
+{/*
                                     <Tab eventKey="1" title="" disabled={tab !== "1"}>
                                         <Row>
                                             <Col xs={6}>
@@ -604,7 +687,9 @@ function CreateOperation() {
                                             </Col>
                                         </Row>
                                     </Tab>
+*/}
 
+{/*
                                     <Tab eventKey="2" title="" disabled={tab !== "2"}>
                                         <Row>
                                             <Col xs={6}>
@@ -705,6 +790,7 @@ function CreateOperation() {
                                             </Col>
                                         </Row>
                                     </Tab>
+*/}
 
                                     <Tab eventKey="7" title="" disabled={tab !== "7"}>
                                         <Row>
@@ -728,12 +814,12 @@ function CreateOperation() {
                                                         onChange={(val) => {
                                                             let id = val.id
                                                             setEmployeeId(id)
-                                                            getEmployee(id)
+                                                            getEmployeeData(id)
                                                             setSelectedStaff(val);
                                                         }}
-                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
-                                                        options={staff}
-                                                        getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
+                                                        isSearchable={employee ? employee.length > 5 ? true : false : false}
+                                                        options={employee}
+                                                        getOptionLabel={(option) => (option.name)}
                                                         styles={customStyles}
                                                     />
                                                 </Form.Group>
@@ -746,12 +832,12 @@ function CreateOperation() {
                                                         value={selectedPosition}
                                                         onChange={(val) => {
                                                             setSelectedPosition(val);
-                                                            getPositionIdData(val.value);
-                                                            setPositionId(val.value);
+                                                            getVacancyData(val.id);
+                                                            setVacancyId(val.id);
                                                         }}
-                                                        isSearchable={position ? position.length > 5 ? true : false : false}
-                                                        options={position}
-                                                        getOptionLabel={(option) => option.value}
+                                                        isSearchable={vacancy ? vacancy.length > 5 ? true : false : false}
+                                                        options={vacancy}
+                                                        getOptionLabel={(option) => `${option.id}. ${option.name}`}
                                                         styles={customStyles}
                                                     />
                                                 </Form.Group>
@@ -763,7 +849,7 @@ function CreateOperation() {
                                                     <Form.Label>
                                                         <Form.Control
                                                             placeholder="İşə qəbul olduğu struktur bölmə daxil edin"
-                                                            value={positionDepartment || ''} disabled={true}/>
+                                                            value={vacancyDepartment || ''} disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
@@ -773,7 +859,7 @@ function CreateOperation() {
                                                         className="input-title">İşə qəbul olduğu alt struktur bölmə </span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Tabe struktur bölmənin adı"
-                                                                      value={positionSubDepartment || ''}
+                                                                      value={vacancySubDepartment || ''}
                                                                       disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>
@@ -783,7 +869,7 @@ function CreateOperation() {
                                                     <span className="input-title">İşə qəbul olduğu vəzifə </span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="İşə qəbul olduğu vəzifə"
-                                                                      value={positionVacancyName || ''}
+                                                                      value={vacancyPosition || ''}
                                                                       disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>
@@ -862,22 +948,50 @@ function CreateOperation() {
                                             </Col>
                                             <Col xs={4}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Ştat üzrə əsas əmək haqqı</span>
-                                                    <Form.Label>
-                                                        <Form.Control placeholder="Ştat üzrə əsas əmək haqqı"
-                                                                      type="number"
-                                                                      value={positionSalary || ''} disabled={true}/>
-                                                    </Form.Label>
+                                                    <span className="input-title">Dərəcə</span>
+                                                    <Select
+                                                        placeholder="Dərəcə"
+                                                        value={selectedGrade}
+                                                        onChange={(val) => {
+                                                            setSelectedGrade(val)
+                                                        }}
+                                                        isSearchable={gradeArr ? gradeArr.length > 5 ? true : false : false}
+                                                        options={gradeArr}
+                                                        getOptionLabel={(option) => (option.grade)}
+                                                        styles={customStyles}
+                                                    />
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={4}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Əmək şəraitinə görə əlavə </span>
-                                                    <Form.Label>
-                                                        <Form.Control placeholder="Əmək şəraitinə görə əlavə"
-                                                                      value={positionAdditionalSalary || ''}
-                                                                      disabled={true}/>
-                                                    </Form.Label>
+                                                    <span className="input-title">Alt dərəcə </span>
+                                                    <Select
+                                                        placeholder="Alt dərəcə"
+                                                        value={selectedSubGrade}
+                                                        onChange={(val) => {
+                                                            setSelectedSubGrade(val)
+                                                        }}
+                                                        isSearchable={subGrade ? subGrade.length > 5 ? true : false : false}
+                                                        options={subGrade}
+                                                        getOptionLabel={(option) => (option.subGrade)}
+                                                        styles={customStyles}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">İş vaxtı </span>
+                                                    <Select
+                                                        placeholder="İş vaxtı"
+                                                        value={selectedJobTime}
+                                                        onChange={(val) => {
+                                                            setSelectedJobTime(val)
+                                                        }}
+                                                        isSearchable={jobTimeOptions ? jobTimeOptions.length > 5 ? true : false : false}
+                                                        options={jobTimeOptions}
+                                                        getOptionLabel={(option) => (option.label)}
+                                                        styles={customStyles}
+                                                    />
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={4}>
@@ -886,15 +1000,15 @@ function CreateOperation() {
                                                     <Form.Label>
                                                         <Form.Control placeholder="Digər fərdi əlavə"
                                                                       type="number"
-                                                                      value={newOwnAdditionalSalary}
-                                                                      onChange={(e) => setNewOwnAdditionalSalary(e.target.value)}/>
+                                                                      value={individualAddition}
+                                                                      onChange={(e) => setIndividualAddition(e.target.value)}/>
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
                                         </Row>
                                     </Tab>
 
-                                    <Tab eventKey="8" title="" disabled={tab !== "8"}>
+                                    {/*                                    <Tab eventKey="8" title="" disabled={tab !== "8"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
@@ -2760,7 +2874,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="17" title="" disabled={tab !== "17"}>
                                         <Row>
                                             <Col xs={6}>
@@ -3023,7 +3136,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="18" title="" disabled={tab !== "18"}>
                                         <Row>
                                             <Col xs={6}>
@@ -3556,7 +3668,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="20" title="" disabled={tab !== "20"}>
                                         <Row>
                                             <Col xs={6}>
@@ -3816,7 +3927,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="21" title="" disabled={tab !== "21"}>
                                         <Row>
                                             <Col xs={6}>
@@ -4076,7 +4186,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="22" title="" disabled={tab !== "22"}>
                                         <Row>
                                             <Col xs={6}>
@@ -4351,7 +4460,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="23" title="" disabled={tab !== "23"}>
                                         <Row>
                                             <Col xs={6}>
@@ -4756,7 +4864,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="24" title="" disabled={tab !== "24"}>
                                         <Row>
                                             <Col xs={6}>
@@ -5332,7 +5439,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="26" title="" disabled={tab !== "26"}>
                                         <Row>
                                             <Col xs={6}>
@@ -5637,7 +5743,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="30" title="" disabled={tab !== "30"}>
                                         <Row>
                                             <Col xs={6}>
@@ -6096,7 +6201,6 @@ function CreateOperation() {
                                         </div>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="31" title="" disabled={tab !== "31"}>
                                         <Row>
                                             <Col xs={6}>
@@ -6555,7 +6659,6 @@ function CreateOperation() {
                                         </div>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="32" title="" disabled={tab !== "32"}>
                                         <Row>
                                             <Col xs={6}>
@@ -7334,7 +7437,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="37" title="" disabled={tab !== "37"}>
                                         <Row>
                                             <Col xs={6}>
@@ -7626,7 +7728,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="39" title="" disabled={tab !== "39"}>
                                         <Row>
                                             <Col xs={6}>
@@ -7896,7 +7997,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="40" title="" disabled={tab !== "40"}>
                                         <Row>
                                             <Col xs={6}>
@@ -8198,7 +8298,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*new*/}
                                     <Tab eventKey="43" title="" disabled={tab !== "43"}>
                                         <Row>
                                             <Col xs={6}>
@@ -8388,8 +8487,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*new*/}
-
                                     <Tab eventKey="45" title="" disabled={tab !== "45"}>
                                         <Row>
                                             <Col xs={6}>
@@ -8492,7 +8589,6 @@ function CreateOperation() {
                                             </Col>
                                         </Row>
                                     </Tab>
-
 
                                     <Tab eventKey="44" title="" disabled={tab !== "44"}>
                                         <Row>
@@ -8814,7 +8910,7 @@ function CreateOperation() {
                                                 </Form.Group>
                                             </Col>
                                         </Row>
-                                    </Tab>
+                                    </Tab>*/}
 
                                 </Tabs>
                             </div>

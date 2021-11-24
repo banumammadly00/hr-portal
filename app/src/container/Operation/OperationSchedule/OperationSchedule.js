@@ -22,7 +22,7 @@ function OperationSchedule() {
     const getDocument = (page) => {
         mainAxios({
             method: 'get',
-            url: '/document',
+            url: '/operations',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -33,8 +33,8 @@ function OperationSchedule() {
             }
         }).then((res) => {
             setCurrentPage(page)
-            setDocument(res.data.data.data);
-            setTotalRecord(res.data.data.totalElement);
+            setDocument(res.data.content);
+            setTotalRecord(res.data.totalElement);
         });
     }
 
@@ -51,7 +51,7 @@ function OperationSchedule() {
             if (result.isConfirmed) {
                 mainAxios({
                     method: 'put',
-                    url: '/document/status/' + id,
+                    url: `/operations/${id}/status`,
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -131,8 +131,8 @@ function OperationSchedule() {
                                 document.map((item, index) =>
                                     <tr key={index}>
                                         <td>{item.id}</td>
-                                        <td>{item.documentType}</td>
-                                        <td>{item.createDate}</td>
+                                        <td>{item.type}</td>
+                                        <td>{item.createdAt}</td>
                                         <td>
                                             <div className="flex">
                                                  <span className={statuses[item.status]}>
@@ -168,7 +168,7 @@ function OperationSchedule() {
                                                         item.status === 'Təsdiq gözləyir' ?
                                                             <li>
                                                                 <Button className="btn-cancel"
-                                                                        onClick={() => changeStatus(2, item.id)}>
+                                                                        onClick={() => changeStatus('REJECTED', item.id)}>
                                                                     <svg width="14" height="14" viewBox="0 0 12 12"
                                                                          fill="none"
                                                                          xmlns="http://www.w3.org/2000/svg">
@@ -185,7 +185,7 @@ function OperationSchedule() {
                                                         item.status === 'Təsdiq gözləyir' ?
                                                             <li>
                                                                 <Button className="btn-confirm"
-                                                                        onClick={() => changeStatus(1, item.id)}>
+                                                                        onClick={() => changeStatus('APPROVED', item.id)}>
                                                                     <svg width="16" height="12" viewBox="0 0 16 12"
                                                                          fill="none"
                                                                          xmlns="http://www.w3.org/2000/svg">
