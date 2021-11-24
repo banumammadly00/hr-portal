@@ -403,7 +403,7 @@ function CreateStaff() {
         setPositionFunctionArr(positionFunctionArr => [...positionFunctionArr, " "])
     }
 
-    const sendData = () => {
+    const sendGeneralData = () => {
         setLoadingIndicator(true);
         let data = {
             "generalInformation": {
@@ -476,6 +476,79 @@ function CreateStaff() {
             }
         });
     }
+
+    const sendGeneralUpdate = () => {
+        setLoadingIndicator(true);
+        let data = {
+            "generalInformation": {
+                "count": parseFloat(vacancyCount),
+                "curatorId": selectedCurator !== null ? selectedCurator.id : null,
+                "departmentId": selectedDepartment !== null ? selectedDepartment.id : null,
+                "educationStatus": selectedEducationDegree !== null ? selectedEducationDegree.value : null,
+                "experience": {
+                    "area": parseFloat(areaExperience),
+                    "leader": parseFloat(leaderExperience)
+                },
+                "functionalities": positionFunctionArr,
+                "gender": selectedGender !== null ? selectedGender.value : null,
+                "gradeRange": {
+                    "max": selectedMinGrade !== null ? selectedMinGrade.value : null,
+                    "min": selectedMaxGrade !== null ? selectedMaxGrade.value : null
+                },
+                "healthy": selectedHealth !== null ? selectedHealth.value : null,
+                "height": parseFloat(height),
+                "institutionId": selectedInstitution !== null ? selectedInstitution.id : null,
+                "militaryRequire": selectedMilitaryAchieve !== null ? selectedMilitaryAchieve.value : null,
+                "positionCategory": selectedVacancyCategory !== null ? selectedVacancyCategory.value : null,
+                "positionId": selectedVacancy !== null ? selectedVacancy.id : null,
+                "legislationStatementSet": skillLegalArr,
+                "specialityId": selectedSpeciality !== null ? selectedSpeciality.id : null,
+                "subDepartmentId": selectedSubDepartment !== null ? selectedSubDepartment.id : null,
+                "workCondition": selectedWorkCondition !== null ? selectedWorkCondition.value : null,
+                "workMode": selectedWorkMode !== null ? selectedWorkMode.value : null,
+                "workPlace": selectedWorkAddress !== null ? selectedWorkAddress.value : null,
+                "jobFamilyId": selectedFamilyJob !== null ? selectedFamilyJob.id : null,
+                "subordinateDepartment": obeyDepartment,
+                "requireCertificate": selectedRequiredFile !== null ? selectedRequiredFile.value : null
+            }
+
+        }
+        mainAxios({
+            method: 'put',
+            url: '/vacancies/' + dataVal,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                "Accept-Language": "az"
+            },
+            data: data
+        }).then((res) => {
+            setLoadingIndicator(false);
+            Swal.fire({
+                icon: 'success',
+                text: 'Məlumatlar qeyd edildi!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            setKey('knowledge');
+            setErrors({})
+        }).catch((error) => {
+            setLoadingIndicator(false);
+            Swal.fire({
+                icon: 'error',
+                text: 'Məlumatlar qeyd edilmədi!',
+                cancelButtonText: 'Bağla',
+                showCancelButton: true,
+                showConfirmButton: false,
+            })
+            if (error.response.data.validations) {
+                setErrors(error.response.data.validations)
+            } else {
+                setErrors({})
+            }
+        });
+    }
+
 
     const sendDataKnowledge = () => {
         setLoadingIndicator(true);
@@ -1142,9 +1215,17 @@ function CreateStaff() {
                                         </div>
                                     </div>
                                     <div className="flex-vertical-center">
-                                        <Button className="btn-effect" onClick={() => sendData()}>
-                                            Davam et
-                                        </Button>
+                                        {
+                                            showButton ?
+                                                <Button className="btn-effect" onClick={() => sendGeneralUpdate()}>
+                                                    Davam et
+                                                </Button>
+                                                :
+                                                <Button className="btn-effect" onClick={() => sendGeneralData()}>
+                                                    Davam et
+                                                </Button>
+
+                                        }
                                     </div>
                                 </Form>
                             </div>
@@ -1434,7 +1515,7 @@ function CreateStaff() {
                                             <ul className="flex-vertical-center btn-block list-unstyled">
                                                 <li>
                                                     <Button className="btn-transparent btn-previous" onClick={() => {
-                                                        setKey('company')
+                                                        setKey('general')
                                                     }}>
                                                         <svg width="16" height="12" viewBox="0 0 16 12" fill="none"
                                                              xmlns="http://www.w3.org/2000/svg">

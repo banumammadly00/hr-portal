@@ -1275,8 +1275,6 @@ function CreateEmployee() {
     const sendImage = () => {
         const formData = new FormData();
         formData.append("image", uploadFile);
-        //formData.append('id', id)
-        console.log(id)
         mainAxios({
             method: 'post',
             url: `/employees/${id}/image/`,
