@@ -2450,7 +2450,7 @@ function EmployeeCreate() {
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="education" title="Təhsil">
+                        <Tab eventKey="education" title="Təhsil məlumatları">
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">

@@ -333,8 +333,7 @@ function EmployeeSchedule() {
                                           <div className="block-item-top">
                                               <div className="img-block flex-vertical-center"
                                                    onClick={() => handleRowClick(item)}>
-                                                    {/*  <Image src={item.photo ? `https://hr-portal-api-v2.herokuapp.com/employees/image/${item.photo}?token=${token}` : userImage}/>*/}
-                                                  <Image src={item.photo ? `https://hr-portal-api-v2.herokuapp.com/employees/image/${item.photo}` : userImage}/>
+                                                      <Image src={item.photo ? `https://hr-portal-api-v2.herokuapp.com/employees/image/${item.photo}?token=${token}` : userImage}/>
                                               </div>
                                               <button type="button" className="btn-transparent">
                                                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none"

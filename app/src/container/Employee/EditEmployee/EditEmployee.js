@@ -2663,7 +2663,7 @@ function CreateEmployee() {
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="education" title="Təhsil">
+                        <Tab eventKey="education" title="Təhsil məlumatları">
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
@@ -2740,7 +2740,7 @@ function CreateEmployee() {
                                                                                     placeholder="Təhsil dərəcəsini seçin"
                                                                                     value={item.degree}
                                                                                     onChange={(val) => {
-                                                                                        educationArr[index].degree = val.value;
+                                                                                        educationArr[index].degree = val;
                                                                                         setEducationArr([...educationArr], educationArr)
                                                                                     }}
                                                                                     isSearchable={eduDegreeOptions ? eduDegreeOptions.length > 5 ? true : false : false}
