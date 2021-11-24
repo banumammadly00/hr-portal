@@ -94,7 +94,6 @@ function EditStaff() {
     ]
 
     /*check&visibility*/
-    const [showButton, setShowButton] = useState(false);
     const [key, setKey] = useState('general');
     const [loadingIndicator, setLoadingIndicator] = useState(false);
     const [errors, setErrors] = useState({});
@@ -149,8 +148,6 @@ function EditStaff() {
     const [skillLanguageArr, setSkillLanguageArr] = useState([{languageId: null, level: null}]);
 
     const [selectedEmployeePosition, setSelectedEmployeePosition] = useState(null);
-    const [selectedEducationSpeciality, setSelectedEducationSpeciality] = useState('');
-
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [recordSize, setRecordSize] = useState(15)
@@ -418,12 +415,7 @@ function EditStaff() {
         setPositionFunctionArr(positionFunctionArr => [...positionFunctionArr, " "])
     }
 
-    const setPositionFunction = (val, index) => {
-        positionFunctionArr[index] = val;
-        setPositionFunctionArr([...positionFunctionArr], positionFunctionArr)
-    }
-
-    const getPositionInfo = (arr) => {
+    const getPositionInfo = () => {
         mainAxios({
             method: 'get',
             url: '/vacancies/' + id,
@@ -470,7 +462,7 @@ function EditStaff() {
                 let heightVal = data.height > 0 ? 1 : 0
 
                 for (let i of options) {
-                    if(heightVal == i.value) {
+                    if (heightVal == i.value) {
                         setSelectedOption(i)
                     }
                 }
@@ -531,7 +523,7 @@ function EditStaff() {
 
             let knowledgeData = res.data.specialityKnowledge
 
-            if(knowledgeData !== null) {
+            if (knowledgeData !== null) {
                 let tmpLanguageSkills = [];
                 for (let i of knowledgeData.languageKnowledgeSet) {
                     let obj = {};
@@ -917,7 +909,7 @@ function EditStaff() {
                                                         <span className="input-title">Ştat vahidinin sayı</span>
                                                         <Form.Label>
                                                             <Form.Control type="number"
-                                                                          value={vacancyCount}
+                                                                          value={vacancyCount || ''}
                                                                           placeholder="Ştat vahidinin saynı daxil edin"
                                                                           onChange={(e => {
                                                                               setVacancyCount(e.target.value);
@@ -1099,6 +1091,9 @@ function EditStaff() {
                                             </Row>
                                             <div className="add-block">
                                                 <div className="block-inn">
+                                                    <div className="block-title">
+                                                        Qanunvericilik
+                                                    </div>
                                                     <div className="addition-content">
                                                         {
                                                             skillLegalArr.map((item, index) =>
@@ -1409,7 +1404,7 @@ function EditStaff() {
                                 <Form className="form-list">
                                     <div className="add-block">
                                         <div className="block-title">
-                                            Vəzifənin tələb etdiyi Kompüter bilikləri
+                                            Kompüter bilikləri
                                         </div>
                                         <div className="block-inn">
                                             <div className="addition-content">
@@ -1500,6 +1495,9 @@ function EditStaff() {
                                         </div>
                                     </div>
                                     <div className="add-block">
+                                        <div className="block-title">
+                                            Dil bilikləri
+                                        </div>
                                         <div className="block-inn">
                                             <div className="addition-content">
                                                 {
@@ -1626,7 +1624,8 @@ function EditStaff() {
                                                             <Row>
                                                                 <Col xs={6}>
                                                                     <Form.Group className="form-group">
-                                                                        <span className="input-title">Vəzifənin tələb etdiyi kompetensiyalar</span>
+                                                                        <span
+                                                                            className="input-title">Kompetensiyalar</span>
                                                                         <Select
                                                                             placeholder="Kompetensiyaları seçin"
                                                                             value={item.requiredSkillId}
@@ -1685,33 +1684,11 @@ function EditStaff() {
                                             </div>
                                         </div>
                                     </div>
-                                    <Button className="btn-effect" onClick={() => sendDataKnowledge()}>
-                                        Yadda saxla
-                                    </Button>
-                                    {
-                                        showButton ?
-                                            <ul className="flex-vertical-center btn-block list-unstyled">
-                                                <li>
-                                                    <Button className="btn-transparent btn-previous" onClick={() => {
-                                                        setKey('company')
-                                                    }}>
-                                                        <svg width="16" height="12" viewBox="0 0 16 12" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M15 6H1.5M5.5 1.5L1 6L5.5 10.5" stroke="#193651"
-                                                                  strokeWidth="2" strokeLinecap="round"
-                                                                  strokeLinejoin="round"/>
-                                                        </svg>
-                                                        Əvvələ qayıt
-                                                    </Button>
-                                                </li>
-                                                <li>
-                                                    <Button className="btn-effect" onClick={() => sendDataKnowledge()}>
-                                                        Yadda saxla
-                                                    </Button>
-                                                </li>
-                                            </ul>
-                                            : null
-                                    }
+                                    <div className="flex-vertical-center btn-block">
+                                        <Button className="btn-effect" onClick={() => sendDataKnowledge()}>
+                                            Yadda saxla
+                                        </Button>
+                                    </div>
                                 </Form>
                             </div>
                         </Tab>

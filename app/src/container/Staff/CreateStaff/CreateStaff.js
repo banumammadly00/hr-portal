@@ -141,19 +141,19 @@ function CreateStaff() {
     const [skillLanguageArr, setSkillLanguageArr] = useState([{languageId: null, level: null}]);
 
     const customStyles = {
-        option: (provided, state) => ({
+        option: (provided) => ({
             ...provided,
             color: '#040647',
-            backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
+            //backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
             padding: '10px 16px',
             margin: '0',
             fontSize: '16px',
             "&:first-of-type": {
                 borderRadius: '2px 2px 0 0',
             },
-            "&:hover": {
+            /*"&:hover": {
                 backgroundColor: '#FAFCFF',
-            },
+            },*/
             "&:last-child": {
                 borderBottom: 'none',
                 borderRadius: '0 0 2px 2px',
@@ -163,6 +163,11 @@ function CreateStaff() {
             justifyContent: 'flex-start',
             position: 'relative'
 
+        }),
+
+        valueContainer: (provided) => ({
+            ...provided,
+            padding: '2px 8px 2px 16px'
         }),
 
         indicatorSeparator: () => {
@@ -201,10 +206,6 @@ function CreateStaff() {
             margin: '0',
             borderColor: 'red',
             width: '100%'
-        }),
-        valueContainer: (provided) => ({
-            ...provided,
-            padding: '2px 8px 2px 16px'
         }),
 
         dropdownIndicator: defaultStyles => ({
@@ -440,7 +441,7 @@ function CreateStaff() {
         }
         mainAxios({
             method: 'post',
-            url: '/vacancies/' + 3022,
+            url: '/vacancies',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -449,7 +450,6 @@ function CreateStaff() {
             data: data
         }).then((res) => {
             setLoadingIndicator(false);
-            console.log(res)
             Swal.fire({
                 icon: 'success',
                 text: 'Məlumatlar qeyd edildi!',
@@ -485,12 +485,11 @@ function CreateStaff() {
                 "languageKnowledgeSet": skillLanguageArr,
                 "requiredKnowledgeSet": skillArr,
             }
-
         }
 
         mainAxios({
             method: 'put',
-            url: '/vacancies/' + 3022,
+            url: '/vacancies/' + dataVal,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -850,6 +849,9 @@ function CreateStaff() {
                                             </Row>
                                         </div>
                                         <div className="block-inn">
+                                            <div className="block-title">
+                                                Qanunvericilik
+                                            </div>
                                             <div className="addition-content">
                                                 {
                                                     skillLegalArr.map((item, index) =>
@@ -1152,7 +1154,7 @@ function CreateStaff() {
                                 <Form className="form-list">
                                     <div className="add-block">
                                         <div className="block-title">
-                                            Vəzifənin tələb etdiyi Kompüter bilikləri
+                                            Kompüter bilikləri
                                         </div>
                                         <div className="block-inn">
                                             <div className="addition-content">
@@ -1241,6 +1243,9 @@ function CreateStaff() {
                                         </div>
                                     </div>
                                     <div className="add-block">
+                                        <div className="block-title">
+                                            Dil bilikləri
+                                        </div>
                                         <div className="block-inn">
                                             <div className="addition-content">
                                                 {
@@ -1318,17 +1323,19 @@ function CreateStaff() {
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path
-                                                            d="M0.46875 5.53125H5.53125V0.46875C5.53125 0.209859 5.74111 0 6 0C6.25889 0 6.46875 0.209859 6.46875 0.46875V5.53125H11.5312C11.7901 5.53125 12 5.74111 12 6C12 6.25889 11.7901 6.46875 11.5312 6.46875H6.46875V11.5312C6.46875 11.7901 6.25889 12 6 12C5.74111 12 5.53125 11.7901 5.53125 11.5312V6.46875H0.46875C0.209859 6.46875 0 6.25889 0 6C0 5.74111 0.209859 5.53125 0.46875 5.53125Z"
-                                                            fill="#3083DC"/>
+                                                            d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                            stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                            strokeLinejoin="round"/>
                                                     </svg>
-
-                                                    Əlavə et
+                                                    <span>əlavə et</span>
                                                 </button>
                                             </div>
                                         </div>
-
                                     </div>
                                     <div className="add-block">
+                                        <div className="block-title">
+                                            Vəzifənin tələb etdiyi  kompetensiyalar
+                                        </div>
                                         <div className="block-inn">
                                             <div className="addition-content">
                                                 {
@@ -1365,7 +1372,7 @@ function CreateStaff() {
                                                             <Row>
                                                                 <Col xs={6}>
                                                                     <Form.Group className="form-group">
-                                                                        <span className="input-title">Vəzifənin tələb etdiyi kompetensiyalar</span>
+                                                                        <span className="input-title">Kompetensiyalar</span>
                                                                         <Select
                                                                             placeholder="Kompetensiyaları seçin"
                                                                             onChange={(val) => {
@@ -1422,9 +1429,6 @@ function CreateStaff() {
                                             </div>
                                         </div>
                                     </div>
-                                    <Button className="btn-effect" onClick={() => sendDataKnowledge()}>
-                                        Yadda saxla
-                                    </Button>
                                     {
                                         showButton ?
                                             <ul className="flex-vertical-center btn-block list-unstyled">

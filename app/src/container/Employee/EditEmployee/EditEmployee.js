@@ -197,10 +197,8 @@ function CreateEmployee() {
     const [academicDegreeOrganization, setAcademicDegreeOrganization] = useState('');
     const [warrantyNumber, setWarrantyNumber] = useState('');
     /*select*/
-    const [selectedUniversity, setSelectedUniversity] = useState(null);
     const [selectedEducationType, setSelectedEducationType] = useState(null);
     const [selectedDriverLicence, setSelectedDriverLicence] = useState(null);
-    const [selectedEduDegree, setSelectedEduDegree] = useState(null);
     /*array*/
     const [certificate, setCertificate] = useState([]);
     const [certificateArr, setCertificateArr] = useState([{

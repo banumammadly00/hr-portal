@@ -85,7 +85,7 @@ function StaffSchedule() {
                                     <tr onClick={() => handleRowClick(item)} key={index}>
                                         <td>{item.id}</td>
                                         <td>{item.department !== null ? item.department.name : ''}</td>
-                                        <td>{item.department !== null ? item.subDepartment.name : ''}</td>
+                                        <td>{item.subDepartment !== null ? item.subDepartment.name : ''}</td>
                                         <td>{item.position !== null ? item.position.name : ''}</td>
                                         <td>{item.count}</td>
                                     </tr>

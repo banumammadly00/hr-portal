@@ -69,30 +69,30 @@ function ViewStaff() {
             },
         }).then((res) => {
             let data = res.data.generalInformation;
-            setInstitution(data.workInstitution !==null ? data.workInstitution.name : null);
+            setInstitution(data.workInstitution !== null ? data.workInstitution.name : null);
             setDepartment(data.department !== null ? data.department.name : null);
-            setSubDepartment(data.subDepartment !== null ? data.subDepartment.name : null );
+            setSubDepartment(data.subDepartment !== null ? data.subDepartment.name : null);
             setObeyDepartment(data.subordinateDepartment);
-            setVacancy(data.position !==null ? data.position.name : null);
+            setVacancy(data.position !== null ? data.position.name : null);
             setVacancyCount(data.count);
-            setFamilyJob(data.jobFamily !==null ? data.jobFamily.name : null);
+            setFamilyJob(data.jobFamily !== null ? data.jobFamily.name : null);
             let leaderData = res.data.generalInformation.experience
-            if(leaderData!==null) {
+            if (leaderData !== null) {
                 setLeaderExperience(data.leader);
                 setAreaExperience(data.area);
             }
             let gradeData = res.data.generalInformation.gradeRange
-            if(leaderData!==null) {
+            if (leaderData !== null) {
                 setMinGrade(gradeData.min);
                 setMaxGrade(gradeData.max);
             }
             setEmployeePosition(data.curator);
             setWorkCondition(data.workCondition);
+            setSkillLegalArr(data.legislationStatementSet)
             setVacancyCategory(data.positionCategory);
             setWorkMode(data.workMode);
             setWorkAddress(data.workPlace);
-            //setSkillArr(data.requiredKnowledgeSet);
-            setEducationSpeciality(data.speciality !==null ? data.speciality.name : null);
+            setEducationSpeciality(data.speciality !== null ? data.speciality.name : null);
             setGender(data.gender);
             setEducationDegree(data.educationStatus);
             setHealth(data.healthy ? 'Bəli' : 'Xeyr');
@@ -101,23 +101,14 @@ function ViewStaff() {
             setHeight(data.height)
             data.height > 0 ? setShowHeight(true) : setShowHeight(false);
             setHeightDemand(data.height > 0 ? 'Bəli' : 'Xeyr');
-            setPositionFunctionArr(data.functionalities)
-        });
-    }
+            setPositionFunctionArr(data.functionalities);
 
-    const getKnowledgeInfo = () => {
-        mainAxios({
-            method: 'get',
-            url: '/position/knowledge/' + id,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-        }).then((res) => {
-            let data = res.data.data;
-            setSkillLanguageArr(data.languageKnowledge);
-            setSkillLegalArr(data.legislationStatements);
-            setSkillProgramArr(data.computerKnowledge);
+            let knowLedgeData = res.data.specialityKnowledge
+            if (knowLedgeData !== null) {
+                setSkillLanguageArr(knowLedgeData.languageKnowledgeSet);
+                setSkillArr(knowLedgeData.requiredKnowledgeSet);
+                setSkillProgramArr(knowLedgeData.computerKnowledgeSet);
+            }
         });
     }
 
@@ -143,7 +134,6 @@ function ViewStaff() {
 
     useEffect(() => {
         getStaffInfo();
-        getKnowledgeInfo();
         getDocument(1)
     }, []);
 
@@ -304,33 +294,50 @@ function ViewStaff() {
                                                     {employeePosition}
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div className="block-inn">
+                                        <div className="block-title">
+                                            Qanunvericilik
+                                        </div>
+                                        <div className="card">
                                             {
-                                                skillArr.map((item, index) =>
-                                                    <div className="card-in " key={index}>
-                                                        {
-                                                            index === 0 ? null :
-                                                                <div className="add-item-top">
-                                                                    <p className="m-0"> #{index + 1}. Digər </p>
+                                                skillLegalArr.length > 0 ?
+                                                    skillLegalArr.map((item, index) =>
+                                                        <div className="card-in " key={index}>
+                                                            {
+                                                                index === 0 ? null :
+                                                                    <div className="add-item-top">
+                                                                        <p className="m-0"> #{index + 1}. Digər </p>
+                                                                    </div>
+                                                            }
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    Qanunvericilik aktları
                                                                 </div>
-                                                        }
-                                                        <div className="card-item flex-start">
-                                                            <div className="card-title">
-                                                                Vəzifənin tələb etdiyi kompetensiyalar
+                                                                <div className="card-text">
+                                                                    {item.legislation !== null ? item.legislationId.name : null}
+                                                                </div>
                                                             </div>
-                                                            <div className="card-text">
-                                                                {item.skill}
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    Bilik səviyyəsi
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.level}
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                    )
+
+                                                    :
+                                                    <div className="card-in">
                                                         <div className="card-item flex-start">
                                                             <div className="card-title">
-                                                                Tələb olunan səviyyə
-                                                            </div>
-                                                            <div className="card-text">
-                                                                {item.level}
+                                                                Məlumat yoxdur
                                                             </div>
                                                         </div>
                                                     </div>
-                                                )
                                             }
                                         </div>
                                     </div>
@@ -482,67 +489,51 @@ function ViewStaff() {
                                 <div className="form-list">
                                     <div className="block-inn">
                                         <div className="block-title">
-                                            Vəzifənin tələb etdiyi Kompüter bilikləri
+                                            Kompüter bilikləri
                                         </div>
                                         <div className="card">
                                             {
-                                                skillProgramArr.map((item, index) =>
-                                                    <div className="card-in " key={index}>
-                                                        {
-                                                            index === 0 ? null :
-                                                                <div className="add-item-top">
-                                                                    <p className="m-0"> #{index + 1}. Digər </p>
+                                                skillProgramArr.length > 0 ?
+                                                    skillProgramArr.map((item, index) =>
+                                                        <div className="card-in " key={index}>
+                                                            {
+                                                                index === 0 ? null :
+                                                                    <div className="add-item-top">
+                                                                        <p className="m-0"> #{index + 1}. Digər </p>
+                                                                    </div>
+                                                            }
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    Proqram adı
                                                                 </div>
-                                                        }
-                                                        <div className="card-item flex-start">
-                                                            <div className="card-title">
-                                                                Proqram adı
+                                                                <div className="card-text">
+                                                                    {item.computer !== null ? item.computer.name : null}
+                                                                </div>
                                                             </div>
-                                                            <div className="card-text">
-                                                                {item.name}
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    Tələb olunan səviyyə
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.level}
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                    )
+                                                    : <div className="card-in">
                                                         <div className="card-item flex-start">
                                                             <div className="card-title">
-                                                                Proqram adı
-                                                            </div>
-                                                            <div className="card-text">
-                                                                {item.level}
+                                                                Məlumat yoxdur
                                                             </div>
                                                         </div>
                                                     </div>
-                                                )
                                             }
+
                                         </div>
-                                        <div className="card">
-                                            {
-                                                skillLegalArr.map((item, index) =>
-                                                    <div className="card-in " key={index}>
-                                                        {
-                                                            index === 0 ? null :
-                                                                <div className="add-item-top">
-                                                                    <p className="m-0"> #{index + 1}. Digər </p>
-                                                                </div>
-                                                        }
-                                                        <div className="card-item flex-start">
-                                                            <div className="card-title">
-                                                                Qanunvericilik aktları
-                                                            </div>
-                                                            <div className="card-text">
-                                                                {item.name}
-                                                            </div>
-                                                        </div>
-                                                        <div className="card-item flex-start">
-                                                            <div className="card-title">
-                                                                Bilik səviyyəsi
-                                                            </div>
-                                                            <div className="card-text">
-                                                                {item.level}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
+                                    </div>
+                                    <div className="block-inn">
+                                        <div className="block-title">
+                                            Dil bilikləri
                                         </div>
                                         <div className="card">
                                             {
@@ -559,7 +550,7 @@ function ViewStaff() {
                                                                 Dil biliyi
                                                             </div>
                                                             <div className="card-text">
-                                                                {item.name}
+                                                                {item.language !== null ? item.language.name : null}
                                                             </div>
                                                         </div>
                                                         <div className="card-item flex-start">
@@ -572,6 +563,49 @@ function ViewStaff() {
                                                         </div>
                                                     </div>
                                                 )
+                                            }
+                                        </div>
+                                    </div>
+                                    <div className="block-inn">
+                                        <div className="block-title">
+                                            Vəzifənin tələb etdiyi kompetensiyalar
+                                        </div>
+                                        <div className="card">
+                                            {
+                                                skillArr.length > 0 ?
+                                                    skillArr.map((item, index) =>
+                                                        <div className="card-in " key={index}>
+                                                            {
+                                                                index === 0 ? null :
+                                                                    <div className="add-item-top">
+                                                                        <p className="m-0"> #{index + 1}. Digər </p>
+                                                                    </div>
+                                                            }
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    Kompetensiyalar
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.requiredSkill !== null ? item.requiredSkill.name : null}
+                                                                </div>
+                                                            </div>
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    Tələb olunan səviyyə
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.level}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                    : <div className="card-in">
+                                                        <div className="card-item flex-start">
+                                                            <div className="card-title">
+                                                                Məlumat yoxdur
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                             }
                                         </div>
                                     </div>
