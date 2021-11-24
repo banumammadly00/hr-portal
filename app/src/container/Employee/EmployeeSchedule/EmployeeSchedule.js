@@ -43,6 +43,7 @@ function EmployeeSchedule() {
     const [fullName, setFullName] = useState('');
     const [selectedJobStatus, setSelectedJobStatus] = useState('');
     const [showFilter, setShowFilter] = useState(false)
+    const [emptyData, setEmptyData] = useState(false)
 
     const customStyles = {
         option: (provided, state) => ({
@@ -192,7 +193,6 @@ function EmployeeSchedule() {
     }
 
     const getEmployee = (page, departId, subDepartId, positionId, jobStatus, name) => {
-
         mainAxios({
             method: 'get',
             url: '/employees',
@@ -212,7 +212,8 @@ function EmployeeSchedule() {
         }).then((res) => {
             setCurrentPage(page);
             setEmployee(res.data.content);
-            setTotalRecord(res.data.totalElements)
+            setTotalRecord(res.data.totalElements);
+            setEmptyData(true)
         });
     }
 
@@ -439,7 +440,9 @@ function EmployeeSchedule() {
                                         </div>
                                     )
                                     :
-                                    <EmptyData/>
+                                    emptyData ?
+                                        <EmptyData/>
+                                        : null
                             }
                         </div>
                         <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
