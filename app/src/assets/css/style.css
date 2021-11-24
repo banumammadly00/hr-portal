@@ -1585,8 +1585,10 @@ td {
     justify-content: flex-start;
 }
 
-.filter-block .btn-main {
+.filter-block .btn-border, .filter-block .btn-border:focus, .filter-block .btn-border:not(:disabled):not(.disabled):active {
     width: 145px;
+    border: 1px solid rgba(48, 131, 220, .8);
+    color: rgba(48, 131, 220, .8);
 }
 
 .filter-block .filter-item {

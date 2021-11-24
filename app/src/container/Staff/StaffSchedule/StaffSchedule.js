@@ -307,7 +307,7 @@ function StaffSchedule() {
                                             </Form.Group>
                                         </div>
                                     </div>
-                                    <Button className="btn-main" onClick={() => resetFilter()}>
+                                    <Button className="btn-border" onClick={() => resetFilter()}>
                                         Təmizlə
                                     </Button>
                                 </div>
