@@ -132,7 +132,6 @@ function StaffSchedule() {
     }
 
     const getSubDepartments = (id) => {
-        console.log(id)
         if (id !== undefined) {
             mainAxios({
                 method: 'get',

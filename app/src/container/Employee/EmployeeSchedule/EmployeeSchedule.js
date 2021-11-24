@@ -11,16 +11,16 @@ import DatePicker from "react-datepicker";
 import moment from "moment";
 
 const statuses = {
-    'işləyir' : 'IN' ,
-    'işləmir' : 'OUT',
-    'Yeni işçi' : 'NONE'
+    'IN' : 'İşləyir',
+    'OUT': 'Çıxarılıb',
+    'NEW': 'Yeni işçi'
 };
 
 
 const jobStatusOptions = [
     {value:'NEW', label: 'Yeni işçi'},
-    {value:'IN', label: 'işləyir'},
-    {value:'OUT', label: 'işləmir'},
+    {value:'IN', label: 'İşləyir'},
+    {value:'OUT', label: 'Çıxarılıb'},
 ]
 
 function EmployeeSchedule() {
@@ -151,17 +151,30 @@ function EmployeeSchedule() {
         });
     }
 
-    const getSubDepartments = () => {
-        mainAxios({
-            method: 'get',
-            url: '/sub-departments',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-        }).then((res) => {
-            setSubDepartment(res.data)
-        });
+    const getSubDepartments = (id) => {
+        if (id !== undefined) {
+            mainAxios({
+                method: 'get',
+                url: `/departments/${id}/sub-departments`,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+            }).then((res) => {
+                setSubDepartment(res.data)
+            });
+        } else {
+            mainAxios({
+                method: 'get',
+                url: '/sub-departments',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+            }).then((res) => {
+                setSubDepartment(res.data)
+            });
+        }
     }
 
     const getPosition = () => {
@@ -177,7 +190,7 @@ function EmployeeSchedule() {
         });
     }
 
-    const getEmployee = (page) => {
+    const getEmployee = (page, departId, subDepartId, positionId, jobStatus, fullName) => {
 
         mainAxios({
             method: 'get',
@@ -189,17 +202,26 @@ function EmployeeSchedule() {
             params: {
                 page: page - 1,
                 size: recordSize,
-                departmentId: selectedDepartment !== null ? selectedDepartment.id : null,
-                fullName: fullName !== '' ? fullName : null,
-                jobStatus: selectedJobStatus !== null ? selectedJobStatus.value : null,
-                positionId: selectedPosition !== null ? selectedPosition.id : null,
-                subDepartmentId: selectedSubDepartment !== null ? selectedSubDepartment.id : null,
+                departmentId: departId,
+                jobStatus: jobStatus,
+                positionId: positionId,
+                subDepartmentId: subDepartId,
+                fullName: fullName,
             }
         }).then((res) => {
             setCurrentPage(page);
             setEmployee(res.data.content);
             setTotalRecord(res.data.totalElements)
         });
+    }
+
+    const resetFilter = () => {
+        setSelectedSubDepartment(null);
+        setSelectedPosition(null);
+        setSelectedDepartment(null);
+        setSelectedJobStatus(null);
+        setFullName('')
+        getEmployee(1)
     }
 
     useEffect(() => {
@@ -246,9 +268,17 @@ function EmployeeSchedule() {
                                                     <span className="input-title">Struktur vahidinin adı</span>
                                                     <Select
                                                         placeholder="Struktur vahidini seçin"
-                                                        selected={selectedDepartment}
+                                                        value={selectedDepartment}
                                                         onChange={(val) => {
                                                             setSelectedDepartment(val);
+                                                            let id = val.id;
+                                                            getSubDepartments(id);
+                                                            setSelectedSubDepartment(null)
+                                                            let subDepartId = selectedSubDepartment !== null ? selectedSubDepartment.id : null;
+                                                            let positionId = selectedPosition !== null ? selectedPosition.id : null;
+                                                            let jobStatus = selectedJobStatus !== null ? selectedJobStatus.value : null;
+                                                            //let fullName = fullName !== '' ? fullName : null
+                                                            getEmployee(1, id, subDepartId, positionId, jobStatus)
                                                         }}
                                                         isSearchable={department ? department.length > 5 ? true : false : false}
                                                         options={department}
@@ -262,9 +292,15 @@ function EmployeeSchedule() {
                                                     <span className="input-title">Struktur bölmənin adı</span>
                                                     <Select
                                                         placeholder="Struktur bölməni seçin"
-                                                        selected={selectedSubDepartment}
+                                                        value={selectedSubDepartment}
                                                         onChange={(val) => {
                                                             setSelectedSubDepartment(val);
+                                                            let id = val.id
+                                                            let departId = selectedDepartment !== null ? selectedDepartment.id : null;
+                                                            let positionId = selectedPosition !== null ? selectedPosition.id : null;
+                                                            let jobStatus = selectedJobStatus !== null ? selectedJobStatus.value : null;
+                                                            getEmployee(1, departId, id, positionId, jobStatus)
+
                                                         }}
                                                         isSearchable={subDepartment ? subDepartment.length > 5 ? true : false : false}
                                                         options={subDepartment}
@@ -278,9 +314,14 @@ function EmployeeSchedule() {
                                                     <span className="input-title">Ştat vahidinin adı</span>
                                                     <Select
                                                         placeholder="Ştat vahidini seçin"
-                                                        selected={selectedPosition}
+                                                        value={selectedPosition}
                                                         onChange={(val) => {
                                                             setSelectedPosition(val);
+                                                            let id = val.id
+                                                            let departId = selectedDepartment !== null ? selectedDepartment.id : null;
+                                                            let subDepartId = selectedSubDepartment !== null ? selectedSubDepartment.id : null;
+                                                            let jobStatus = selectedJobStatus !== null ? selectedJobStatus.value : null;
+                                                            getEmployee(1, departId, subDepartId, id, jobStatus)
                                                         }}
                                                         isSearchable={position ? position.length > 5 ? true : false : false}
                                                         options={position}
@@ -291,12 +332,17 @@ function EmployeeSchedule() {
                                             </div>
                                             <div className="filter-item">
                                                 <Form.Group className="form-group m-0">
-                                                    <span className="input-title">İş ailəsi</span>
+                                                    <span className="input-title">Status</span>
                                                     <Select
-                                                        placeholder="İş ailəsi seçin"
-                                                        selected={selectedJobStatus}
+                                                        placeholder="Status seçin"
+                                                        value={selectedJobStatus}
                                                         onChange={(val) => {
                                                             setSelectedJobStatus(val);
+                                                            let id = val.value
+                                                            let departId = selectedDepartment !== null ? selectedDepartment.id : null;
+                                                            let subDepartId = selectedSubDepartment !== null ? selectedSubDepartment.id : null;
+                                                            let positionId = selectedPosition !== null ? selectedPosition.id : null;
+                                                            getEmployee(1, departId, subDepartId, positionId, id)
                                                         }}
                                                         isSearchable={jobStatusOptions ? jobStatusOptions.length > 5 ? true : false : false}
                                                         options={jobStatusOptions}
@@ -311,37 +357,20 @@ function EmployeeSchedule() {
                                                     <Form.Label>
                                                         <Form.Control placeholder="İşçinin adı daxil edin"
                                                                       value={fullName}
-                                                                      onChange={(e => setFullName(e.target.value))}/>
-                                                    </Form.Label>
-                                                </Form.Group>
-                                            </div>
-                                            <div className="filter-item">
-                                                <Form.Group className="form-group m-0">
-                                                    <span className="input-title">İşçinin adı</span>
-                                                    <Form.Label>
-                                                        <Form.Control placeholder="İşçinin adı daxil edin"
-                                                                      value={fullName}
-                                                                      onChange={(e => setFullName(e.target.value))}/>
-                                                    </Form.Label>
-                                                </Form.Group>
-                                            </div>
-                                            <div className="filter-item">
-                                                <Form.Group className="form-group m-0">
-                                                    <span className="input-title">İşçinin adı</span>
-                                                    <Form.Label>
-                                                        <Form.Control placeholder="İşçinin adı daxil edin"
-                                                                      value={fullName}
-                                                                      onChange={(e => setFullName(e.target.value))}/>
+                                                                      onChange={(e) => {
+                                                                          setFullName(e.target.value)
+                                                                         /* let departId = selectedDepartment !== null ? selectedDepartment.id : null;
+                                                                          let subDepartId = selectedSubDepartment !== null ? selectedSubDepartment.id : null;
+                                                                          let positionId = selectedPosition !== null ? selectedPosition.id : null;
+                                                                          let jobStatusId = selectedJobStatus !== null ? selectedJobStatus.id : null;
+                                                                          getEmployee(1, departId, subDepartId, positionId, jobStatusId, e.target.value)*/
+                                                                      }}/>
                                                     </Form.Label>
                                                 </Form.Group>
                                             </div>
                                         </div>
-                                        <Button className="btn-main" onClick={()=> getEmployee(1)}>
-                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M6.4316 11.9218C9.46375 11.9218 11.9218 9.46375 11.9218 6.4316C11.9218 3.39945 9.46375 0.941406 6.4316 0.941406C3.39945 0.941406 0.941406 3.39945 0.941406 6.4316C0.941406 9.46375 3.39945 11.9218 6.4316 11.9218Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                                <path d="M15.0574 15.0584L10.3516 10.3525" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                            </svg>
-                                            Axtar
+                                        <Button className="btn-main" onClick={() => resetFilter()}>
+                                            Təmizlə
                                         </Button>
                                     </div>
                                 </div>
@@ -387,8 +416,8 @@ function EmployeeSchedule() {
                                                 <span className="user-fullName">
                                                     {item.fullName}
                                                 </span>
-                                                  <span className={item.jobStatus !== null ? statuses[item.jobStatus].toLowerCase() : ''}>
-                                                    {item.jobStatus}
+                                                <span className={item.jobStatus.toLowerCase()}>
+                                                    {statuses[item.jobStatus]}
                                                  </span>
                                               </div>
                                               <div className="profession">

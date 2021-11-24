@@ -861,7 +861,7 @@ td {
     display: flex;
 }
 
-.block-item .block-user-name .in, .block-item .block-user-name .out,  .block-item .block-user-name .none {
+.block-item .block-user-name .in, .block-item .block-user-name .out,  .block-item .block-user-name .new {
     font-weight: 500;
     color: #2ED06A;
     margin-left: 10px;
@@ -871,7 +871,7 @@ td {
     color: #DC2419;
 }
 
-.block-item .block-user-name .none {
+.block-item .block-user-name .new {
     color: #3083dc;
 }
 
