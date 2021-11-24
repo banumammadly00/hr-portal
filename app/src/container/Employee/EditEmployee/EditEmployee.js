@@ -107,6 +107,7 @@ function CreateEmployee() {
     const [key, setKey] = useState('general');
     const [loadingIndicator, setLoadingIndicator] = useState(false);
     const [errors, setErrors] = useState({});
+    const token = localStorage.getItem('token');
 
     /*check&visibility*/
     const [showPassport, setShowPassport] = useState(false);
@@ -707,7 +708,7 @@ function CreateEmployee() {
                 let motherLandName = personalData.motherLand !== null ? personalData.motherLand.name : null;
                 (motherLandName !== 'Azərbaycan' && motherLandName !== null) ? setShowPermission(true) : setShowPermission(false);
                 personalData.photo !== null ?
-                    setPhoto(`https://hr-portal-api-v2.herokuapp.com/employees/image/${personalData.photo}`) : setPhoto(userImage)
+                    setPhoto(`https://hr-portal-api-v2.herokuapp.com/employees/image/${personalData.photo}?token=${token}`) : setPhoto(userImage)
                 /*setPhoto(`https://hr-portal-api.herokuapp.com/image/${data.photo}?token=${token}`) : setPhoto(userImage)*/
 
                 if (personalData.foreignPassport !== null) {
@@ -940,7 +941,7 @@ function CreateEmployee() {
                 timer: 1500
             });
             setShowButton(true);
-            if (uploadFile !== "") sendImage(res.data);
+            if (uploadFile !== "") sendImage();
             setErrors({})
         }).catch((error) => {
             setLoadingIndicator(false)
@@ -1271,15 +1272,16 @@ function CreateEmployee() {
     }
 
 
-    const sendImage = (id) => {
+    const sendImage = () => {
         const formData = new FormData();
-        formData.append("file", uploadFile);
-        formData.append('id', id)
+        formData.append("image", uploadFile);
+        //formData.append('id', id)
+        console.log(id)
         mainAxios({
             method: 'post',
-            url: '/image/save',
+            url: `/employees/${id}/image/`,
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             data: formData

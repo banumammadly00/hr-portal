@@ -159,7 +159,7 @@ function ViewEmployee() {
                 setCitizenControl(motherLandName);
                 motherLandName !== 'Azərbaycan' ? setShowPermission(true) : setShowPermission(false)
                 personalData.photo !== null ?
-                    setPhoto(`https://hr-portal-api.herokuapp.com/employees/image/${personalData.photo}?token=${token}`) : setPhoto(userImage)
+                    setPhoto(`https://hr-portal-api-v2.herokuapp.com/employees/image/${personalData.photo}?token=${token}`) : setPhoto(userImage)
 
                 if (personalData.foreignPassport !== null) {
                     setPassportNumber(personalData.foreignPassport.seriesNumber);

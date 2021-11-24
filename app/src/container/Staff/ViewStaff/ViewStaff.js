@@ -537,32 +537,42 @@ function ViewStaff() {
                                         </div>
                                         <div className="card">
                                             {
-                                                skillLanguageArr.map((item, index) =>
-                                                    <div className="card-in " key={index}>
-                                                        {
-                                                            index === 0 ? null :
-                                                                <div className="add-item-top">
-                                                                    <p className="m-0"> #{index + 1}. Digər </p>
+
+                                                skillLanguageArr.length > 0 ?
+                                                    skillLanguageArr.map((item, index) =>
+                                                        <div className="card-in " key={index}>
+                                                            {
+                                                                index === 0 ? null :
+                                                                    <div className="add-item-top">
+                                                                        <p className="m-0"> #{index + 1}. Digər </p>
+                                                                    </div>
+                                                            }
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    Dil biliyi
                                                                 </div>
-                                                        }
-                                                        <div className="card-item flex-start">
-                                                            <div className="card-title">
-                                                                Dil biliyi
+                                                                <div className="card-text">
+                                                                    {item.language !== null ? item.language.name : null}
+                                                                </div>
                                                             </div>
-                                                            <div className="card-text">
-                                                                {item.language !== null ? item.language.name : null}
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
+                                                                    Bilik səviyyəsi
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.level}
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                    )
+                                                    :
+                                                    <div className="card-in">
                                                         <div className="card-item flex-start">
                                                             <div className="card-title">
-                                                                Bilik səviyyəsi
-                                                            </div>
-                                                            <div className="card-text">
-                                                                {item.level}
+                                                                Məlumat yoxdur
                                                             </div>
                                                         </div>
                                                     </div>
-                                                )
                                             }
                                         </div>
                                     </div>
