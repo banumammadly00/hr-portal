@@ -1596,6 +1596,27 @@ td {
     margin-right: 20px;
 }
 
+.empty-data {
+    background: #FFFFFF;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+}
+
+.empty-in {
+    flex-direction: column;
+}
+
+.empty-in span {
+    font-size: 18px;
+    line-height: 23px;
+    color: #193651;
+    opacity: 0.7;
+    display: inline-block;
+}
+
 @media only screen and (min-width: 1600px){
     .export-block {
         width: 80%;

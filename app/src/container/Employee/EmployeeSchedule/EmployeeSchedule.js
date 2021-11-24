@@ -9,6 +9,7 @@ import Paginate from "../../../components/Pagination/Pagination";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import moment from "moment";
+import EmptyData from "../../../components/EmptyData/EmptyData";
 
 const statuses = {
     'IN': 'İşləyir',
@@ -387,7 +388,7 @@ function EmployeeSchedule() {
                         }
                         <div className="block-list">
                             {
-                                employee ?
+                                employee.length > 0 ?
                                     employee.map((item, index) =>
                                         <div className="block-item" key={index}>
                                             <div className="block-item-top">
@@ -437,7 +438,8 @@ function EmployeeSchedule() {
                                             </div>
                                         </div>
                                     )
-                                    : null
+                                    :
+                                    <EmptyData/>
                             }
                         </div>
                         <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
