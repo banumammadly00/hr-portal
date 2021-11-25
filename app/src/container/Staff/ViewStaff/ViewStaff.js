@@ -55,7 +55,7 @@ function ViewStaff() {
     const [workConditionPer, setWorkConditionPer] = useState('')
 
     /*Operation*/
-    const [document, setDocument] = useState([]);
+    const [operation, setOperation] = useState([])
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [recordSize, setRecordSize] = useState(15)
@@ -115,10 +115,10 @@ function ViewStaff() {
     }
 
 
-    const getDocument = (page) => {
+    const getOperation = (page) => {
         mainAxios({
             method: 'get',
-            url: '/position/document/' + id,
+            url: `/vacancies/${id}/operations`,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -129,14 +129,14 @@ function ViewStaff() {
             }
         }).then((res) => {
             setCurrentPage(page)
-            setDocument(res.data.data.data);
-            setTotalRecord(res.data.data.totalElement);
+            setOperation(res.data.content);
+            setTotalRecord(res.data.totalElement);
         });
     }
 
     useEffect(() => {
         getStaffInfo();
-        getDocument(1)
+        getOperation(1)
     }, []);
 
     return (
@@ -330,7 +330,7 @@ function ViewStaff() {
                                                                     Qanunvericilik aktları
                                                                 </div>
                                                                 <div className="card-text">
-                                                                    {item.legislation !== null ? item.legislationId.name : null}
+                                                                    {item.legislation !== null ? item.legislation.name : null}
                                                                 </div>
                                                             </div>
                                                             <div className="card-item flex-start">
@@ -442,14 +442,6 @@ function ViewStaff() {
                                                 </div>
                                                 <div className="card-text">
                                                     {gender}
-                                                </div>
-                                            </div>
-                                            <div className="card-item flex-start">
-                                                <div className="card-title">
-                                                    Struk b. tabe old. kurator rəh. ad, soyad, ata adı, vəzifə
-                                                </div>
-                                                <div className="card-text">
-                                                    {employeePosition}
                                                 </div>
                                             </div>
                                             {
@@ -649,8 +641,8 @@ function ViewStaff() {
                                     </thead>
                                     <tbody>
                                     {
-                                        document ?
-                                            document.map((item, index) =>
+                                        operation ?
+                                            operation.map((item, index) =>
                                                 <tr key={index}>
                                                     <td>{item.id}</td>
                                                     <td>{item.documentType}</td>
@@ -670,7 +662,7 @@ function ViewStaff() {
                                 </Table>
                             </div>
                             <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
-                                      click={(page) => getDocument(page)}/>
+                                      click={(page) => getOperation(page)}/>
                         </Tab>
                     </Tabs>
                 </Container>

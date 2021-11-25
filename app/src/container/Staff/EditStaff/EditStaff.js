@@ -47,8 +47,8 @@ function EditStaff() {
     ];
 
     const workConditionOptions = [
-        {value: 'HARMLESS', label: 'Zərərli'},
-        {value: 'HARMFUL', label: 'Zərərsiz'}
+        {value: 'HARMFUL', label: 'Zərərli'},
+        {value: 'HARMLESS', label: 'Zərərsiz'}
     ];
 
     const WorkModeOptions = [
@@ -129,6 +129,8 @@ function EditStaff() {
     const [skillLanguageArr, setSkillLanguageArr] = useState([{languageId: null, level: null}]);
 
     const [selectedEmployeePosition, setSelectedEmployeePosition] = useState(null);
+
+    const [operation, setOperation] = useState([])
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [recordSize, setRecordSize] = useState(15)
@@ -431,9 +433,10 @@ function EditStaff() {
 
                 let gradeData = data.gradeRange
                 if (gradeData !== null) {
-                    setSelectedMaxGrade({value: gradeData.max, label: gradeData.max});
-                    setSelectedMinGrade({value: gradeData.min, label: gradeData.min});
+                    setSelectedMaxGrade({id: gradeData.max, grade: gradeData.max});
+                    setSelectedMinGrade({id: gradeData.min, grade: gradeData.min});
                 }
+                data.workCondition !== 'Zərərsiz' ? setCondition(true) : setCondition(false);
                 setPositionFunctionArr(data.functionalities);
                 setSelectedInstitution(data.workInstitution);
                 setWorkConditionPer(data.conditionalAdditionPercentage);
@@ -567,31 +570,32 @@ function EditStaff() {
         });
     }
 
-
     const sendData = () => {
-        setLoadingIndicator(true);
+        //setLoadingIndicator(true);
         let checkLegalArr = 0
+
         for(let i of skillLegalArr) {
             if(skillLegalArr.length === 1 && i.legislationId === null) {
                 checkLegalArr = 1
             }
         }
-        for (let i of skillLegalArr) {
-            if (i.legislationId != null) {
-                i.legislationId = i.legislationId.id
-            } else {
-                i.legislationId = null
+
+        let sArr = [];
+        for (let i in skillLegalArr) {
+            sArr.push(skillLegalArr[i]);
+            if (sArr[i].legislationId != null) {
+                sArr[i].legislationId = sArr[i].legislationId.id
             }
 
-            if (i.level != null) {
-                i.level = i.level.value
-            } else {
-                i.level = null
+            if (sArr[i].level != null) {
+                sArr[i].level = sArr[i].level.value
             }
+
         }
+
         let data = {
             "generalInformation": {
-                "conditionalAdditionPercentage" : workConditionPer !== '' ? workConditionPer : null,
+                "conditionalAdditionPercentage": workConditionPer !== '' ? workConditionPer : null,
                 "count": parseFloat(vacancyCount),
                 "curatorId": selectedCurator !== null ? selectedCurator.id : null,
                 "departmentId": selectedDepartment !== null ? selectedDepartment.id : null,
@@ -603,8 +607,8 @@ function EditStaff() {
                 "functionalities": positionFunctionArr,
                 "gender": selectedGender !== null ? selectedGender.value : null,
                 "gradeRange": {
-                    "max": selectedMinGrade !== null ? selectedMinGrade.id : null,
-                    "min": selectedMaxGrade !== null ? selectedMaxGrade.id : null
+                    "max": selectedMinGrade !== null ? selectedMinGrade.grade : null,
+                    "min": selectedMaxGrade !== null ? selectedMaxGrade.grade : null
                 },
                 "healthy": selectedHealth !== null ? selectedHealth.value : null,
                 "height": parseFloat(height),
@@ -612,7 +616,7 @@ function EditStaff() {
                 "militaryRequire": selectedMilitaryAchieve !== null ? selectedMilitaryAchieve.value : null,
                 "positionCategory": selectedVacancyCategory !== null ? selectedVacancyCategory.value : null,
                 "positionId": selectedVacancy !== null ? selectedVacancy.id : null,
-                "legislationStatementSet": checkLegalArr ? [] : skillLegalArr,
+                "legislationStatementSet": checkLegalArr ? [] : sArr,
                 "specialityId": selectedSpeciality !== null ? selectedSpeciality.id : null,
                 "subDepartmentId": selectedSubDepartment !== null ? selectedSubDepartment.id : null,
                 "workCondition": selectedWorkCondition !== null ? selectedWorkCondition.value : null,
@@ -737,24 +741,24 @@ function EditStaff() {
         });
     }
 
-    /*    const getDocument = (page) => {
-            mainAxios({
-                method: 'get',
-                url: '/position/document/' + id,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                params: {
-                    page: page - 1,
-                    size: recordSize
-                }
-            }).then((res) => {
-                setCurrentPage(page)
-                setDocument(res.data.data.data);
-                setTotalRecord(res.data.data.totalElement);
-            });
-        }*/
+    const getOperation = (page) => {
+        mainAxios({
+            method: 'get',
+            url: `/vacancies/${id}/operations`,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            params: {
+                page: page - 1,
+                size: recordSize
+            }
+        }).then((res) => {
+            setCurrentPage(page)
+            setOperation(res.data.content);
+            setTotalRecord(res.data.totalElement);
+        });
+    }
 
     useEffect(() => {
         getInstitution();
@@ -768,7 +772,8 @@ function EditStaff() {
         getComputerSkill();
         getLegislationSkill();
         getLanguageSkill();
-        getPositionInfo()
+        getPositionInfo();
+        getOperation(1);
     }, []);
 
     return (
@@ -813,7 +818,7 @@ function EditStaff() {
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors['generalInformation.institutionId'] !== '' ?
+                                                                errors.hasOwnProperty('generalInformation.institutionI') && errors['generalInformation.institutionId'] !== '' ?
                                                                     <span
                                                                         className="text-validation">{errors['generalInformation.institutionId']}</span>
                                                                     : null
@@ -929,7 +934,7 @@ function EditStaff() {
                                                             onChange={(val) => {
                                                                 let value = val.value;
                                                                 setSelectedWorkCondition(val);
-                                                                value !== 'HARMLESS' ?  setCondition(false) : setCondition(true)
+                                                                value !== 'HARMLESS' ? setCondition(true) : setCondition(false)
                                                             }}
                                                             options={workConditionOptions}
                                                             isSearchable={workConditionOptions ? workConditionOptions.length > 5 ? true : false : false}
@@ -995,7 +1000,8 @@ function EditStaff() {
                                                     showCondition ?
                                                         <Col xs={12}>
                                                             <Form.Group className="form-group">
-                                                                <span className="input-title">Əmək şəraiti dərəcəsi</span>
+                                                                <span
+                                                                    className="input-title">Əmək şəraiti dərəcəsi</span>
                                                                 <Form.Control
                                                                     value={workConditionPer || ''}
                                                                     type="number"
@@ -1143,8 +1149,7 @@ function EditStaff() {
                                                                     <Row>
                                                                         <Col xs={6}>
                                                                             <Form.Group className="form-group">
-                                                                    <span
-                                                                        className="input-title">Qanunvericilik aktları</span>
+                                                                                <span className="input-title">Qanunvericilik aktları</span>
                                                                                 <Select
                                                                                     value={item.legislationId}
                                                                                     onChange={(val) => {
@@ -1156,14 +1161,15 @@ function EditStaff() {
                                                                                     options={legislationSkill}
                                                                                     getOptionLabel={(option) => (option.name)}
                                                                                     styles={customStyles}/>
-                                                                                <div className="validation-block flex-start">
+                                                                             {/*   <div className="validation-block flex-start">
                                                                                     {
                                                                                         errors['generalInformation.legislationStatementSet[].legislationId'] !== '' ?
-                                                                                            <span
-                                                                                                className="text-validation">{errors['generalInformation.legislationStatementSet[].legislationId']}</span>
+                                                                                            <span className="text-validation">
+                                                                                                {errors['generalInformation.legislationStatementSet[].legislationId']}
+                                                                                            </span>
                                                                                             : null
                                                                                     }
-                                                                                </div>
+                                                                                </div>*/}
                                                                             </Form.Group>
                                                                         </Col>
                                                                         <Col xs={6}>
@@ -1310,6 +1316,7 @@ function EditStaff() {
                                                                 <span className="input-title">Boy tələbi</span>
                                                                 <Form.Label>
                                                                     <Form.Control type="number"
+                                                                                  value={height || ''}
                                                                                   placeholder="Boy tələbini daxil edin"
                                                                                   onChange={(e) => setHeight(e.target.value)}/>
                                                                 </Form.Label>
@@ -1414,7 +1421,7 @@ function EditStaff() {
                                     </div>
                                     <div className="flex-vertical-center">
                                         <Button className="btn-effect" onClick={() => sendData()}>
-                                            Davam et
+                                            Yadda saxla
                                         </Button>
                                     </div>
                                 </Form>
@@ -1663,7 +1670,8 @@ function EditStaff() {
                                                             <Row>
                                                                 <Col xs={6}>
                                                                     <Form.Group className="form-group">
-                                                                        <span className="input-title">Kompetensiyalar</span>
+                                                                        <span
+                                                                            className="input-title">Kompetensiyalar</span>
                                                                         <Select
                                                                             placeholder="Kompetensiyaları seçin"
                                                                             value={item.requiredSkillId}
@@ -1730,7 +1738,6 @@ function EditStaff() {
                                 </Form>
                             </div>
                         </Tab>
-                        {/*
                         <Tab eventKey="operation" title="Əmrlər">
                             <div className="block">
                                 <Table responsive="sm" hover>
@@ -1744,8 +1751,8 @@ function EditStaff() {
                                     </thead>
                                     <tbody>
                                     {
-                                        document ?
-                                            document.map((item, index) =>
+                                        operation ?
+                                            operation.map((item, index) =>
                                                 <tr key={index}>
                                                     <td>{item.id}</td>
                                                     <td>{item.documentType}</td>
@@ -1765,9 +1772,8 @@ function EditStaff() {
                                 </Table>
                             </div>
                             <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
-                                      click={(page) => getDocument(page)}/>
+                                      click={(page) => getOperation(page)}/>
                         </Tab>
-*/}
                     </Tabs>
                 </Container>
             </div>

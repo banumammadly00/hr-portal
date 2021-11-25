@@ -37,8 +37,8 @@ function CreateStaff() {
     ];
 
     const workConditionOptions = [
-        {value: 'HARMLESS', label: 'Zərərli'},
-        {value: 'HARMFUL', label: 'Zərərsiz'}
+        {value: 'HARMFUL', label: 'Zərərli'},
+        {value: 'HARMLESS', label: 'Zərərsiz'}
     ];
 
     const WorkModeOptions = [
@@ -411,7 +411,7 @@ function CreateStaff() {
         }
         let data = {
             "generalInformation": {
-                "conditionalAdditionPercentage" : workConditionPer !== '' ? workConditionPer : null,
+                "conditionalAdditionPercentage" : workConditionPer !== '' ? parseFloat(workConditionPer) : null,
                 "count": parseFloat(vacancyCount),
                 "curatorId": selectedCurator !== null ? selectedCurator.id : null,
                 "departmentId": selectedDepartment !== null ? selectedDepartment.id : null,
@@ -423,8 +423,8 @@ function CreateStaff() {
                 "functionalities": positionFunctionArr,
                 "gender": selectedGender !== null ? selectedGender.value : null,
                 "gradeRange": {
-                    "max": selectedMinGrade !== null ? selectedMinGrade.value : null,
-                    "min": selectedMaxGrade !== null ? selectedMaxGrade.value : null
+                    "min": selectedMinGrade !== null ? selectedMinGrade.grade : null,
+                    "max": selectedMaxGrade !== null ? selectedMaxGrade.grade : null
                 },
                 "healthy": selectedHealth !== null ? selectedHealth.value : null,
                 "height": parseFloat(height),
@@ -505,8 +505,8 @@ function CreateStaff() {
                 "functionalities": positionFunctionArr,
                 "gender": selectedGender !== null ? selectedGender.value : null,
                 "gradeRange": {
-                    "max": selectedMinGrade !== null ? selectedMinGrade.id : null,
-                    "min": selectedMaxGrade !== null ? selectedMaxGrade.id : null
+                    "min": selectedMinGrade !== null ? selectedMinGrade.grade : null,
+                    "max": selectedMaxGrade !== null ? selectedMaxGrade.grade : null
                 },
                 "healthy": selectedHealth !== null ? selectedHealth.value : null,
                 "height": parseFloat(height),
@@ -790,7 +790,7 @@ function CreateStaff() {
                                                             onChange={(val) => {
                                                                 let value = val.value;
                                                                 setSelectedWorkCondition(val);
-                                                                value !== 'HARMLESS' ?  setCondition(false) : setCondition(true)
+                                                                value !== 'HARMLESS' ?  setCondition(true) : setCondition(false)
                                                             }}
                                                             options={workConditionOptions}
                                                             isSearchable={workConditionOptions ? workConditionOptions.length > 5 ? true : false : false}

@@ -277,7 +277,7 @@ function CreateEmployee() {
 
 
     /*-------------Operation-------------*/
-    const [document, setDocument] = useState([]);
+    const [operation, setOperation] = useState([])
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [recordSize, setRecordSize] = useState(15)
@@ -1288,10 +1288,10 @@ function CreateEmployee() {
     }
 
 
-    const getDocument = (page) => {
+    const getOperation = (page) => {
         mainAxios({
             method: 'get',
-            url: '/employee/document/' + id,
+            url: `/employees/${id}/operations`,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -1300,11 +1300,10 @@ function CreateEmployee() {
                 page: page - 1,
                 size: recordSize
             }
-
         }).then((res) => {
             setCurrentPage(page)
-            setDocument(res.data.data.data);
-            setTotalRecord(res.data.data.totalElement);
+            setOperation(res.data.content);
+            setTotalRecord(res.data.totalElement);
         });
     }
 
@@ -1318,7 +1317,7 @@ function CreateEmployee() {
         getRewardOrganization();
         getCitizenControl();
         getCertificate();
-        //getDocument(1)
+        getOperation(1)
     }, []);
 
     return (
@@ -4332,7 +4331,6 @@ function CreateEmployee() {
                                 </Form>
                             </div>
                         </Tab>
-
                         <Tab eventKey="operation" title="Əmrlər">
                             <div className="block">
                                 <Table responsive="sm" hover>
@@ -4346,8 +4344,8 @@ function CreateEmployee() {
                                     </thead>
                                     <tbody>
                                     {
-                                        document ?
-                                            document.map((item, index) =>
+                                        operation ?
+                                            operation.map((item, index) =>
                                                 <tr key={index}>
                                                     <td>{item.id}</td>
                                                     <td>{item.documentType}</td>
@@ -4367,7 +4365,7 @@ function CreateEmployee() {
                                 </Table>
                             </div>
                             <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
-                                      click={(page) => getDocument(page)}/>
+                                      click={(page) => getOperation(page)}/>
                         </Tab>
                     </Tabs>
                 </Container>
