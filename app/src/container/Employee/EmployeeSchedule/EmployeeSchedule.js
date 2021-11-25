@@ -10,6 +10,7 @@ import Select from "react-select";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import EmptyData from "../../../components/EmptyData/EmptyData";
+import Swal from "sweetalert2";
 
 const statuses = {
     'IN': 'İşləyir',
@@ -150,6 +151,8 @@ function EmployeeSchedule() {
         }).then((res) => {
             setDepartment(res.data);
             //console.log(departmentArr)
+        }).catch((error) => {
+            setDepartment([])
         });
     }
 
@@ -175,6 +178,8 @@ function EmployeeSchedule() {
                 },
             }).then((res) => {
                 setSubDepartment(res.data)
+            }).catch((error) => {
+               setSubDepartment([])
             });
         }
     }
@@ -189,6 +194,8 @@ function EmployeeSchedule() {
             },
         }).then((res) => {
             setPosition(res.data)
+        }).catch((error) => {
+            setPosition([])
         });
     }
 
@@ -210,10 +217,12 @@ function EmployeeSchedule() {
                 fullName: name,
             }
         }).then((res) => {
+            setEmployee(res.data.content)
             setCurrentPage(page);
-            setEmployee(res.data.content);
             setTotalRecord(res.data.totalElements);
             setEmptyData(true)
+        }).catch((error) => {
+            setEmployee([])
         });
     }
 
@@ -433,8 +442,8 @@ function EmployeeSchedule() {
                                                  </span>
                                                 </div>
                                                 <div className="profession">
-                                                    <p className="m-0">{item.department}</p>
-                                                    <p className="m-0">{item.position}</p>
+                                                    <p className="m-0">{item.department !== null ? item.department.name : null}</p>
+                                                    <p className="m-0">{item.position !== null ? item.position.name : null}</p>
                                                 </div>
                                             </div>
                                         </div>

@@ -5,6 +5,7 @@ import {Link, useHistory} from 'react-router-dom';
 import {mainAxios} from "../../components/Axios/axios";
 import Spinner from 'react-bootstrap/Spinner'
 import DatePicker from "react-datepicker";
+import Swal from "sweetalert2";
 
 
 function Login() {
@@ -53,10 +54,18 @@ function Login() {
             const {response} = error;
             if (response) {
                 setErrors(error.response.data.validations);
-
-               /* if (error.response.data.status === 400) {
-                    setErrors(error.response.data.validations);
-                }*/
+                if (response.status === 400) {
+                    if(response.message !== '') {
+                        Swal.fire({
+                            icon: 'error',
+                            text: error.response.data.message,
+                            cancelButtonText: 'Bağla',
+                            showCancelButton: true,
+                            showConfirmButton: false,
+                        })
+                        setErrors({})
+                    }
+                }
             } else {
                 setErrors({networkError: "Şəbəkə ilə bağlı problem var"})
             }
@@ -97,9 +106,11 @@ function Login() {
                                                 </Form.Label>
                                                 <div className="validation-block flex-start">
                                                     {
-                                                        errors.username !== '' ?
-                                                            <span className="text-validation">{errors.username}</span>
-                                                            : null
+                                                       errors ?
+                                                           errors.username !== '' ?
+                                                               <span className="text-validation">{errors.username}</span>
+                                                               : null
+                                                           : null
                                                     }
                                                 </div>
                                             </Form.Group>
@@ -135,8 +146,10 @@ function Login() {
                                                 </Form.Label>
                                                 <div className="validation-block flex-start">
                                                     {
+                                                        errors ?
                                                         errors.password !== '' ?
                                                             <span className="text-validation">{errors.password}</span>
+                                                            : null
                                                             : null
                                                     }
                                                 </div>
