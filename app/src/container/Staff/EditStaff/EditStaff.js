@@ -573,22 +573,21 @@ function EditStaff() {
     const sendData = () => {
         //setLoadingIndicator(true);
         let checkLegalArr = 0
-
         for(let i of skillLegalArr) {
             if(skillLegalArr.length === 1 && i.legislationId === null) {
                 checkLegalArr = 1
             }
         }
 
-        let sArr = [];
+        let legalArr = [];
         for (let i in skillLegalArr) {
-            sArr.push(skillLegalArr[i]);
-            if (sArr[i].legislationId != null) {
-                sArr[i].legislationId = sArr[i].legislationId.id
+            legalArr.push(skillLegalArr[i]);
+            if (legalArr[i].legislationId != null) {
+                legalArr[i].legislationId = legalArr[i].legislationId.id
             }
 
-            if (sArr[i].level != null) {
-                sArr[i].level = sArr[i].level.value
+            if (legalArr[i].level != null) {
+                legalArr[i].level = legalArr[i].level.value
             }
 
         }
@@ -616,7 +615,7 @@ function EditStaff() {
                 "militaryRequire": selectedMilitaryAchieve !== null ? selectedMilitaryAchieve.value : null,
                 "positionCategory": selectedVacancyCategory !== null ? selectedVacancyCategory.value : null,
                 "positionId": selectedVacancy !== null ? selectedVacancy.id : null,
-                "legislationStatementSet": checkLegalArr ? [] : sArr,
+                "legislationStatementSet": checkLegalArr ? [] : legalArr,
                 "specialityId": selectedSpeciality !== null ? selectedSpeciality.id : null,
                 "subDepartmentId": selectedSubDepartment !== null ? selectedSubDepartment.id : null,
                 "workCondition": selectedWorkCondition !== null ? selectedWorkCondition.value : null,
@@ -636,16 +635,16 @@ function EditStaff() {
             },
             data: data
         }).then((res) => {
-            setLoadingIndicator(false);
+            //setLoadingIndicator(false);
             Swal.fire({
                 icon: 'success',
                 text: 'Məlumatlar qeyd edildi!',
                 showConfirmButton: false,
                 timer: 1500
             });
-            setErrors({})
+            //setErrors({})
         }).catch((error) => {
-            setLoadingIndicator(false);
+            //setLoadingIndicator(false);
             Swal.fire({
                 icon: 'error',
                 text: 'Məlumatlar qeyd edilmədi!',
@@ -653,63 +652,71 @@ function EditStaff() {
                 showCancelButton: true,
                 showConfirmButton: false,
             })
-            if (error.response.data.validations) {
+           /* if (error.response.data.validations) {
                 setErrors(error.response.data.validations)
             } else {
                 setErrors({})
-            }
+            }*/
         });
     }
 
     const sendDataKnowledge = () => {
-        setLoadingIndicator(true);
+        //setLoadingIndicator(true);
+        let checkProgramArr = 0
+
+        for(let i of skillProgramArr) {
+            if(skillProgramArr.length === 1 && i.computerId === null) {
+                checkProgramArr = 1
+            }
+        }
+        let checkLanguageArr = 0
+
+        for(let i of skillLanguageArr) {
+            if(skillLanguageArr.length === 1 && i.languageId === null) {
+                checkLanguageArr = 1
+            }
+        }
+        let checkSkillArr = 0
+
+        for(let i of skillArr) {
+            if(skillArr.length === 1 && i.requiredSkillId === null) {
+                checkSkillArr = 1
+            }
+        }
         for (let i of skillProgramArr) {
             if (i.computerId != null) {
                 i.computerId = i.computerId.id
-            } else {
-                i.computerId = null
             }
-
             if (i.level != null) {
                 i.level = i.level.value
-            } else {
-                i.level = null
             }
         }
 
         for (let i of skillLanguageArr) {
             if (i.languageId != null) {
                 i.languageId = i.languageId.id
-            } else {
-                i.languageId = null
             }
 
             if (i.level != null) {
                 i.level = i.level.value
-            } else {
-                i.level = null
             }
         }
 
         for (let i of skillArr) {
             if (i.requiredSkillId != null) {
                 i.requiredSkillId = i.requiredSkillId.id
-            } else {
-                i.requiredSkillId = null
             }
 
             if (i.level != null) {
                 i.level = i.level.value
-            } else {
-                i.level = null
             }
         }
 
         let data = {
             "specialityKnowledge": {
-                "requiredKnowledgeSet": skillArr,
-                "computerKnowledgeSet": skillProgramArr,
-                "languageKnowledgeSet": skillLanguageArr,
+                "computerKnowledgeSet": checkProgramArr ? [] : skillProgramArr,
+                "languageKnowledgeSet": checkLanguageArr ? [] : skillLanguageArr,
+                "requiredKnowledgeSet": checkSkillArr ? [] : skillArr,
             }
         }
 
@@ -722,7 +729,7 @@ function EditStaff() {
             },
             data: data
         }).then((res) => {
-            setLoadingIndicator(false);
+            //setLoadingIndicator(false);
             Swal.fire({
                 icon: 'success',
                 text: 'Məlumatlar qeyd edildi!',
@@ -730,7 +737,7 @@ function EditStaff() {
                 timer: 1500
             });
         }).catch((error) => {
-            setLoadingIndicator(false);
+            //setLoadingIndicator(false);
             Swal.fire({
                 icon: 'error',
                 text: 'Məlumatlar qeyd edilmədi!',
@@ -1483,14 +1490,14 @@ function EditStaff() {
                                                                             options={computerSkill}
                                                                             getOptionLabel={(option) => (option.name)}
                                                                             styles={customStyles}/>
-                                                                        <div className="validation-block flex-start">
+                                                                       {/* <div className="validation-block flex-start">
                                                                             {
                                                                                 errors['specialityKnowledge.computerKnowledgeSet[].computerId'] !== '' ?
                                                                                     <span
                                                                                         className="text-validation">{errors['generalInformation.computerKnowledgeSet[].computerId']}</span>
                                                                                     : null
                                                                             }
-                                                                        </div>
+                                                                        </div>*/}
                                                                     </Form.Group>
                                                                 </Col>
                                                                 <Col xs={6}>
@@ -1583,14 +1590,14 @@ function EditStaff() {
                                                                             options={languageSkill}
                                                                             getOptionLabel={(option) => (option.name)}
                                                                             styles={customStyles}/>
-                                                                        <div className="validation-block flex-start">
+                                                                      {/*  <div className="validation-block flex-start">
                                                                             {
                                                                                 errors['specialityKnowledge.languageKnowledgeSet[].languageId'] !== '' ?
                                                                                     <span
                                                                                         className="text-validation">{errors['generalInformation.languageKnowledgeSet[].languageId']}</span>
                                                                                     : null
                                                                             }
-                                                                        </div>
+                                                                        </div>*/}
                                                                     </Form.Group>
                                                                 </Col>
                                                                 <Col xs={6}>
@@ -1684,14 +1691,14 @@ function EditStaff() {
                                                                             styles={customStyles}
                                                                             getOptionLabel={(option) => (option.name)}
                                                                         />
-                                                                        <div className="validation-block flex-start">
+                                                                    {/*    <div className="validation-block flex-start">
                                                                             {
                                                                                 errors['specialityKnowledge.requiredKnowledgeSet[].requiredSkillId'] !== '' ?
                                                                                     <span
                                                                                         className="text-validation">{errors['specialityKnowledge.requiredKnowledgeSet[].requiredSkillId']}</span>
                                                                                     : null
                                                                             }
-                                                                        </div>
+                                                                        </div>*/}
                                                                     </Form.Group>
                                                                 </Col>
                                                                 <Col xs={6}>
