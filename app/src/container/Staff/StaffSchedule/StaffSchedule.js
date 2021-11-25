@@ -341,7 +341,7 @@ function StaffSchedule() {
                         </Table>
                     </div>
                     <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
-                              click={(page) => getVacancy(page)}/>
+                              click={(page, depart, subDepart, position) => getVacancy(page, depart, subDepart, position)}/>
                 </Container>
             </div>
         </Aux>

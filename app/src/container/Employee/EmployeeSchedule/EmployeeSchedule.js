@@ -370,7 +370,7 @@ function EmployeeSchedule() {
                                                     />
                                                 </Form.Group>
                                             </div>
-                                            <div className="filter-item">
+                                          {/*  <div className="filter-item">
                                                 <Form.Group className="form-group m-0">
                                                     <span className="input-title">İşçinin adı</span>
                                                     <Form.Label>
@@ -387,7 +387,7 @@ function EmployeeSchedule() {
                                                                       }}/>
                                                     </Form.Label>
                                                 </Form.Group>
-                                            </div>
+                                            </div>*/}
                                         </div>
                                         <Button className="btn-border" onClick={() => resetFilter()}>
                                             Təmizlə

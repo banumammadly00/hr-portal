@@ -571,7 +571,7 @@ function EditStaff() {
     }
 
     const sendData = () => {
-        //setLoadingIndicator(true);
+        setLoadingIndicator(true);
         let checkLegalArr = 0
         for(let i of skillLegalArr) {
             if(skillLegalArr.length === 1 && i.legislationId === null) {
@@ -635,16 +635,17 @@ function EditStaff() {
             },
             data: data
         }).then((res) => {
-            //setLoadingIndicator(false);
+            setLoadingIndicator(false);
+            setErrors({});
             Swal.fire({
                 icon: 'success',
                 text: 'Məlumatlar qeyd edildi!',
                 showConfirmButton: false,
                 timer: 1500
             });
-            //setErrors({})
+            getPositionInfo();
         }).catch((error) => {
-            //setLoadingIndicator(false);
+            setLoadingIndicator(false);
             Swal.fire({
                 icon: 'error',
                 text: 'Məlumatlar qeyd edilmədi!',
@@ -652,16 +653,17 @@ function EditStaff() {
                 showCancelButton: true,
                 showConfirmButton: false,
             })
-           /* if (error.response.data.validations) {
+            if (error.response.data.validations) {
                 setErrors(error.response.data.validations)
             } else {
                 setErrors({})
-            }*/
+            }
+            getPositionInfo();
         });
     }
 
     const sendDataKnowledge = () => {
-        //setLoadingIndicator(true);
+        setLoadingIndicator(true);
         let checkProgramArr = 0
 
         for(let i of skillProgramArr) {
@@ -729,22 +731,25 @@ function EditStaff() {
             },
             data: data
         }).then((res) => {
-            //setLoadingIndicator(false);
+            setLoadingIndicator(false);
+            setErrors({});
             Swal.fire({
                 icon: 'success',
                 text: 'Məlumatlar qeyd edildi!',
                 showConfirmButton: false,
                 timer: 1500
             });
+            getPositionInfo();
         }).catch((error) => {
-            //setLoadingIndicator(false);
+            setLoadingIndicator(false);
             Swal.fire({
                 icon: 'error',
                 text: 'Məlumatlar qeyd edilmədi!',
                 cancelButtonText: 'Bağla',
                 showCancelButton: true,
                 showConfirmButton: false,
-            })
+            });
+            getPositionInfo();
         });
     }
 
@@ -1158,7 +1163,7 @@ function EditStaff() {
                                                                             <Form.Group className="form-group">
                                                                                 <span className="input-title">Qanunvericilik aktları</span>
                                                                                 <Select
-                                                                                    value={item.legislationId}
+                                                                                   value={item.legislationId}
                                                                                     onChange={(val) => {
                                                                                         skillLegalArr[index].legislationId = val;
                                                                                         setSkillLegalArr([...skillLegalArr], skillLegalArr);

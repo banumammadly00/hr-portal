@@ -1140,6 +1140,7 @@ function CreateEmployee() {
                 timer: 1500
             });
             setErrors({})
+            getEmployeeInfo()
         }).catch((error) => {
             setLoadingIndicator(false)
             Swal.fire({
@@ -1154,6 +1155,7 @@ function CreateEmployee() {
             } else {
                 setErrors({})
             }
+            getEmployeeInfo()
         });
     }
 
@@ -1213,6 +1215,7 @@ function CreateEmployee() {
                 timer: 1500
             });
             setErrors({})
+            getEmployeeInfo()
         }).catch((error) => {
             setLoadingIndicator(false)
             Swal.fire({
@@ -1227,6 +1230,7 @@ function CreateEmployee() {
             } else {
                 setErrors({})
             }
+            getEmployeeInfo()
         });
     }
 
