@@ -888,7 +888,7 @@ function CreateOperation() {
                                                         }}
                                                         isSearchable={vacancy ? vacancy.length > 5 ? true : false : false}
                                                         options={vacancy}
-                                                        getOptionLabel={(option) => `${option.id}. ${option.name}`}
+                                                        getOptionLabel={(option) => `${option.id}. ${option.position} - ${option.department}`}
                                                         styles={customStyles}
                                                     />
                                                 </Form.Group>
