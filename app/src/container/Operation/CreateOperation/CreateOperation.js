@@ -361,6 +361,8 @@ function CreateOperation() {
             "jobTime": selectedJobTime !== null ? selectedJobTime.value : null
         }
 
+        console.log(tab)
+
         const data = {
             "header": {
                 "department": "string",
@@ -368,7 +370,7 @@ function CreateOperation() {
                 "main": mainOfOrder !== "" ? mainOfOrder : null,
                 "note": "string"
             },
-            "hire": tab === "7" ? hireData : null,
+            "hire": tab == "7" ? hireData : null,
             "type": operationType !== '' ? operationType : null,
             "vacancyId": vacancyId ? vacancyId : null,
             "employeeId": employeeId ? employeeId : null

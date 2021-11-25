@@ -16,7 +16,7 @@ const statuses = {
 function ViewStaff() {
     const {params: {id}} = useRouteMatch('/staff/view/:id');
 
-    const [key, setKey] = useState('home');
+    const [key, setKey] = useState('general');
 
     /*General*/
     const [institution, setInstitution] = useState([]);
@@ -52,6 +52,7 @@ function ViewStaff() {
     const [gender, setGender] = useState('');
     const [militaryAchieve, setMilitaryAchieve] = useState('');
     const [health, setHealth] = useState('');
+    const [workConditionPer, setWorkConditionPer] = useState('')
 
     /*Operation*/
     const [document, setDocument] = useState([]);
@@ -91,6 +92,7 @@ function ViewStaff() {
             setSkillLegalArr(data.legislationStatementSet)
             setVacancyCategory(data.positionCategory);
             setWorkMode(data.workMode);
+            setWorkConditionPer(data.conditionalAdditionPercentage)
             setWorkAddress(data.workPlace);
             setEducationSpeciality(data.speciality !== null ? data.speciality.name : null);
             setGender(data.gender);
@@ -153,7 +155,7 @@ function ViewStaff() {
                         </div>
                     </div>
                     <Tabs activeKey={key} onSelect={(k) => setKey(k)}>
-                        <Tab eventKey="home" title="Ümumi məlumatlar">
+                        <Tab eventKey="general" title="Ümumi məlumatlar">
                             <div className="block">
                                 <div className="flex view-top">
                                     <div className="staff-id">
@@ -208,7 +210,7 @@ function ViewStaff() {
                                             </div>
                                             <div className="card-item flex-start">
                                                 <div className="card-title">
-                                                    Tabe struktur bölmənin adı *
+                                                    Tabe struktur bölmənin adı
                                                 </div>
                                                 <div className="card-text">
                                                     {obeyDepartment}
@@ -232,7 +234,7 @@ function ViewStaff() {
                                             </div>
                                             <div className="card-item flex-start">
                                                 <div className="card-title">
-                                                    Min dərəcə
+                                                    Min dərəcə *
                                                 </div>
                                                 <div className="card-text">
                                                     {minGrade}
@@ -240,7 +242,7 @@ function ViewStaff() {
                                             </div>
                                             <div className="card-item flex-start">
                                                 <div className="card-title">
-                                                    Max dərəcə
+                                                    Max dərəcə *
                                                 </div>
                                                 <div className="card-text">
                                                     {maxGrade}
@@ -254,6 +256,18 @@ function ViewStaff() {
                                                     {workCondition}
                                                 </div>
                                             </div>
+                                            {
+                                                workCondition == 'Zərərli' ?
+                                                    <div className="card-item flex-start">
+                                                        <div className="card-title">
+                                                            Əmək şəraiti dərəcəsi
+                                                        </div>
+                                                        <div className="card-text">
+                                                            {workConditionPer}
+                                                        </div>
+                                                    </div>
+                                                    : null
+                                            }
                                             <div className="card-item flex-start">
                                                 <div className="card-title">
                                                     Ştat vahidinin iş rejimi *
@@ -272,7 +286,7 @@ function ViewStaff() {
                                             </div>
                                             <div className="card-item flex-start">
                                                 <div className="card-title">
-                                                    İş ailəsi *
+                                                    İş ailəsi
                                                 </div>
                                                 <div className="card-text">
                                                     {familyJob}

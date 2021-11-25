@@ -61,28 +61,7 @@ function CreateStaff() {
         {value: 'WORK_PLACE_5', label: 'Ələt'},
     ]
 
-    const gradeOptions = [
-        {value: 1, label: '1'},
-        {value: 2, label: '2'},
-        {value: 3, label: '3'},
-        {value: 4, label: '4'},
-        {value: 5, label: '5'},
-        {value: 6, label: '6'},
-        {value: 7, label: '7'},
-        {value: 8, label: '8'},
-        {value: 9, label: '9'},
-        {value: 10, label: '10'},
-        {value: 11, label: '11'},
-        {value: 12, label: '12'},
-        {value: 13, label: '13'},
-        {value: 14, label: '14'},
-        {value: 15, label: '15'},
-        {value: 16, label: '16'},
-        {value: 17, label: '17'},
-        {value: 18, label: '18'},
-        {value: 19, label: '19'},
-    ]
-
+    /*check&visibility*/
     const [key, setKey] = useState('general');
     const [dataVal, setDataVal] = useState('');
     const [loadingIndicator, setLoadingIndicator] = useState(false);
@@ -126,14 +105,17 @@ function CreateStaff() {
     const [computerSkill, setComputerSkill] = useState([]);
     const [languageSkill, setLanguageSkill] = useState([]);
     const [legislationSkill, setLegislationSkill] = useState([]);
+    const [grade, setGrade] = useState([])
     /*input*/
     const [obeyDepartment, setObeyDepartment] = useState('');
     const [vacancyCount, setVacancyCount] = useState('');
     const [areaExperience, setAreaExperience] = useState('');
     const [leaderExperience, setLeaderExperience] = useState('');
     const [height, setHeight] = useState('');
+    const [workConditionPer, setWorkConditionPer] = useState('')
     /*checked*/
     const [showHeight, setShowHeight] = useState(false);
+    const [showCondition, setCondition] = useState(false)
 
     /*-----------Knowledge------------*/
     const [skillProgramArr, setSkillProgramArr] = useState([{computerId: null, level: null}]);
@@ -299,6 +281,21 @@ function CreateStaff() {
         });
     }
 
+    const getGrade = () => {
+        mainAxios({
+            method: 'get',
+            url: '/grades',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            let data = res.data;
+            setGrade(data);
+        });
+    }
+
+
     const getFamilyJob = () => {
         mainAxios({
             method: 'get',
@@ -405,8 +402,16 @@ function CreateStaff() {
 
     const sendGeneralData = () => {
         setLoadingIndicator(true);
+        let checkLegalArr = 0
+
+        for(let i of skillLegalArr) {
+            if(skillLegalArr.length === 1 && i.legislationId === null) {
+                checkLegalArr = 1
+            }
+        }
         let data = {
             "generalInformation": {
+                "conditionalAdditionPercentage" : workConditionPer !== '' ? workConditionPer : null,
                 "count": parseFloat(vacancyCount),
                 "curatorId": selectedCurator !== null ? selectedCurator.id : null,
                 "departmentId": selectedDepartment !== null ? selectedDepartment.id : null,
@@ -427,7 +432,7 @@ function CreateStaff() {
                 "militaryRequire": selectedMilitaryAchieve !== null ? selectedMilitaryAchieve.value : null,
                 "positionCategory": selectedVacancyCategory !== null ? selectedVacancyCategory.value : null,
                 "positionId": selectedVacancy !== null ? selectedVacancy.id : null,
-                "legislationStatementSet": skillLegalArr,
+                "legislationStatementSet": checkLegalArr ? [] : skillLegalArr,
                 "specialityId": selectedSpeciality !== null ? selectedSpeciality.id : null,
                 "subDepartmentId": selectedSubDepartment !== null ? selectedSubDepartment.id : null,
                 "workCondition": selectedWorkCondition !== null ? selectedWorkCondition.value : null,
@@ -479,8 +484,16 @@ function CreateStaff() {
 
     const sendGeneralUpdate = () => {
         setLoadingIndicator(true);
+        let checkLegalArr = 0
+
+        for(let i of skillLegalArr) {
+            if(skillLegalArr.length === 1 && i.legislationId === null) {
+                checkLegalArr = 1
+            }
+        }
         let data = {
             "generalInformation": {
+                "conditionalAdditionPercentage" : workConditionPer !== '' ? workConditionPer : null,
                 "count": parseFloat(vacancyCount),
                 "curatorId": selectedCurator !== null ? selectedCurator.id : null,
                 "departmentId": selectedDepartment !== null ? selectedDepartment.id : null,
@@ -492,8 +505,8 @@ function CreateStaff() {
                 "functionalities": positionFunctionArr,
                 "gender": selectedGender !== null ? selectedGender.value : null,
                 "gradeRange": {
-                    "max": selectedMinGrade !== null ? selectedMinGrade.value : null,
-                    "min": selectedMaxGrade !== null ? selectedMaxGrade.value : null
+                    "max": selectedMinGrade !== null ? selectedMinGrade.id : null,
+                    "min": selectedMaxGrade !== null ? selectedMaxGrade.id : null
                 },
                 "healthy": selectedHealth !== null ? selectedHealth.value : null,
                 "height": parseFloat(height),
@@ -501,7 +514,7 @@ function CreateStaff() {
                 "militaryRequire": selectedMilitaryAchieve !== null ? selectedMilitaryAchieve.value : null,
                 "positionCategory": selectedVacancyCategory !== null ? selectedVacancyCategory.value : null,
                 "positionId": selectedVacancy !== null ? selectedVacancy.id : null,
-                "legislationStatementSet": skillLegalArr,
+                "legislationStatementSet": checkLegalArr ? [] : skillLegalArr,
                 "specialityId": selectedSpeciality !== null ? selectedSpeciality.id : null,
                 "subDepartmentId": selectedSubDepartment !== null ? selectedSubDepartment.id : null,
                 "workCondition": selectedWorkCondition !== null ? selectedWorkCondition.value : null,
@@ -511,7 +524,6 @@ function CreateStaff() {
                 "subordinateDepartment": obeyDepartment,
                 "requireCertificate": selectedRequiredFile !== null ? selectedRequiredFile.value : null
             }
-
         }
         mainAxios({
             method: 'put',
@@ -549,14 +561,34 @@ function CreateStaff() {
         });
     }
 
-
     const sendDataKnowledge = () => {
         setLoadingIndicator(true);
+        let checkProgramArr = 0
+
+        for(let i of skillProgramArr) {
+            if(skillProgramArr.length === 1 && i.computerId === null) {
+                checkProgramArr = 1
+            }
+        }
+        let checkLanguageArr = 0
+
+        for(let i of skillLanguageArr) {
+            if(skillLanguageArr.length === 1 && i.languageId === null) {
+                checkLanguageArr = 1
+            }
+        }
+        let checkSkillArr = 0
+
+        for(let i of skillArr) {
+            if(skillArr.length === 1 && i.requiredSkillId === null) {
+                checkSkillArr = 1
+            }
+        }
         let data = {
             "specialityKnowledge": {
-                "computerKnowledgeSet": skillProgramArr,
-                "languageKnowledgeSet": skillLanguageArr,
-                "requiredKnowledgeSet": skillArr,
+                "computerKnowledgeSet": checkProgramArr ? [] : skillProgramArr,
+                "languageKnowledgeSet": checkLanguageArr ? [] : skillLanguageArr,
+                "requiredKnowledgeSet": checkSkillArr ? [] : skillArr,
             }
         }
 
@@ -592,6 +624,7 @@ function CreateStaff() {
         getInstitution();
         getDepartment();
         getVacancy();
+        getGrade();
         getFamilyJob();
         getSkill();
         getCurators();
@@ -643,9 +676,9 @@ function CreateStaff() {
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors['institutionId'] !== '' ?
+                                                                errors['generalInformation.institutionId'] !== '' ?
                                                                     <span
-                                                                        className="text-validation">{errors['institutionId']}</span>
+                                                                        className="text-validation">{errors['generalInformation.institutionId']}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -669,9 +702,9 @@ function CreateStaff() {
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors['departmentId'] !== '' ?
+                                                                errors['generalInformation.departmentId'] !== '' ?
                                                                     <span
-                                                                        className="text-validation">{errors['departmentId']}</span>
+                                                                        className="text-validation">{errors['generalInformation.departmentId']}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -691,14 +724,6 @@ function CreateStaff() {
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
                                                         />
-                                                        <div className="validation-block flex-start">
-                                                            {
-                                                                errors.subDepartmentName !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors.subDepartmentName}</span>
-                                                                    : null
-                                                            }
-                                                        </div>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -714,7 +739,7 @@ function CreateStaff() {
                                                 </Col>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">Ştat vahidinin adı</span>
+                                                        <span className="input-title">Ştat vahidinin adı *</span>
                                                         <Select
                                                             placeholder="Ştat vahidin adını seçin"
                                                             value={selectedVacancy}
@@ -728,9 +753,9 @@ function CreateStaff() {
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors['positionId'] !== '' ?
+                                                                errors['generalInformation.positionId'] !== '' ?
                                                                     <span
-                                                                        className="text-validation">{errors['positionId']}</span>
+                                                                        className="text-validation">{errors['generalInformation.positionId']}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -738,7 +763,7 @@ function CreateStaff() {
                                                 </Col>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">Ştat vahidinin sayı</span>
+                                                        <span className="input-title">Ştat vahidinin sayı *</span>
                                                         <Form.Label>
                                                             <Form.Control type="number"
                                                                           placeholder="Ştat vahidinin saynı daxil edin"
@@ -748,9 +773,9 @@ function CreateStaff() {
                                                         </Form.Label>
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors['count'] !== '' ?
+                                                                errors['generalInformation.count'] !== '' ?
                                                                     <span
-                                                                        className="text-validation">{errors['count']}</span>
+                                                                        className="text-validation">{errors['generalInformation.count']}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -758,20 +783,24 @@ function CreateStaff() {
                                                 </Col>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">Əmək şəraiti</span>
+                                                        <span className="input-title">Əmək şəraiti *</span>
                                                         <Select
                                                             placeholder="Əmək şəraitini seçin"
                                                             value={selectedWorkCondition}
-                                                            onChange={setSelectedWorkCondition}
+                                                            onChange={(val) => {
+                                                                let value = val.value;
+                                                                setSelectedWorkCondition(val);
+                                                                value !== 'HARMLESS' ?  setCondition(false) : setCondition(true)
+                                                            }}
                                                             options={workConditionOptions}
                                                             isSearchable={workConditionOptions ? workConditionOptions.length > 5 ? true : false : false}
                                                             styles={customStyles}
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors['workCondition'] !== '' ?
+                                                                errors['generalInformation.workCondition'] !== '' ?
                                                                     <span
-                                                                        className="text-validation">{errors['workCondition']}</span>
+                                                                        className="text-validation">{errors['generalInformation.workCondition']}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -781,7 +810,7 @@ function CreateStaff() {
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                             <span
-                                                                className="input-title">Ştat vahidinin iş rejimi</span>
+                                                                className="input-title">Ştat vahidinin iş rejimi *</span>
                                                         <Select
                                                             placeholder="İş rejimini seçin"
                                                             value={selectedWorkMode}
@@ -792,9 +821,9 @@ function CreateStaff() {
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors['workMode'] !== '' ?
+                                                                errors['generalInformation.workMode'] !== '' ?
                                                                     <span
-                                                                        className="text-validation">{errors['workMode']}</span>
+                                                                        className="text-validation">{errors['generalInformation.workMode']}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -804,7 +833,7 @@ function CreateStaff() {
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                             <span
-                                                                className="input-title">Ştat vahidinin kateqoriyası </span>
+                                                                className="input-title">Ştat vahidinin kateqoriyası * </span>
                                                         <Select
                                                             placeholder="Kateqoriyanı seçin"
                                                             value={selectedVacancyCategory}
@@ -815,14 +844,28 @@ function CreateStaff() {
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors['positionCategory'] !== '' ?
+                                                                errors['generalInformation.positionCategory'] !== '' ?
                                                                     <span
-                                                                        className="text-validation">{errors['positionCategory']}</span>
+                                                                        className="text-validation">{errors['generalInformation.positionCategory']}</span>
                                                                     : null
                                                             }
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
+                                                {
+                                                    showCondition ?
+                                                        <Col xs={12}>
+                                                            <Form.Group className="form-group">
+                                                                <span className="input-title">Əmək şəraiti dərəcəsi</span>
+                                                                <Form.Control
+                                                                    value={workConditionPer || ''}
+                                                                    type="number"
+                                                                    placeholder="Əmək şəraiti dərəcəsi daxil edin"
+                                                                    onChange={(e => setWorkConditionPer(e.target.value))}/>
+                                                            </Form.Group>
+                                                        </Col>
+                                                        : null
+                                                }
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">İş ailəsi </span>
@@ -841,7 +884,7 @@ function CreateStaff() {
                                                 </Col>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">İş yerinin ünvanı </span>
+                                                        <span className="input-title">İş yerinin ünvanı * </span>
                                                         <Select
                                                             placeholder="İş yerinin ünvanını seçin"
                                                             value={selectedWorkAddress}
@@ -853,9 +896,9 @@ function CreateStaff() {
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors['workPlace'] !== '' ?
+                                                                errors['generalInformation.workPlace'] !== '' ?
                                                                     <span
-                                                                        className="text-validation">{errors['workPlace']}</span>
+                                                                        className="text-validation">{errors['generalInformation.workPlace']}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -877,21 +920,21 @@ function CreateStaff() {
                                                 </Col>
                                                 <Col xs={6}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">Min dərəcə </span>
+                                                        <span className="input-title">Min dərəcə *</span>
                                                         <Select
                                                             placeholder="Min dərəcəni seçin"
                                                             value={selectedMinGrade}
                                                             onChange={setSelectedMinGrade}
-                                                            options={gradeOptions}
-                                                            isSearchable={gradeOptions ? gradeOptions.length > 5 ? true : false : false}
+                                                            options={grade}
+                                                            isSearchable={grade ? grade.length > 5 ? true : false : false}
                                                             styles={customStyles}
-                                                            getOptionLabel={(option) => (option.label)}
+                                                            getOptionLabel={(option) => (option.grade)}
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors['gradeRange.min'] !== '' ?
+                                                                errors['generalInformation.gradeRange.min'] !== '' ?
                                                                     <span
-                                                                        className="text-validation">{errors['gradeRange.min']}</span>
+                                                                        className="text-validation">{errors['generalInformation.gradeRange.min']}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -899,21 +942,21 @@ function CreateStaff() {
                                                 </Col>
                                                 <Col xs={6}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">Max dərəcə </span>
+                                                        <span className="input-title">Max dərəcə *</span>
                                                         <Select
                                                             placeholder="Max dərəcəni seçin"
                                                             value={selectedMaxGrade}
                                                             onChange={setSelectedMaxGrade}
-                                                            options={gradeOptions}
-                                                            isSearchable={gradeOptions ? gradeOptions.length > 5 ? true : false : false}
+                                                            options={grade}
+                                                            isSearchable={grade ? grade.length > 5 ? true : false : false}
                                                             styles={customStyles}
-                                                            getOptionLabel={(option) => (option.label)}
+                                                            getOptionLabel={(option) => (option.grade)}
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors['gradeRange.max'] !== '' ?
+                                                                errors['generalInformation.gradeRange.max'] !== '' ?
                                                                     <span
-                                                                        className="text-validation">{errors['gradeRange.max']}</span>
+                                                                        className="text-validation">{errors['generalInformation.gradeRange.max']}</span>
                                                                     : null
                                                             }
                                                         </div>
@@ -972,6 +1015,14 @@ function CreateStaff() {
                                                                             options={legislationSkill}
                                                                             getOptionLabel={(option) => (option.name)}
                                                                             styles={customStyles}/>
+                                                                        <div className="validation-block flex-start">
+                                                                            {
+                                                                                errors['generalInformation.legislationStatementSet[].legislationId'] !== '' ?
+                                                                                    <span
+                                                                                        className="text-validation">{errors['generalInformation.legislationStatementSet[].legislationId']}</span>
+                                                                                    : null
+                                                                            }
+                                                                        </div>
                                                                     </Form.Group>
                                                                 </Col>
                                                                 <Col xs={6}>
@@ -1285,6 +1336,14 @@ function CreateStaff() {
                                                                             options={computerSkill}
                                                                             getOptionLabel={(option) => (option.name)}
                                                                             styles={customStyles}/>
+                                                                        <div className="validation-block flex-start">
+                                                                            {
+                                                                                errors['specialityKnowledge.computerKnowledgeSet[].computerId'] !== '' ?
+                                                                                    <span
+                                                                                        className="text-validation">{errors['generalInformation.computerKnowledgeSet[].computerId']}</span>
+                                                                                    : null
+                                                                            }
+                                                                        </div>
                                                                     </Form.Group>
                                                                 </Col>
                                                                 <Col xs={6}>
@@ -1375,6 +1434,14 @@ function CreateStaff() {
                                                                             options={languageSkill}
                                                                             getOptionLabel={(option) => (option.name)}
                                                                             styles={customStyles}/>
+                                                                        <div className="validation-block flex-start">
+                                                                            {
+                                                                                errors['specialityKnowledge.languageKnowledgeSet[].languageId'] !== '' ?
+                                                                                    <span
+                                                                                        className="text-validation">{errors['generalInformation.languageKnowledgeSet[].languageId']}</span>
+                                                                                    : null
+                                                                            }
+                                                                        </div>
                                                                     </Form.Group>
                                                                 </Col>
                                                                 <Col xs={6}>
@@ -1415,7 +1482,7 @@ function CreateStaff() {
                                     </div>
                                     <div className="add-block">
                                         <div className="block-title">
-                                            Vəzifənin tələb etdiyi  kompetensiyalar
+                                            Vəzifənin tələb etdiyi kompetensiyalar
                                         </div>
                                         <div className="block-inn">
                                             <div className="addition-content">
@@ -1467,9 +1534,9 @@ function CreateStaff() {
                                                                         />
                                                                         <div className="validation-block flex-start">
                                                                             {
-                                                                                errors['requiredKnowledgeSet[].requiredSkillId'] !== '' ?
+                                                                                errors['specialityKnowledge.requiredKnowledgeSet[].requiredSkillId'] !== '' ?
                                                                                     <span
-                                                                                        className="text-validation">{errors['requiredKnowledgeSet[].requiredSkillId']}</span>
+                                                                                        className="text-validation">{errors['specialityKnowledge.requiredKnowledgeSet[].requiredSkillId']}</span>
                                                                                     : null
                                                                             }
                                                                         </div>
