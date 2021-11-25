@@ -258,444 +258,447 @@ function CreateOperation() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            let data = res.data;
-            let arr = [];
-            if (data.length > 0)
-                data.forEach(function (elem) {
-                    arr.push({
-                        id: elem.id,
-                        position: elem.position !== null ? elem.position.name : null,
-                        department:elem.department !== null ? elem.department.name : null
-                })
-        });
-        setVacancy(arr)
+                let data = res.data;
+                let arr = [];
+                if (data.length > 0)
+                    data.forEach(function (elem) {
+                        arr.push({
+                            id: elem.id,
+                            position: elem.position !== null ? elem.position.name : null,
+                            department: elem.department !== null ? elem.department.name : null
+                        })
+                    });
+                setVacancy(arr)
+            }
+        );
     }
-);
-}
 
-const getVacancyData = (id) => {
-    mainAxios({
-        method: 'get',
-        url: '/vacancies/' + id,
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-        },
-    }).then((res) => {
-        let generalData = res.data.generalInformation;
-        if (generalData !== null) {
-            setVacancyDepartment(generalData.department !== null ? generalData.department.name : null);
-            setVacancySubDepartment(generalData.subDepartment !== null ? generalData.subDepartment.name : null);
-            setVacancyPosition(generalData.position !== null ? generalData.position.name : null);
-            setVacancyCategory(generalData.positionCategory);
-            setVacancyObeyDepartment(generalData.subordinateDepartment);
-            setVacancyWorkMode(generalData.workMode);
-            setVacancyWorkPlace(generalData.workPlace);
-            setVacancyCount(generalData.count);
-            let gradeData = generalData.gradeRange
-            if (gradeData !== null) {
-                setVacancyMinGrade(gradeData.min);
-                setVacancyMaxGrade(gradeData.max);
-                let arr = []
-                for (let i = gradeData.min; i <= gradeData.max; i++) {
-                    for (let j of grade) {
-                        if (i === j.grade) {
-                            arr.push(j)
+    const getVacancyData = (id) => {
+        mainAxios({
+            method: 'get',
+            url: '/vacancies/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            let generalData = res.data.generalInformation;
+            if (generalData !== null) {
+                setVacancyDepartment(generalData.department !== null ? generalData.department.name : null);
+                setVacancySubDepartment(generalData.subDepartment !== null ? generalData.subDepartment.name : null);
+                setVacancyPosition(generalData.position !== null ? generalData.position.name : null);
+                setVacancyCategory(generalData.positionCategory);
+                setVacancyObeyDepartment(generalData.subordinateDepartment);
+                setVacancyWorkMode(generalData.workMode);
+                setVacancyWorkPlace(generalData.workPlace);
+                setVacancyCount(generalData.count);
+                let gradeData = generalData.gradeRange
+                if (gradeData !== null) {
+                    setVacancyMinGrade(gradeData.min);
+                    setVacancyMaxGrade(gradeData.max);
+                    let arr = []
+                    for (let i = gradeData.min; i <= gradeData.max; i++) {
+                        for (let j of grade) {
+                            if (i === j.grade) {
+                                arr.push(j)
+                            }
                         }
                     }
+                    setGradeArr(arr)
+                } else {
+                    setGradeArr(grade)
                 }
-                setGradeArr(arr)
-            } else {
-                setGradeArr(grade)
             }
-        }
 
 
-        /*            ;
-                    setPositionSalary(data.salary);
-                    setPositionVacancyName(data.vacancyName);
-                    setPositionVacancyCount(data.vacancyCount);
-                    setPositionVacancyCategory(data.vacancyCategory);
-                    setPositionWorkMode(data.workMode);
-                    setPositionWorkPlace(data.workPlace);
-                    setPositionAdditionalSalary(data.additionalSalary)*/
-    });
-}
+            /*            ;
+                        setPositionSalary(data.salary);
+                        setPositionVacancyName(data.vacancyName);
+                        setPositionVacancyCount(data.vacancyCount);
+                        setPositionVacancyCategory(data.vacancyCategory);
+                        setPositionWorkMode(data.workMode);
+                        setPositionWorkPlace(data.workPlace);
+                        setPositionAdditionalSalary(data.additionalSalary)*/
+        });
+    }
 
-const resetData = () => {
-    /*        setSelectedStaff(null);
-            setSelectedPosition(null);
-            setMainOfOrder('');
-            setDepartment('');
-            setSubDepartment('');
-            setSalary('');
-            setAdditionalSalary('');
-            setOwnAdditionalSalary('');
-            setPositionSalary('');
-            setPositionVacancyCount('');
-            setPositionSubDepartment('');
-            setPositionDepartment('');
-            setPositionVacancyCategory('');
-            setPositionAdditionalSalary('');
-            setPositionWorkMode('');
-            setPositionWorkPlace('');
-            setPositionVacancyName('');
-            setOwnAdditionalSalary(null);
-            setNewOwnAdditionalSalary('');
-            setChangePeriod('');
-            setNewAdditionalSalary('');
-            setJoinDate(null);
-            setChangeDate(null);
-            setTestPeriod('');
-            setNoteArr([""])*/
-}
+    const resetData = () => {
+        /*        setSelectedStaff(null);
+                setSelectedPosition(null);
+                setMainOfOrder('');
+                setDepartment('');
+                setSubDepartment('');
+                setSalary('');
+                setAdditionalSalary('');
+                setOwnAdditionalSalary('');
+                setPositionSalary('');
+                setPositionVacancyCount('');
+                setPositionSubDepartment('');
+                setPositionDepartment('');
+                setPositionVacancyCategory('');
+                setPositionAdditionalSalary('');
+                setPositionWorkMode('');
+                setPositionWorkPlace('');
+                setPositionVacancyName('');
+                setOwnAdditionalSalary(null);
+                setNewOwnAdditionalSalary('');
+                setChangePeriod('');
+                setNewAdditionalSalary('');
+                setJoinDate(null);
+                setChangeDate(null);
+                setTestPeriod('');
+                setNoteArr([""])*/
+    }
 
-const senData = () => {
-    const data = {
-        "header": {
-            "department": "string",
-            "fullName": "string",
-            "main": mainOfOrder !== "" ? mainOfOrder : null,
-            "note": "string"
-        },
-        "hire": {
+    const senData = () => {
+
+        let hireData = {
             "date": joinDate !== null ? moment(joinDate).format("YYYY-MM-DD") : null,
             "gradeId": selectedGrade !== null ? selectedGrade.id : null,
             "individualAddition": individualAddition !== '' ? parseFloat(individualAddition) : null,
             "subGradeId": selectedSubGrade !== null ? selectedSubGrade.id : null,
             "testPeriod": testPeriod !== "" ? parseFloat(testPeriod) : null,
             "jobTime": selectedJobTime !== null ? selectedJobTime.value : null
-        },
-        "type": operationType !== '' ? operationType : null,
-        "vacancyId": vacancyId ? vacancyId : null,
-        "employeeId": employeeId ? employeeId : null
+        }
+
+        const data = {
+            "header": {
+                "department": "string",
+                "fullName": "string",
+                "main": mainOfOrder !== "" ? mainOfOrder : null,
+                "note": "string"
+            },
+            "hire": tab === "7" ? hireData : null,
+            "type": operationType !== '' ? operationType : null,
+            "vacancyId": vacancyId ? vacancyId : null,
+            "employeeId": employeeId ? employeeId : null
 
 
-        /*            "achievementAmount": achievement !== "" ? parseFloat(achievement) : null,
-                    "amount": amount !== "" ? parseFloat(amount) : null,
-                    "businessTripLocation": businessTripLocation !== "" ? businessTripLocation : null,
-                    "businessTripTerm": businessTripPeriod !== "" ? parseFloat(businessTripPeriod) : null,
-                    "callBackDate": callBackDate !== null ? moment(callBackDate).format("MM-DD-YYYY") : null,
-                    "callBackReason": callBackReason !== "" ? callBackReason : null,
-                    "catchAmount": catchAmount !== "" ? parseFloat(catchAmount) : null,
-                    "catchMonths": monthArr,
-                    "changeDate": changeDate !== null ? moment(changeDate).format("MM-DD-YYYY") : null,
-                    "changePeriod": changePeriod !== "" ? parseFloat(changePeriod) : null,
-                    "compensation": compensation !== "" ? parseFloat(compensation) : null,
-                    "dayInEvent": dayInEvent !== "" ? parseFloat(dayInEvent) : null,
-                    "dayInEvent2": dayOutEvent !== "" ? parseFloat(dayOutEvent) : null,
-                    "disciplineType": selectedDiscipline !== null ? selectedDiscipline.value : null,
-                    "dismissalDate": firedDate !== null ? moment(firedDate).format("MM-DD-YYYY") : null,
-                    "dismissalReason": firedReason !== "" ? firedReason : null,
-                    "documentType": documentId ? documentId : null,
-                    "employeeIds": employeeIds,
-                    "eventToBusinessTripDate": businessTripStart !== null ? moment(businessTripStart).format("MM-DD-YYYY") : null,
-                    "eventFromBusinessTripDate": businessTripEnd !== null ? moment(businessTripEnd).format("MM-DD-YYYY") : null,
-                    "eventFrom": startDate !== null ? moment(startDate).format("MM-DD-YYYY") : null,
-                    "eventFrom2": startVacationHeldDate !== null ? moment(startVacationHeldDate).format("MM-DD-YYYY") : null,
-                    "eventName": eventName !== "" ? eventName : null,
-                    "eventTo": endDate !== null ? moment(endDate).format("MM-DD-YYYY") : null,
-                    "eventTo2": endVacationHeldDate !== null ? moment(endVacationHeldDate).format("MM-DD-YYYY") : null,
-                    "financialHelp": financialHelp !== "" ? parseFloat(financialHelp) : null,
-                    "givenNonWorkDay": givenNonWorkDay !== null ? moment(givenNonWorkDay).format("MM-DD-YYYY") : null*/,
-        /*
-                    "joinDate": joinDate !== null ? moment(joinDate).format("MM-DD-YYYY") : null,
-        */
-        /*
-                    "mainOfOrder": mainOfOrder !== "" ? mainOfOrder : null,
-        */
-        /*            "newAdditionalSalary": newAdditionalSalary !== "" ? newAdditionalSalary : null,
-                    "newOwnAdditionalSalary": newOwnAdditionalSalary !== '' ? newOwnAdditionalSalary : null,
-                    "newSalary": newSalary !== "" ? newSalary : null,
-                    "newWorkMode": selectedNewWorkMode !== null ? selectedNewWorkMode.value : null,
-                    "nonWorkDay": nonWorkDay !== null ? moment(nonWorkDay).format("MM-DD-YYYY") : null,
-                    "notes": noteArr.length > 0 ? noteArr : null,
-                    "ownAdditionalSalary": ownAdditionalSalary !== "" ? parseFloat(ownAdditionalSalary) : null,
-                    "positionId": positionId ? positionId : null,
-                    "presentationOwnerDepartment": presentationDepartment !== "" ? presentationDepartment : null,
-                    "presentationOwnerName": presentationFullName !== "" ? presentationFullName : null,
-                    "presentationOwnerPosition": presentationPosition !== "" ? presentationPosition : null,
-                    "testPeriod": testPeriod !== "" ? parseFloat(testPeriod) : null,
-                    "reason": selectedReason !== null ? selectedReason.label : null,
-                    "serialNumber1": null,
-                    "serialNumber2": null,
-                    "titleDepartment": null,
-                    "titleFullName": null,
-                    "vacationReason": selectedVacationReason !== null ? selectedVacationReason.label : null,*/
+            /*            "achievementAmount": achievement !== "" ? parseFloat(achievement) : null,
+                        "amount": amount !== "" ? parseFloat(amount) : null,
+                        "businessTripLocation": businessTripLocation !== "" ? businessTripLocation : null,
+                        "businessTripTerm": businessTripPeriod !== "" ? parseFloat(businessTripPeriod) : null,
+                        "callBackDate": callBackDate !== null ? moment(callBackDate).format("MM-DD-YYYY") : null,
+                        "callBackReason": callBackReason !== "" ? callBackReason : null,
+                        "catchAmount": catchAmount !== "" ? parseFloat(catchAmount) : null,
+                        "catchMonths": monthArr,
+                        "changeDate": changeDate !== null ? moment(changeDate).format("MM-DD-YYYY") : null,
+                        "changePeriod": changePeriod !== "" ? parseFloat(changePeriod) : null,
+                        "compensation": compensation !== "" ? parseFloat(compensation) : null,
+                        "dayInEvent": dayInEvent !== "" ? parseFloat(dayInEvent) : null,
+                        "dayInEvent2": dayOutEvent !== "" ? parseFloat(dayOutEvent) : null,
+                        "disciplineType": selectedDiscipline !== null ? selectedDiscipline.value : null,
+                        "dismissalDate": firedDate !== null ? moment(firedDate).format("MM-DD-YYYY") : null,
+                        "dismissalReason": firedReason !== "" ? firedReason : null,
+                        "documentType": documentId ? documentId : null,
+                        "employeeIds": employeeIds,
+                        "eventToBusinessTripDate": businessTripStart !== null ? moment(businessTripStart).format("MM-DD-YYYY") : null,
+                        "eventFromBusinessTripDate": businessTripEnd !== null ? moment(businessTripEnd).format("MM-DD-YYYY") : null,
+                        "eventFrom": startDate !== null ? moment(startDate).format("MM-DD-YYYY") : null,
+                        "eventFrom2": startVacationHeldDate !== null ? moment(startVacationHeldDate).format("MM-DD-YYYY") : null,
+                        "eventName": eventName !== "" ? eventName : null,
+                        "eventTo": endDate !== null ? moment(endDate).format("MM-DD-YYYY") : null,
+                        "eventTo2": endVacationHeldDate !== null ? moment(endVacationHeldDate).format("MM-DD-YYYY") : null,
+                        "financialHelp": financialHelp !== "" ? parseFloat(financialHelp) : null,
+                        "givenNonWorkDay": givenNonWorkDay !== null ? moment(givenNonWorkDay).format("MM-DD-YYYY") : null*/,
+            /*
+                        "joinDate": joinDate !== null ? moment(joinDate).format("MM-DD-YYYY") : null,
+            */
+            /*
+                        "mainOfOrder": mainOfOrder !== "" ? mainOfOrder : null,
+            */
+            /*            "newAdditionalSalary": newAdditionalSalary !== "" ? newAdditionalSalary : null,
+                        "newOwnAdditionalSalary": newOwnAdditionalSalary !== '' ? newOwnAdditionalSalary : null,
+                        "newSalary": newSalary !== "" ? newSalary : null,
+                        "newWorkMode": selectedNewWorkMode !== null ? selectedNewWorkMode.value : null,
+                        "nonWorkDay": nonWorkDay !== null ? moment(nonWorkDay).format("MM-DD-YYYY") : null,
+                        "notes": noteArr.length > 0 ? noteArr : null,
+                        "ownAdditionalSalary": ownAdditionalSalary !== "" ? parseFloat(ownAdditionalSalary) : null,
+                        "positionId": positionId ? positionId : null,
+                        "presentationOwnerDepartment": presentationDepartment !== "" ? presentationDepartment : null,
+                        "presentationOwnerName": presentationFullName !== "" ? presentationFullName : null,
+                        "presentationOwnerPosition": presentationPosition !== "" ? presentationPosition : null,
+                        "testPeriod": testPeriod !== "" ? parseFloat(testPeriod) : null,
+                        "reason": selectedReason !== null ? selectedReason.label : null,
+                        "serialNumber1": null,
+                        "serialNumber2": null,
+                        "titleDepartment": null,
+                        "titleFullName": null,
+                        "vacationReason": selectedVacationReason !== null ? selectedVacationReason.label : null,*/
+        }
+
+        mainAxios({
+            method: 'post',
+            url: '/operations',
+            data: data,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            Swal.fire({
+                icon: 'success',
+                text: 'Məlumatlar qeyd edildi!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            setSelectedOperationType('');
+            setTab('');
+            resetData();
+            setSave(false);
+            history.push("/operation")
+        }).catch((error) => {
+            Swal.fire({
+                icon: 'error',
+                text: 'Məlumatlar qeyd edilmədi!',
+                cancelButtonText: 'Bağla',
+                showCancelButton: true,
+                showConfirmButton: false,
+            })
+        });
     }
 
-    mainAxios({
-        method: 'post',
-        url: '/operations',
-        data: data,
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-        },
-    }).then((res) => {
-        Swal.fire({
-            icon: 'success',
-            text: 'Məlumatlar qeyd edildi!',
-            showConfirmButton: false,
-            timer: 1500
-        });
-        setSelectedOperationType('');
-        setTab('');
-        resetData();
-        setSave(false);
-        history.push("/operation")
-    }).catch((error) => {
-        Swal.fire({
-            icon: 'error',
-            text: 'Məlumatlar qeyd edilmədi!',
-            cancelButtonText: 'Bağla',
-            showCancelButton: true,
-            showConfirmButton: false,
-        })
-    });
-}
+    const customStyles = {
+        option: (provided, state) => ({
+            ...provided,
+            color: '#040647',
+            backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
+            padding: '10px 16px',
+            margin: '0',
+            fontSize: '16px',
+            "&:first-of-type": {
+                borderRadius: '2px 2px 0 0',
+            },
+            "&:hover": {
+                backgroundColor: '#FAFCFF',
+            },
+            "&:last-child": {
+                borderBottom: 'none',
+                borderRadius: '0 0 2px 2px',
+            },
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            position: 'relative'
 
-const customStyles = {
-    option: (provided, state) => ({
-        ...provided,
-        color: '#040647',
-        backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-        padding: '10px 16px',
-        margin: '0',
-        fontSize: '16px',
-        "&:first-of-type": {
-            borderRadius: '2px 2px 0 0',
+        }),
+        valueContainer: (provided) => ({
+            ...provided,
+            padding: '2px 8px 2px 16px'
+        }),
+
+        indicatorSeparator: () => {
         },
-        "&:hover": {
+
+        indicatorsContainer: (provided) => ({
+            ...provided,
+            paddingRight: '8px'
+        }),
+
+        control: (provided) => ({
+            ...provided,
+            minHeight: '43px',
+            fontSize: '14px',
+            padding: '0',
+            margin: '0',
+            color: '#66615b',
             backgroundColor: '#FAFCFF',
-        },
-        "&:last-child": {
-            borderBottom: 'none',
-            borderRadius: '0 0 2px 2px',
-        },
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        position: 'relative'
+            boxShadow: 'none',
+            border: '1px solid rgba(4, 6, 71, 0.1)',
+            "&:hover": {
+                borderColor: 'rgba(4, 6, 71, 0.1)',
+            },
 
-    }),
-    valueContainer: (provided) => ({
-        ...provided,
-        padding: '2px 8px 2px 16px'
-    }),
+        }),
 
-    indicatorSeparator: () => {
-    },
+        container: (provided) => ({
+            ...provided,
+            width: '100%'
+        }),
 
-    indicatorsContainer: (provided) => ({
-        ...provided,
-        paddingRight: '8px'
-    }),
+        menu: (provided) => ({
+            ...provided,
+            borderRadius: '2px',
+            padding: '0',
+            margin: '0',
+            borderColor: 'red',
+            width: '100%'
+        }),
 
-    control: (provided) => ({
-        ...provided,
-        minHeight: '43px',
-        fontSize: '14px',
-        padding: '0',
-        margin: '0',
-        color: '#66615b',
-        backgroundColor: '#FAFCFF',
-        boxShadow: 'none',
-        border: '1px solid rgba(4, 6, 71, 0.1)',
-        "&:hover": {
-            borderColor: 'rgba(4, 6, 71, 0.1)',
-        },
+        dropdownIndicator: defaultStyles => ({
+            ...defaultStyles,
+            'svg path': {
+                fill: 'rgba(24,24,24, .8)',
+            },
 
-    }),
+            'svg': {
+                width: '18px'
+            },
+        }),
 
-    container: (provided) => ({
-        ...provided,
-        width: '100%'
-    }),
+        menuList: base => ({
+            ...base,
+            padding: 0,
+            borderColor: 'red'
 
-    menu: (provided) => ({
-        ...provided,
-        borderRadius: '2px',
-        padding: '0',
-        margin: '0',
-        borderColor: 'red',
-        width: '100%'
-    }),
+        })
 
-    dropdownIndicator: defaultStyles => ({
-        ...defaultStyles,
-        'svg path': {
-            fill: 'rgba(24,24,24, .8)',
-        },
+    };
 
-        'svg': {
-            width: '18px'
-        },
-    }),
+    useEffect(() => {
+        getOperationName();
+        getVacancy();
+        getEmployee();
+        getGrade();
+        getSubGrade();
+    }, []);
 
-    menuList: base => ({
-        ...base,
-        padding: 0,
-        borderColor: 'red'
-
-    })
-
-};
-
-useEffect(() => {
-    getOperationName();
-    getVacancy();
-    getEmployee();
-    getGrade();
-    getSubGrade();
-}, []);
-
-return (
-    <Aux>
-        <div className="create-operation">
-            <Container fluid>
-                <div className="title-block flex">
-                    <div className="title flex-center">
-                        <Link to="/operation" className="flex">
-                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M23.3333 14H7.58333M12.25 8.75L7 14L12.25 19.25" stroke="#193651"
-                                      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                        </Link>
-                        Kadr əməliyyatı yarat
+    return (
+        <Aux>
+            <div className="create-operation">
+                <Container fluid>
+                    <div className="title-block flex">
+                        <div className="title flex-center">
+                            <Link to="/operation" className="flex">
+                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M23.3333 14H7.58333M12.25 8.75L7 14L12.25 19.25" stroke="#193651"
+                                          strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </Link>
+                            Kadr əməliyyatı yarat
+                        </div>
                     </div>
-                </div>
-                <div className="block">
-                    <Form className="form-list">
-                        <Row>
-                            <Col xs={12}>
-                                <Form.Group className="form-group">
-                                    <span className="input-title">Əmrin adı *</span>
-                                    <Select
-                                        placeholder="Vəzifə dəyişikliyi"
-                                        value={selectedOperationType}
-                                        onChange={(val) => {
-                                            setSelectedOperationType(val);
-                                            resetData()
-                                            setOperationType(val.type)
-                                            setSave(true);
-                                            setTab(val.orderNo)
-                                            setKey(val.label)
-                                        }}
-                                        options={operationTypeArr}
-                                        isSearchable={operationTypeArr ? operationTypeArr.length > 5 ? true : false : false}
-                                        getOptionLabel={(option) => (option.valueAz)}
-                                        styles={customStyles}
-                                    />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <div className="operation-tab">
-                            <Tabs activeKey={tab}>
+                    <div className="block">
+                        <Form className="form-list">
+                            <Row>
+                                <Col xs={12}>
+                                    <Form.Group className="form-group">
+                                        <span className="input-title">Əmrin adı *</span>
+                                        <Select
+                                            placeholder="Vəzifə dəyişikliyi"
+                                            value={selectedOperationType}
+                                            onChange={(val) => {
+                                                setSelectedOperationType(val);
+                                                resetData()
+                                                setOperationType(val.type)
+                                                setSave(true);
+                                                setTab(val.orderNo)
+                                                setKey(val.label)
+                                            }}
+                                            options={operationTypeArr}
+                                            isSearchable={operationTypeArr ? operationTypeArr.length > 5 ? true : false : false}
+                                            getOptionLabel={(option) => (option.valueAz)}
+                                            styles={customStyles}
+                                        />
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                            <div className="operation-tab">
+                                <Tabs activeKey={tab}>
 
-                                <Tab eventKey="1" title="" disabled={tab !== "1"}>
-                                    <Row>
-                                        <Col xs={6}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">Ştatın nömrəsi</span>
-                                                <Select
-                                                    placeholder="Ştatın nömrəsini seç"
-                                                    value={selectedPosition}
-                                                    onChange={(val) => {
-                                                        setSelectedPosition(val);
-                                                        getVacancyData(val.id);
-                                                        setVacancyId(val.id);
-                                                    }}
-                                                    isSearchable={vacancy ? vacancy.length > 5 ? true : false : false}
-                                                    options={vacancy}
-                                                    getOptionLabel={(option) => `${option.id}. ${option.position} - ${option.department}`}
-                                                    styles={customStyles}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={6}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">Əmrin əsası</span>
-                                                <Form.Label>
-                                                    <Form.Control placeholder="Əmrin əsası daxil edin"
-                                                                  value={mainOfOrder}
-                                                                  onChange={(e) => setMainOfOrder(e.target.value)}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={6}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">Ştat cədvəli dəyişiklik edilən struktur bölmə: </span>
-                                                <Form.Label>
-                                                    <Form.Control
-                                                        placeholder="Ştat cədvəli dəyişiklik edilən struktur bölmə adı daxil edin"
-                                                        value={vacancyDepartment || ''} disabled={true}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={6}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">Struktur bölmənin adı </span>
-                                                <Form.Label>
-                                                    <Form.Control placeholder="Struktur bölmənin adı"
-                                                                  value={vacancySubDepartment || ''}
-                                                                  disabled={true}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={6}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">Tabe struktur bölmənin adı </span>
-                                                <Form.Label>
-                                                    <Form.Control placeholder="Tabe struktur bölmənin adı"
-                                                                  value={vacancyObeyDepartment || ''}
-                                                                  disabled={true}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={6}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">Ştat vahidinin adı (vəzifə) </span>
-                                                <Form.Label>
-                                                    <Form.Control placeholder="Ştat vahidinin adı (vəzifə)"
-                                                                  value={vacancyPosition || ''}
-                                                                  disabled={true}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={6}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">Ştat vahidi (say) </span>
-                                                <Form.Label>
-                                                    <Form.Control placeholder="Ştat vahidi (say)  "
-                                                                  value={vacancyCount || ''}
-                                                                  disabled={true}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={6}>
-                                            <span className="input-title">Dərəcə</span>
-                                            <div className="flex">
-                                                <Form.Group className="form-group m-0 w-100">
+                                    <Tab eventKey="1" title="" disabled={tab !== "1"}>
+                                        <Row>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Ştatın nömrəsi</span>
+                                                    <Select
+                                                        placeholder="Ştatın nömrəsini seç"
+                                                        value={selectedPosition}
+                                                        onChange={(val) => {
+                                                            setSelectedPosition(val);
+                                                            getVacancyData(val.id);
+                                                            setVacancyId(val.id);
+                                                        }}
+                                                        isSearchable={vacancy ? vacancy.length > 5 ? true : false : false}
+                                                        options={vacancy}
+                                                        getOptionLabel={(option) => `${option.id}. ${option.position} - ${option.department}`}
+                                                        styles={customStyles}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Əmrin əsası</span>
                                                     <Form.Label>
-                                                        <Form.Control
-                                                            placeholder="Əmək haqqı AZN(vergilər və digər ödənişlər daxil olmaqla)"
-                                                            value={vacancyMinGrade || ''} disabled={true}/>
+                                                        <Form.Control placeholder="Əmrin əsası daxil edin"
+                                                                      value={mainOfOrder}
+                                                                      onChange={(e) => setMainOfOrder(e.target.value)}/>
                                                     </Form.Label>
                                                 </Form.Group>
-                                                <span className="break-line"></span>
-                                                <Form.Group className="form-group m-0 w-100">
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Ştat cədvəli dəyişiklik edilən struktur bölmə: </span>
                                                     <Form.Label>
                                                         <Form.Control
-                                                            placeholder="Əmək haqqı AZN(vergilər və digər ödənişlər daxil olmaqla)"
-                                                            value={vacancyMaxGrade || ''} disabled={true}/>
+                                                            placeholder="Ştat cədvəli dəyişiklik edilən struktur bölmə adı daxil edin"
+                                                            value={vacancyDepartment || ''} disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Struktur bölmənin adı </span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Struktur bölmənin adı"
+                                                                      value={vacancySubDepartment || ''}
+                                                                      disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Tabe struktur bölmənin adı </span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Tabe struktur bölmənin adı"
+                                                                      value={vacancyObeyDepartment || ''}
+                                                                      disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Ştat vahidinin adı (vəzifə) </span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Ştat vahidinin adı (vəzifə)"
+                                                                      value={vacancyPosition || ''}
+                                                                      disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Ştat vahidi (say) </span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Ştat vahidi (say)  "
+                                                                      value={vacancyCount || ''}
+                                                                      disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <span className="input-title">Dərəcə</span>
+                                                <div className="flex m-20">
+                                                    <Form.Group className="form-group m-0 w-100">
+                                                        <Form.Label>
+                                                            <Form.Control
+                                                                placeholder="Min dərəcə"
+                                                                value={vacancyMinGrade || ''} disabled={true}/>
+                                                        </Form.Label>
+                                                    </Form.Group>
+                                                    <span className="break-line"></span>
+                                                    <Form.Group className="form-group  m-0 w-100">
+                                                        <Form.Label>
+                                                            <Form.Control
+                                                                placeholder="Max dərəcə"
+                                                                value={vacancyMaxGrade || ''} disabled={true}/>
+                                                        </Form.Label>
+                                                    </Form.Group>
 
-                                            </div>
+                                                </div>
 
-                                            {/* <Form.Group className="form-group">
+                                                {/* <Form.Group className="form-group">
                                                     <span className="input-title">Əmək haqqı AZN(vergilər və digər ödənişlər daxil olmaqla)</span>
                                                     <Form.Label>
                                                         <Form.Control
@@ -703,41 +706,41 @@ return (
                                                             value={positionSalary || ''} disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>*/}
-                                        </Col>
-                                        <Col xs={6}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">İş rejimi</span>
-                                                <Form.Label>
-                                                    <Form.Control placeholder="İş rejimi"
-                                                                  value={vacancyWorkMode || ''} disabled={true}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={6}>
-                                            <Form.Group className="form-group">
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">İş rejimi</span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="İş rejimi"
+                                                                      value={vacancyWorkMode || ''} disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">Təsis edilən vəzifənin kateqoriyası</span>
-                                                <Form.Label>
-                                                    <Form.Control placeholder="Təsis edilən vəzifənin kateqoriyası"
-                                                                  value={vacancyCategory || ''}
-                                                                  disabled={true}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={6}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">İş yerinin ünvanı</span>
-                                                <Form.Label>
-                                                    <Form.Control placeholder="İş yerinin ünvanı"
-                                                                  value={vacancyWorkPlace || ''} disabled={true}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                    </Row>
-                                </Tab>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Təsis edilən vəzifənin kateqoriyası"
+                                                                      value={vacancyCategory || ''}
+                                                                      disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">İş yerinin ünvanı</span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="İş yerinin ünvanı"
+                                                                      value={vacancyWorkPlace || ''} disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                        </Row>
+                                    </Tab>
 
 
-                                {/*
+                                    {/*
                                     <Tab eventKey="2" title="" disabled={tab !== "2"}>
                                         <Row>
                                             <Col xs={6}>
@@ -840,223 +843,223 @@ return (
                                     </Tab>
 */}
 
-                                <Tab eventKey="7" title="" disabled={tab !== "7"}>
-                                    <Row>
-                                        <Col xs={6}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">Əsaslandırma</span>
-                                                <Form.Label>
-                                                    <Form.Control placeholder="Əmrin əsası daxil edin"
-                                                                  value={mainOfOrder}
-                                                                  onChange={(e) => setMainOfOrder(e.target.value)}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={6}>
-                                            <Form.Group className="form-group">
+                                    <Tab eventKey="7" title="" disabled={tab !== "7"}>
+                                        <Row>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Əsaslandırma</span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Əmrin əsası daxil edin"
+                                                                      value={mainOfOrder}
+                                                                      onChange={(e) => setMainOfOrder(e.target.value)}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşçinin adı, soyadı, atasının adı *</span>
-                                                <Select
-                                                    placeholder="İşçinin adı, soyadı, atasının adı"
-                                                    value={selectedStaff}
-                                                    onChange={(val) => {
-                                                        let id = val.id
-                                                        setEmployeeId(id)
-                                                        getEmployeeData(id)
-                                                        setSelectedStaff(val);
-                                                    }}
-                                                    isSearchable={employee ? employee.length > 5 ? true : false : false}
-                                                    options={employee}
-                                                    getOptionLabel={(option) => (option.name)}
-                                                    styles={customStyles}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={4}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">Ştatın nömrəsi</span>
-                                                <Select
-                                                    placeholder="Ştatın nömrəsini seç"
-                                                    value={selectedPosition}
-                                                    onChange={(val) => {
-                                                        setSelectedPosition(val);
-                                                        getVacancyData(val.id);
-                                                        setVacancyId(val.id);
-                                                    }}
-                                                    isSearchable={vacancy ? vacancy.length > 5 ? true : false : false}
-                                                    options={vacancy}
-                                                    getOptionLabel={(option) => `${option.id}. ${option.name}`}
-                                                    styles={customStyles}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={4}>
-                                            <Form.Group className="form-group">
+                                                    <Select
+                                                        placeholder="İşçinin adı, soyadı, atasının adı"
+                                                        value={selectedStaff}
+                                                        onChange={(val) => {
+                                                            let id = val.id
+                                                            setEmployeeId(id)
+                                                            getEmployeeData(id)
+                                                            setSelectedStaff(val);
+                                                        }}
+                                                        isSearchable={employee ? employee.length > 5 ? true : false : false}
+                                                        options={employee}
+                                                        getOptionLabel={(option) => (option.name)}
+                                                        styles={customStyles}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Ştatın nömrəsi</span>
+                                                    <Select
+                                                        placeholder="Ştatın nömrəsini seç"
+                                                        value={selectedPosition}
+                                                        onChange={(val) => {
+                                                            setSelectedPosition(val);
+                                                            getVacancyData(val.id);
+                                                            setVacancyId(val.id);
+                                                        }}
+                                                        isSearchable={vacancy ? vacancy.length > 5 ? true : false : false}
+                                                        options={vacancy}
+                                                        getOptionLabel={(option) => `${option.id}. ${option.name}`}
+                                                        styles={customStyles}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşə qəbul olduğu struktur bölmə </span>
-                                                <Form.Label>
-                                                    <Form.Control
-                                                        placeholder="İşə qəbul olduğu struktur bölmə daxil edin"
-                                                        value={vacancyDepartment || ''} disabled={true}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={4}>
-                                            <Form.Group className="form-group">
+                                                    <Form.Label>
+                                                        <Form.Control
+                                                            placeholder="İşə qəbul olduğu struktur bölmə daxil edin"
+                                                            value={vacancyDepartment || ''} disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşə qəbul olduğu alt struktur bölmə </span>
-                                                <Form.Label>
-                                                    <Form.Control placeholder="Tabe struktur bölmənin adı"
-                                                                  value={vacancySubDepartment || ''}
-                                                                  disabled={true}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={4}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">İşə qəbul olduğu vəzifə </span>
-                                                <Form.Label>
-                                                    <Form.Control placeholder="İşə qəbul olduğu vəzifə"
-                                                                  value={vacancyPosition || ''}
-                                                                  disabled={true}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={4}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">İşə qəbul tarixi *</span>
-                                                <Form.Label className="relative m-0">
-                                                    <DatePicker selected={joinDate}
-                                                                dateFormat="dd-MM-yyyy"
-                                                                placeholderText="DD-MM-YYYY"
-                                                                showMonthDropdown
-                                                                showYearDropdown
-                                                                dropdownMode="select"
-                                                                onChange={(date) => setJoinDate(date)}/>
-                                                    <Button className="btn-transparent">
-                                                        <svg width="18" height="18"
-                                                             viewBox="0 0 18 18" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <g opacity="0.8"
-                                                               clipPath="url(#clip0)">
-                                                                <path
-                                                                    d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
-                                                                    fill="#181818"/>
-                                                                <path
-                                                                    d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
-                                                                    fill="#181818"/>
-                                                                <path
-                                                                    d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
-                                                                    fill="#181818"/>
-                                                                <path
-                                                                    d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
-                                                                    fill="#181818"/>
-                                                                <path
-                                                                    d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
-                                                                    fill="#181818"/>
-                                                                <path
-                                                                    d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
-                                                                    fill="#181818"/>
-                                                                <path
-                                                                    d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
-                                                                    fill="#181818"/>
-                                                                <path
-                                                                    d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
-                                                                    fill="#181818"/>
-                                                                <path
-                                                                    d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
-                                                                    fill="#181818"/>
-                                                                <path
-                                                                    d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
-                                                                    fill="#181818"/>
-                                                            </g>
-                                                            <defs>
-                                                                <clipPath id="clip0">
-                                                                    <rect width="17.399"
-                                                                          height="18"
-                                                                          fill="white"
-                                                                          transform="translate(0.449219)"/>
-                                                                </clipPath>
-                                                            </defs>
-                                                        </svg>
-                                                    </Button>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={4}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">Sınaq müddəti </span>
-                                                <Form.Label>
-                                                    <Form.Control placeholder="Sınaq müddəti"
-                                                                  type="number"
-                                                                  value={testPeriod}
-                                                                  onChange={(e) => setTestPeriod(e.target.value)}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={4}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">Dərəcə</span>
-                                                <Select
-                                                    placeholder="Dərəcə"
-                                                    value={selectedGrade}
-                                                    onChange={(val) => {
-                                                        setSelectedGrade(val)
-                                                    }}
-                                                    isSearchable={gradeArr ? gradeArr.length > 5 ? true : false : false}
-                                                    options={gradeArr}
-                                                    getOptionLabel={(option) => (option.grade)}
-                                                    styles={customStyles}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={4}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">Alt dərəcə </span>
-                                                <Select
-                                                    placeholder="Alt dərəcə"
-                                                    value={selectedSubGrade}
-                                                    onChange={(val) => {
-                                                        setSelectedSubGrade(val)
-                                                    }}
-                                                    isSearchable={subGrade ? subGrade.length > 5 ? true : false : false}
-                                                    options={subGrade}
-                                                    getOptionLabel={(option) => (option.subGrade)}
-                                                    styles={customStyles}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={4}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">İş vaxtı </span>
-                                                <Select
-                                                    placeholder="İş vaxtı"
-                                                    value={selectedJobTime}
-                                                    onChange={(val) => {
-                                                        setSelectedJobTime(val)
-                                                    }}
-                                                    isSearchable={jobTimeOptions ? jobTimeOptions.length > 5 ? true : false : false}
-                                                    options={jobTimeOptions}
-                                                    getOptionLabel={(option) => (option.label)}
-                                                    styles={customStyles}
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col xs={4}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">Digər fərdi əlavə </span>
-                                                <Form.Label>
-                                                    <Form.Control placeholder="Digər fərdi əlavə"
-                                                                  type="number"
-                                                                  value={individualAddition}
-                                                                  onChange={(e) => setIndividualAddition(e.target.value)}/>
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
-                                    </Row>
-                                </Tab>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Tabe struktur bölmənin adı"
+                                                                      value={vacancySubDepartment || ''}
+                                                                      disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">İşə qəbul olduğu vəzifə </span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="İşə qəbul olduğu vəzifə"
+                                                                      value={vacancyPosition || ''}
+                                                                      disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">İşə qəbul tarixi *</span>
+                                                    <Form.Label className="relative m-0">
+                                                        <DatePicker selected={joinDate}
+                                                                    dateFormat="dd-MM-yyyy"
+                                                                    placeholderText="DD-MM-YYYY"
+                                                                    showMonthDropdown
+                                                                    showYearDropdown
+                                                                    dropdownMode="select"
+                                                                    onChange={(date) => setJoinDate(date)}/>
+                                                        <Button className="btn-transparent">
+                                                            <svg width="18" height="18"
+                                                                 viewBox="0 0 18 18" fill="none"
+                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                <g opacity="0.8"
+                                                                   clipPath="url(#clip0)">
+                                                                    <path
+                                                                        d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
+                                                                        fill="#181818"/>
+                                                                </g>
+                                                                <defs>
+                                                                    <clipPath id="clip0">
+                                                                        <rect width="17.399"
+                                                                              height="18"
+                                                                              fill="white"
+                                                                              transform="translate(0.449219)"/>
+                                                                    </clipPath>
+                                                                </defs>
+                                                            </svg>
+                                                        </Button>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Sınaq müddəti </span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Sınaq müddəti"
+                                                                      type="number"
+                                                                      value={testPeriod}
+                                                                      onChange={(e) => setTestPeriod(e.target.value)}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Dərəcə</span>
+                                                    <Select
+                                                        placeholder="Dərəcə"
+                                                        value={selectedGrade}
+                                                        onChange={(val) => {
+                                                            setSelectedGrade(val)
+                                                        }}
+                                                        isSearchable={gradeArr ? gradeArr.length > 5 ? true : false : false}
+                                                        options={gradeArr}
+                                                        getOptionLabel={(option) => (option.grade)}
+                                                        styles={customStyles}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Alt dərəcə </span>
+                                                    <Select
+                                                        placeholder="Alt dərəcə"
+                                                        value={selectedSubGrade}
+                                                        onChange={(val) => {
+                                                            setSelectedSubGrade(val)
+                                                        }}
+                                                        isSearchable={subGrade ? subGrade.length > 5 ? true : false : false}
+                                                        options={subGrade}
+                                                        getOptionLabel={(option) => (option.subGrade)}
+                                                        styles={customStyles}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">İş vaxtı </span>
+                                                    <Select
+                                                        placeholder="İş vaxtı"
+                                                        value={selectedJobTime}
+                                                        onChange={(val) => {
+                                                            setSelectedJobTime(val)
+                                                        }}
+                                                        isSearchable={jobTimeOptions ? jobTimeOptions.length > 5 ? true : false : false}
+                                                        options={jobTimeOptions}
+                                                        getOptionLabel={(option) => (option.label)}
+                                                        styles={customStyles}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Digər fərdi əlavə </span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Digər fərdi əlavə"
+                                                                      type="number"
+                                                                      value={individualAddition}
+                                                                      onChange={(e) => setIndividualAddition(e.target.value)}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                        </Row>
+                                    </Tab>
 
-                                {/*                                    <Tab eventKey="8" title="" disabled={tab !== "8"}>
+                                    {/*                                    <Tab eventKey="8" title="" disabled={tab !== "8"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
@@ -8960,25 +8963,25 @@ return (
                                         </Row>
                                     </Tab>*/}
 
-                            </Tabs>
-                        </div>
-                        {
-                            save ?
-                                <div className="flex-vertical-center btn-block">
-                                    <Button className="btn-effect" onClick={() => senData()}>
-                                        Yadda saxla
-                                    </Button>
-                                </div>
+                                </Tabs>
+                            </div>
+                            {
+                                save ?
+                                    <div className="flex-vertical-center btn-block">
+                                        <Button className="btn-effect" onClick={() => senData()}>
+                                            Yadda saxla
+                                        </Button>
+                                    </div>
 
-                                : ""
-                        }
-                    </Form>
-                </div>
-            </Container>
-        </div>
-    </Aux>
+                                    : ""
+                            }
+                        </Form>
+                    </div>
+                </Container>
+            </div>
+        </Aux>
 
-);
+    );
 }
 
 export default CreateOperation
