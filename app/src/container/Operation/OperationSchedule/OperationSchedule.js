@@ -17,7 +17,7 @@ function OperationSchedule() {
     const [document, setDocument] = useState([]);
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [recordSize, setRecordSize] = useState(25)
+    const [recordSize, setRecordSize] = useState(20)
 
     const getDocument = (page) => {
         mainAxios({

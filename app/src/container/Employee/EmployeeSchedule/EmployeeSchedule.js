@@ -31,7 +31,7 @@ function EmployeeSchedule() {
     const token = localStorage.getItem('token');
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [recordSize, setRecordSize] = useState(15);
+    const [recordSize, setRecordSize] = useState(20);
 
     /*filter*/
 

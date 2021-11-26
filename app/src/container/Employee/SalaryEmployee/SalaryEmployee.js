@@ -27,7 +27,7 @@ function SalaryEmployee() {
     const [salary, setSalary] = useState([]);
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [recordSize, setRecordSize] = useState(4);
+    const [recordSize, setRecordSize] = useState(20);
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
     const [yearOptions, setYearOptions] = useState([]);
 
@@ -38,7 +38,7 @@ function SalaryEmployee() {
     const getSalary = (page) => {
         mainAxios({
             method: 'get',
-            url: '/employee-salary/calculate',
+            url: '/salaries',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -46,14 +46,14 @@ function SalaryEmployee() {
             params: {
                 page: page - 1,
                 size: recordSize,
-                year: 2021,
-                month: selectedMonth
+                /*    year: 2021,
+                    month: selectedMonth*/
             }
         }).then((res) => {
             setLoading(false)
             setCurrentPage(page)
-            setSalary(res.data.data.data);
-            setTotalRecord(res.data.data.totalElement);
+            setSalary(res.data.content);
+            setTotalRecord(res.data.totalElements);
         });
     }
 
@@ -146,7 +146,7 @@ function SalaryEmployee() {
 
     useEffect(() => {
         getSalary(1);
-        for (let i= 2021; i<=currentYear ; i++) {
+        for (let i = 2021; i <= currentYear; i++) {
             yearOptions.push({value: i, label: i});
         }
     }, []);
@@ -207,10 +207,13 @@ function SalaryEmployee() {
                             <thead>
                             <tr>
                                 <th>Soyadı, adı, ata adı</th>
-                                <th>İşçinin vəzifəsi</th>
+                                {/* <th>İşçinin vəzifəsi</th>
                                 <th>İş günlərinin sayı</th>
-                                <th>İşlədiyi günlərin sayı</th>
+                                <th>İşlədiyi günlərin sayı</th>*/}
+                                <th>Gross</th>
+                                <th>Net</th>
                                 <th>Yekun əmək haqqı</th>
+                                {/*
                                 <th>M.D.S.S Müəssə 3%</th>
                                 <th>İTS Müəssə</th>
                                 <th>İşsizlik Müəssə</th>
@@ -218,7 +221,7 @@ function SalaryEmployee() {
                                 <th>İşsizlik işçi</th>
                                 <th>M.D.S.S işçi</th>
                                 <th>İTS işçi</th>
-                                <th>Digər</th>
+                                <th>Digər</th>*/}
                             </tr>
                             </thead>
                             <tbody>
@@ -227,10 +230,13 @@ function SalaryEmployee() {
                                     salary.map((item, index) =>
                                         <tr key={index}>
                                             <td>{item.fullName}</td>
-                                            <td>{item.vacancyName}</td>
+                                            <td>{item.gross}</td>
+                                            <td>{item.net}</td>
+                                            <td>{item.calculated}</td>
+                                            {/*  <td>{item.vacancyName}</td>
                                             <td>{item.activeDayCount}</td>
-                                            <td>{item.employeeActiveDayCount}</td>
-                                            <td>{item.netSalary}</td>
+                                            <td>{item.employeeActiveDayCount}</td>*/}
+                                            {/* <td>{item.calculated}</td>
                                             <td>{item.positionMDSS}</td>
                                             <td>{item.positionITS}</td>
                                             <td>{item.positionUnemploymentTax}</td>
@@ -238,7 +244,7 @@ function SalaryEmployee() {
                                             <td>{item.employeeUnemploymentTax}</td>
                                             <td>{item.employeeMDSS}</td>
                                             <td>{item.employeeITS}</td>
-                                            <td>{item.other}</td>
+                                            <td>{item.other}</td>*/}
                                         </tr>
                                     )
                                     : null

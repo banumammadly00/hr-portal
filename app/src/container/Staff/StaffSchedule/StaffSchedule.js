@@ -13,7 +13,7 @@ function StaffSchedule() {
     const [position, setPosition] = useState([]);
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [recordSize, setRecordSize] = useState(15);
+    const [recordSize, setRecordSize] = useState(20);
 
 
     /*filter*/

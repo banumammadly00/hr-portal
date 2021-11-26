@@ -61,7 +61,7 @@ function ViewStaff() {
     const [operation, setOperation] = useState([])
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [recordSize, setRecordSize] = useState(15)
+    const [recordSize, setRecordSize] = useState(20)
 
     const getStaffInfo = () => {
         mainAxios({
@@ -132,7 +132,7 @@ function ViewStaff() {
         }).then((res) => {
             setCurrentPage(page)
             setOperation(res.data.content);
-            setTotalRecord(res.data.totalElement);
+            setTotalRecord(res.data.totalElements);
         });
     }
 

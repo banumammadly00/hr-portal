@@ -277,7 +277,7 @@ function ViewEmployee() {
         }).then((res) => {
             setCurrentPage(page)
             setOperation(res.data.content);
-            setTotalRecord(res.data.totalElement);
+            setTotalRecord(res.data.totalElements);
         });
     }
 

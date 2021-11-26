@@ -136,7 +136,7 @@ function EditStaff() {
     const [operation, setOperation] = useState([])
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [recordSize, setRecordSize] = useState(15)
+    const [recordSize, setRecordSize] = useState(20)
 
     const customStyles = {
         option: (provided) => ({
@@ -770,7 +770,7 @@ function EditStaff() {
         }).then((res) => {
             setCurrentPage(page)
             setOperation(res.data.content);
-            setTotalRecord(res.data.totalElement);
+            setTotalRecord(res.data.totalElements);
         });
     }
 
