@@ -13,7 +13,8 @@ function StaffSchedule() {
     const [position, setPosition] = useState([]);
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [recordSize, setRecordSize] = useState(15)
+    const [recordSize, setRecordSize] = useState(15);
+
 
     /*filter*/
 
@@ -23,6 +24,10 @@ function StaffSchedule() {
     const [selectedSubDepartment, setSelectedSubDepartment] = useState(null)
     const [selectedPosition, setSelectedPosition] = useState(null)
     const [showFilter, setShowFilter] = useState(false);
+
+    let depart = selectedDepartment !== null ? selectedDepartment.id : null;
+    let subDepart = selectedDepartment !== null ? selectedDepartment.id : null;
+    let positionId = selectedPosition !== null ? selectedPosition.id : null;
 
     const customStyles = {
         option: (provided, state) => ({
@@ -341,7 +346,7 @@ function StaffSchedule() {
                         </Table>
                     </div>
                     <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
-                              click={(page, depart, subDepart, position) => getVacancy(page, depart, subDepart, position)}/>
+                              click={(page) => getVacancy(page, depart, subDepart, positionId)}/>
                 </Container>
             </div>
         </Aux>

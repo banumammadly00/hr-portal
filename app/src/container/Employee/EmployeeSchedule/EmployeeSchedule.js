@@ -31,14 +31,14 @@ function EmployeeSchedule() {
     const token = localStorage.getItem('token');
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [recordSize, setRecordSize] = useState(25);
+    const [recordSize, setRecordSize] = useState(3);
 
     /*filter*/
 
     const [department, setDepartment] = useState([]);
     const [selectedDepartment, setSelectedDepartment] = useState(null)
     const [subDepartment, setSubDepartment] = useState([]);
-    const [selectedSubDepartment, setSelectedSubDepartment] = useState(null)
+    const [selectedSubDepartment, setSelectedSubDepartment] = useState( null)
     const [position, setPosition] = useState([]);
     const [selectedPosition, setSelectedPosition] = useState(null)
     const [fullName, setFullName] = useState('');
@@ -135,6 +135,11 @@ function EmployeeSchedule() {
 
     };
 
+    let depart = selectedDepartment !== null ? selectedDepartment.id : null;
+    let subDepart = selectedDepartment !== null ? selectedDepartment.id : null;
+    let jobStatus = selectedJobStatus !== null ? selectedJobStatus.id : null;
+    let positionId = selectedPosition !== null ? selectedPosition.id : null;
+    let name = fullName !== '' ? fullName : null;
 
     const handleRowClick = (item) => {
         history.push(`/employee/view/${item.id}`);
@@ -211,9 +216,9 @@ function EmployeeSchedule() {
                 page: page - 1,
                 size: recordSize,
                 departmentId: departId,
+                subDepartmentId: subDepartId,
                 jobStatus: jobStatus,
                 positionId: positionId,
-                subDepartmentId: subDepartId,
                 fullName: name,
             }
         }).then((res) => {
@@ -370,7 +375,7 @@ function EmployeeSchedule() {
                                                     />
                                                 </Form.Group>
                                             </div>
-                                          {/*  <div className="filter-item">
+                                            <div className="filter-item">
                                                 <Form.Group className="form-group m-0">
                                                     <span className="input-title">İşçinin adı</span>
                                                     <Form.Label>
@@ -383,11 +388,14 @@ function EmployeeSchedule() {
                                                                           let subDepartId = selectedSubDepartment !== null ? selectedSubDepartment.id : null;
                                                                           let positionId = selectedPosition !== null ? selectedPosition.id : null;
                                                                           let jobStatus = selectedJobStatus !== null ? selectedJobStatus.value : null;
-                                                                          getEmployee(1, departId, subDepartId, positionId, jobStatus, name)
+                                                                          const timer = setTimeout(() => {
+                                                                              getEmployee(1, departId, subDepartId, positionId, jobStatus, name)
+                                                                          }, 1000);
+                                                                          return () => clearTimeout(timer);
                                                                       }}/>
                                                     </Form.Label>
                                                 </Form.Group>
-                                            </div>*/}
+                                            </div>
                                         </div>
                                         <Button className="btn-border" onClick={() => resetFilter()}>
                                             Təmizlə
@@ -455,7 +463,7 @@ function EmployeeSchedule() {
                             }
                         </div>
                         <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
-                                  click={(page) => getEmployee(page)}/>
+                                  click={(page) => getEmployee(page, depart, subDepart, jobStatus, positionId, name)}/>
                     </Container>
                 </div>
             </div>
