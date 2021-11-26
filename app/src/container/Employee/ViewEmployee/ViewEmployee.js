@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Aux from "../../../hoc/Auxiliary";
 import {Container, Row, Col, Tabs, Tab, Image, Table, Form, Button} from 'react-bootstrap';
-import {Link, useRouteMatch} from 'react-router-dom';
+import {Link, useLocation, useParams, useRouteMatch} from 'react-router-dom';
 import {mainAxios} from "../../../components/Axios/axios";
 import userImage from '../../../assets/img/user.png'
 
@@ -16,8 +16,11 @@ const statuses = {
 };
 
 function ViewEmployee() {
-    const {params: {id}} = useRouteMatch('/employee/view/:id');
-    const [key, setKey] = useState('general');
+    let params = useParams();
+    let location = useLocation()
+    let id = params.id;
+    let activeKey = location.state ? location.state : undefined
+    const [key, setKey] = useState( activeKey !== undefined ? activeKey : 'general');
     const token = localStorage.getItem('token');
 
     /*-------------General--------------*/
@@ -312,7 +315,10 @@ function ViewEmployee() {
                                             <p className="user-position">{position}</p>
                                         </div>
                                     </div>
-                                    <Link to={`/employee/edit/${id}`} className="btn-border">
+                                    <Link to={{
+                                        pathname: `/employee/edit/${id}`,
+                                        state: {key}
+                                    }} className="btn-border">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <g opacity="0.8" clipPath="url(#clip0)">
@@ -556,7 +562,10 @@ function ViewEmployee() {
                                             <p className="user-position">{position}</p>
                                         </div>
                                     </div>
-                                    <Link to={`/employee/edit/${id}`} className="btn-border">
+                                    <Link to={{
+                                        pathname: `/employee/edit/${id}`,
+                                        state: {key}
+                                    }} className="btn-border">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <g opacity="0.8" clipPath="url(#clip0)">
@@ -843,7 +852,10 @@ function ViewEmployee() {
                                             <p className="user-position">{position}</p>
                                         </div>
                                     </div>
-                                    <Link to={`/employee/edit/${id}`} className="btn-border">
+                                    <Link to={{
+                                        pathname: `/employee/edit/${id}`,
+                                        state: {key}
+                                    }} className="btn-border">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <g opacity="0.8" clipPath="url(#clip0)">
@@ -1151,7 +1163,10 @@ function ViewEmployee() {
                                                 <p className="user-position">{position}</p>
                                             </div>
                                         </div>
-                                        <Link to={`/employee/edit/${id}`} className="btn-border">
+                                        <Link to={{
+                                            pathname: `/employee/edit/${id}`,
+                                            state: {key}
+                                        }} className="btn-border">
                                             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                                  xmlns="http://www.w3.org/2000/svg">
                                                 <g opacity="0.8" clipPath="url(#clip0)">
@@ -1290,7 +1305,10 @@ function ViewEmployee() {
                                                 <p className="user-position">{position}</p>
                                             </div>
                                         </div>
-                                        <Link to={`/employee/edit/${id}`} className="btn-border">
+                                        <Link to={{
+                                            pathname: `/employee/edit/${id}`,
+                                            state: {key}
+                                        }} className="btn-border">
                                             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                                  xmlns="http://www.w3.org/2000/svg">
                                                 <g opacity="0.8" clipPath="url(#clip0)">
@@ -1341,7 +1359,10 @@ function ViewEmployee() {
                                                 <p className="user-position">{position}</p>
                                             </div>
                                         </div>
-                                        <Link to={`/employee/edit/${id}`} className="btn-border">
+                                        <Link to={{
+                                            pathname: `/employee/edit/${id}`,
+                                            state: {key}
+                                        }} className="btn-border">
                                             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                                  xmlns="http://www.w3.org/2000/svg">
                                                 <g opacity="0.8" clipPath="url(#clip0)">

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Aux from "../../../hoc/Auxiliary";
 import {Button, Container, Row, Col, Form, Tabs, Tab, Table} from 'react-bootstrap';
-import {Link} from 'react-router-dom';
+import {Link, useLocation, useParams} from 'react-router-dom';
 import Select from 'react-select';
 import {mainAxios} from "../../../components/Axios/axios";
 import {useRouteMatch} from 'react-router-dom';
@@ -18,7 +18,10 @@ const statuses = {
 };
 
 function EditStaff() {
-    const {params: {id}} = useRouteMatch('/staff/edit/:id');
+    let params = useParams();
+    let location = useLocation()
+    let id = params.id;
+    let activeKey = location.state.key
 
     const evaluationOptions = [
         {value: 'BEST', label: 'Əla'},
@@ -72,7 +75,7 @@ function EditStaff() {
     ]
 
     /*check&visibility*/
-    const [key, setKey] = useState('general');
+    const [key, setKey] = useState(activeKey !== '' ? activeKey : 'general');
     const [loadingIndicator, setLoadingIndicator] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -307,7 +310,6 @@ function EditStaff() {
             setGrade(data);
         });
     }
-
 
     const getFamilyJob = () => {
         mainAxios({
@@ -573,8 +575,8 @@ function EditStaff() {
     const sendData = () => {
         setLoadingIndicator(true);
         let checkLegalArr = 0
-        for(let i of skillLegalArr) {
-            if(skillLegalArr.length === 1 && i.legislationId === null) {
+        for (let i of skillLegalArr) {
+            if (skillLegalArr.length === 1 && i.legislationId === null) {
                 checkLegalArr = 1
             }
         }
@@ -666,22 +668,22 @@ function EditStaff() {
         setLoadingIndicator(true);
         let checkProgramArr = 0
 
-        for(let i of skillProgramArr) {
-            if(skillProgramArr.length === 1 && i.computerId === null) {
+        for (let i of skillProgramArr) {
+            if (skillProgramArr.length === 1 && i.computerId === null) {
                 checkProgramArr = 1
             }
         }
         let checkLanguageArr = 0
 
-        for(let i of skillLanguageArr) {
-            if(skillLanguageArr.length === 1 && i.languageId === null) {
+        for (let i of skillLanguageArr) {
+            if (skillLanguageArr.length === 1 && i.languageId === null) {
                 checkLanguageArr = 1
             }
         }
         let checkSkillArr = 0
 
-        for(let i of skillArr) {
-            if(skillArr.length === 1 && i.requiredSkillId === null) {
+        for (let i of skillArr) {
+            if (skillArr.length === 1 && i.requiredSkillId === null) {
                 checkSkillArr = 1
             }
         }
@@ -794,7 +796,10 @@ function EditStaff() {
                 <Container fluid>
                     <div className="title-block flex">
                         <div className="title flex-center">
-                            <Link to={`/staff/view/${id}`} className="flex">
+                            <Link to={{
+                                pathname: `/staff/view/${id}`,
+                                state: {key}
+                            }} className="flex">
                                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path d="M23.3333 14H7.58333M12.25 8.75L7 14L12.25 19.25" stroke="#193651"
@@ -1163,7 +1168,7 @@ function EditStaff() {
                                                                             <Form.Group className="form-group">
                                                                                 <span className="input-title">Qanunvericilik aktları</span>
                                                                                 <Select
-                                                                                   value={item.legislationId}
+                                                                                    value={item.legislationId}
                                                                                     onChange={(val) => {
                                                                                         skillLegalArr[index].legislationId = val;
                                                                                         setSkillLegalArr([...skillLegalArr], skillLegalArr);
@@ -1173,7 +1178,7 @@ function EditStaff() {
                                                                                     options={legislationSkill}
                                                                                     getOptionLabel={(option) => (option.name)}
                                                                                     styles={customStyles}/>
-                                                                             {/*   <div className="validation-block flex-start">
+                                                                                {/*   <div className="validation-block flex-start">
                                                                                     {
                                                                                         errors['generalInformation.legislationStatementSet[].legislationId'] !== '' ?
                                                                                             <span className="text-validation">
@@ -1495,7 +1500,7 @@ function EditStaff() {
                                                                             options={computerSkill}
                                                                             getOptionLabel={(option) => (option.name)}
                                                                             styles={customStyles}/>
-                                                                       {/* <div className="validation-block flex-start">
+                                                                        {/* <div className="validation-block flex-start">
                                                                             {
                                                                                 errors['specialityKnowledge.computerKnowledgeSet[].computerId'] !== '' ?
                                                                                     <span
@@ -1595,7 +1600,7 @@ function EditStaff() {
                                                                             options={languageSkill}
                                                                             getOptionLabel={(option) => (option.name)}
                                                                             styles={customStyles}/>
-                                                                      {/*  <div className="validation-block flex-start">
+                                                                        {/*  <div className="validation-block flex-start">
                                                                             {
                                                                                 errors['specialityKnowledge.languageKnowledgeSet[].languageId'] !== '' ?
                                                                                     <span
@@ -1696,7 +1701,7 @@ function EditStaff() {
                                                                             styles={customStyles}
                                                                             getOptionLabel={(option) => (option.name)}
                                                                         />
-                                                                    {/*    <div className="validation-block flex-start">
+                                                                        {/*    <div className="validation-block flex-start">
                                                                             {
                                                                                 errors['specialityKnowledge.requiredKnowledgeSet[].requiredSkillId'] !== '' ?
                                                                                     <span

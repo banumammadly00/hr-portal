@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Aux from "../../../hoc/Auxiliary";
 import {Button, Container, Row, Col, Form, Tabs, Tab, InputGroup, Image, Table} from 'react-bootstrap';
-import {Link, useParams} from 'react-router-dom';
+import {Link, useParams, useLocation} from 'react-router-dom';
 import Select from 'react-select';
 import {mainAxios} from "../../../components/Axios/axios";
 import DatePicker from "react-datepicker";
@@ -21,9 +21,11 @@ const statuses = {
     'Hesablandı': 'calculated'
 };
 
-function CreateEmployee() {
+function EditEmployee() {
     let params = useParams();
+    let location = useLocation()
     let id = params.id;
+    let activeKey = location.state.key
 
     const familyConditionOptions = [
         {value: "MARRIED", label: "Evli"},
@@ -104,7 +106,7 @@ function CreateEmployee() {
         {value: "QUOTA_9", label: 'Şəhid ailələri'},
     ]
 
-    const [key, setKey] = useState('general');
+    const [key, setKey] = useState(activeKey !== '' ? activeKey : 'general');
     const [loadingIndicator, setLoadingIndicator] = useState(false);
     const [errors, setErrors] = useState({});
     const token = localStorage.getItem('token');
@@ -658,7 +660,7 @@ function CreateEmployee() {
         }).then((res) => {
 
             let accountData = res.data.account;
-            if(accountData !==null) {
+            if (accountData !== null) {
                 setBankAccount(accountData.number)
             }
             let personalData = res.data.personalInformation;
@@ -1330,7 +1332,10 @@ function CreateEmployee() {
                 <Container fluid>
                     <div className="title-block flex">
                         <div className="title flex-center">
-                            <Link to={`/employee/view/${id}`} className="flex">
+                            <Link to={{
+                                pathname: `/employee/view/${id}`,
+                                state: key
+                            }} className="flex">
                                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path d="M23.3333 14H7.58333M12.25 8.75L7 14L12.25 19.25" stroke="#193651"
@@ -4382,4 +4387,4 @@ function CreateEmployee() {
     );
 }
 
-export default CreateEmployee
+export default EditEmployee

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Aux from "../../../hoc/Auxiliary";
 import {Container, Tabs, Tab, Table, Button} from 'react-bootstrap';
-import {Link, useRouteMatch} from 'react-router-dom';
+import {Link, useLocation, useParams, useRouteMatch} from 'react-router-dom';
 import {mainAxios} from "../../../components/Axios/axios";
 import Paginate from "../../../components/Pagination/Pagination";
 
@@ -14,9 +14,12 @@ const statuses = {
 
 
 function ViewStaff() {
-    const {params: {id}} = useRouteMatch('/staff/view/:id');
+    let params = useParams();
+    let location = useLocation()
+    let id = params.id;
+    let activeKey = location.state ? location.state.key : undefined
 
-    const [key, setKey] = useState('general');
+    const [key, setKey] = useState( activeKey !== undefined ? activeKey : 'general');
 
     /*General*/
     const [institution, setInstitution] = useState([]);
@@ -114,7 +117,6 @@ function ViewStaff() {
         });
     }
 
-
     const getOperation = (page) => {
         mainAxios({
             method: 'get',
@@ -161,7 +163,9 @@ function ViewStaff() {
                                     <div className="staff-id">
                                         #{id}
                                     </div>
-                                    <Link to={`/staff/edit/${id}`} className="btn-border">
+                                    <Link to={{
+                                        pathname: `/staff/edit/${id}`,
+                                        state: {key}}} className="btn-border">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <g opacity="0.8" clipPath="url(#clip0)">
@@ -475,7 +479,9 @@ function ViewStaff() {
                                     <div className="staff-id">
                                         #{id}
                                     </div>
-                                    <Link to={`/staff/edit/${id}`} className="btn-border">
+                                    <Link to={{
+                                        pathname: `/staff/edit/${id}`,
+                                        state: {key}}} className="btn-border">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <g opacity="0.8" clipPath="url(#clip0)">
