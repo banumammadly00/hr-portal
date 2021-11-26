@@ -46,8 +46,8 @@ function SalaryEmployee() {
             params: {
                 page: page - 1,
                 size: recordSize,
-                /*    year: 2021,
-                    month: selectedMonth*/
+          /*      year: 2021,
+                month: selectedMonth*/
             }
         }).then((res) => {
             setLoading(false)

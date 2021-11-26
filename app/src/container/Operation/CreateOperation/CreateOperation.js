@@ -64,6 +64,13 @@ function CreateOperation() {
     /*------Employee----------*/
     const [employee, setEmployee] = useState([]);
 
+    const [department, setDepartment] = useState('')
+    const [subDepartment, setSubDepartment] = useState('');
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const [dayInEvent, setDayInEvent] = useState('');
+
+
 
     /*------Vacancy----------*/
     const [vacancy, setVacancy] = useState([]);
@@ -89,6 +96,8 @@ function CreateOperation() {
     const [selectedSubGrade, setSelectedSubGrade] = useState(null);
     const [vacancyMinGrade, setVacancyMinGrade] = useState(null);
     const [vacancyMaxGrade, setVacancyMaxGrade] = useState(null);
+    const [joinDate, setJoinDate] = useState(null);
+
 
 
     const [selectedStaff, setSelectedStaff] = useState(null);
@@ -102,11 +111,8 @@ function CreateOperation() {
     const [key, setKey] = useState('')
     const [noteArr, setNoteArr] = useState([""]);
     const [firedDate, setFiredDate] = useState(null);
-    const [joinDate, setJoinDate] = useState(null);
     const [changeDate, setChangeDate] = useState(null);
-    const [startDate, setStartDate] = useState(null);
     const [startVacationHeldDate, setStartVacationHeldDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
     const [endVacationHeldDate, setEndVacationHeldDate] = useState(null);
     const [callBackDate, setCallBackDate] = useState(null);
     const [businessTripStart, setBusinessTripStart] = useState(null);
@@ -120,8 +126,6 @@ function CreateOperation() {
 
     const [firedReason, setFiredReason] = useState('');
     const [compensation, setCompensation] = useState('');
-    const [department, setDepartment] = useState('')
-    const [subDepartment, setSubDepartment] = useState('');
 
     const [departments, setDepartments] = useState('');
     const [vacancyNames, setVacancyNames] = useState('');
@@ -144,7 +148,6 @@ function CreateOperation() {
     const [financialHelp, setFinancialHelp] = useState('');
     const [achievement, setAchievement] = useState('');
     const [changePeriod, setChangePeriod] = useState('');
-    const [dayInEvent, setDayInEvent] = useState('');
     const [dayOutEvent, setDayOutEvent] = useState('');
     const [eventName, setEventName] = useState('');
     const [presentationFullName, setPresentationFullName] = useState('');
@@ -239,6 +242,7 @@ function CreateOperation() {
             },
         }).then((res) => {
             let data = res.data.content
+
             /*     setDepartment(data.departmentName);
                  setSubDepartment(data.subDepartmentName);
                  setVacancyName(data.vacancyName);
@@ -361,7 +365,10 @@ function CreateOperation() {
             "jobTime": selectedJobTime !== null ? selectedJobTime.value : null
         }
 
-        console.log(tab)
+        let workVacation = {
+            "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
+            "to": endDate !== null ? moment(endDate).format("YYYY-MM-DD") : null
+        }
 
         const data = {
             "header": {
@@ -373,7 +380,8 @@ function CreateOperation() {
             "hire": tab == "7" ? hireData : null,
             "type": operationType !== '' ? operationType : null,
             "vacancyId": vacancyId ? vacancyId : null,
-            "employeeId": employeeId ? employeeId : null
+            "employeeId": employeeId ? employeeId : null,
+            "workVacation": tab == "17" ? workVacation : null
 
 
             /*            "achievementAmount": achievement !== "" ? parseFloat(achievement) : null,
@@ -1080,7 +1088,7 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
-                                    {/*                                    <Tab eventKey="8" title="" disabled={tab !== "8"}>
+                                                                      {/*  <Tab eventKey="8" title="" disabled={tab !== "8"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
@@ -1277,9 +1285,9 @@ function CreateOperation() {
                                                 )
                                             }
                                         </div>
-                                    </Tab>
+                                    </Tab>*/}
 
-                                    <Tab eventKey="9" title="" disabled={tab !== "9"}>
+                                {/*    <Tab eventKey="9" title="" disabled={tab !== "9"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
@@ -2944,26 +2952,26 @@ function CreateOperation() {
                                                 </Form.Group>
                                             </Col>
                                         </Row>
-                                    </Tab>
+                                    </Tab>*/}
 
                                     <Tab eventKey="17" title="" disabled={tab !== "17"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
                                                     <span
-                                                        className="input-title">İşçinin soyadı, adı, atasının adı *</span>
+                                                        className="input-title">İşçinin adı, soyadı, atasının adı *</span>
                                                     <Select
                                                         placeholder="İşçinin adı, soyadı, atasının adı"
                                                         value={selectedStaff}
                                                         onChange={(val) => {
                                                             let id = val.id
                                                             setEmployeeId(id)
-                                                            getEmployee(id)
+                                                            getEmployeeData(id)
                                                             setSelectedStaff(val);
                                                         }}
-                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
-                                                        options={staff}
-                                                        getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
+                                                        isSearchable={employee ? employee.length > 5 ? true : false : false}
+                                                        options={employee}
+                                                        getOptionLabel={(option) => (option.name)}
                                                         styles={customStyles}
                                                     />
                                                 </Form.Group>
@@ -3131,7 +3139,7 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={6}>
+                                           {/* <Col xs={6}>
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">İşə başlama tarixi </span>
                                                     <Form.Label className="relative m-0">
@@ -3204,11 +3212,11 @@ function CreateOperation() {
                                                         />
                                                     </Form.Label>
                                                 </Form.Group>
-                                            </Col>
+                                            </Col>*/}
                                         </Row>
                                     </Tab>
 
-                                    <Tab eventKey="18" title="" disabled={tab !== "18"}>
+                           {/*         <Tab eventKey="18" title="" disabled={tab !== "18"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
@@ -3479,9 +3487,9 @@ function CreateOperation() {
                                                 </Form.Group>
                                             </Col>
                                         </Row>
-                                    </Tab>
+                                    </Tab>*/}
 
-                                    <Tab eventKey="19" title="" disabled={tab !== "19"}>
+                           {/*         <Tab eventKey="19" title="" disabled={tab !== "19"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
@@ -5194,9 +5202,9 @@ function CreateOperation() {
                                                 </Form.Group>
                                             </Col>
                                         </Row>
-                                    </Tab>
+                                    </Tab>*/}
 
-                                    <Tab eventKey="25" title="" disabled={tab !== "25"}>
+                               {/*     <Tab eventKey="25" title="" disabled={tab !== "25"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
@@ -6271,9 +6279,9 @@ function CreateOperation() {
                                                 )
                                             }
                                         </div>
-                                    </Tab>
+                                    </Tab>*/}
 
-                                    <Tab eventKey="31" title="" disabled={tab !== "31"}>
+                                {/*    <Tab eventKey="31" title="" disabled={tab !== "31"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
@@ -7221,9 +7229,9 @@ function CreateOperation() {
                                                 </Form.Group>
                                             </Col>
                                         </Row>
-                                    </Tab>
+                                    </Tab>*/}
 
-                                    <Tab eventKey="35" title="" disabled={tab !== "35"}>
+                             {/*       <Tab eventKey="35" title="" disabled={tab !== "35"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
@@ -8264,9 +8272,9 @@ function CreateOperation() {
                                                 </Form.Group>
                                             </Col>
                                         </Row>
-                                    </Tab>
+                                    </Tab>*/}
 
-                                    <Tab eventKey="41" title="" disabled={tab !== "41"}>
+                                  {/*  <Tab eventKey="41" title="" disabled={tab !== "41"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">

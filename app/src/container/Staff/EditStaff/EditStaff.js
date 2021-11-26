@@ -1772,8 +1772,8 @@ function EditStaff() {
                                             operation.map((item, index) =>
                                                 <tr key={index}>
                                                     <td>{item.id}</td>
-                                                    <td>{item.documentType}</td>
-                                                    <td>{item.createDate}</td>
+                                                    <td>{item.type}</td>
+                                                    <td>{item.createdAt}</td>
                                                     <td>
                                                         <div className="flex">
                                                              <span className={statuses[item.status]}>

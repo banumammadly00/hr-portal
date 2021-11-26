@@ -69,7 +69,7 @@ function OperationSchedule() {
     const getExportDocument = (id, operationName) => {
         mainAxios({
             method: 'get',
-            url: '/document/export/' + id,
+            url: `/operations/${id}/export`,
             responseType: 'arraybuffer',
             headers: {
                 'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ function OperationSchedule() {
             const url = window.URL.createObjectURL(new Blob([res.data]));
             const link = window.document.createElement('a');
             link.href = url;
-            link.setAttribute('download', `${operationName}.pdf`);
+            link.setAttribute('download', `${operationName}.doc`);
             window.document.body.appendChild(link);
             link.click();
         })
@@ -140,28 +140,14 @@ function OperationSchedule() {
                                                  </span>
                                                 <ul className="btn-block list-unstyled flex m-0">
                                                     <li>
-                                                        <Button className="btn-export"  onClick={() => getExportDocument(item.id, item.documentType)}>
-                                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                                                 xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M3.75 10.625V3.75C3.75 3.58424 3.81585 3.42527 3.93306 3.30806C4.05027 3.19085 4.20924 3.125 4.375 3.125H11.8756L16.2506 7.5V10.625"
-                                                                    stroke="#040647" strokeLinecap="round"
-                                                                    strokeLinejoin="round"/>
-                                                                <path d="M11.875 3.125V7.5H16.2506" stroke="#040647"
-                                                                      strokeLinecap="round" strokeLinejoin="round"/>
-                                                                <path
-                                                                    d="M3.75 15.625H5C5.33152 15.625 5.64946 15.4933 5.88388 15.2589C6.1183 15.0245 6.25 14.7065 6.25 14.375C6.25 14.0435 6.1183 13.7255 5.88388 13.4911C5.64946 13.2567 5.33152 13.125 5 13.125H3.75V16.875"
-                                                                    stroke="#040647" strokeLinecap="round"
-                                                                    strokeLinejoin="round"/>
-                                                                <path
-                                                                    d="M9.6875 16.875C10.1848 16.875 10.6617 16.6775 11.0133 16.3258C11.365 15.9742 11.5625 15.4973 11.5625 15C11.5625 14.5027 11.365 14.0258 11.0133 13.6742C10.6617 13.3225 10.1848 13.125 9.6875 13.125H8.75V16.875H9.6875Z"
-                                                                    stroke="#040647" strokeLinecap="round"
-                                                                    strokeLinejoin="round"/>
-                                                                <path d="M16.25 13.125H14.0625V16.875" stroke="#040647"
-                                                                      strokeLinecap="round" strokeLinejoin="round"/>
-                                                                <path d="M15.9375 15.3125H14.0625" stroke="#040647"
-                                                                      strokeLinecap="round" strokeLinejoin="round"/>
+                                                        <Button className="btn-export"  onClick={() => getExportDocument(item.id, item.type)}>
+                                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M17.1875 19.25H4.81247C4.63013 19.25 4.45527 19.1776 4.32635 19.0486C4.19742 18.9197 4.125 18.7448 4.125 18.5625V3.4375C4.125 3.25517 4.19742 3.0803 4.32635 2.95137C4.45527 2.82244 4.63013 2.75 4.81247 2.75H13.0627L17.875 7.5625V18.5625C17.875 18.7448 17.8026 18.9197 17.6737 19.0486C17.5447 19.1776 17.3699 19.25 17.1875 19.25V19.25Z" stroke="#040647" strokeLinecap="round" strokeLinejoin="round"/>
+                                                                <path d="M13.0625 2.75V7.5625H17.8757" stroke="#040647" strokeLinecap="round" strokeLinejoin="round"/>
+                                                                <path d="M8.25 11.6875H13.75" stroke="#040647" strokeLinecap="round" strokeLinejoin="round"/>
+                                                                <path d="M8.25 14.4375H13.75" stroke="#040647" strokeLinecap="round" strokeLinejoin="round"/>
                                                             </svg>
+
                                                         </Button>
                                                     </li>
                                                     {
