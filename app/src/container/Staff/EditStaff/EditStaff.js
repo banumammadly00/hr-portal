@@ -608,8 +608,8 @@ function EditStaff() {
                 "functionalities": positionFunctionArr,
                 "gender": selectedGender !== null ? selectedGender.value : null,
                 "gradeRange": {
-                    "max": selectedMinGrade !== null ? selectedMinGrade.grade : null,
-                    "min": selectedMaxGrade !== null ? selectedMaxGrade.grade : null
+                    "max": selectedMaxGrade !== null ? selectedMaxGrade.grade : null,
+                    "min": selectedMinGrade !== null ? selectedMinGrade.grade : null
                 },
                 "healthy": selectedHealth !== null ? selectedHealth.value : null,
                 "height": parseFloat(height),
