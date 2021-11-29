@@ -835,7 +835,7 @@ function EditStaff() {
                                                         />
                                                         <div className="validation-block flex-start">
                                                             {
-                                                                errors.hasOwnProperty('generalInformation.institutionI') && errors['generalInformation.institutionId'] !== '' ?
+                                                               errors['generalInformation.institutionId'] !== '' ?
                                                                     <span
                                                                         className="text-validation">{errors['generalInformation.institutionId']}</span>
                                                                     : null
