@@ -7,8 +7,6 @@ import userImage from '../../../assets/img/user.png'
 import {useHistory} from "react-router-dom";
 import Paginate from "../../../components/Pagination/Pagination";
 import Select from "react-select";
-import DatePicker from "react-datepicker";
-import moment from "moment";
 import EmptyData from "../../../components/EmptyData/EmptyData";
 import Swal from "sweetalert2";
 
@@ -44,7 +42,7 @@ function EmployeeSchedule() {
     const [fullName, setFullName] = useState('');
     const [selectedJobStatus, setSelectedJobStatus] = useState('');
     const [showFilter, setShowFilter] = useState(false)
-    const [emptyData, setEmptyData] = useState(false)
+    const [emptyData, setEmptyData] = useState(false);
 
     const customStyles = {
         option: (provided, state) => ({
@@ -383,16 +381,23 @@ function EmployeeSchedule() {
                                                                       value={fullName}
                                                                       onChange={(e) => {
                                                                           setFullName(e.target.value)
-                                                                          let name = e.target.value !== '' ? e.target.value : null;
+                                                                          //let name = e.target.value !== '' ? e.target.value : null;
+                                                                          //console.log(fullName)
+/*
+                                                                          const timer = setTimeout(() => {
+                                                                          }, 1000);
+                                                                          return () => clearTimeout(timer);*/
+                                                                      }}
+                                                                      onKeyPress={(e)=> {
                                                                           let departId = selectedDepartment !== null ? selectedDepartment.id : null;
                                                                           let subDepartId = selectedSubDepartment !== null ? selectedSubDepartment.id : null;
                                                                           let positionId = selectedPosition !== null ? selectedPosition.id : null;
                                                                           let jobStatus = selectedJobStatus !== null ? selectedJobStatus.value : null;
-                                                                          const timer = setTimeout(() => {
-                                                                              getEmployee(1, departId, subDepartId, positionId, jobStatus, name)
-                                                                          }, 1000);
-                                                                          return () => clearTimeout(timer);
-                                                                      }}/>
+                                                                          if (e.key === 'Enter') {
+                                                                              getEmployee(1, departId, subDepartId, positionId, jobStatus, e.target.value)
+                                                                          }
+                                                                      }}
+                                                        />
                                                     </Form.Label>
                                                 </Form.Group>
                                             </div>
