@@ -1577,6 +1577,7 @@ td {
     min-height: auto;
     padding: 15px;
     align-items: flex-end;
+    overflow-x: unset;
 }
 
 .filter-block .filter-left {

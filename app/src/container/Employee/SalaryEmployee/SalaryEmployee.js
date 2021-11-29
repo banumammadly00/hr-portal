@@ -28,7 +28,7 @@ function SalaryEmployee() {
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [recordSize, setRecordSize] = useState(20);
-    const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+    const [selectedMonth, setSelectedMonth] = useState(currentMonth - 1);
     const [yearOptions, setYearOptions] = useState([]);
 
     const [selectedYear, setSelectedYear] = useState(currentYear);
@@ -46,8 +46,8 @@ function SalaryEmployee() {
             params: {
                 page: page - 1,
                 size: recordSize,
-          /*      year: 2021,
-                month: selectedMonth*/
+                year: 2021,
+                //month: selectedMonth
             }
         }).then((res) => {
             setLoading(false)
@@ -57,24 +57,20 @@ function SalaryEmployee() {
         });
     }
 
-    const calculate = () => {
-        setLoading(true)
-        getSalary(1)
-    }
 
     const customStyles = {
         option: (provided, state) => ({
             ...provided,
             color: '#040647',
             backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '10px',
+            padding: '10px 16px',
             margin: '0',
             fontSize: '16px',
             "&:first-of-type": {
                 borderRadius: '2px 2px 0 0',
             },
             "&:hover": {
-                backgroundColor: '#FAFCFF',
+                backgroundColor: '#FFF',
             },
             "&:last-child": {
                 borderBottom: 'none',
@@ -82,7 +78,7 @@ function SalaryEmployee() {
             },
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             position: 'relative'
 
         }),
@@ -90,13 +86,14 @@ function SalaryEmployee() {
         indicatorSeparator: () => {
         },
 
-        indicatorsContainer: (provided, state) => ({
+        indicatorsContainer: (provided) => ({
             ...provided,
+            paddingRight: '8px'
         }),
 
         control: (provided) => ({
             ...provided,
-            minHeight: '43px',
+            minHeight: '44px',
             fontSize: '14px',
             padding: '0',
             margin: '0',
@@ -112,8 +109,14 @@ function SalaryEmployee() {
 
         container: (provided) => ({
             ...provided,
-            width: '100%'
+            width: '100%',
         }),
+
+        valueContainer: (provided) => ({
+            ...provided,
+            padding: '2px 8px 2px 16px'
+        }),
+
 
         menu: (provided) => ({
             ...provided,
@@ -144,6 +147,11 @@ function SalaryEmployee() {
 
     };
 
+
+    const resetFilter = () => {
+        getSalary(1)
+    }
+
     useEffect(() => {
         getSalary(1);
         for (let i = 2021; i <= currentYear; i++) {
@@ -159,46 +167,64 @@ function SalaryEmployee() {
                         <div className="title">
                             Əmək haqqı hesablama
                         </div>
-                        <ul className="btn-block flex-end list-unstyled m-0">
-                            <li>
-                                <Form.Group className="m-0 form-group">
-                                    <Select
-                                        defaultValue={{label: currentYear, value: currentYear}}
-                                        value={selectedYear.label}
-                                        placeholder="Year"
-                                        onChange={(val) => {
-                                            val = val.value
-                                            setSelectedYear(val)
-                                        }}
-                                        options={yearOptions}
-                                        styles={customStyles}
-                                    />
-                                </Form.Group>
-                            </li>
-                            <li>
-                                <Form.Group className="m-0 form-group">
-                                    <Select
-                                        defaultValue={monthOptions[currentMonth - 1]}
-                                        value={selectedMonth.label}
-                                        placeholder="Month"
-                                        onChange={(val) => {
-                                            val = val.value
-                                            setSelectedMonth(val)
-                                        }}
-                                        options={monthOptions}
-                                        styles={customStyles}
-                                        isSearchable={false}
-                                        getOptionLabel={(option) => option.label}
-                                    />
-                                </Form.Group>
-                            </li>
-                            <li>
-                                <button type="button" className="btn-main" onClick={() => calculate()}>
-                                    Hesabla
-                                </button>
-                            </li>
-                        </ul>
                     </div>
+                    <div className="filter-block">
+                        <div className="block flex">
+                            <div className="filter-left">
+                                <div className="filter-item">
+                                    <Form.Group className="m-0 form-group">
+                                        <Select
+                                            defaultValue={{label: currentYear, value: currentYear}}
+                                            value={selectedYear.label}
+                                            placeholder="Year"
+                                            onChange={(val) => {
+                                                val = val.value
+                                                setSelectedYear(val)
+                                            }}
+                                            options={yearOptions}
+                                            styles={customStyles}
+                                        />
+                                    </Form.Group>
+                                    {/*  <Form.Group className="form-group m-0">
+                                            <span className="input-title">Struktur vahidinin adı</span>
+                                            <Select
+                                                placeholder="Struktur vahidini seçin"
+                                                onChange={(val) => {
+
+                                                }}
+                                                isSearchable={}
+                                                options={}
+                                                getOptionLabel={(option) => (option.name)}
+                                                styles={customStyles}
+                                            />
+                                        </Form.Group>*/}
+                                </div>
+                                <div className="filter-item">
+                                    <Form.Group className="m-0 form-group">
+                                        <Select
+                                            defaultValue={monthOptions[currentMonth - 2]}
+                                            value={selectedMonth.label}
+                                            placeholder="Month"
+                                            onChange={(val) => {
+                                                val = val.value
+                                                setSelectedMonth(val);
+                                                getSalary(1)
+                                            }}
+                                            options={monthOptions}
+                                            styles={customStyles}
+                                            isSearchable={false}
+                                            getOptionLabel={(option) => option.label}
+                                        />
+                                    </Form.Group>
+
+                                </div>
+                            </div>
+                            <Button className="btn-border" onClick={() => resetFilter()}>
+                                Təmizlə
+                            </Button>
+                        </div>
+                    </div>
+
                     <div className="block">
                         <Table responsive="sm" hover className={["m-0", loading ? 'active' : ''].join(' ')}>
                             <tbody>
@@ -207,21 +233,17 @@ function SalaryEmployee() {
                             <thead>
                             <tr>
                                 <th>Soyadı, adı, ata adı</th>
-                                {/* <th>İşçinin vəzifəsi</th>
-                                <th>İş günlərinin sayı</th>
-                                <th>İşlədiyi günlərin sayı</th>*/}
                                 <th>Gross</th>
                                 <th>Net</th>
                                 <th>Yekun əmək haqqı</th>
-                                {/*
-                                <th>M.D.S.S Müəssə 3%</th>
-                                <th>İTS Müəssə</th>
-                                <th>İşsizlik Müəssə</th>
+                                <th>D.S.M.F</th>
+                                <th>Həmkarlar</th>
                                 <th>Gəlir vergisi</th>
-                                <th>İşsizlik işçi</th>
-                                <th>M.D.S.S işçi</th>
-                                <th>İTS işçi</th>
-                                <th>Digər</th>*/}
+                                <th>M.D.S.S </th>
+                                <th>Tibbi sığorta</th>
+                                <th>Port Tax</th>
+                                <th>İşsizlik </th>
+                                <th>İşlədiyi günlərin sayı</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -230,21 +252,17 @@ function SalaryEmployee() {
                                     salary.map((item, index) =>
                                         <tr key={index}>
                                             <td>{item.fullName}</td>
-                                            <td>{item.gross}</td>
-                                            <td>{item.net}</td>
-                                            <td>{item.calculated}</td>
-                                            {/*  <td>{item.vacancyName}</td>
-                                            <td>{item.activeDayCount}</td>
-                                            <td>{item.employeeActiveDayCount}</td>*/}
-                                            {/* <td>{item.calculated}</td>
-                                            <td>{item.positionMDSS}</td>
-                                            <td>{item.positionITS}</td>
-                                            <td>{item.positionUnemploymentTax}</td>
-                                            <td>{item.incomingTax}</td>
-                                            <td>{item.employeeUnemploymentTax}</td>
-                                            <td>{item.employeeMDSS}</td>
-                                            <td>{item.employeeITS}</td>
-                                            <td>{item.other}</td>*/}
+                                            <td>{item.salaryDetails !== null ? item.salaryDetails.gross : null}</td>
+                                            <td>{item.salaryDetails !== null ? item.salaryDetails.net : null}</td>
+                                            <td>{item.salaryDetails !==null ? item.salaryDetails.calculated : null}</td>
+                                            <td>{item.salaryDetails !==null ? item.salaryDetails.dsmfTax : null}</td>
+                                            <td>{item.salaryDetails !==null ? item.salaryDetails.hysTax : null}</td>
+                                            <td>{item.salaryDetails !==null ? item.salaryDetails.incomingTax : null}</td>
+                                            <td>{item.salaryDetails !==null ? item.salaryDetails.mdssTax : null}</td>
+                                            <td>{item.salaryDetails !==null ? item.salaryDetails.medicalInsuranceTax : null}</td>
+                                            <td>{item.salaryDetails !==null ? item.salaryDetails.portTax : null}</td>
+                                            <td>{item.salaryDetails !==null ? item.salaryDetails.unemploymentTax : null}</td>
+                                            <td>{item.salaryDetails !==null ? item.salaryDetails.workedDayCount : null}</td>
                                         </tr>
                                     )
                                     : null
