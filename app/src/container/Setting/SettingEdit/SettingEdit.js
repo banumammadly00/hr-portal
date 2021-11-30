@@ -5,29 +5,6 @@ import {Container, Row, Col, Form} from 'react-bootstrap';
 import Dropdown from 'react-bootstrap/Dropdown'
 import Select from "react-select";
 
-const gradeOptions = [
-    {value: 1, label: '1'},
-    {value: 2, label: '2'},
-    {value: 3, label: '3'},
-    {value: 4, label: '4'},
-    {value: 5, label: '5'},
-    {value: 6, label: '6'},
-    {value: 7, label: '7'},
-    {value: 8, label: '8'},
-    {value: 9, label: '9'},
-    {value: 10, label: '10'},
-    {value: 11, label: '11'},
-    {value: 12, label: '12'},
-    {value: 13, label: '13'},
-    {value: 14, label: '14'},
-    {value: 15, label: '15'},
-    {value: 16, label: '16'},
-    {value: 17, label: '17'},
-    {value: 18, label: '18'},
-    {value: 19, label: '19'},
-]
-
-
 function SettingEdit() {
 
     const [countryArr, setCountryArr] = useState([]);
@@ -155,9 +132,6 @@ function SettingEdit() {
             backgroundColor: '#FAFCFF',
             boxShadow: 'none',
             border: '1px solid rgba(4, 6, 71, 0.1)',
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0,
-            borderRight: 0,
             "&:hover": {
                 borderColor: 'rgba(4, 6, 71, 0.1)',
             },
@@ -996,7 +970,6 @@ function SettingEdit() {
         });
     }
 
-
     const senSubDepartment = () => {
         let data = {
             name: subDepartment
@@ -1025,6 +998,24 @@ function SettingEdit() {
             },
         }).then((res) => {
             getDepartment()
+        });
+    }
+
+    const sendEvaluation = () => {
+        let data = {
+            amount: evaluation !== '' ? parseFloat(evaluation) : null,
+            gradeId: selectedMinGrade !== null ? selectedMinGrade.id : null,
+            subGradeId: selectedMaxGrade !== null ?  selectedMaxGrade.id : null
+        }
+        mainAxios({
+            method: 'post',
+            url: '/evaluations',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            data: data
+        }).then((res) => {
         });
     }
 
@@ -1092,7 +1083,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -1173,7 +1164,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -1254,7 +1245,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -1335,7 +1326,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -1416,7 +1407,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -1496,7 +1487,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -1577,7 +1568,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -1656,7 +1647,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -1736,7 +1727,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -1816,7 +1807,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -1895,7 +1886,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -1974,7 +1965,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -2054,7 +2045,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -2134,7 +2125,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -2215,7 +2206,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -2295,7 +2286,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -2378,7 +2369,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -2460,7 +2451,7 @@ function SettingEdit() {
                                             d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
                                             fill="#3083DC"/>
                                     </svg>
-                                    Əlavə et
+                                     əlavə et
                                 </button>
                             </div>
                         </Col>
@@ -2589,25 +2580,25 @@ function SettingEdit() {
                             <div className="flex">
                                 <Form.Group className="form-group m-0 w-100">
                                     <Select
-                                        placeholder="Min dərəcə"
+                                        placeholder="Dərəcə"
                                         value={selectedMinGrade}
                                         onChange={setSelectedMinGrade}
-                                        options={gradeOptions}
-                                        isSearchable={gradeOptions ? gradeOptions.length > 5 ? true : false : false}
+                                        options={gradeArr}
+                                        isSearchable={gradeArr ? gradeArr.length > 5 ? true : false : false}
                                         styles={customStyles}
-                                        getOptionLabel={(option) => (option.label)}
+                                        getOptionLabel={(option) => (option.grade)}
                                     />
                                 </Form.Group>
                                 <span className="break-line"></span>
                                 <Form.Group className="form-group m-0 w-100">
                                     <Select
-                                        placeholder="Max dərəcə"
+                                        placeholder="Alt dərəcə"
                                         value={selectedMaxGrade}
                                         onChange={setSelectedMaxGrade}
-                                        options={gradeOptions}
-                                        isSearchable={gradeOptions ? gradeOptions.length > 5 ? true : false : false}
+                                        options={subGradeArr}
+                                        isSearchable={subGradeArr ? subGradeArr.length > 5 ? true : false : false}
                                         styles={customStyles}
-                                        getOptionLabel={(option) => (option.label)}
+                                        getOptionLabel={(option) => (option.subGrade)}
                                     />
 
                                 </Form.Group>
@@ -2619,12 +2610,18 @@ function SettingEdit() {
                                 <Form.Label>
                                     <Form.Control
                                         value={evaluation}
+                                        type="number"
                                         placeholder="Qiymətləndirmə"
                                         onChange={e => setEvaluation(e.target.value)}/>
                                 </Form.Label>
-
-
                             </Form.Group>
+                        </Col>
+                        <Col xs={1}>
+                           <div className="btn-block">
+                               <button className="btn-green-border" onClick={()=> sendEvaluation()}>
+                                   Saxla
+                               </button>
+                           </div>
                         </Col>
                     </div>
                 </div>
