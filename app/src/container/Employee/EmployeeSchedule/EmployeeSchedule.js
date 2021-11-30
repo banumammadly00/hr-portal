@@ -8,12 +8,11 @@ import {useHistory} from "react-router-dom";
 import Paginate from "../../../components/Pagination/Pagination";
 import Select from "react-select";
 import EmptyData from "../../../components/EmptyData/EmptyData";
-import Swal from "sweetalert2";
 
 const statuses = {
-    'IN': 'İşləyir',
-    'OUT': 'Çıxarılıb',
-    'NEW': 'Yeni işçi'
+    'IN': 'işləyir',
+    'OUT': 'çıxarılıb',
+    'NEW': 'yeni işçi'
 };
 
 
@@ -47,11 +46,11 @@ function EmployeeSchedule() {
     const customStyles = {
         option: (provided, state) => ({
             ...provided,
-            color: '#040647',
+            color: '#193651',
             backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '10px 16px',
+            padding: '5px 16px',
             margin: '0',
-            fontSize: '16px',
+            fontSize: '14px',
             "&:first-of-type": {
                 borderRadius: '2px 2px 0 0',
             },
@@ -63,9 +62,10 @@ function EmployeeSchedule() {
                 borderRadius: '0 0 2px 2px',
             },
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             justifyContent: 'flex-start',
-            position: 'relative'
+            position: 'relative',
+            textAlign: 'left'
 
         }),
 
@@ -74,12 +74,12 @@ function EmployeeSchedule() {
 
         indicatorsContainer: (provided) => ({
             ...provided,
-            paddingRight: '8px'
+            paddingRight: '4px'
         }),
 
         control: (provided) => ({
             ...provided,
-            minHeight: '44px',
+            minHeight: '42px',
             fontSize: '14px',
             padding: '0',
             margin: '0',
@@ -100,17 +100,17 @@ function EmployeeSchedule() {
 
         valueContainer: (provided) => ({
             ...provided,
-            padding: '2px 8px 2px 16px'
+            padding: '2px 8px 2px 12px'
         }),
 
 
         menu: (provided) => ({
             ...provided,
             borderRadius: '2px',
-            padding: '0',
+            padding: '10px 0',
             margin: '0',
             borderColor: 'red',
-            width: '100%'
+            width: '100%',
         }),
 
         dropdownIndicator: defaultStyles => ({
@@ -127,9 +127,16 @@ function EmployeeSchedule() {
         menuList: base => ({
             ...base,
             padding: 0,
-            borderColor: 'red'
 
-        })
+        }),
+
+        placeholder: (provided) => ({
+            ...provided,
+            width: '100%',
+            textAlign: 'left',
+            whiteSpace : 'nowrap'
+
+        }),
 
     };
 

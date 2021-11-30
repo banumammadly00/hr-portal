@@ -171,6 +171,102 @@ function CreateOperation() {
     const [positionVacancyCategory, setPositionVacancyCategory] = useState('');
     const [positionWorkPlace, setPositionWorkPlace] = useState('');
 
+    const customStyles = {
+        option: (provided,state) => ({
+            ...provided,
+            color: '#040647',
+            backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
+            padding: '10px 16px',
+            margin: '0',
+            fontSize: '16px',
+            "&:first-of-type": {
+                borderRadius: '2px 2px 0 0',
+            },
+            "&:hover": {
+                backgroundColor: '#FFF',
+            },
+            "&:last-child": {
+                borderBottom: 'none',
+                borderRadius: '0 0 2px 2px',
+            },
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            position: 'relative'
+
+        }),
+
+        indicatorSeparator: () => {
+        },
+
+        indicatorsContainer: (provided) => ({
+            ...provided,
+            paddingRight: '4px'
+        }),
+
+        control: (provided) => ({
+            ...provided,
+            minHeight: '42px',
+            fontSize: '14px',
+            padding: '0',
+            margin: '0',
+            color: '#66615b',
+            backgroundColor: '#FAFCFF',
+            boxShadow: 'none',
+            border: '1px solid rgba(4, 6, 71, 0.1)',
+            "&:hover": {
+                borderColor: 'rgba(4, 6, 71, 0.1)',
+            },
+
+        }),
+
+        container: (provided) => ({
+            ...provided,
+            width: '100%',
+        }),
+
+        valueContainer: (provided) => ({
+            ...provided,
+            padding: '2px 8px 2px 12px'
+        }),
+
+
+        menu: (provided) => ({
+            ...provided,
+            borderRadius: '2px',
+            padding: '0',
+            margin: '0',
+            borderColor: 'red',
+            width: '100%'
+        }),
+
+        dropdownIndicator: defaultStyles => ({
+            ...defaultStyles,
+            'svg path': {
+                fill: 'rgba(24,24,24, .8)',
+            },
+
+            'svg': {
+                width: '18px'
+            },
+        }),
+
+        menuList: base => ({
+            ...base,
+            padding: 0,
+            borderColor: 'red'
+
+        }),
+
+        placeholder: (provided) => ({
+            ...provided,
+            width: '100%',
+            textAlign: 'left',
+            whiteSpace : 'nowrap'
+
+        }),
+
+    };
 
     const getOperationName = () => {
         mainAxios({
@@ -467,93 +563,6 @@ function CreateOperation() {
             })
         });
     }
-
-    const customStyles = {
-        option: (provided, state) => ({
-            ...provided,
-            color: '#040647',
-            backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '10px 16px',
-            margin: '0',
-            fontSize: '16px',
-            "&:first-of-type": {
-                borderRadius: '2px 2px 0 0',
-            },
-            "&:hover": {
-                backgroundColor: '#FAFCFF',
-            },
-            "&:last-child": {
-                borderBottom: 'none',
-                borderRadius: '0 0 2px 2px',
-            },
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            position: 'relative'
-
-        }),
-        valueContainer: (provided) => ({
-            ...provided,
-            padding: '2px 8px 2px 16px'
-        }),
-
-        indicatorSeparator: () => {
-        },
-
-        indicatorsContainer: (provided) => ({
-            ...provided,
-            paddingRight: '8px'
-        }),
-
-        control: (provided) => ({
-            ...provided,
-            minHeight: '43px',
-            fontSize: '14px',
-            padding: '0',
-            margin: '0',
-            color: '#66615b',
-            backgroundColor: '#FAFCFF',
-            boxShadow: 'none',
-            border: '1px solid rgba(4, 6, 71, 0.1)',
-            "&:hover": {
-                borderColor: 'rgba(4, 6, 71, 0.1)',
-            },
-
-        }),
-
-        container: (provided) => ({
-            ...provided,
-            width: '100%'
-        }),
-
-        menu: (provided) => ({
-            ...provided,
-            borderRadius: '2px',
-            padding: '0',
-            margin: '0',
-            borderColor: 'red',
-            width: '100%'
-        }),
-
-        dropdownIndicator: defaultStyles => ({
-            ...defaultStyles,
-            'svg path': {
-                fill: 'rgba(24,24,24, .8)',
-            },
-
-            'svg': {
-                width: '18px'
-            },
-        }),
-
-        menuList: base => ({
-            ...base,
-            padding: 0,
-            borderColor: 'red'
-
-        })
-
-    };
 
     useEffect(() => {
         getOperationName();

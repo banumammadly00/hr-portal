@@ -280,7 +280,7 @@ function EmployeeCreate() {
                 borderRadius: '2px 2px 0 0',
             },
             "&:hover": {
-                backgroundColor: '#FAFCFF',
+                backgroundColor: '#FFF',
             },
             "&:last-child": {
                 borderBottom: 'none',
@@ -298,12 +298,12 @@ function EmployeeCreate() {
 
         indicatorsContainer: (provided) => ({
             ...provided,
-            paddingRight: '8px'
+            paddingRight: '4px'
         }),
 
         control: (provided) => ({
             ...provided,
-            minHeight: '44px',
+            minHeight: '42px',
             fontSize: '14px',
             padding: '0',
             margin: '0',
@@ -324,7 +324,7 @@ function EmployeeCreate() {
 
         valueContainer: (provided) => ({
             ...provided,
-            padding: '2px 8px 2px 16px'
+            padding: '2px 8px 2px 12px'
         }),
 
 
@@ -353,7 +353,15 @@ function EmployeeCreate() {
             padding: 0,
             borderColor: 'red'
 
-        })
+        }),
+
+        placeholder: (provided) => ({
+            ...provided,
+            width: '100%',
+            textAlign: 'left',
+            whiteSpace : 'nowrap'
+
+        }),
 
     };
     const customGroupStyles = {
@@ -386,12 +394,12 @@ function EmployeeCreate() {
 
         indicatorsContainer: (provided) => ({
             ...provided,
-            paddingRight: '8px'
+            paddingRight: '4px'
         }),
 
         control: (provided) => ({
             ...provided,
-            minHeight: '44px',
+            minHeight: '42px',
             fontSize: '14px',
             padding: '0',
             margin: '0',
@@ -415,7 +423,7 @@ function EmployeeCreate() {
 
         valueContainer: (provided) => ({
             ...provided,
-            padding: '2px 8px 2px 16px'
+            padding: '2px 8px 2px 12px'
         }),
 
         menu: (provided) => ({
@@ -443,7 +451,15 @@ function EmployeeCreate() {
             padding: 0,
             borderColor: 'red'
 
-        })
+        }),
+
+        placeholder: (provided) => ({
+            ...provided,
+            width: '100%',
+            textAlign: 'left',
+            whiteSpace : 'nowrap'
+
+        }),
 
     };
 

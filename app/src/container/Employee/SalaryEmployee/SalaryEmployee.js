@@ -88,12 +88,12 @@ function SalaryEmployee() {
 
         indicatorsContainer: (provided) => ({
             ...provided,
-            paddingRight: '8px'
+            paddingRight: '4px'
         }),
 
         control: (provided) => ({
             ...provided,
-            minHeight: '44px',
+            minHeight: '42px',
             fontSize: '14px',
             padding: '0',
             margin: '0',
@@ -114,7 +114,7 @@ function SalaryEmployee() {
 
         valueContainer: (provided) => ({
             ...provided,
-            padding: '2px 8px 2px 16px'
+            padding: '2px 8px 2px 12px'
         }),
 
 
@@ -143,7 +143,15 @@ function SalaryEmployee() {
             padding: 0,
             borderColor: 'red'
 
-        })
+        }),
+
+        placeholder: (provided) => ({
+            ...provided,
+            width: '100%',
+            textAlign: 'left',
+            whiteSpace : 'nowrap'
+
+        }),
 
     };
 

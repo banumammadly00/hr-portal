@@ -107,10 +107,10 @@ label {
     border: 1px solid rgba(4, 6, 71, 0.1);
     box-sizing: border-box;
     border-radius: 4px;
-    height: 44px;
+    height: 42px;
     outline: none;
     box-shadow: none;
-    padding: 10px 16px;
+    padding: 10px 12px;
     font-size: 14px;
     color: #191919;
     width: 100%;
@@ -849,9 +849,20 @@ td {
     margin: 0 0 10px;
 }
 
+.block-item .block-item-top .btn-transparent svg {
+    margin: 0;
+}
+
 .block-item .profession {
-    opacity: .7;
     font-size: 16px;
+}
+
+.block-item .profession p:first-child {
+    opacity: .85;
+}
+
+.block-item .profession p:last-child {
+    opacity: .65;
 }
 
 .block-item .block-user-name {
@@ -1582,12 +1593,12 @@ td {
 
 .filter-block .filter-left {
     display: flex;
-    width: calc(100% - 145px);
+    width: calc(100% - 120px);
     justify-content: flex-start;
 }
 
 .filter-block .btn-border, .filter-block .btn-border:focus, .filter-block .btn-border:not(:disabled):not(.disabled):active {
-    width: 145px;
+    width: 120px;
     border: 1px solid rgba(48, 131, 220, .8);
     color: rgba(48, 131, 220, .8);
 }
@@ -1622,6 +1633,13 @@ td {
 @media only screen and (min-width: 1600px){
     .export-block {
         width: 80%;
+    }
+}
+
+@media only screen and (max-width: 1300px) {
+    .nav-tabs .nav-link {
+        font-size: 15px;
+        margin-right: 30px;
     }
 }
 

@@ -64,7 +64,7 @@ function StaffSchedule() {
 
         control: (provided) => ({
             ...provided,
-            minHeight: '44px',
+            minHeight: '42px',
             fontSize: '14px',
             padding: '0',
             margin: '0',
@@ -72,6 +72,9 @@ function StaffSchedule() {
             backgroundColor: '#FAFCFF',
             boxShadow: 'none',
             border: '1px solid rgba(4, 6, 71, 0.1)',
+            borderTopRightRadius: 0,
+            borderBottomRightRadius: 0,
+            borderRight: 0,
             "&:hover": {
                 borderColor: 'rgba(4, 6, 71, 0.1)',
             },
@@ -85,9 +88,8 @@ function StaffSchedule() {
 
         valueContainer: (provided) => ({
             ...provided,
-            padding: '2px 8px 2px 16px'
+            padding: '2px 8px 2px 12px'
         }),
-
 
         menu: (provided) => ({
             ...provided,
@@ -114,7 +116,15 @@ function StaffSchedule() {
             padding: 0,
             borderColor: 'red'
 
-        })
+        }),
+
+        placeholder: (provided) => ({
+            ...provided,
+            width: '100%',
+            textAlign: 'left',
+            whiteSpace : 'nowrap'
+
+        }),
 
     };
 

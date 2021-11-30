@@ -194,9 +194,9 @@ function ViewEmployee() {
                 setContactData(true)
                 /*livingAddress*/
                 if (contactData.livingAddress !== null) {
-                    setCountry(contactData.livingAddress.country.name);
-                    setCity(contactData.livingAddress.city.name);
-                    setRegion(contactData.livingAddress.district.name);
+                    setRegCountry(contactData.livingAddress.country !==null ? contactData.livingAddress.country.name : null);
+                    setRegCity(contactData.livingAddress.city !== null ? contactData.livingAddress.city.name : null);
+                    setRegRegion(contactData.livingAddress.district !==null ? contactData.livingAddress.district.name : null);
                     setSettlement(contactData.livingAddress.village);
                     setStreet(contactData.livingAddress.street);
                     setBlock(contactData.livingAddress.block);
@@ -206,9 +206,9 @@ function ViewEmployee() {
                 }
                 /*registeredAddress*/
                 if (contactData.registeredAddress !== null) {
-                    setRegCountry(contactData.registeredAddress.country.name);
-                    setRegCity(contactData.registeredAddress.city.name);
-                    setRegRegion(contactData.registeredAddress.district.name);
+                    setRegCountry(contactData.registeredAddress.country !==null ? contactData.registeredAddress.country.name : null);
+                    setRegCity(contactData.registeredAddress.city !== null ? contactData.registeredAddress.city.name : null);
+                    setRegRegion(contactData.registeredAddress.district !==null ? contactData.registeredAddress.district.name : null);
                     setRegSettlement(contactData.registeredAddress.village);
                     setRegStreet(contactData.registeredAddress.street);
                     setRegBlock(contactData.registeredAddress.block);
@@ -221,14 +221,6 @@ function ViewEmployee() {
             let businessData = res.data.businessInformationSet
             if (businessData.length > 0) {
                 setCompanyArr(businessData)
-                // setCompany(businessData.company);
-                //setDepartment(businessData.department);
-                /*  setSubDepartment(businessData.subDepartment);
-                  setPosition(businessData.position);
-                  setFiredReason(businessData.dismissalReason);
-                  setStartJobDate(businessData.startDate);
-                  setEndJobDate(businessData.endDate);
-                  setChecked(businessData.mainJob)*/
             }
 
             let educationData = res.data.educationInformation

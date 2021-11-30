@@ -140,9 +140,14 @@ function SettingEdit() {
         indicatorSeparator: () => {
         },
 
+        indicatorsContainer: (provided) => ({
+            ...provided,
+            paddingRight: '4px'
+        }),
+
         control: (provided) => ({
             ...provided,
-            minHeight: '43px',
+            minHeight: '42px',
             fontSize: '14px',
             padding: '0',
             margin: '0',
@@ -150,20 +155,23 @@ function SettingEdit() {
             backgroundColor: '#FAFCFF',
             boxShadow: 'none',
             border: '1px solid rgba(4, 6, 71, 0.1)',
+            borderTopRightRadius: 0,
+            borderBottomRightRadius: 0,
+            borderRight: 0,
             "&:hover": {
                 borderColor: 'rgba(4, 6, 71, 0.1)',
             },
 
         }),
 
-        indicatorsContainer: (provided) => ({
-            ...provided,
-            paddingRight: '8px'
-        }),
-
         container: (provided) => ({
             ...provided,
-            width: '100%'
+            width: '100%',
+        }),
+
+        valueContainer: (provided) => ({
+            ...provided,
+            padding: '2px 8px 2px 12px'
         }),
 
         menu: (provided) => ({
@@ -173,10 +181,6 @@ function SettingEdit() {
             margin: '0',
             borderColor: 'red',
             width: '100%'
-        }),
-        valueContainer: (provided) => ({
-            ...provided,
-            padding: '2px 8px 2px 16px'
         }),
 
         dropdownIndicator: defaultStyles => ({
@@ -195,7 +199,15 @@ function SettingEdit() {
             padding: 0,
             borderColor: 'red'
 
-        })
+        }),
+
+        placeholder: (provided) => ({
+            ...provided,
+            width: '100%',
+            textAlign: 'left',
+            whiteSpace : 'nowrap'
+
+        }),
 
     };
 
