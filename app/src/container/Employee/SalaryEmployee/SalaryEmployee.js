@@ -61,11 +61,11 @@ function SalaryEmployee() {
     const customStyles = {
         option: (provided, state) => ({
             ...provided,
-            color: '#040647',
+            color: '#193651',
             backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '10px 16px',
+            padding: '5px 16px',
             margin: '0',
-            fontSize: '16px',
+            fontSize: '14px',
             "&:first-of-type": {
                 borderRadius: '2px 2px 0 0',
             },
@@ -77,9 +77,10 @@ function SalaryEmployee() {
                 borderRadius: '0 0 2px 2px',
             },
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             justifyContent: 'flex-start',
-            position: 'relative'
+            position: 'relative',
+            textAlign: 'left'
 
         }),
 
@@ -121,7 +122,7 @@ function SalaryEmployee() {
         menu: (provided) => ({
             ...provided,
             borderRadius: '2px',
-            padding: '0',
+            padding: '10px 0',
             margin: '0',
             borderColor: 'red',
             width: '100%'
@@ -240,18 +241,18 @@ function SalaryEmployee() {
                             </tbody>
                             <thead>
                             <tr>
-                                <th>Soyadı, adı, ata adı</th>
+                                <th>S.A.A</th>
                                 <th>Gross</th>
                                 <th>Net</th>
-                                <th>Yekun əmək haqqı</th>
+                                <th>Yekun əmək h.</th>
                                 <th>D.S.M.F</th>
                                 <th>Həmkarlar</th>
-                                <th>Gəlir vergisi</th>
+                                <th>Gəlir verg.</th>
                                 <th>M.D.S.S </th>
                                 <th>Tibbi sığorta</th>
                                 <th>Port Tax</th>
                                 <th>İşsizlik </th>
-                                <th>İşlədiyi günlərin sayı</th>
+                                <th>İş. gün. sayı</th>
                             </tr>
                             </thead>
                             <tbody>

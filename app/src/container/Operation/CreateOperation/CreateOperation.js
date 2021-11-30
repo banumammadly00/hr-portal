@@ -172,13 +172,13 @@ function CreateOperation() {
     const [positionWorkPlace, setPositionWorkPlace] = useState('');
 
     const customStyles = {
-        option: (provided,state) => ({
+        option: (provided, state) => ({
             ...provided,
-            color: '#040647',
+            color: '#193651',
             backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '10px 16px',
+            padding: '5px 16px',
             margin: '0',
-            fontSize: '16px',
+            fontSize: '14px',
             "&:first-of-type": {
                 borderRadius: '2px 2px 0 0',
             },
@@ -190,9 +190,10 @@ function CreateOperation() {
                 borderRadius: '0 0 2px 2px',
             },
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             justifyContent: 'flex-start',
-            position: 'relative'
+            position: 'relative',
+            textAlign: 'left'
 
         }),
 
@@ -234,7 +235,7 @@ function CreateOperation() {
         menu: (provided) => ({
             ...provided,
             borderRadius: '2px',
-            padding: '0',
+            padding: '10px 0',
             margin: '0',
             borderColor: 'red',
             width: '100%'

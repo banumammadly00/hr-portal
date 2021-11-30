@@ -1604,7 +1604,7 @@ td {
 }
 
 .filter-block .filter-item {
-    width: 300px;
+    width: 200px;
     margin-right: 20px;
 }
 
@@ -1630,6 +1630,19 @@ td {
     display: inline-block;
 }
 
+.tooltip-inner {
+    max-width: 275px;
+    text-align: left;
+    background-color: #7e8d9a;
+}
+
+.bs-tooltip-auto[data-popper-placement^=top] .tooltip-arrow::before, .bs-tooltip-top .tooltip-arrow::before {
+    top: -1px;
+    border-width: 0.4rem 0.4rem 0;
+    border-top-color: #7e8d9a;
+    left: -2px;
+}
+
 @media only screen and (min-width: 1600px){
     .export-block {
         width: 80%;
@@ -1640,6 +1653,18 @@ td {
     .nav-tabs .nav-link {
         font-size: 15px;
         margin-right: 30px;
+    }
+
+    .operation .table {
+        table-layout: unset;
+    }
+
+    .operation .operation-name {
+        width: 200px;
+        overflow: hidden;
+        display: inline-block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 }
 

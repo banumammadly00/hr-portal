@@ -287,11 +287,11 @@ function EditEmployee() {
     const customStyles = {
         option: (provided, state) => ({
             ...provided,
-            color: '#040647',
+            color: '#193651',
             backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '10px 16px',
+            padding: '5px 16px',
             margin: '0',
-            fontSize: '16px',
+            fontSize: '14px',
             "&:first-of-type": {
                 borderRadius: '2px 2px 0 0',
             },
@@ -303,9 +303,10 @@ function EditEmployee() {
                 borderRadius: '0 0 2px 2px',
             },
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             justifyContent: 'flex-start',
-            position: 'relative'
+            position: 'relative',
+            textAlign: 'left'
 
         }),
 
@@ -347,7 +348,7 @@ function EditEmployee() {
         menu: (provided) => ({
             ...provided,
             borderRadius: '2px',
-            padding: '0',
+            padding: '10px 0',
             margin: '0',
             borderColor: 'red',
             width: '100%'
@@ -375,7 +376,7 @@ function EditEmployee() {
             ...provided,
             width: '100%',
             textAlign: 'left',
-            whiteSpace : 'nowrap'
+            whiteSpace: 'nowrap'
 
         }),
 
@@ -465,7 +466,6 @@ function EditEmployee() {
         menuList: base => ({
             ...base,
             padding: 0,
-            borderColor: 'red'
 
         }),
 
@@ -473,7 +473,7 @@ function EditEmployee() {
             ...provided,
             width: '100%',
             textAlign: 'left',
-            whiteSpace : 'nowrap'
+            whiteSpace: 'nowrap'
 
         }),
 
@@ -1715,6 +1715,7 @@ function EditEmployee() {
                                                             isSearchable={citizen ? citizen.length > 5 ? true : false : false}
                                                             options={citizen}
                                                             getOptionLabel={(option) => (option.name)}
+                                                            getOptionValue={option => option.name}
                                                             styles={customStyles}
                                                         />
                                                         <div className="validation-block flex-start">
@@ -2163,6 +2164,7 @@ function EditEmployee() {
                                                             isSearchable={countries ? countries.length > 5 ? true : false : false}
                                                             options={countries}
                                                             getOptionLabel={(option) => (option.name)}
+                                                            getOptionValue={option => option.name}
                                                             styles={customStyles}
                                                         />
                                                         <div className="validation-block flex-start">
@@ -2188,6 +2190,7 @@ function EditEmployee() {
                                                             isSearchable={cities ? cities.length > 5 ? true : false : false}
                                                             options={cities}
                                                             getOptionLabel={(option) => (option.name)}
+                                                            getOptionValue={option => option.name}
                                                             styles={customStyles}
                                                         />
                                                         <div className="validation-block flex-start">
@@ -2213,6 +2216,7 @@ function EditEmployee() {
                                                             isSearchable={regions ? regions.length > 5 ? true : false : false}
                                                             options={regions}
                                                             getOptionLabel={(option) => (option.name)}
+                                                            getOptionValue={option => option.name}
                                                             styles={customStyles}
                                                         />
                                                         <div className="validation-block flex-start">
@@ -2315,6 +2319,7 @@ function EditEmployee() {
                                                                     isSearchable={countries ? countries.length > 5 ? true : false : false}
                                                                     options={countries}
                                                                     getOptionLabel={(option) => (option.name)}
+                                                                    getOptionValue={option => option.name}
                                                                     styles={customStyles}
                                                                 />
                                                                 <div className="validation-block flex-start">
@@ -2341,6 +2346,7 @@ function EditEmployee() {
                                                                     isSearchable={cities ? cities.length > 5 ? true : false : false}
                                                                     options={cities}
                                                                     getOptionLabel={(option) => (option.name)}
+                                                                    getOptionValue={option => option.name}
                                                                     styles={customStyles}
                                                                 />
                                                                 <div className="validation-block flex-start">
@@ -2367,6 +2373,7 @@ function EditEmployee() {
                                                                     isSearchable={regions ? regions.length > 5 ? true : false : false}
                                                                     options={regions}
                                                                     getOptionLabel={(option) => (option.name)}
+                                                                    getOptionValue={option => option.name}
                                                                     styles={customStyles}
                                                                 />
                                                                 <div className="validation-block flex-start">
@@ -2455,6 +2462,7 @@ function EditEmployee() {
                                                                     isSearchable={countries ? countries.length > 5 ? true : false : false}
                                                                     options={countries}
                                                                     getOptionLabel={(option) => (option.name)}
+                                                                    getOptionValue={option => option.name}
                                                                     styles={customStyles}
                                                                 />
                                                                 <div className="validation-block flex-start">
@@ -2480,6 +2488,7 @@ function EditEmployee() {
                                                                     isSearchable={cities ? cities.length > 5 ? true : false : false}
                                                                     options={cities}
                                                                     getOptionLabel={(option) => (option.name)}
+                                                                    getOptionValue={option => option.name}
                                                                     styles={customStyles}
                                                                 />
                                                                 <div className="validation-block flex-start">
@@ -2505,6 +2514,7 @@ function EditEmployee() {
                                                                     isSearchable={regions ? regions.length > 5 ? true : false : false}
                                                                     options={regions}
                                                                     getOptionLabel={(option) => (option.name)}
+                                                                    getOptionValue={option => option.name}
                                                                     styles={customStyles}
                                                                 />
                                                                 <div className="validation-block flex-start">
@@ -2785,6 +2795,7 @@ function EditEmployee() {
                                                                                     isSearchable={university ? university.length > 5 ? true : false : false}
                                                                                     options={university}
                                                                                     getOptionLabel={(option) => (option.name)}
+                                                                                    getOptionValue={option => option.name}
                                                                                     styles={customStyles}
                                                                                 />
                                                                             </Form.Group>
@@ -3174,6 +3185,7 @@ function EditEmployee() {
                                                                                 isSearchable={certificate ? certificate.length > 5 ? true : false : false}
                                                                                 options={certificate}
                                                                                 getOptionLabel={(option) => (option.name)}
+                                                                                getOptionValue={option => option.name}
                                                                                 styles={customStyles}
                                                                             />
                                                                         </Form.Label>
@@ -3896,6 +3908,7 @@ function EditEmployee() {
                                                                                 isSearchable={reward ? reward.length > 5 ? true : false : false}
                                                                                 options={reward}
                                                                                 getOptionLabel={(option) => (option.name)}
+                                                                                getOptionValue={option => option.name}
                                                                                 styles={customStyles}
                                                                             />
                                                                         </Form.Label>
@@ -3925,6 +3938,7 @@ function EditEmployee() {
                                                                                 isSearchable={rewardOrganization ? rewardOrganization.length > 5 ? true : false : false}
                                                                                 options={rewardOrganization}
                                                                                 getOptionLabel={(option) => (option.name)}
+                                                                                getOptionValue={option => option.name}
                                                                                 styles={customStyles}
                                                                             />
                                                                         </Form.Label>

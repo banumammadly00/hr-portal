@@ -103,14 +103,13 @@ function EmployeeSchedule() {
             padding: '2px 8px 2px 12px'
         }),
 
-
         menu: (provided) => ({
             ...provided,
             borderRadius: '2px',
             padding: '10px 0',
             margin: '0',
             borderColor: 'red',
-            width: '100%',
+            width: '100%'
         }),
 
         dropdownIndicator: defaultStyles => ({
@@ -127,6 +126,7 @@ function EmployeeSchedule() {
         menuList: base => ({
             ...base,
             padding: 0,
+            borderColor: 'red'
 
         }),
 

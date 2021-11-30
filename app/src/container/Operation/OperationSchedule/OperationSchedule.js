@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Aux from "../../../hoc/Auxiliary";
-import {Table, Container, Button} from 'react-bootstrap';
+import {Table, Container, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import {mainAxios} from "../../../components/Axios/axios";
 import Paginate from "../../../components/Pagination/Pagination";
@@ -131,7 +131,16 @@ function OperationSchedule() {
                                 document.map((item, index) =>
                                     <tr key={index}>
                                         <td>{item.id}</td>
-                                        <td>{item.type}</td>
+                                        <td>
+                                            {
+                                                item.type.length > 30 ?
+                                                    <OverlayTrigger placement="top-start" overlay={<Tooltip id="tooltip-disabled">{item.type}</Tooltip>}>
+                                                        <p className="m-0 operation-name">{item.type}</p>
+                                                    </OverlayTrigger>
+                                                    :
+                                                    <p className="m-0 operation-name">{item.type}</p>
+                                            }
+                                        </td>
                                         <td>{item.createdAt}</td>
                                         <td>
                                             <div className="flex">
@@ -140,12 +149,20 @@ function OperationSchedule() {
                                                  </span>
                                                 <ul className="btn-block list-unstyled flex m-0">
                                                     <li>
-                                                        <Button className="btn-export"  onClick={() => getExportDocument(item.id, item.type)}>
-                                                            <svg width="20" height="20" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M17.1875 19.25H4.81247C4.63013 19.25 4.45527 19.1776 4.32635 19.0486C4.19742 18.9197 4.125 18.7448 4.125 18.5625V3.4375C4.125 3.25517 4.19742 3.0803 4.32635 2.95137C4.45527 2.82244 4.63013 2.75 4.81247 2.75H13.0627L17.875 7.5625V18.5625C17.875 18.7448 17.8026 18.9197 17.6737 19.0486C17.5447 19.1776 17.3699 19.25 17.1875 19.25V19.25Z" stroke="#040647" strokeLinecap="round" strokeLinejoin="round"/>
-                                                                <path d="M13.0625 2.75V7.5625H17.8757" stroke="#040647" strokeLinecap="round" strokeLinejoin="round"/>
-                                                                <path d="M8.25 11.6875H13.75" stroke="#040647" strokeLinecap="round" strokeLinejoin="round"/>
-                                                                <path d="M8.25 14.4375H13.75" stroke="#040647" strokeLinecap="round" strokeLinejoin="round"/>
+                                                        <Button className="btn-export"
+                                                                onClick={() => getExportDocument(item.id, item.type)}>
+                                                            <svg width="20" height="20" viewBox="0 0 22 22" fill="none"
+                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M17.1875 19.25H4.81247C4.63013 19.25 4.45527 19.1776 4.32635 19.0486C4.19742 18.9197 4.125 18.7448 4.125 18.5625V3.4375C4.125 3.25517 4.19742 3.0803 4.32635 2.95137C4.45527 2.82244 4.63013 2.75 4.81247 2.75H13.0627L17.875 7.5625V18.5625C17.875 18.7448 17.8026 18.9197 17.6737 19.0486C17.5447 19.1776 17.3699 19.25 17.1875 19.25V19.25Z"
+                                                                    stroke="#040647" strokeLinecap="round"
+                                                                    strokeLinejoin="round"/>
+                                                                <path d="M13.0625 2.75V7.5625H17.8757" stroke="#040647"
+                                                                      strokeLinecap="round" strokeLinejoin="round"/>
+                                                                <path d="M8.25 11.6875H13.75" stroke="#040647"
+                                                                      strokeLinecap="round" strokeLinejoin="round"/>
+                                                                <path d="M8.25 14.4375H13.75" stroke="#040647"
+                                                                      strokeLinecap="round" strokeLinejoin="round"/>
                                                             </svg>
 
                                                         </Button>

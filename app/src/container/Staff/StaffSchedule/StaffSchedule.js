@@ -32,11 +32,11 @@ function StaffSchedule() {
     const customStyles = {
         option: (provided, state) => ({
             ...provided,
-            color: '#040647',
+            color: '#193651',
             backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '10px 16px',
+            padding: '5px 16px',
             margin: '0',
-            fontSize: '16px',
+            fontSize: '14px',
             "&:first-of-type": {
                 borderRadius: '2px 2px 0 0',
             },
@@ -48,9 +48,10 @@ function StaffSchedule() {
                 borderRadius: '0 0 2px 2px',
             },
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             justifyContent: 'flex-start',
-            position: 'relative'
+            position: 'relative',
+            textAlign: 'left'
 
         }),
 
@@ -59,7 +60,7 @@ function StaffSchedule() {
 
         indicatorsContainer: (provided) => ({
             ...provided,
-            paddingRight: '8px'
+            paddingRight: '4px'
         }),
 
         control: (provided) => ({
@@ -72,9 +73,6 @@ function StaffSchedule() {
             backgroundColor: '#FAFCFF',
             boxShadow: 'none',
             border: '1px solid rgba(4, 6, 71, 0.1)',
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0,
-            borderRight: 0,
             "&:hover": {
                 borderColor: 'rgba(4, 6, 71, 0.1)',
             },
@@ -94,7 +92,7 @@ function StaffSchedule() {
         menu: (provided) => ({
             ...provided,
             borderRadius: '2px',
-            padding: '0',
+            padding: '10px 0',
             margin: '0',
             borderColor: 'red',
             width: '100%'
