@@ -51,6 +51,10 @@ const jobTimeOptions = [
     {value: 'FULL_TIME', label: 'Natamam'},
 ]
 
+const vacationType = [
+    {value: 'MAIN', label: 'Main'},
+    {value: 'EXPERIENCE', label: 'Experience'},
+]
 
 function CreateOperation() {
     let history = useHistory();
@@ -97,6 +101,7 @@ function CreateOperation() {
     const [vacancyMinGrade, setVacancyMinGrade] = useState(null);
     const [vacancyMaxGrade, setVacancyMaxGrade] = useState(null);
     const [joinDate, setJoinDate] = useState(null);
+    const [selectedVacationType, setSelectedVacationType] = useState(null);
 
 
 
@@ -421,6 +426,20 @@ function CreateOperation() {
                         setPositionWorkPlace(data.workPlace);
                         setPositionAdditionalSalary(data.additionalSalary)*/
         });
+    }
+
+    const getVacation = (id) => {
+        mainAxios({
+            method: 'get',
+            url: '/vacations/period/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+
+            }
+        );
     }
 
     const resetData = () => {
@@ -2978,6 +2997,7 @@ function CreateOperation() {
                                                             setEmployeeId(id)
                                                             getEmployeeData(id)
                                                             setSelectedStaff(val);
+                                                            getVacation(id)
                                                         }}
                                                         isSearchable={employee ? employee.length > 5 ? true : false : false}
                                                         options={employee}
@@ -3017,7 +3037,24 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={6}>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span
+                                                        className="input-title">Tətil növünü seçin</span>
+                                                    <Select
+                                                        placeholder="İşçinin adı, soyadı, atasının adı"
+                                                        value={selectedVacationType}
+                                                        onChange={(val) => {
+                                                            setSelectedVacationType(val);
+                                                        }}
+                                                        isSearchable={vacationType ? vacationType.length > 5 ? true : false : false}
+                                                        options={vacationType}
+                                                        getOptionLabel={(option) => (option.label)}
+                                                        styles={customStyles}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">Məzuniyyətin başladığı tarix  </span>
@@ -3082,7 +3119,7 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={6}>
+                                            <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">Məzuniyyətin başladığı tarix  </span>

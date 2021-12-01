@@ -47,7 +47,7 @@ function SalaryEmployee() {
                 page: page - 1,
                 size: recordSize,
                 year: 2021,
-                //month: selectedMonth
+                month: selectedMonth
             }
         }).then((res) => {
             setLoading(false)
@@ -217,7 +217,6 @@ function SalaryEmployee() {
                                             onChange={(val) => {
                                                 val = val.value
                                                 setSelectedMonth(val);
-                                                getSalary(1)
                                             }}
                                             options={monthOptions}
                                             styles={customStyles}
@@ -228,8 +227,8 @@ function SalaryEmployee() {
 
                                 </div>
                             </div>
-                            <Button className="btn-border" onClick={() => resetFilter()}>
-                                Təmizlə
+                            <Button className="btn-main" onClick={() => getSalary(1)}>
+                                Hesabla
                             </Button>
                         </div>
                     </div>
@@ -248,7 +247,6 @@ function SalaryEmployee() {
                                 <th>D.S.M.F</th>
                                 <th>Həmkarlar</th>
                                 <th>Gəlir verg.</th>
-                                <th>M.D.S.S </th>
                                 <th>Tibbi sığorta</th>
                                 <th>Port Tax</th>
                                 <th>İşsizlik </th>
@@ -267,7 +265,6 @@ function SalaryEmployee() {
                                             <td>{item.salaryDetails !==null ? item.salaryDetails.dsmfTax : null}</td>
                                             <td>{item.salaryDetails !==null ? item.salaryDetails.hysTax : null}</td>
                                             <td>{item.salaryDetails !==null ? item.salaryDetails.incomingTax : null}</td>
-                                            <td>{item.salaryDetails !==null ? item.salaryDetails.mdssTax : null}</td>
                                             <td>{item.salaryDetails !==null ? item.salaryDetails.medicalInsuranceTax : null}</td>
                                             <td>{item.salaryDetails !==null ? item.salaryDetails.portTax : null}</td>
                                             <td>{item.salaryDetails !==null ? item.salaryDetails.unemploymentTax : null}</td>
