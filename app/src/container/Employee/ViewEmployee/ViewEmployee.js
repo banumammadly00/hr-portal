@@ -247,7 +247,7 @@ function ViewEmployee() {
             }
             setCheckPrisoner(data.prisoner);
             setCheckColleague(data.allianceMember);
-            setWarrantyNumber(data.socialInsuranceCertificate);
+            setWarrantyNumber(data.sicNo);
             setQuota((data.quotas).join(' , '));
             //setRewardArr(data.honoraryAchievements)
 
@@ -1426,7 +1426,7 @@ function ViewEmployee() {
                                     </div>
                                     <div className="block-inn">
                                         <div className="block-title">
-                                            Sosial sığorta şəhadətnaməsi ( burdan goturulecek, gedecek umumi melumata)
+                                            Sosial sığorta şəhadətnaməsi
                                         </div>
                                         <div className="card">
                                             {

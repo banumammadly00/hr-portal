@@ -92,7 +92,12 @@ function EmployeeCreate() {
         {value: "QUOTA_7", label: 'Məcburi köçkünlər'},
         {value: "QUOTA_8", label: 'Müharibə veteranları'},
         {value: "QUOTA_9", label: 'Şəhid ailələri'},
-    ]
+    ];
+
+    const businessOptions = [
+        {value: "EXTERNAL", label: 'Xarici'},
+        {value: "INTERNAL", label: 'Daxili'},
+    ];
 
     const [key, setKey] = useState('general');
     const [loadingIndicator, setLoadingIndicator] = useState(false);
@@ -230,7 +235,8 @@ function EmployeeCreate() {
         mainJob: true,
         position: null,
         startDate: null,
-        subDepartment: null
+        subDepartment: null,
+        businessStatus: null
     }])
 
 
@@ -645,7 +651,8 @@ function EmployeeCreate() {
             mainJob: true,
             position: null,
             startDate: null,
-            subDepartment: null
+            subDepartment: null,
+            businessStatus: null
         }])
     }
 
@@ -941,6 +948,11 @@ function EmployeeCreate() {
 
     const sendCompanyData = () => {
         setLoadingIndicator(true);
+        for(let i of companyArr) {
+            if(i.businessData !== null) {
+                i.businessData = i.businessData.value
+            }
+        }
         let data = {
             "businessInformationSet": companyArr,
         }
@@ -2949,15 +2961,6 @@ function EmployeeCreate() {
                                                                                 styles={customStyles}
                                                                             />
                                                                         </Form.Label>
-                                                                        {/* <div className="validation-block flex-start">
-                                                                            {
-
-                                                                                errors['educationInformation.certificates[].certificateId'] !== '' ?
-                                                                                    <span
-                                                                                        className="text-validation">{errors['educationInformation.certificates[].certificateId']}</span>
-                                                                                    : null
-                                                                            }
-                                                                        </div>*/}
                                                                     </Form.Group>
                                                                 </Col>
                                                                 <Col xs={6}>
@@ -3479,7 +3482,7 @@ function EmployeeCreate() {
                                                                         </Form.Label>
                                                                     </Form.Group>
                                                                 </Col>
-                                                                <Col xs={6}>
+                                                                <Col xs={4}>
                                                                     <Form.Group className="form-group">
                                                                         <span className="input-title">İşdən azad tarixi</span>
                                                                         <Form.Label className="relative m-0">
@@ -3553,7 +3556,7 @@ function EmployeeCreate() {
                                                                         </div>
                                                                     </Form.Group>
                                                                 </Col>
-                                                                <Col xs={6}>
+                                                                <Col xs={4}>
                                                                     <Form.Group className="form-group">
                                                                         <span className="input-title">İşdən azad olma maddəsi</span>
                                                                         <Form.Label>
@@ -3565,6 +3568,24 @@ function EmployeeCreate() {
                                                                                     setCompanyArr([...companyArr], companyArr)
                                                                                 }}/>
                                                                         </Form.Label>
+                                                                    </Form.Group>
+                                                                </Col>
+                                                                <Col xs={4}>
+                                                                    <Form.Group className="form-group">
+                                                                        <span className="input-title">İş statusu</span>
+                                                                        <Select
+                                                                            placeholder="İş statusu seçin"
+                                                                            value={item.businessStatus}
+                                                                            onChange={(val) => {
+                                                                                companyArr[index].businessStatus = val;
+                                                                                setCompanyArr([...companyArr], companyArr)
+                                                                            }}
+                                                                            isSearchable={businessOptions ? businessOptions.length > 5 ? true : false : false}
+                                                                            options={businessOptions}
+                                                                            getOptionLabel={(option) => (option.label)}
+                                                                            getOptionValue={option => option.label}
+                                                                            styles={customStyles}
+                                                                        />
                                                                     </Form.Group>
                                                                 </Col>
                                                             </Row>

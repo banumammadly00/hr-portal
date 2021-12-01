@@ -116,7 +116,7 @@ label {
     width: 100%;
 }
 
-.form-control:disabled, .form-control[readonly] {
+.form-control:disabled, .form-control[readonly], .react-datepicker-wrapper input[type="text"]:disabled  {
     background-color: rgba(233, 236, 239, .66);
     opacity: 1;
 }
@@ -1641,6 +1641,65 @@ td {
     border-width: 0.4rem 0.4rem 0;
     border-top-color: #7e8d9a;
     left: -2px;
+}
+
+.table-striped {
+    padding: 20px 0;
+}
+
+.table-striped .table th {
+    background: rgba(48, 131, 220, 0.08);
+    font-weight: 500;
+    padding: 11px 20px;
+    color: #3083DC;
+    text-align: center;
+    opacity: 1;
+    border: 1px solid rgba(4, 6, 71, 0.04);
+}
+
+.table-striped td {
+    color: #181818;
+    border: 1px solid rgba(4, 6, 71, 0.04);
+    text-align: center;
+    font-size: 14px;
+}
+
+.inner-tab .nav-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 30px 0;
+    border: none;
+}
+
+.inner-tab .nav-tabs li:first-child .nav-link {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.inner-tab .nav-tabs li:last-child .nav-link {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.inner-tab .nav-tabs .nav-link {
+    border: none;
+    background: rgba(48, 131, 220, 0.1);
+    margin: 0;
+    width: 150px;
+    color: #3083DC;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 0;
+}
+
+.inner-tab .nav-tabs .nav-item.show .nav-link, .inner-tab .nav-tabs .nav-link.active {
+    color: #3083DC;
+    font-weight: 500;
+    background: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 0 6px rgba(166 ,166, 166, .16);
 }
 
 @media only screen and (min-width: 1600px){
