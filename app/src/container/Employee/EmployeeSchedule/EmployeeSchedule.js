@@ -142,9 +142,11 @@ function EmployeeSchedule() {
 
     let depart = selectedDepartment !== null ? selectedDepartment.id : null;
     let subDepart = selectedDepartment !== null ? selectedDepartment.id : null;
-    let jobStatus = selectedJobStatus !== null ? selectedJobStatus.id : null;
+    let jobStatus = selectedJobStatus !== null ? selectedJobStatus.value : null;
     let positionId = selectedPosition !== null ? selectedPosition.id : null;
     let name = fullName !== '' ? fullName : null;
+
+    console.log(jobStatus)
 
     const handleRowClick = (item) => {
         history.push(`/employee/view/${item.id}`);
@@ -475,7 +477,7 @@ function EmployeeSchedule() {
                             }
                         </div>
                         <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
-                                  click={(page) => getEmployee(page, depart, subDepart, jobStatus, positionId, name)}/>
+                                  click={(page) => getEmployee(page, depart, subDepart, positionId, jobStatus, name)}/>
                     </Container>
                 </div>
             </div>

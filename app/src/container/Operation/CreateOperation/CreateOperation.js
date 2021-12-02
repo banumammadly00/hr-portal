@@ -73,8 +73,10 @@ function CreateOperation() {
 
     const [department, setDepartment] = useState('')
     const [subDepartment, setSubDepartment] = useState('');
+    const [position, setPosition] = useState('');
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [sendEndDate, setSendEndDate] = useState('');
     const [dayInEvent, setDayInEvent] = useState('');
 
 
@@ -370,6 +372,22 @@ function CreateOperation() {
         });
     }
 
+    const getEmployeeDetail = (id) => {
+        mainAxios({
+            method: 'get',
+            url: `/employees/${id}/operation-info`,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            let data = res.data
+            setDepartment(data.department);
+            setSubDepartment(data.subDepartment);
+            setPosition(data.position);
+        });
+    }
+
     const getVacancy = () => {
         mainAxios({
             method: 'get',
@@ -515,7 +533,7 @@ function CreateOperation() {
 
         let workVacation = {
             "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
-            "to": endDate !== '' ? endDate : null,
+            "to": sendEndDate !== '' ? sendEndDate : null,
             "vacations": vacationArr
         }
 
@@ -638,10 +656,11 @@ function CreateOperation() {
                     total += parseFloat(i)
                 }
             }
-            let totalDate = parseFloat(total + newDate);
+            let totalDate = parseFloat((total + newDate));
             x.setDate(totalDate);
-            let formatDate = moment(x).format("YYYY-MM-DD")
+            let formatDate = moment(x).format("YYYY-DD-MM")
             setEndDate(formatDate);
+            setSendEndDate(moment(x.setDate(parseFloat((total + newDate) - 1))).format("YYYY-MM-DD"))
             getJobDay(formatDate)
         }
     }
@@ -3061,7 +3080,7 @@ function CreateOperation() {
                                                                 </thead>
                                                                 <tbody>
                                                                 {
-                                                                    vacation ?
+                                                                    vacation.length > 0 ?
                                                                         vacation.map((item) =>
                                                                             <tr>
                                                                                 <td>{item.startDate} - {item.endDate}</td>
@@ -3069,7 +3088,13 @@ function CreateOperation() {
                                                                                 <td>{item.experience}</td>
                                                                             </tr>
                                                                         )
-                                                                        : null
+                                                                        :
+                                                                        <tr>
+                                                                            <td colSpan={3}>
+                                                                                <p className="text-center m-0">Məlumat
+                                                                                    yoxdur</p>
+                                                                            </td>
+                                                                        </tr>
                                                                 }
                                                                 </tbody>
                                                             </Table>
@@ -3088,7 +3113,7 @@ function CreateOperation() {
                                                             let id = val.id
                                                             setEmployeeId(id);
                                                             setShowVacation(true)
-                                                            getEmployeeData(id)
+                                                            getEmployeeDetail(id)
                                                             setSelectedStaff(val);
                                                             getVacation(id)
                                                         }}
@@ -3126,7 +3151,7 @@ function CreateOperation() {
                                                     <span className="input-title">Vəzifəsi </span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Vəzifəsi"
-                                                                      value={vacancyName || ''} disabled={true}/>
+                                                                      value={position || ''} disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
