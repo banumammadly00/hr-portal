@@ -104,11 +104,7 @@ function CreateOperation() {
     const [vacancyMinGrade, setVacancyMinGrade] = useState(null);
     const [vacancyMaxGrade, setVacancyMaxGrade] = useState(null);
     const [joinDate, setJoinDate] = useState(null);
-    const [selectedVacationType, setSelectedVacationType] = useState(null);
-    const [expVacation, setExpVacation] = useState('');
-    const [mainVacation, setMainVacation] = useState('');
-    const [showMainVacation, setShowMainVacation] = useState(false);
-    const [showExpVacation, setShowExpVacation] = useState(false);
+    const [jobDay, setJobDay] = useState('')
     const [showVacation, setShowVacation] = useState(false);
 
     const [vacationArr, setVacationArr] = useState([{
@@ -456,7 +452,24 @@ function CreateOperation() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            setVacation(res.data)
+                setVacation(res.data)
+            }
+        );
+    }
+
+    const getJobDay = (date) => {
+        mainAxios({
+            method: 'get',
+            url: '/vacations/next',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            params: {
+                date: date
+            }
+        }).then((res) => {
+                setJobDay(res.data)
             }
         );
     }
@@ -502,8 +515,8 @@ function CreateOperation() {
 
         let workVacation = {
             "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
-                "to": endDate !== null ? moment(endDate).format("YYYY-MM-DD") : null,
-                "vacations": vacationArr
+            "to": endDate !== '' ? endDate : null,
+            "vacations": vacationArr
         }
 
         const data = {
@@ -604,22 +617,32 @@ function CreateOperation() {
         });
     }
 
-    const getCalculatedDate = (setDate) => {
-        if(setDate !== null) {
+    const getCalculatedDate = (arr, setDate) => {
+        let vacArr = []
+        if (arr.some(item => item.day)) {
+            for (let i of vacationArr) {
+                if (i.day !== '') {
+                    vacArr.push(i.day)
+                }
+            }
+        }
+        if (setDate !== null) {
             let getDate = setDate.getDate();
             let getMonth = setDate.getMonth();
             let getYear = setDate.getFullYear();
-            let x = new Date(getYear,getMonth,getDate);
-            for (let i of vacationArr) {
-                console.log(i)
-            }
-      /*      let mainC = mainCount !== '' ? parseFloat(mainCount) : 0;
-            let expC = expCount !== '' ? parseFloat(expCount) : 0;*/
+            let x = new Date(getYear, getMonth, getDate);
             let newDate = parseFloat(x.getDate());
-            //let totalDate = parseFloat(mainC + expC + newDate);
-           // x.setDate(totalDate);
-            let formatDate = moment(x).format("DD-MM-YYYY")
-            setEndDate(formatDate)
+            let total = 0
+            if (vacArr.length > 0) {
+                for (let i of vacArr) {
+                    total += parseFloat(i)
+                }
+            }
+            let totalDate = parseFloat(total + newDate);
+            x.setDate(totalDate);
+            let formatDate = moment(x).format("YYYY-MM-DD")
+            setEndDate(formatDate);
+            getJobDay(formatDate)
         }
     }
 
@@ -3038,15 +3061,15 @@ function CreateOperation() {
                                                                 </thead>
                                                                 <tbody>
                                                                 {
-                                                                   vacation ?
-                                                                       vacation.map((item)=>
-                                                                           <tr>
-                                                                               <td>{item.startDate} - {item.endDate}</td>
-                                                                               <td>{item.main}</td>
-                                                                               <td>{item.experience}</td>
-                                                                           </tr>
-                                                                       )
-                                                                       : null
+                                                                    vacation ?
+                                                                        vacation.map((item) =>
+                                                                            <tr>
+                                                                                <td>{item.startDate} - {item.endDate}</td>
+                                                                                <td>{item.main}</td>
+                                                                                <td>{item.experience}</td>
+                                                                            </tr>
+                                                                        )
+                                                                        : null
                                                                 }
                                                                 </tbody>
                                                             </Table>
@@ -3107,7 +3130,7 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                           {/* <Col xs={4}>
+                                            {/* <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">Tətil növünü seçin</span>
@@ -3127,7 +3150,7 @@ function CreateOperation() {
                                                     />
                                                 </Form.Group>
                                             </Col>*/}
-                                            <Col xs={6}>
+                                            <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">Məzuniyyətin başladığı tarix  </span>
@@ -3139,10 +3162,10 @@ function CreateOperation() {
                                                                     showMonthDropdown
                                                                     showYearDropdown
                                                                     dropdownMode="select"
-                                                                    onChange={(date)=>{
+                                                                    onChange={(date) => {
                                                                         setStartDate(date);
                                                                         let setDate = date !== null ? date : 0;
-                                                                        getCalculatedDate(setDate)
+                                                                        getCalculatedDate(vacationArr, setDate)
                                                                     }}
                                                         />
                                                         <Button className="btn-transparent">
@@ -3195,7 +3218,7 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={6}>
+                                            <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">Məzuniyyətin bitdiyi tarix  </span>
@@ -3257,6 +3280,20 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">İşə başlama tarixi  </span>
+                                                    <Form.Label className="relative m-0">
+                                                        <Form.Label>
+                                                            <Form.Control placeholder="YYYY-MM-DD"
+                                                                          type="text"
+                                                                          disabled={true}
+                                                                          value={jobDay}
+                                                            />
+                                                        </Form.Label>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
                                             <Col xs={12}>
                                                 <div className="block-inn">
                                                     <div className="addition-content">
@@ -3267,7 +3304,8 @@ function CreateOperation() {
                                                                     {
                                                                         index === 0 ? null :
                                                                             <div className="add-item-top">
-                                                                                <p className="m-0"> #{index + 1}. Digər </p>
+                                                                                <p className="m-0"> #{index + 1}.
+                                                                                    Digər </p>
                                                                                 <Button
                                                                                     className="btn-transparent btn-remove flex-center"
                                                                                     onClick={() => {
@@ -3312,12 +3350,13 @@ function CreateOperation() {
                                                                         </Col>
                                                                         <Col xs={6}>
                                                                             <Form.Group className="form-group">
-                                                                            <span className="input-title">Tətil gün. sayı daxil edin</span>
+                                                                                <span className="input-title">Tətil gün. sayı daxil edin</span>
                                                                                 <Form.Control
                                                                                     placeholder="Tətil gün. sayı daxil edin"
                                                                                     onChange={(e) => {
                                                                                         vacationArr[index].day = e.target.value;
-                                                                                        setVacationArr([...vacationArr], vacationArr)
+                                                                                        setVacationArr([...vacationArr], vacationArr);
+                                                                                        getCalculatedDate(vacationArr, startDate)
                                                                                     }}/>
                                                                             </Form.Group>
                                                                         </Col>
@@ -3329,11 +3368,13 @@ function CreateOperation() {
                                                         <div className="flex-end">
                                                             <button type="button" className="btn-color"
                                                                     onClick={() => addVacationArr()}>
-                                                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                                <svg width="12" height="12" viewBox="0 0 12 12"
+                                                                     fill="none"
                                                                      xmlns="http://www.w3.org/2000/svg">
                                                                     <path
                                                                         d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
-                                                                        stroke="#3083DC" strokeWidth="1.3" strokeLinecap="round"
+                                                                        stroke="#3083DC" strokeWidth="1.3"
+                                                                        strokeLinecap="round"
                                                                         strokeLinejoin="round"/>
                                                                 </svg>
                                                                 <span>əlavə et</span>
