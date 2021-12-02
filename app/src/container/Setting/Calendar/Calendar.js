@@ -19,7 +19,7 @@ function Calendar() {
     const getDay = (year, month) => {
         mainAxios({
             method: 'get',
-            url: '/day',
+            url: '/days',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -29,12 +29,15 @@ function Calendar() {
                 year: year
             }
         }).then((res) => {
-            let data = res.data.data;
+            let data = res.data;
+            console.log(data)
             let events = [];
-            for (let i of data) {
-                setDays(data)
-                if (i.jobDay === false) {
-                    events.push({display: 'background', date: i.day, title: i.title === null ? " " : i.title, id: i.id})
+            if(data) {
+                for (let i of data) {
+                    setDays(data)
+                    if (i.jobDay === false) {
+                        events.push({display: 'background', date: i.date, title: i.description === null ? " " : i.description, id: i.id})
+                    }
                 }
             }
             setEvents(events);
@@ -44,14 +47,13 @@ function Calendar() {
     const changeDayEvent = (id, title, jobDay,day) => {
         let year = new Date(day).getFullYear();
         let month = (new Date(day).getMonth() + 1 )
-        console.log(day)
         let data = {
             "jobDay": jobDay,
-            "text": title === "" ? null : title
+            "description": title === "" ? null : title
         }
         mainAxios({
             method: 'put',
-            url: '/day/' + id,
+            url: '/days/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -67,14 +69,16 @@ function Calendar() {
 
     const getDayEvent = (date) => {
         for (let i of days) {
-            if (i.day === date)
+            if (i.date === date)
                 return i
         }
+
     }
 
     const handleDateClick = (arg) => { // bind with an arrow function
         let day = getDayEvent(arg.dateStr);
         setModalData(day)
+        console.log(modalData)
         if (day.jobDay) {
             setModalShow(true)
         } else {

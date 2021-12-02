@@ -465,6 +465,7 @@ function EmployeeSchedule() {
                                                 </div>
                                                 <div className="profession">
                                                     <p className="m-0">{item.department !== null ? item.department.name : null}</p>
+                                                    <p className="m-0">{item.subDepartment !== null ? item.subDepartment.name : null}</p>
                                                     <p className="m-0">{item.position !== null ? item.position.name : null}</p>
                                                 </div>
                                             </div>

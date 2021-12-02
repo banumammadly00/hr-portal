@@ -857,7 +857,7 @@ td {
     font-size: 16px;
 }
 
-.block-item .profession p:first-child {
+.block-item .profession p:first-child, .block-item .profession p:nth-child(2) {
     opacity: .85;
 }
 
