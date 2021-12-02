@@ -475,7 +475,7 @@ function CreateOperation() {
         );
     }
 
-    const getJobDay = (date) => {
+    const getJobDay = (to, from) => {
         mainAxios({
             method: 'get',
             url: '/vacations/next',
@@ -484,7 +484,8 @@ function CreateOperation() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             params: {
-                date: date
+                from : moment(from).format('YYYY-MM-DD'),
+                to: to
             }
         }).then((res) => {
                 setJobDay(res.data)
@@ -658,10 +659,10 @@ function CreateOperation() {
             }
             let totalDate = parseFloat((total + newDate));
             x.setDate(totalDate);
-            let formatDate = moment(x).format("YYYY-DD-MM")
+            let formatDate = moment(x).format("YYYY-MM-DD")
             setEndDate(formatDate);
             setSendEndDate(moment(x.setDate(parseFloat((total + newDate) - 1))).format("YYYY-MM-DD"))
-            getJobDay(formatDate)
+            getJobDay(formatDate, setDate)
         }
     }
 
