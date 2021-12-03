@@ -144,8 +144,8 @@ function OperationSchedule() {
                                         <td>{item.createdAt}</td>
                                         <td>
                                             <div className="flex">
-                                                 <span className={statuses[item.status]}>
-                                                     {item.status}
+                                                 <span className={statuses[item.statusAz]}>
+                                                     {item.statusAz}
                                                  </span>
                                                 <ul className="btn-block list-unstyled flex m-0">
                                                     <li>
@@ -168,7 +168,7 @@ function OperationSchedule() {
                                                         </Button>
                                                     </li>
                                                     {
-                                                        item.status === 'Təsdiq gözləyir' ?
+                                                        item.statusAz === 'Təsdiq gözləyir' ?
                                                             <li>
                                                                 <Button className="btn-cancel"
                                                                         onClick={() => changeStatus('REJECTED', item.id)}>
@@ -185,7 +185,7 @@ function OperationSchedule() {
                                                             : null
                                                     }
                                                     {
-                                                        item.status === 'Təsdiq gözləyir' ?
+                                                        item.statusAz === 'Təsdiq gözləyir' ?
                                                             <li>
                                                                 <Button className="btn-confirm"
                                                                         onClick={() => changeStatus('APPROVED', item.id)}>
