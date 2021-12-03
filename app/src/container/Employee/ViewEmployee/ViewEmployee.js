@@ -1248,7 +1248,7 @@ function ViewEmployee() {
                                                                     İşə qəbul tarixi
                                                                 </div>
                                                                 <div className="card-text">
-                                                                    {item.startJobDate}
+                                                                    {item.startDate}
                                                                 </div>
                                                             </div>
                                                             <div className="card-item flex-start">
@@ -1256,7 +1256,7 @@ function ViewEmployee() {
                                                                     İşdən azad tarixi
                                                                 </div>
                                                                 <div className="card-text">
-                                                                    {item.endJobDate}
+                                                                    {item.endDate}
                                                                 </div>
                                                             </div>
                                                             <div className="card-item flex-start">
