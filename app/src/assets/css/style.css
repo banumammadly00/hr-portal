@@ -1424,7 +1424,7 @@ td {
     padding: 0 ;
 }
 
-.calendar .fc .fc-day-sat .fc-bg-event, .calendar .fc .fc-day-sun .fc-bg-event {
+.calendar .fc-theme-standard .fc-scrollgrid-section-body .fc-day-sat, .calendar .fc-theme-standard .fc-scrollgrid-section-body  .fc-day-sun {
     background-color: rgba(247, 247, 247, .7);
 }
 

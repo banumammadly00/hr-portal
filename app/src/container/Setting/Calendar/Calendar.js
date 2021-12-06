@@ -30,13 +30,17 @@ function Calendar() {
             }
         }).then((res) => {
             let data = res.data;
-            console.log(data)
             let events = [];
-            if(data) {
+            if (data) {
                 for (let i of data) {
                     setDays(data)
-                    if (i.jobDay === false) {
-                        events.push({display: 'background', date: i.date, title: i.description === null ? " " : i.description, id: i.id})
+                    if (i.holiday === true) {
+                        events.push({
+                            display: 'background',
+                            date: i.date,
+                            title: i.description === null ? " " : i.description,
+                            id: i.id
+                        })
                     }
                 }
             }
@@ -44,11 +48,11 @@ function Calendar() {
         });
     }
 
-    const changeDayEvent = (id, title, jobDay,day) => {
+    const changeDayEvent = (id, title, holiday, day) => {
         let year = new Date(day).getFullYear();
-        let month = (new Date(day).getMonth() + 1 )
+        let month = (new Date(day).getMonth() + 1)
         let data = {
-            "jobDay": jobDay,
+            "holiday": holiday,
             "description": title === "" ? null : title
         }
         mainAxios({
@@ -61,7 +65,7 @@ function Calendar() {
             data: data
 
         }).then((res) => {
-            getDay(year,month)
+            getDay(year, month)
             setModalShow(false);
             setModalEventShow(false)
         });
@@ -78,11 +82,10 @@ function Calendar() {
     const handleDateClick = (arg) => { // bind with an arrow function
         let day = getDayEvent(arg.dateStr);
         setModalData(day)
-        console.log(modalData)
-        if (day.jobDay) {
-            setModalShow(true)
-        } else {
+        if (day.holiday) {
             setModalEventShow(true)
+        } else {
+            setModalShow(true)
         }
     }
 
@@ -110,12 +113,16 @@ function Calendar() {
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                     data={modalData}
-                    click ={(id, title, jobDay, day) => {changeDayEvent(id, title, jobDay, day)}}
+                    click={(id, title, holiday, day) => {
+                        changeDayEvent(id, title, holiday, day)
+                    }}
                 />
                 <CalendarEventModal
                     show={modalEventShow}
                     data={modalData}
-                    click ={(id, title, jobDay, day) => {changeDayEvent(id, title, jobDay, day)}}
+                    click={(id, title, holiday, day) => {
+                        changeDayEvent(id, title, holiday, day)
+                    }}
                     onHide={() => setModalEventShow(false)}
                 />
             </div>

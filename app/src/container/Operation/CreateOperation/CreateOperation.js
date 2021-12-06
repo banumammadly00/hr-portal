@@ -76,7 +76,7 @@ function CreateOperation() {
     const [position, setPosition] = useState('');
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const [sendEndDate, setSendEndDate] = useState('');
+    // const [sendEndDate, setSendEndDate] = useState('');
     const [dayInEvent, setDayInEvent] = useState('');
 
 
@@ -484,11 +484,12 @@ function CreateOperation() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             params: {
-                from : moment(from).format('YYYY-MM-DD'),
+                from: moment(from).format('YYYY-MM-DD'),
                 to: to
             }
         }).then((res) => {
-                setJobDay(res.data)
+                setJobDay(res.data.startJob);
+                setEndDate(res.data.to)
             }
         );
     }
@@ -534,7 +535,7 @@ function CreateOperation() {
 
         let workVacation = {
             "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
-            "to": sendEndDate !== '' ? sendEndDate : null,
+            "to": endDate !== '' ? endDate : null,
             "vacations": vacationArr
         }
 
@@ -657,11 +658,9 @@ function CreateOperation() {
                     total += parseFloat(i)
                 }
             }
-            let totalDate = parseFloat((total + newDate));
+            let totalDate = parseFloat((total + newDate) - 1);
             x.setDate(totalDate);
             let formatDate = moment(x).format("YYYY-MM-DD")
-            setEndDate(formatDate);
-            setSendEndDate(moment(x.setDate(parseFloat((total + newDate) - 1))).format("YYYY-MM-DD"))
             getJobDay(formatDate, setDate)
         }
     }
