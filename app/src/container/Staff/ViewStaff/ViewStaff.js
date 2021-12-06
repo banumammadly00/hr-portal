@@ -9,7 +9,7 @@ const statuses = {
     'Təsdiq gözləyir': 'pending',
     'Təsdiqlənib': 'confirmed',
     'Ləğv edildi': 'cancelled',
-    'Hesablandı': 'calculated'
+    'Hesablandı': 'done'
 };
 
 
@@ -655,8 +655,8 @@ function ViewStaff() {
                                                     <td>{item.createdAt}</td>
                                                     <td>
                                                         <div className="flex">
-                                                             <span className={statuses[item.status]}>
-                                                                 {item.status}
+                                                             <span className={statuses[item.statusAz]}>
+                                                                 {item.statusAz}
                                                              </span>
                                                         </div>
                                                     </td>

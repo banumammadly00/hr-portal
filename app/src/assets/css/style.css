@@ -1702,6 +1702,12 @@ td {
     box-shadow: 0 0 6px rgba(166 ,166, 166, .16);
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 @media only screen and (min-width: 1600px){
     .export-block {
         width: 80%;
