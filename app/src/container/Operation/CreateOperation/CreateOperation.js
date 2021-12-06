@@ -478,7 +478,7 @@ function CreateOperation() {
     const getJobDay = (to, from) => {
         mainAxios({
             method: 'get',
-            url: '/vacations/next',
+            url: '/vacations/dates',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
