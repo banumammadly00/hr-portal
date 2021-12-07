@@ -146,8 +146,6 @@ function EmployeeSchedule() {
     let positionId = selectedPosition !== null ? selectedPosition.id : null;
     let name = fullName !== '' ? fullName : null;
 
-    console.log(jobStatus)
-
     const handleRowClick = (item) => {
         history.push(`/employee/view/${item.id}`);
     }

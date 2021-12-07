@@ -536,6 +536,7 @@ function CreateOperation() {
         let workVacation = {
             "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
             "to": endDate !== '' ? endDate : null,
+            "startJob": jobDay !== '' ? jobDay : null,
             "vacations": vacationArr
         }
 
@@ -742,7 +743,7 @@ function CreateOperation() {
                                                     <span className="input-title">Əmrin əsası</span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Əmrin əsası daxil edin"
-                                                                      value={mainOfOrder}
+                                                                      value={mainOfOrder || ''}
                                                                       onChange={(e) => setMainOfOrder(e.target.value)}/>
                                                     </Form.Label>
                                                 </Form.Group>
@@ -875,7 +876,7 @@ function CreateOperation() {
                                                     <span className="input-title">Əmrin əsası</span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Əmrin əsası daxil edin"
-                                                                      value={mainOfOrder}
+                                                                      value={mainOfOrder || ''}
                                                                       onChange={(e) => setMainOfOrder(e.target.value)}/>
                                                     </Form.Label>
                                                 </Form.Group>
@@ -979,7 +980,7 @@ function CreateOperation() {
                                                     <span className="input-title">Əsaslandırma</span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Əmrin əsası daxil edin"
-                                                                      value={mainOfOrder}
+                                                                      value={mainOfOrder || ''}
                                                                       onChange={(e) => setMainOfOrder(e.target.value)}/>
                                                     </Form.Label>
                                                 </Form.Group>
@@ -1131,7 +1132,7 @@ function CreateOperation() {
                                                     <Form.Label>
                                                         <Form.Control placeholder="Sınaq müddəti"
                                                                       type="number"
-                                                                      value={testPeriod}
+                                                                      value={testPeriod || ''}
                                                                       onChange={(e) => setTestPeriod(e.target.value)}/>
                                                     </Form.Label>
                                                 </Form.Group>
@@ -1190,7 +1191,7 @@ function CreateOperation() {
                                                     <Form.Label>
                                                         <Form.Control placeholder="Digər fərdi əlavə"
                                                                       type="number"
-                                                                      value={individualAddition}
+                                                                      value={individualAddition || ''}
                                                                       onChange={(e) => setIndividualAddition(e.target.value)}/>
                                                     </Form.Label>
                                                 </Form.Group>
@@ -3252,7 +3253,7 @@ function CreateOperation() {
                                                             <Form.Control placeholder="YYYY-MM-DD"
                                                                           type="text"
                                                                           disabled={true}
-                                                                          value={endDate}
+                                                                          value={endDate || ''}
                                                             />
                                                         </Form.Label>
                                                         <Button className="btn-transparent">
@@ -3313,7 +3314,7 @@ function CreateOperation() {
                                                             <Form.Control placeholder="YYYY-MM-DD"
                                                                           type="text"
                                                                           disabled={true}
-                                                                          value={jobDay}
+                                                                          value={jobDay || ''}
                                                             />
                                                         </Form.Label>
                                                     </Form.Label>
