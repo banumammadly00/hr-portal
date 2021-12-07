@@ -27,7 +27,6 @@ function ViewEmployee() {
     const [photo, setPhoto] = useState();
     const [idCardNumber, setIdCardNumber] = useState('');
     const [idCardPin, setIdCardPin] = useState('');
-    const [idCardSerial, setIdCardSerial] = useState('');
     const [startIdDate, setStartIdDate] = useState('');
     const [expiredIdDate, setExpiredIdDate] = useState('');
     const [idCardOrganization, setIdCardOrganization] = useState('');
@@ -86,14 +85,9 @@ function ViewEmployee() {
     /*--------------Company------------*/
     const [companyArr, setCompanyArr] = useState([]);
 
-    const [company, setCompany] = useState('');
     const [department, setDepartment] = useState('');
     const [subDepartment, setSubDepartment] = useState('');
     const [position, setPosition] = useState('');
-    const [firedReason, setFiredReason] = useState('');
-    const [checked, setChecked] = useState(true);
-    const [startJobDate, setStartJobDate] = useState('');
-    const [endJobDate, setEndJobDate] = useState('');
 
     /*---------Education----------*/
     const [driverLicence, setDriverLicence] = useState('');
@@ -154,7 +148,6 @@ function ViewEmployee() {
                 setIdCardOrganization(personalData.idCard.organization);
                 setIdCardPin(personalData.idCard.pin);
                 setIdCardNumber(personalData.idCard.seriesNumber);
-                setIdCardSerial(personalData.idCard.seriesNumber);
                 setStartIdDate(personalData.idCard.startDate);
                 setSetMilitaryStatus(personalData.militaryStatus);
                 personalData.gender !== 'Kişi' ? setShowMilitary(false) : setShowMilitary(true);
@@ -194,9 +187,9 @@ function ViewEmployee() {
                 setContactData(true)
                 /*livingAddress*/
                 if (contactData.livingAddress !== null) {
-                    setRegCountry(contactData.livingAddress.country !==null ? contactData.livingAddress.country.name : null);
-                    setRegCity(contactData.livingAddress.city !== null ? contactData.livingAddress.city.name : null);
-                    setRegRegion(contactData.livingAddress.district !==null ? contactData.livingAddress.district.name : null);
+                    setCountry(contactData.livingAddress.country !==null ? contactData.livingAddress.country.name : null);
+                    setCity(contactData.livingAddress.city !== null ? contactData.livingAddress.city.name : null);
+                    setRegion(contactData.livingAddress.district !==null ? contactData.livingAddress.district.name : null);
                     setSettlement(contactData.livingAddress.village);
                     setStreet(contactData.livingAddress.street);
                     setBlock(contactData.livingAddress.block);
@@ -249,7 +242,8 @@ function ViewEmployee() {
             setCheckColleague(data.allianceMember);
             setWarrantyNumber(data.sicNo);
             setQuota((data.quotas).join(' , '));
-            //setRewardArr(data.honoraryAchievements)
+            if (data.honoraryAchievements.length > 0)
+                setRewardArr(data.honoraryAchievements);
 
         });
     }
@@ -581,7 +575,7 @@ function ViewEmployee() {
                                         </div>
                                         <div className="card">
                                             {
-                                                contactData ?
+                                                livingData ?
                                                     <div className="card-in">
                                                         <div className="card-item flex-start">
                                                             <div className="card-title">
@@ -875,6 +869,7 @@ function ViewEmployee() {
                                                     <label className="radio-label">
                                                         <input type="radio" name="education"
                                                                checked={!checkEducation}
+                                                               readOnly={true}
                                                         />
                                                         <span className="radio-mark"></span>
                                                     </label>
@@ -884,6 +879,7 @@ function ViewEmployee() {
                                                     <label className="radio-label">
                                                         <input type="radio" name="education"
                                                                checked={checkEducation}
+                                                               readOnly={true}
                                                         />
                                                         <span className="radio-mark"></span>
                                                     </label>
@@ -1197,9 +1193,7 @@ function ViewEmployee() {
                                                                         <label className="radio-label">
                                                                             <input type="radio" name={`${index}radio`}
                                                                                    checked={item.mainJob}
-                                                                                   disabled={true} onChange={(e) => {
-                                                                                setChecked(true)
-                                                                            }}/>
+                                                                                   readOnly={true}/>
                                                                             <span className="radio-mark"></span>
                                                                         </label>
                                                                         <span
@@ -1209,9 +1203,7 @@ function ViewEmployee() {
                                                                         <label className="radio-label">
                                                                             <input type="radio" name={`${index}radio`}
                                                                                    checked={!item.mainJob}
-                                                                                   disabled={true} onChange={(e) => {
-                                                                                setChecked(false)
-                                                                            }}/>
+                                                                                   readOnly={true} />
                                                                             <span className="radio-mark"></span>
                                                                         </label>
                                                                         <span
@@ -1391,7 +1383,7 @@ function ViewEmployee() {
                                                                     Təltifin adı
                                                                 </div>
                                                                 <div className="card-text">
-                                                                    {item.name}
+                                                                    {item.honoraryDecree !== null ? item.honoraryDecree.name : null}
                                                                 </div>
                                                             </div>
                                                             <div className="card-item flex-start">
@@ -1399,7 +1391,7 @@ function ViewEmployee() {
                                                                     Təltifi verən orqanın adı
                                                                 </div>
                                                                 <div className="card-text">
-                                                                    {item.organization}
+                                                                    {item.organization !== null ? item.organization.name : null}
                                                                 </div>
                                                             </div>
                                                             <div className="card-item flex-start">
@@ -1407,7 +1399,7 @@ function ViewEmployee() {
                                                                     Təltifin verilmə tarixi
                                                                 </div>
                                                                 <div className="card-text">
-                                                                    {item.startDate}
+                                                                    {item.givenDate}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1556,10 +1548,7 @@ function ViewEmployee() {
                                                                     <label className="radio-label">
                                                                         <input type="radio" name="prisoner"
                                                                                checked={checkPrisoner}
-                                                                               disabled={true}
-                                                                               onChange={(e) => {
-                                                                                   setCheckPrisoner(true)
-                                                                               }}/>
+                                                                               readOnly={true}/>
                                                                         <span className="radio-mark"></span>
                                                                     </label>
                                                                     <span className="radio-title">Bəli</span>
@@ -1567,11 +1556,8 @@ function ViewEmployee() {
                                                                 <div className="radio-block">
                                                                     <label className="radio-label">
                                                                         <input type="radio" name="prisoner"
-                                                                               disabled={true}
-                                                                               checked={!checkPrisoner}
-                                                                               onChange={(e) => {
-                                                                                   setCheckPrisoner(false)
-                                                                               }}/>
+                                                                               readOnly={true}
+                                                                               checked={!checkPrisoner}/>
                                                                         <span className="radio-mark"></span>
                                                                     </label>
                                                                     <span className="radio-title">Xeyr</span>
@@ -1587,10 +1573,7 @@ function ViewEmployee() {
                                                                     <label className="radio-label">
                                                                         <input type="radio" name="colleague"
                                                                                checked={checkColleague}
-                                                                               disabled={true}
-                                                                               onChange={(e) => {
-                                                                                   setCheckColleague(true)
-                                                                               }}/>
+                                                                               readOnly={true}/>
                                                                         <span className="radio-mark"></span>
                                                                     </label>
                                                                     <span className="radio-title">Bəli</span>
@@ -1599,10 +1582,7 @@ function ViewEmployee() {
                                                                     <label className="radio-label">
                                                                         <input type="radio" name="colleague"
                                                                                checked={!checkColleague}
-                                                                               disabled={true}
-                                                                               onChange={(e) => {
-                                                                                   setCheckColleague(false)
-                                                                               }}/>
+                                                                               readOnly={true}/>
                                                                         <span className="radio-mark"></span>
                                                                     </label>
                                                                     <span className="radio-title">Xeyr</span>
