@@ -19,7 +19,7 @@ function ViewStaff() {
     let id = params.id;
     let activeKey = location.state ? location.state.key : undefined
 
-    const [key, setKey] = useState( activeKey !== undefined ? activeKey : 'general');
+    const [key, setKey] = useState(activeKey !== undefined ? activeKey : 'general');
 
     /*General*/
     const [institution, setInstitution] = useState([]);
@@ -55,7 +55,8 @@ function ViewStaff() {
     const [gender, setGender] = useState('');
     const [militaryAchieve, setMilitaryAchieve] = useState('');
     const [health, setHealth] = useState('');
-    const [workConditionPer, setWorkConditionPer] = useState('')
+    const [workConditionPer, setWorkConditionPer] = useState('');
+    const [workConditionVac, setWorkConditionVac] = useState('');
 
     /*Operation*/
     const [operation, setOperation] = useState([])
@@ -95,7 +96,8 @@ function ViewStaff() {
             setSkillLegalArr(data.legislationStatementSet)
             setVacancyCategory(data.positionCategory);
             setWorkMode(data.workMode);
-            setWorkConditionPer(data.conditionalAdditionPercentage)
+            setWorkConditionPer(data.conditionalAdditionPercentage);
+            setWorkConditionVac(data.conditionalAdditionVacation);
             setWorkAddress(data.workPlace);
             setEducationSpeciality(data.speciality !== null ? data.speciality.name : null);
             setGender(data.gender);
@@ -165,7 +167,8 @@ function ViewStaff() {
                                     </div>
                                     <Link to={{
                                         pathname: `/staff/edit/${id}`,
-                                        state: {key}}} className="btn-border">
+                                        state: {key}
+                                    }} className="btn-border">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <g opacity="0.8" clipPath="url(#clip0)">
@@ -262,14 +265,24 @@ function ViewStaff() {
                                             </div>
                                             {
                                                 workCondition == 'Zərərli' ?
-                                                    <div className="card-item flex-start">
-                                                        <div className="card-title">
-                                                            Əmək şəraiti dərəcəsi
+                                                    <>
+                                                        <div className="card-item flex-start">
+                                                            <div className="card-title">
+                                                                Əmək şəraiti dərəcəsi
+                                                            </div>
+                                                            <div className="card-text">
+                                                                {workConditionPer}
+                                                            </div>
                                                         </div>
-                                                        <div className="card-text">
-                                                            {workConditionPer}
+                                                        <div className="card-item flex-start">
+                                                            <div className="card-title">
+                                                                Əmək şəraitinə görə məzuniyyət
+                                                            </div>
+                                                            <div className="card-text">
+                                                                {workConditionVac}
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    </>
                                                     : null
                                             }
                                             <div className="card-item flex-start">
@@ -481,7 +494,8 @@ function ViewStaff() {
                                     </div>
                                     <Link to={{
                                         pathname: `/staff/edit/${id}`,
-                                        state: {key}}} className="btn-border">
+                                        state: {key}
+                                    }} className="btn-border">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <g opacity="0.8" clipPath="url(#clip0)">

@@ -121,7 +121,8 @@ function EditStaff() {
     const [areaExperience, setAreaExperience] = useState('');
     const [leaderExperience, setLeaderExperience] = useState('');
     const [height, setHeight] = useState('');
-    const [workConditionPer, setWorkConditionPer] = useState('')
+    const [workConditionPer, setWorkConditionPer] = useState('');
+    const [workConditionVac, setWorkConditionVac] = useState('');
     /*checked*/
     const [showHeight, setShowHeight] = useState(false);
     const [showCondition, setCondition] = useState(false)
@@ -451,6 +452,7 @@ function EditStaff() {
                 setPositionFunctionArr(data.functionalities);
                 setSelectedInstitution(data.workInstitution);
                 setWorkConditionPer(data.conditionalAdditionPercentage);
+                setWorkConditionVac(data.conditionalAdditionVacation);
                 setSelectedFamilyJob(data.jobFamily);
                 setSelectedDepartment(data.department);
                 setObeyDepartment(data.subordinateDepartment);
@@ -1029,17 +1031,30 @@ function EditStaff() {
                                                 </Col>
                                                 {
                                                     showCondition ?
-                                                        <Col xs={12}>
-                                                            <Form.Group className="form-group">
+                                                        <>
+                                                            <Col xs={6}>
+                                                                <Form.Group className="form-group">
                                                                 <span
                                                                     className="input-title">Əmək şəraiti dərəcəsi</span>
-                                                                <Form.Control
-                                                                    value={workConditionPer || ''}
-                                                                    type="number"
-                                                                    placeholder="Əmək şəraiti dərəcəsi daxil edin"
-                                                                    onChange={(e => setWorkConditionPer(e.target.value))}/>
-                                                            </Form.Group>
-                                                        </Col>
+                                                                    <Form.Control
+                                                                        value={workConditionPer || ''}
+                                                                        type="number"
+                                                                        placeholder="Əmək şəraiti dərəcəsi daxil edin"
+                                                                        onChange={(e => setWorkConditionPer(e.target.value))}/>
+                                                                </Form.Group>
+                                                            </Col>
+                                                            <Col xs={6}>
+                                                                <Form.Group className="form-group">
+                                                                <span
+                                                                    className="input-title">Əmək şəraitinə görə məzuniyyət</span>
+                                                                    <Form.Control
+                                                                        value={workConditionVac || ''}
+                                                                        type="number"
+                                                                        placeholder="Əmək şəraitinə görə məzuniyyət daxil edin"
+                                                                        onChange={(e => setWorkConditionVac(e.target.value))}/>
+                                                                </Form.Group>
+                                                            </Col>
+                                                        </>
                                                         : null
                                                 }
                                                 <Col xs={6}>

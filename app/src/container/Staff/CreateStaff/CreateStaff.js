@@ -112,7 +112,8 @@ function CreateStaff() {
     const [areaExperience, setAreaExperience] = useState('');
     const [leaderExperience, setLeaderExperience] = useState('');
     const [height, setHeight] = useState('');
-    const [workConditionPer, setWorkConditionPer] = useState('')
+    const [workConditionPer, setWorkConditionPer] = useState('');
+    const [workConditionVac, setWorkConditionVac] = useState('');
     /*checked*/
     const [showHeight, setShowHeight] = useState(false);
     const [showCondition, setCondition] = useState(false)
@@ -213,7 +214,7 @@ function CreateStaff() {
             ...provided,
             width: '100%',
             textAlign: 'left',
-            whiteSpace : 'nowrap'
+            whiteSpace: 'nowrap'
 
         }),
 
@@ -413,14 +414,15 @@ function CreateStaff() {
         setLoadingIndicator(true);
         let checkLegalArr = 0
 
-        for(let i of skillLegalArr) {
-            if(skillLegalArr.length === 1 && i.legislationId === null) {
+        for (let i of skillLegalArr) {
+            if (skillLegalArr.length === 1 && i.legislationId === null) {
                 checkLegalArr = 1
             }
         }
         let data = {
             "generalInformation": {
-                "conditionalAdditionPercentage" : workConditionPer !== '' ? parseFloat(workConditionPer) : null,
+                "conditionalAdditionPercentage": workConditionPer !== '' ? parseFloat(workConditionPer) : null,
+                "conditionalAdditionVacation": workConditionVac !== '' ? parseFloat(workConditionVac) : null,
                 "count": parseFloat(vacancyCount),
                 "curatorId": selectedCurator !== null ? selectedCurator.id : null,
                 "departmentId": selectedDepartment !== null ? selectedDepartment.id : null,
@@ -495,14 +497,14 @@ function CreateStaff() {
         setLoadingIndicator(true);
         let checkLegalArr = 0
 
-        for(let i of skillLegalArr) {
-            if(skillLegalArr.length === 1 && i.legislationId === null) {
+        for (let i of skillLegalArr) {
+            if (skillLegalArr.length === 1 && i.legislationId === null) {
                 checkLegalArr = 1
             }
         }
         let data = {
             "generalInformation": {
-                "conditionalAdditionPercentage" : workConditionPer !== '' ? workConditionPer : null,
+                "conditionalAdditionPercentage": workConditionPer !== '' ? workConditionPer : null,
                 "count": parseFloat(vacancyCount),
                 "curatorId": selectedCurator !== null ? selectedCurator.id : null,
                 "departmentId": selectedDepartment !== null ? selectedDepartment.id : null,
@@ -574,22 +576,22 @@ function CreateStaff() {
         setLoadingIndicator(true);
         let checkProgramArr = 0
 
-        for(let i of skillProgramArr) {
-            if(skillProgramArr.length === 1 && i.computerId === null) {
+        for (let i of skillProgramArr) {
+            if (skillProgramArr.length === 1 && i.computerId === null) {
                 checkProgramArr = 1
             }
         }
         let checkLanguageArr = 0
 
-        for(let i of skillLanguageArr) {
-            if(skillLanguageArr.length === 1 && i.languageId === null) {
+        for (let i of skillLanguageArr) {
+            if (skillLanguageArr.length === 1 && i.languageId === null) {
                 checkLanguageArr = 1
             }
         }
         let checkSkillArr = 0
 
-        for(let i of skillArr) {
-            if(skillArr.length === 1 && i.requiredSkillId === null) {
+        for (let i of skillArr) {
+            if (skillArr.length === 1 && i.requiredSkillId === null) {
                 checkSkillArr = 1
             }
         }
@@ -799,7 +801,12 @@ function CreateStaff() {
                                                             onChange={(val) => {
                                                                 let value = val.value;
                                                                 setSelectedWorkCondition(val);
-                                                                value !== 'HARMLESS' ?  setCondition(true) : setCondition(false)
+                                                                value !== 'HARMLESS' ? setCondition(true) : setCondition(false);
+
+                                                                if (value !== 'HARMLESS') {
+                                                                    setWorkConditionVac('');
+                                                                    setWorkConditionPer('');
+                                                                }
                                                             }}
                                                             options={workConditionOptions}
                                                             isSearchable={workConditionOptions ? workConditionOptions.length > 5 ? true : false : false}
@@ -838,7 +845,33 @@ function CreateStaff() {
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-
+                                                {
+                                                    showCondition ?
+                                                        <>
+                                                            <Col xs={6}>
+                                                                <Form.Group className="form-group">
+                                                                    <span
+                                                                        className="input-title">Əmək şəraiti dərəcəsi</span>
+                                                                    <Form.Control
+                                                                        value={workConditionPer || ''}
+                                                                        type="number"
+                                                                        placeholder="Əmək şəraiti dərəcəsi daxil edin"
+                                                                        onChange={(e => setWorkConditionPer(e.target.value))}/>
+                                                                </Form.Group>
+                                                            </Col>
+                                                            <Col xs={6}>
+                                                                <Form.Group className="form-group">
+                                                                    <span className="input-title">Əmək şəraitinə görə məzuniyyət</span>
+                                                                    <Form.Control
+                                                                        value={workConditionVac || ''}
+                                                                        type="number"
+                                                                        placeholder="Əmək şəraitinə görə məzuniyyət daxil edin"
+                                                                        onChange={(e => setWorkConditionVac(e.target.value))}/>
+                                                                </Form.Group>
+                                                            </Col>
+                                                        </>
+                                                        : null
+                                                }
                                                 <Col xs={6}>
                                                     <Form.Group className="form-group">
                                                             <span
@@ -861,20 +894,6 @@ function CreateStaff() {
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-                                                {
-                                                    showCondition ?
-                                                        <Col xs={12}>
-                                                            <Form.Group className="form-group">
-                                                                <span className="input-title">Əmək şəraiti dərəcəsi</span>
-                                                                <Form.Control
-                                                                    value={workConditionPer || ''}
-                                                                    type="number"
-                                                                    placeholder="Əmək şəraiti dərəcəsi daxil edin"
-                                                                    onChange={(e => setWorkConditionPer(e.target.value))}/>
-                                                            </Form.Group>
-                                                        </Col>
-                                                        : null
-                                                }
                                                 <Col xs={6}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">İş ailəsi </span>
@@ -1529,7 +1548,8 @@ function CreateStaff() {
                                                             <Row>
                                                                 <Col xs={6}>
                                                                     <Form.Group className="form-group">
-                                                                        <span className="input-title">Kompetensiyalar</span>
+                                                                        <span
+                                                                            className="input-title">Kompetensiyalar</span>
                                                                         <Select
                                                                             placeholder="Kompetensiyaları seçin"
                                                                             onChange={(val) => {
