@@ -235,6 +235,9 @@ function ViewEmployee() {
                 setUniversityArr(educationData.universities);
 
             let data = res.data
+            setDepartment(data.department);
+            setSubDepartment(data.subDepartment);
+            setPosition(data.position);
             if (data.familyMembers.length > 0) {
                 setFamilyMemberArr(data.familyMembers)
             }
@@ -298,6 +301,7 @@ function ViewEmployee() {
                                         <div className="user-data">
                                             <p className="user-name">{fullName}</p>
                                             <p className="user-department">{department}</p>
+                                            <p className="user-department">{subDepartment}</p>
                                             <p className="user-position">{position}</p>
                                         </div>
                                     </div>
@@ -545,6 +549,7 @@ function ViewEmployee() {
                                         <div className="user-data">
                                             <p className="user-name">{fullName}</p>
                                             <p className="user-department">{department}</p>
+                                            <p className="user-department">{subDepartment}</p>
                                             <p className="user-position">{position}</p>
                                         </div>
                                     </div>
@@ -835,6 +840,7 @@ function ViewEmployee() {
                                         <div className="user-data">
                                             <p className="user-name">{fullName}</p>
                                             <p className="user-department">{department}</p>
+                                            <p className="user-department">{subDepartment}</p>
                                             <p className="user-position">{position}</p>
                                         </div>
                                     </div>
@@ -1148,6 +1154,7 @@ function ViewEmployee() {
                                             <div className="user-data">
                                                 <p className="user-name">{fullName}</p>
                                                 <p className="user-department">{department}</p>
+                                                <p className="user-department">{subDepartment}</p>
                                                 <p className="user-position">{position}</p>
                                             </div>
                                         </div>
@@ -1286,6 +1293,7 @@ function ViewEmployee() {
                                             <div className="user-data">
                                                 <p className="user-name">{fullName}</p>
                                                 <p className="user-department">{department}</p>
+                                                <p className="user-department">{subDepartment}</p>
                                                 <p className="user-position">{position}</p>
                                             </div>
                                         </div>
@@ -1340,6 +1348,7 @@ function ViewEmployee() {
                                             <div className="user-data">
                                                 <p className="user-name">{fullName}</p>
                                                 <p className="user-department">{department}</p>
+                                                <p className="user-department">{subDepartment}</p>
                                                 <p className="user-position">{position}</p>
                                             </div>
                                         </div>

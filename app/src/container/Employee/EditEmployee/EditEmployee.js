@@ -942,6 +942,7 @@ function EditEmployee() {
             if (tmpReward.length > 0)
                 setRewardArr(tmpReward);
 
+
             let tmpFamilyArr = [];
             for (let i of data.familyMembers) {
                 let obj = {};
@@ -2675,7 +2676,7 @@ function EditEmployee() {
                                                             <Form.Control
                                                                 type="number"
                                                                 placeholder="Ev nömrəsi daxil edin"
-                                                                value={phoneNumber}
+                                                                value={phoneNumber || ''}
                                                                 onChange={(e => setPhoneNumber(e.target.value))}/>
                                                         </Form.Label>
                                                     </Form.Group>
@@ -2687,7 +2688,7 @@ function EditEmployee() {
                                                             <Form.Control
                                                                 type="number"
                                                                 placeholder="Mobil nömrəsi daxil edin"
-                                                                value={mobileNumber1}
+                                                                value={mobileNumber1 || ''}
                                                                 onChange={(e => setMobileNumber1(e.target.value))}/>
                                                         </Form.Label>
                                                         <div className="validation-block flex-start">
@@ -2707,7 +2708,7 @@ function EditEmployee() {
                                                             <Form.Control
                                                                 type="number"
                                                                 placeholder="Mobil nömrəsi daxil edin"
-                                                                value={mobileNumber2}
+                                                                value={mobileNumber2 || ''}
                                                                 onChange={(e => setMobileNumber2(e.target.value))}/>
                                                         </Form.Label>
                                                     </Form.Group>
@@ -2719,7 +2720,7 @@ function EditEmployee() {
                                                             <Form.Control
                                                                 type="number"
                                                                 placeholder="İş nömrəsi daxil edin"
-                                                                value={businessPhone}
+                                                                value={businessPhone || ''}
                                                                 onChange={(e => setBusinessPhone(e.target.value))}/>
                                                         </Form.Label>
                                                     </Form.Group>
@@ -2731,7 +2732,7 @@ function EditEmployee() {
                                                             <Form.Control
                                                                 type="number"
                                                                 placeholder="İş nömrəsi daxil edin"
-                                                                value={businessInternalPhone}
+                                                                value={businessInternalPhone || ''}
                                                                 onChange={(e => setBusinessInternalPhone(e.target.value))}/>
                                                         </Form.Label>
                                                     </Form.Group>
@@ -2742,7 +2743,7 @@ function EditEmployee() {
                                                         <Form.Label>
                                                             <Form.Control
                                                                 placeholder="E-mail ünvanı edin"
-                                                                value={email}
+                                                                value={email || ''}
                                                                 onChange={(e => setEmail(e.target.value))}/>
                                                         </Form.Label>
                                                     </Form.Group>
@@ -2753,7 +2754,7 @@ function EditEmployee() {
                                                         <Form.Label>
                                                             <Form.Control
                                                                 placeholder="E-mail ünvanı edin"
-                                                                value={emailBusiness}
+                                                                value={emailBusiness || ''}
                                                                 onChange={(e => setEmailBusiness(e.target.value))}/>
                                                         </Form.Label>
                                                     </Form.Group>
@@ -2844,7 +2845,7 @@ function EditEmployee() {
                                                                                 <span className="input-title">Təhsil dərəcəsi</span>
                                                                                 <Select
                                                                                     placeholder="Təhsil dərəcəsini seçin"
-                                                                                    value={item.degree}
+                                                                                    value={item.degree || ''}
                                                                                     onChange={(val) => {
                                                                                         educationArr[index].degree = val;
                                                                                         setEducationArr([...educationArr], educationArr)
@@ -2861,7 +2862,7 @@ function EditEmployee() {
                                                                                 <span className="input-title">Təhsil müəssəsinin adı</span>
                                                                                 <Select
                                                                                     placeholder="Təhsil müəssəsini seçin"
-                                                                                    value={item.institutionId}
+                                                                                    value={item.institutionId || ''}
                                                                                     onChange={(val) => {
                                                                                         educationArr[index].institutionId = val;
                                                                                         setEducationArr([...educationArr], educationArr)
@@ -2880,7 +2881,7 @@ function EditEmployee() {
                                                                                     className="input-title">Fakültə</span>
                                                                                 <Form.Label>
                                                                                     <Form.Control
-                                                                                        value={item.faculty}
+                                                                                        value={item.faculty || ''}
                                                                                         placeholder="Fakültə daxil et"
                                                                                         onChange={(e) => {
                                                                                             educationArr[index].faculty = e.target.value;
@@ -2895,7 +2896,7 @@ function EditEmployee() {
                                                                                     className="input-title">İstiqamət</span>
                                                                                 <Form.Label>
                                                                                     <Form.Control
-                                                                                        value={item.direction}
+                                                                                        value={item.direction || ''}
                                                                                         placeholder="İstiqamət daxil et"
                                                                                         onChange={(e) => {
                                                                                             educationArr[index].direction = e.target.value;
@@ -2910,7 +2911,7 @@ function EditEmployee() {
                                                                                     className="input-title"> İxtisas</span>
                                                                                 <Form.Label className="relative m-0">
                                                                                     <Form.Control
-                                                                                        value={item.speciality}
+                                                                                        value={item.speciality || ''}
                                                                                         placeholder="İxtisas daxil et"
                                                                                         onChange={(e) => {
                                                                                             educationArr[index].speciality = e.target.value;
@@ -2924,7 +2925,7 @@ function EditEmployee() {
                                                                                 <span className="input-title"> Daxil olma tarixi</span>
                                                                                 <Form.Label className="relative m-0">
                                                                                     <DatePicker
-                                                                                        value={item.entranceDate}
+                                                                                        value={item.entranceDate || ''}
                                                                                         dateFormat="dd-MM-yyyy"
                                                                                         placeholderText="YYYY-MM-DD"
                                                                                         showMonthDropdown
@@ -2991,7 +2992,7 @@ function EditEmployee() {
                                                                                 <span className="input-title"> Bitmə tarixi</span>
                                                                                 <Form.Label className="relative m-0">
                                                                                     <DatePicker
-                                                                                        value={item.graduateDate}
+                                                                                        value={item.graduateDate || ''}
                                                                                         dateFormat="dd-MM-yyyy"
                                                                                         placeholderText="YYYY-MM-DD"
                                                                                         showMonthDropdown
@@ -3072,7 +3073,7 @@ function EditEmployee() {
                                                                                 <span className="input-title"> Sənədin verilmə tarixi</span>
                                                                                 <Form.Label className="relative m-0">
                                                                                     <DatePicker
-                                                                                        value={item.diploma !== null ? item.diploma.givenDate : null}
+                                                                                        value={item.diploma !== null ? item.diploma.givenDate : ''}
                                                                                         dateFormat="dd-MM-yyyy"
                                                                                         placeholderText="YYYY-MM-DD"
                                                                                         showMonthDropdown
@@ -3138,7 +3139,7 @@ function EditEmployee() {
                                                                             <Form.Group className="form-group">
                                                                                 <span className="input-title">Təhsil forması</span>
                                                                                 <Select
-                                                                                    value={item.educationType}
+                                                                                    value={item.educationType || ''}
                                                                                     placeholder="Təhsil forması seçin"
                                                                                     onChange={(val) => {
                                                                                         educationArr[index].educationType = val;
@@ -3160,20 +3161,19 @@ function EditEmployee() {
                                                                                         <label className="check-button">
                                                                                             <input type="checkbox"
                                                                                                    name="checkForeign"
-                                                                                                   checked={item.foreignOption}
+                                                                                                   checked={item.foreignOption || ''}
                                                                                                    onChange={(e) => {
                                                                                                        educationArr[index].foreignOption = e.target.checked;
                                                                                                        setEducationArr([...educationArr], educationArr)
                                                                                                    }}/>
-                                                                                            <span
-                                                                                                className="checkmark"></span>
+                                                                                            <span className="checkmark"></span>
                                                                                         </label>
                                                                                     </div>
                                                                                     <span>Nostrifikasiya şəhadətnaməsinin nömrəsi</span>
                                                                                 </div>
                                                                                 <Form.Label>
                                                                                     <Form.Control
-                                                                                        value={item.abroadStudyNo}
+                                                                                        value={item.abroadStudyNo || ''}
                                                                                         placeholder="Nostrifikasiya şəhadətnaməsinin nömrəsi daxil et"
                                                                                         disabled={!(item.foreignOption)}
                                                                                         onChange={(e) => {
@@ -3252,7 +3252,7 @@ function EditEmployee() {
                                                                         <Form.Label>
                                                                             <Select
                                                                                 placeholder="Adı seçin"
-                                                                                value={item.certificateId}
+                                                                                value={item.certificateId || ''}
                                                                                 onChange={(val) => {
                                                                                     certificateArr[index].certificateId = val;
                                                                                     setCertificateArr([...certificateArr], certificateArr)
@@ -3281,7 +3281,7 @@ function EditEmployee() {
                                                                     className="input-title">Qüvvədə olma müddəti</span>
                                                                         <Form.Label className="relative m-0">
                                                                             <DatePicker
-                                                                                value={item.endDate}
+                                                                                value={item.endDate || ''}
                                                                                 dateFormat="dd-MM-yyyy"
                                                                                 placeholderText="YYYY-MM-DD"
                                                                                 showMonthDropdown
@@ -3450,7 +3450,7 @@ function EditEmployee() {
                                                                     <Form.Label>
                                                                         <Form.Control
                                                                             placeholder="Sənədin nömrəsi daxil et"
-                                                                            value={academicDegreeNumber}
+                                                                            value={academicDegreeNumber || ''}
                                                                             onChange={(e => setAcademicDegreeNumber(e.target.value))}/>
                                                                     </Form.Label>
                                                                 </Form.Group>
@@ -3460,7 +3460,7 @@ function EditEmployee() {
                                                                     <span className="input-title">Verən orqan</span>
                                                                     <Form.Label>
                                                                         <Form.Control placeholder="Verən orqan daxil et"
-                                                                                      value={academicDegreeOrganization}
+                                                                                      value={academicDegreeOrganization || ''}
                                                                                       onChange={(e => setAcademicDegreeOrganization(e.target.value))}/>
                                                                     </Form.Label>
                                                                 </Form.Group>
@@ -3495,7 +3495,7 @@ function EditEmployee() {
                                                                     <Form.Label>
                                                                         <Select
                                                                             placeholder="Kateqoriya daxil edin"
-                                                                            value={selectedDriverLicence}
+                                                                            value={selectedDriverLicence || ''}
                                                                             onChange={(val) => {
                                                                                 setSelectedDriverLicence(val)
                                                                             }}
@@ -3641,8 +3641,7 @@ function EditEmployee() {
                                                                                                    companyIntArr[index].mainJob = true;
                                                                                                    setCompanyIntArr([...companyIntArr], companyIntArr)
                                                                                                }}/>
-                                                                                        <span
-                                                                                            className="radio-mark"></span>
+                                                                                        <span className="radio-mark"></span>
                                                                                     </label>
                                                                                     <span
                                                                                         className="radio-title">Əsas iş yeri</span>
@@ -3656,8 +3655,7 @@ function EditEmployee() {
                                                                                                    companyIntArr[index].mainJob = false;
                                                                                                    setCompanyIntArr([...companyIntArr], companyIntArr)
                                                                                                }}/>
-                                                                                        <span
-                                                                                            className="radio-mark"></span>
+                                                                                        <span className="radio-mark"></span>
                                                                                     </label>
                                                                                     <span
                                                                                         className="radio-title">Əlavə iş yeri</span>
@@ -3728,7 +3726,7 @@ function EditEmployee() {
                                                                                     <Form.Label
                                                                                         className="relative m-0">
                                                                                         <DatePicker
-                                                                                            value={item.startDate}
+                                                                                            value={item.startDate || ''}
                                                                                             dateFormat="dd-MM-yyyy"
                                                                                             placeholderText="YYYY-MM-DD"
                                                                                             showMonthDropdown
@@ -3797,7 +3795,7 @@ function EditEmployee() {
                                                                                     <span className="input-title">İşdən azad tarixi</span>
                                                                                     <Form.Label
                                                                                         className="relative m-0">
-                                                                                        <DatePicker value={item.endDate}
+                                                                                        <DatePicker value={item.endDate || ''}
                                                                                                     dateFormat="dd-MM-yyyy"
                                                                                                     placeholderText="YYYY-MM-DD"
                                                                                                     showMonthDropdown
@@ -3890,7 +3888,7 @@ function EditEmployee() {
                                                                                     <span className="input-title">İş statusu</span>
                                                                                     <Select
                                                                                         placeholder="İş statusu seçin"
-                                                                                        value={item.businessStatus}
+                                                                                        value={item.businessStatus || ''}
                                                                                         onChange={(val) => {
                                                                                             companyIntArr[index].businessStatus = val;
                                                                                             setCompanyIntArr([...companyIntArr], companyIntArr)
@@ -3987,8 +3985,7 @@ function EditEmployee() {
                                                                                                    companyExtArr[index].mainJob = true;
                                                                                                    setCompanyExtArr([...companyExtArr], companyExtArr)
                                                                                                }}/>
-                                                                                        <span
-                                                                                            className="radio-mark"></span>
+                                                                                        <span className="radio-mark"></span>
                                                                                     </label>
                                                                                     <span
                                                                                         className="radio-title">Əsas iş yeri</span>
@@ -4002,8 +3999,7 @@ function EditEmployee() {
                                                                                                    companyExtArr[index].mainJob = false;
                                                                                                    setCompanyExtArr([...companyExtArr], companyExtArr)
                                                                                                }}/>
-                                                                                        <span
-                                                                                            className="radio-mark"></span>
+                                                                                        <span className="radio-mark"></span>
                                                                                     </label>
                                                                                     <span
                                                                                         className="radio-title">Əlavə iş yeri</span>
@@ -4074,7 +4070,7 @@ function EditEmployee() {
                                                                                     <Form.Label
                                                                                         className="relative m-0">
                                                                                         <DatePicker
-                                                                                            value={item.startDate}
+                                                                                            value={item.startDate || ''}
                                                                                             dateFormat="dd-MM-yyyy"
                                                                                             placeholderText="YYYY-MM-DD"
                                                                                             showMonthDropdown
@@ -4143,7 +4139,7 @@ function EditEmployee() {
                                                                                     <span className="input-title">İşdən azad tarixi</span>
                                                                                     <Form.Label
                                                                                         className="relative m-0">
-                                                                                        <DatePicker value={item.endDate}
+                                                                                        <DatePicker value={item.endDate || ''}
                                                                                                     dateFormat="dd-MM-yyyy"
                                                                                                     placeholderText="YYYY-MM-DD"
                                                                                                     showMonthDropdown
@@ -4236,7 +4232,7 @@ function EditEmployee() {
                                                                                     <span className="input-title">İş statusu</span>
                                                                                     <Select
                                                                                         placeholder="İş statusu seçin"
-                                                                                        value={item.businessStatus}
+                                                                                        value={item.businessStatus || ''}
                                                                                         onChange={(val) => {
                                                                                             companyExtArr[index].businessStatus = val;
                                                                                             setCompanyExtArr([...companyExtArr], companyExtArr)
@@ -4363,7 +4359,7 @@ function EditEmployee() {
                                                                         <Form.Label>
                                                                             <Select
                                                                                 placeholder="Təltifin adı seçin"
-                                                                                value={item.honoraryDecreeId}
+                                                                                value={item.honoraryDecreeId || ''}
                                                                                 onChange={(val) => {
                                                                                     rewardArr[index].honoraryDecreeId = val;
                                                                                     setRewardArr([...rewardArr], rewardArr)
@@ -4392,7 +4388,7 @@ function EditEmployee() {
                                                                 className="input-title">Təltifi verən orqanın adı *</span>
                                                                         <Form.Label>
                                                                             <Select
-                                                                                value={item.organizationId}
+                                                                                value={item.organizationId || ''}
                                                                                 placeholder="Təltifi verən orqanı seçin"
                                                                                 onChange={(val) => {
                                                                                     rewardArr[index].organizationId = val;
@@ -4421,7 +4417,7 @@ function EditEmployee() {
                                                                 <span
                                                                     className="input-title">Təltifin verilmə tarixi</span>
                                                                         <Form.Label className="relative m-0">
-                                                                            <DatePicker value={item.givenDate}
+                                                                            <DatePicker value={item.givenDate || ''}
                                                                                         dateFormat="dd-MM-yyyy"
                                                                                         placeholderText="YYYY-MM-DD"
                                                                                         showMonthDropdown
@@ -4528,7 +4524,7 @@ function EditEmployee() {
                                                         <Form.Label className="relative m-0">
                                                             <Select
                                                                 placeholder="Yetkinlik yaşına çatmamış uşaqları tərbiyə edən tək və çoxuşaqlı valideynlər"
-                                                                value={selectedQuota}
+                                                                value={selectedQuota || ''}
                                                                 onChange={(val) => {
                                                                     setSelectedQuota(val);
                                                                     setQuotaArr(val)
@@ -4591,7 +4587,7 @@ function EditEmployee() {
                                                                         <Form.Label>
                                                                             <Select
                                                                                 placeholder="Ailə üzvü daxil edin"
-                                                                                value={item.relationType}
+                                                                                value={item.relationType || ''}
                                                                                 onChange={(val) => {
                                                                                     familyMemberArr[index].relationType = val;
                                                                                     setFamilyMemberArr([...familyMemberArr], familyMemberArr)
@@ -4610,7 +4606,7 @@ function EditEmployee() {
                                                                         <Form.Label>
                                                                             <Form.Control
                                                                                 placeholder="Soyadı, adı, ata adı daxil edin"
-                                                                                value={item.fullName}
+                                                                                value={item.fullName || ''}
                                                                                 onChange={(e) => {
                                                                                     familyMemberArr[index].fullName = e.target.value;
                                                                                     setFamilyMemberArr([...familyMemberArr], familyMemberArr)
@@ -4624,7 +4620,7 @@ function EditEmployee() {
                                                                             className="input-title">Doğum tarixi</span>
                                                                         <Form.Label className="relative m-0">
                                                                             <DatePicker
-                                                                                value={item.birthDate}
+                                                                                value={item.birthDate || ''}
                                                                                 placeholderText="YYYY-MM-DD"
                                                                                 dateFormat="dd-MM-yyyy"
                                                                                 showMonthDropdown
@@ -4692,7 +4688,7 @@ function EditEmployee() {
                                                                         <Form.Label>
                                                                             <Form.Control
                                                                                 placeholder="Doğum yeri daxil edin"
-                                                                                value={item.birthplace}
+                                                                                value={item.birthplace || ''}
                                                                                 onChange={(e) => {
                                                                                     familyMemberArr[index].birthplace = e.target.value;
                                                                                     setFamilyMemberArr([...familyMemberArr], familyMemberArr)
@@ -4706,7 +4702,7 @@ function EditEmployee() {
                                                                         <Form.Label>
                                                                             <Form.Control
                                                                                 placeholder="Yeri daxil edin"
-                                                                                value={item.workPlace}
+                                                                                value={item.workPlace || ''}
                                                                                 onChange={(e) => {
                                                                                     familyMemberArr[index].workPlace = e.target.value;
                                                                                     setFamilyMemberArr([...familyMemberArr], familyMemberArr)
@@ -4721,7 +4717,7 @@ function EditEmployee() {
                                                                         <Form.Label>
                                                                             <Form.Control
                                                                                 placeholder="Vəzifə daxil edin"
-                                                                                value={item.position}
+                                                                                value={item.position || ''}
                                                                                 onChange={(e) => {
                                                                                     familyMemberArr[index].position = e.target.value;
                                                                                     setFamilyMemberArr([...familyMemberArr], familyMemberArr)
@@ -4735,7 +4731,7 @@ function EditEmployee() {
                                                                         <Form.Label>
                                                                             <Form.Control
                                                                                 placeholder="Yaşayış daxil edin"
-                                                                                value={item.address}
+                                                                                value={item.address || ''}
                                                                                 onChange={(e) => {
                                                                                     familyMemberArr[index].address = e.target.value;
                                                                                     setFamilyMemberArr([...familyMemberArr], familyMemberArr)
