@@ -1236,6 +1236,14 @@ function ViewEmployee() {
                                                             </div>
                                                             <div className="card-item flex-start">
                                                                 <div className="card-title">
+                                                                    İşçinin işlədiyi vəzifə
+                                                                </div>
+                                                                <div className="card-text">
+                                                                    {item.position}
+                                                                </div>
+                                                            </div>
+                                                            <div className="card-item flex-start">
+                                                                <div className="card-title">
                                                                     Alt struktur bölmə
                                                                 </div>
                                                                 <div className="card-text">

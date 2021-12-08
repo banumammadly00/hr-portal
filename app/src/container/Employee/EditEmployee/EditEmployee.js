@@ -114,7 +114,6 @@ function EditEmployee() {
 
     /*check&visibility*/
     const [showPassport, setShowPassport] = useState(false);
-    const [showButton, setShowButton] = useState(false);
 
     /*--------general------*/
 
@@ -141,7 +140,6 @@ function EditEmployee() {
     const [passportNumber, setPassportNumber] = useState('');
     const [photo, setPhoto] = useState(userImage);
     const [uploadFile, setUploadFile] = useState('');
-    const [militaryStatus, setSetMilitaryStatus] = useState('');
     const [workPermissionSerial, setWorkPermissionSerial] = useState('');
     const [workPermissionNumber, setWorkPermissionNumber] = useState('');
     const [workPermissionPeriod, setWorkPermissionPeriod] = useState('');
@@ -192,16 +190,12 @@ function EditEmployee() {
 
     /*date*/
     const [startAcademicDegreeDate, setStartAcademicDegreeDate] = useState(null);
-    const [endGraduateDate, setEndGraduateDate] = useState(null);
-    const [startGraduateFile, setStartGraduateFile] = useState(null);
-    const [expiredCertificateDate, setExpiredCertificateDate] = useState(null);
     const [expiredDriverLicenceDate, setExpiredDriverLicenceDate] = useState(null);
     /*input*/
     const [academicDegreeNumber, setAcademicDegreeNumber] = useState('');
     const [academicDegreeOrganization, setAcademicDegreeOrganization] = useState('');
     const [warrantyNumber, setWarrantyNumber] = useState('');
     /*select*/
-    const [selectedEducationType, setSelectedEducationType] = useState(null);
     const [selectedDriverLicence, setSelectedDriverLicence] = useState(null);
     /*array*/
     const [certificate, setCertificate] = useState([]);
@@ -260,8 +254,6 @@ function EditEmployee() {
 
     /*------------------Other-------------------------*/
 
-    /*date*/
-    const [startRewardDate, setStartRewardDate] = useState(null);
     /*select*/
     const [selectedFamilyCondition, setSelectedFamilyCondition] = useState(null);
     const [selectedQuota, setSelectedQuota] = useState(null);
@@ -556,19 +548,6 @@ function EditEmployee() {
         });
     }
 
-    /*const getQuota = () => {
-        mainAxios({
-            method: 'get',
-            url: '/employee/quota',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-        }).then((res) => {
-            setQuota(res.data.data)
-        });
-    }*/
-
     const getReward = () => {
         mainAxios({
             method: 'get',
@@ -750,14 +729,12 @@ function EditEmployee() {
                         setSelectedSerial(i)
                     }
                 }
-                setSetMilitaryStatus(personalData.militaryStatus);
                 personalData.gender !== 'Kişi' ? setShowMilitary(false) : setShowMilitary(true);
                 setSelectedCitizenControl(personalData.motherLand);
                 let motherLandName = personalData.motherLand !== null ? personalData.motherLand.name : null;
                 (motherLandName !== 'Azərbaycan' && motherLandName !== null) ? setShowPermission(true) : setShowPermission(false);
                 personalData.photo !== null ?
                     setPhoto(`https://hr-portal-api-v2.herokuapp.com/employees/image/${personalData.photo}?token=${token}`) : setPhoto(userImage)
-                /*setPhoto(`https://hr-portal-api.herokuapp.com/image/${data.photo}?token=${token}`) : setPhoto(userImage)*/
 
                 if (personalData.foreignPassport !== null) {
                     setPassportNumber(personalData.foreignPassport.seriesNumber);
@@ -1020,7 +997,6 @@ function EditEmployee() {
                 showConfirmButton: false,
                 timer: 1500
             });
-            setShowButton(true);
             if (uploadFile !== "") sendImage();
             setErrors({})
         }).catch((error) => {
@@ -1810,7 +1786,10 @@ function EditEmployee() {
                                                             value={selectedGender}
                                                             onChange={(val) => {
                                                                 setSelectedGender(val);
-                                                                val.value === 'MALE' ? setShowMilitary(true) : setShowMilitary(false)
+                                                                val.value === 'MALE' ? setShowMilitary(true) :  setShowMilitary(false)
+                                                                if (val.value !== 'MALE') {
+                                                                    setSelectedMilitary(null)
+                                                                }
                                                             }}
                                                             isSearchable={genderOptions ? genderOptions.length > 5 ? true : false : false}
                                                             options={genderOptions}
@@ -2932,7 +2911,6 @@ function EditEmployee() {
                                                                                         showYearDropdown
                                                                                         dropdownMode="select"
                                                                                         onChange={(date) => {
-                                                                                            setExpiredCertificateDate(date);
                                                                                             educationArr[index].entranceDate = moment(date).format("YYYY-MM-DD");
                                                                                             setEducationArr([...educationArr], educationArr)
                                                                                         }}/>
@@ -2999,7 +2977,6 @@ function EditEmployee() {
                                                                                         showYearDropdown
                                                                                         dropdownMode="select"
                                                                                         onChange={(date) => {
-                                                                                            setEndGraduateDate(date);
                                                                                             educationArr[index].graduateDate = moment(date).format("YYYY-MM-DD");
                                                                                             setEducationArr([...educationArr], educationArr)
                                                                                         }}/>
@@ -3080,7 +3057,6 @@ function EditEmployee() {
                                                                                         showYearDropdown
                                                                                         dropdownMode="select"
                                                                                         onChange={(date) => {
-                                                                                            setStartGraduateFile(date);
                                                                                             educationArr[index].diploma.givenDate = moment(date).format("YYYY-MM-DD");
                                                                                             setEducationArr([...educationArr], educationArr)
                                                                                         }}/>
@@ -3144,7 +3120,6 @@ function EditEmployee() {
                                                                                     onChange={(val) => {
                                                                                         educationArr[index].educationType = val;
                                                                                         setEducationArr([...educationArr], educationArr)
-                                                                                        setSelectedEducationType(val);
                                                                                     }}
                                                                                     isSearchable={educationTypeOptions ? educationTypeOptions.length > 5 ? true : false : false}
                                                                                     options={educationTypeOptions}
@@ -3288,7 +3263,6 @@ function EditEmployee() {
                                                                                 showYearDropdown
                                                                                 dropdownMode="select"
                                                                                 onChange={(date) => {
-                                                                                    setExpiredCertificateDate(date);
                                                                                     certificateArr[index].endDate = moment(date).format("YYYY-MM-DD");
                                                                                     setCertificateArr([...certificateArr], certificateArr)
                                                                                 }}/>
@@ -4424,7 +4398,6 @@ function EditEmployee() {
                                                                                         showYearDropdown
                                                                                         dropdownMode="select"
                                                                                         onChange={(date) => {
-                                                                                            setStartRewardDate(date)
                                                                                             rewardArr[index].givenDate = moment(date).format("YYYY-MM-DD");
                                                                                             setRewardArr([...rewardArr], rewardArr)
                                                                                         }}/>
