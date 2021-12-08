@@ -21,7 +21,7 @@ function CalendarDayModal(props) {
                     </li>
                     <li className="w-100">
                         <button type="button" className="btn-effect" onClick={() => {
-                            props.click(props.data.id, props.data.description, true, props.data.date)
+                            props.click(props.data.id, props.data.description, false, props.data.date)
                         }}>
                             Bəli
                         </button>
