@@ -7,8 +7,8 @@ import {mainAxios} from "../../../components/Axios/axios";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import Swal from 'sweetalert2';
-import format from "@popperjs/core/lib/utils/format";
 import {uid} from "react-uid";
+import Indicator from "../../../components/Loading/Indicator";
 
 const WorkModeOptions = [
     {value: 'DAILY', label: 'Gündəlik'},
@@ -65,20 +65,20 @@ function CreateOperation() {
     const [operationType, setOperationType] = useState([]);
     const [operationTypeArr, setOperationTypeArr] = useState([]);
     const [selectedOperationType, setSelectedOperationType] = useState(null);
-    const [newDate, setNewDate] = useState(null)
+    const [tab, setTab] = useState('')
+    const [errors, setErrors] = useState({});
+    const [loadingIndicator, setLoadingIndicator] = useState(false);
 
 
     /*------Employee----------*/
     const [employee, setEmployee] = useState([]);
-
     const [department, setDepartment] = useState('')
     const [subDepartment, setSubDepartment] = useState('');
     const [position, setPosition] = useState('');
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    // const [sendEndDate, setSendEndDate] = useState('');
-    const [dayInEvent, setDayInEvent] = useState('');
-
+    const [getEndDate, setGetEndDate] = useState('');
+    const [eventName, setEventName] = useState('');
 
     /*------Vacancy----------*/
     const [vacancy, setVacancy] = useState([]);
@@ -92,8 +92,8 @@ function CreateOperation() {
     const [vacancyCategory, setVacancyCategory] = useState('');
     const [vacancyObeyDepartment, setVacancyObeyDepartment] = useState('');
 
-
     /*------General----------*/
+    const [mainOfOrder, setMainOfOrder] = useState('');
     const [testPeriod, setTestPeriod] = useState('');
     const [individualAddition, setIndividualAddition] = useState('');
     const [selectedJobTime, setSelectedJobTime] = useState(null);
@@ -114,7 +114,6 @@ function CreateOperation() {
         day: null
     }])
 
-
     const [selectedStaff, setSelectedStaff] = useState(null);
     const [selectedStaffArr, setSelectedStaffArr] = useState(null);
     const [selectedPosition, setSelectedPosition] = useState(null);
@@ -123,7 +122,6 @@ function CreateOperation() {
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [monthArr, setMonthArr] = useState([]);
 
-    const [key, setKey] = useState('')
     const [noteArr, setNoteArr] = useState([""]);
     const [firedDate, setFiredDate] = useState(null);
     const [changeDate, setChangeDate] = useState(null);
@@ -148,12 +146,10 @@ function CreateOperation() {
     const [employeeId, setEmployeeId] = useState('');
     const [positionId, setPositionId] = useState('');
     const [employeeIds, setEmployeeIds] = useState([]);
-    const [tab, setTab] = useState('')
     const [documentId, setDocumentId] = useState('');
     const [salary, setSalary] = useState('');
     const [vacancyName, setVacancyName] = useState('');
     const [workMode, setWorkMode] = useState('');
-    const [mainOfOrder, setMainOfOrder] = useState('');
     const [additionalSalary, setAdditionalSalary] = useState('');
     const [ownAdditionalSalary, setOwnAdditionalSalary] = useState('');
     const [newSalary, setNewSalary] = useState('');
@@ -164,7 +160,6 @@ function CreateOperation() {
     const [achievement, setAchievement] = useState('');
     const [changePeriod, setChangePeriod] = useState('');
     const [dayOutEvent, setDayOutEvent] = useState('');
-    const [eventName, setEventName] = useState('');
     const [presentationFullName, setPresentationFullName] = useState('');
     const [presentationPosition, setPresentationPosition] = useState('');
     const [presentationDepartment, setPresentationDepartment] = useState('');
@@ -489,41 +484,33 @@ function CreateOperation() {
             }
         }).then((res) => {
                 setJobDay(res.data.startJob);
-                setEndDate(res.data.to)
+                setGetEndDate(res.data.to)
             }
         );
     }
 
     const resetData = () => {
-        /*        setSelectedStaff(null);
-                setSelectedPosition(null);
-                setMainOfOrder('');
-                setDepartment('');
-                setSubDepartment('');
-                setSalary('');
-                setAdditionalSalary('');
-                setOwnAdditionalSalary('');
-                setPositionSalary('');
-                setPositionVacancyCount('');
-                setPositionSubDepartment('');
-                setPositionDepartment('');
-                setPositionVacancyCategory('');
-                setPositionAdditionalSalary('');
-                setPositionWorkMode('');
-                setPositionWorkPlace('');
-                setPositionVacancyName('');
-                setOwnAdditionalSalary(null);
-                setNewOwnAdditionalSalary('');
-                setChangePeriod('');
-                setNewAdditionalSalary('');
-                setJoinDate(null);
-                setChangeDate(null);
-                setTestPeriod('');
-                setNoteArr([""])*/
+        setSelectedPosition(null);
+        setMainOfOrder('');
+        setVacancyDepartment('');
+        setVacancySubDepartment('');
+        setVacancyObeyDepartment('');
+        setVacancyCount('');
+        setVacancyPosition('');
+        setVacancyWorkMode('');
+        setVacancyWorkPlace('');
+        setVacancyMinGrade('');
+        setVacancyMaxGrade('');
+        setVacancyCategory('');
+        setStartDate(null);
+        setEndDate(null);
+        setGetEndDate('');
+        setJobDay('');
+        setErrors({})
     }
 
     const senData = () => {
-
+        setLoadingIndicator(true);
         let hireData = {
             "date": joinDate !== null ? moment(joinDate).format("YYYY-MM-DD") : null,
             "gradeId": selectedGrade !== null ? selectedGrade.id : null,
@@ -533,14 +520,21 @@ function CreateOperation() {
             "jobTime": selectedJobTime !== null ? selectedJobTime.value : null
         }
 
+
         let workVacation = {
             "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
-            "to": endDate !== '' ? endDate : null,
+            "to": getEndDate !== '' ? getEndDate : null,
             "startJob": jobDay !== '' ? jobDay : null,
             "vacations": vacationArr
         }
 
-        const data = {
+        let trainingShipping = {
+            "eventName": eventName !== '' ? eventName : null,
+            "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
+            "to": endDate !== null || '' ? moment(endDate).format("YYYY-MM-DD") : null
+        };
+
+        let data = {
             "header": {
                 "department": "string",
                 "fullName": "string",
@@ -551,60 +545,8 @@ function CreateOperation() {
             "type": operationType !== '' ? operationType : null,
             "vacancyId": vacancyId ? vacancyId : null,
             "employeeId": employeeId ? employeeId : null,
-            "workVacation": tab == "17" ? workVacation : null
-
-
-            /*            "achievementAmount": achievement !== "" ? parseFloat(achievement) : null,
-                        "amount": amount !== "" ? parseFloat(amount) : null,
-                        "businessTripLocation": businessTripLocation !== "" ? businessTripLocation : null,
-                        "businessTripTerm": businessTripPeriod !== "" ? parseFloat(businessTripPeriod) : null,
-                        "callBackDate": callBackDate !== null ? moment(callBackDate).format("MM-DD-YYYY") : null,
-                        "callBackReason": callBackReason !== "" ? callBackReason : null,
-                        "catchAmount": catchAmount !== "" ? parseFloat(catchAmount) : null,
-                        "catchMonths": monthArr,
-                        "changeDate": changeDate !== null ? moment(changeDate).format("MM-DD-YYYY") : null,
-                        "changePeriod": changePeriod !== "" ? parseFloat(changePeriod) : null,
-                        "compensation": compensation !== "" ? parseFloat(compensation) : null,
-                        "dayInEvent": dayInEvent !== "" ? parseFloat(dayInEvent) : null,
-                        "dayInEvent2": dayOutEvent !== "" ? parseFloat(dayOutEvent) : null,
-                        "disciplineType": selectedDiscipline !== null ? selectedDiscipline.value : null,
-                        "dismissalDate": firedDate !== null ? moment(firedDate).format("MM-DD-YYYY") : null,
-                        "dismissalReason": firedReason !== "" ? firedReason : null,
-                        "documentType": documentId ? documentId : null,
-                        "employeeIds": employeeIds,
-                        "eventToBusinessTripDate": businessTripStart !== null ? moment(businessTripStart).format("MM-DD-YYYY") : null,
-                        "eventFromBusinessTripDate": businessTripEnd !== null ? moment(businessTripEnd).format("MM-DD-YYYY") : null,
-                        "eventFrom": startDate !== null ? moment(startDate).format("MM-DD-YYYY") : null,
-                        "eventFrom2": startVacationHeldDate !== null ? moment(startVacationHeldDate).format("MM-DD-YYYY") : null,
-                        "eventName": eventName !== "" ? eventName : null,
-                        "eventTo": endDate !== null ? moment(endDate).format("MM-DD-YYYY") : null,
-                        "eventTo2": endVacationHeldDate !== null ? moment(endVacationHeldDate).format("MM-DD-YYYY") : null,
-                        "financialHelp": financialHelp !== "" ? parseFloat(financialHelp) : null,
-                        "givenNonWorkDay": givenNonWorkDay !== null ? moment(givenNonWorkDay).format("MM-DD-YYYY") : null*/,
-            /*
-                        "joinDate": joinDate !== null ? moment(joinDate).format("MM-DD-YYYY") : null,
-            */
-            /*
-                        "mainOfOrder": mainOfOrder !== "" ? mainOfOrder : null,
-            */
-            /*            "newAdditionalSalary": newAdditionalSalary !== "" ? newAdditionalSalary : null,
-                        "newOwnAdditionalSalary": newOwnAdditionalSalary !== '' ? newOwnAdditionalSalary : null,
-                        "newSalary": newSalary !== "" ? newSalary : null,
-                        "newWorkMode": selectedNewWorkMode !== null ? selectedNewWorkMode.value : null,
-                        "nonWorkDay": nonWorkDay !== null ? moment(nonWorkDay).format("MM-DD-YYYY") : null,
-                        "notes": noteArr.length > 0 ? noteArr : null,
-                        "ownAdditionalSalary": ownAdditionalSalary !== "" ? parseFloat(ownAdditionalSalary) : null,
-                        "positionId": positionId ? positionId : null,
-                        "presentationOwnerDepartment": presentationDepartment !== "" ? presentationDepartment : null,
-                        "presentationOwnerName": presentationFullName !== "" ? presentationFullName : null,
-                        "presentationOwnerPosition": presentationPosition !== "" ? presentationPosition : null,
-                        "testPeriod": testPeriod !== "" ? parseFloat(testPeriod) : null,
-                        "reason": selectedReason !== null ? selectedReason.label : null,
-                        "serialNumber1": null,
-                        "serialNumber2": null,
-                        "titleDepartment": null,
-                        "titleFullName": null,
-                        "vacationReason": selectedVacationReason !== null ? selectedVacationReason.label : null,*/
+            "workVacation": tab == "17" ? workVacation : null,
+            "trainingShipping": tab == "28" ? trainingShipping : null
         }
 
         mainAxios({
@@ -616,6 +558,7 @@ function CreateOperation() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
+            setLoadingIndicator(false);
             Swal.fire({
                 icon: 'success',
                 text: 'Məlumatlar qeyd edildi!',
@@ -628,13 +571,19 @@ function CreateOperation() {
             setSave(false);
             history.push("/operation")
         }).catch((error) => {
+            setLoadingIndicator(false)
             Swal.fire({
                 icon: 'error',
                 text: 'Məlumatlar qeyd edilmədi!',
                 cancelButtonText: 'Bağla',
                 showCancelButton: true,
                 showConfirmButton: false,
-            })
+            });
+            if (error.response.data.validations) {
+                setErrors(error.response.data.validations)
+            } else {
+                setErrors({})
+            }
         });
     }
 
@@ -705,7 +654,6 @@ function CreateOperation() {
                                                 setOperationType(val.type)
                                                 setSave(true);
                                                 setTab(val.orderNo)
-                                                setKey(val.label)
                                             }}
                                             options={operationTypeArr}
                                             isSearchable={operationTypeArr ? operationTypeArr.length > 5 ? true : false : false}
@@ -1124,6 +1072,15 @@ function CreateOperation() {
                                                             </svg>
                                                         </Button>
                                                     </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['hire.date'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['hire.date']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={4}>
@@ -1151,6 +1108,15 @@ function CreateOperation() {
                                                         getOptionLabel={(option) => (option.grade)}
                                                         styles={customStyles}
                                                     />
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['hire.gradeId'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['hire.gradeId']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={4}>
@@ -3242,6 +3208,15 @@ function CreateOperation() {
                                                             </svg>
                                                         </Button>
                                                     </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['workVacation.from'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['workVacation.from']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={4}>
@@ -3249,13 +3224,11 @@ function CreateOperation() {
                                                     <span
                                                         className="input-title">Məzuniyyətin bitdiyi tarix  </span>
                                                     <Form.Label className="relative m-0">
-                                                        <Form.Label>
-                                                            <Form.Control placeholder="YYYY-MM-DD"
-                                                                          type="text"
-                                                                          disabled={true}
-                                                                          value={endDate || ''}
-                                                            />
-                                                        </Form.Label>
+                                                        <Form.Control placeholder="YYYY-MM-DD"
+                                                                      type="text"
+                                                                      disabled={true}
+                                                                      value={getEndDate || ''}
+                                                        />
                                                         <Button className="btn-transparent">
                                                             <svg width="18" height="18"
                                                                  viewBox="0 0 18 18" fill="none"
@@ -3304,20 +3277,83 @@ function CreateOperation() {
                                                             </svg>
                                                         </Button>
                                                     </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['workVacation.to'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['workVacation.to']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">İşə başlama tarixi  </span>
                                                     <Form.Label className="relative m-0">
-                                                        <Form.Label>
-                                                            <Form.Control placeholder="YYYY-MM-DD"
-                                                                          type="text"
-                                                                          disabled={true}
-                                                                          value={jobDay || ''}
-                                                            />
-                                                        </Form.Label>
+                                                        <Form.Control placeholder="YYYY-MM-DD"
+                                                                      type="text"
+                                                                      disabled={true}
+                                                                      value={jobDay || ''}
+                                                        />
+                                                        <Button className="btn-transparent">
+                                                            <svg width="18" height="18"
+                                                                 viewBox="0 0 18 18" fill="none"
+                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                <g opacity="0.8"
+                                                                   clipPath="url(#clip0)">
+                                                                    <path
+                                                                        d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
+                                                                        fill="#181818"/>
+                                                                </g>
+                                                                <defs>
+                                                                    <clipPath id="clip0">
+                                                                        <rect width="17.399"
+                                                                              height="18"
+                                                                              fill="white"
+                                                                              transform="translate(0.449219)"/>
+                                                                    </clipPath>
+                                                                </defs>
+                                                            </svg>
+                                                        </Button>
                                                     </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['workVacation.startJob'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['workVacation.startJob']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={12}>
@@ -3372,18 +3408,40 @@ function CreateOperation() {
                                                                                         styles={customStyles}
                                                                                     />
                                                                                 </Form.Label>
+                                                                                <div
+                                                                                    className="validation-block flex-start">
+                                                                                    {
+
+                                                                                        errors[`workVacation.vacations[${index}].vacationType`] !== '' ?
+                                                                                            <span
+                                                                                                className="text-validation">{errors[`workVacation.vacations[${index}].vacationType`]}</span>
+                                                                                            : null
+                                                                                    }
+                                                                                </div>
                                                                             </Form.Group>
                                                                         </Col>
                                                                         <Col xs={6}>
                                                                             <Form.Group className="form-group">
                                                                                 <span className="input-title">Tətil gün. sayı daxil edin</span>
-                                                                                <Form.Control
-                                                                                    placeholder="Tətil gün. sayı daxil edin"
-                                                                                    onChange={(e) => {
-                                                                                        vacationArr[index].day = e.target.value;
-                                                                                        setVacationArr([...vacationArr], vacationArr);
-                                                                                        getCalculatedDate(vacationArr, startDate)
-                                                                                    }}/>
+                                                                                <Form.Label>
+                                                                                    <Form.Control
+                                                                                        placeholder="Tətil gün. sayı daxil edin"
+                                                                                        onChange={(e) => {
+                                                                                            vacationArr[index].day = e.target.value;
+                                                                                            setVacationArr([...vacationArr], vacationArr);
+                                                                                            getCalculatedDate(vacationArr, startDate)
+                                                                                        }}/>
+                                                                                </Form.Label>
+                                                                                <div
+                                                                                    className="validation-block flex-start">
+                                                                                    {
+
+                                                                                        errors[`workVacation.vacations[${index}].day`] !== '' ?
+                                                                                            <span
+                                                                                                className="text-validation">{errors[`workVacation.vacations[${index}].day`]}</span>
+                                                                                            : null
+                                                                                    }
+                                                                                </div>
                                                                             </Form.Group>
                                                                         </Col>
                                                                     </Row>
@@ -5785,7 +5843,7 @@ function CreateOperation() {
                                                 </Form.Group>
                                             </Col>
                                         </Row>
-                                    </Tab>
+                                    </Tab>*/}
 
                                     <Tab eventKey="28" title="" disabled={tab !== "28"}>
                                         <Row>
@@ -5803,19 +5861,19 @@ function CreateOperation() {
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
                                                     <span
-                                                        className="input-title">İşçinin soyadı, adı, atasının adı *</span>
+                                                        className="input-title">İşçinin adı, soyadı, atasının adı *</span>
                                                     <Select
                                                         placeholder="İşçinin adı, soyadı, atasının adı"
                                                         value={selectedStaff}
                                                         onChange={(val) => {
                                                             let id = val.id
                                                             setEmployeeId(id)
-                                                            getEmployee(id)
+                                                            getEmployeeData(id)
                                                             setSelectedStaff(val);
                                                         }}
-                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
-                                                        options={staff}
-                                                        getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
+                                                        isSearchable={employee ? employee.length > 5 ? true : false : false}
+                                                        options={employee}
+                                                        getOptionLabel={(option) => (option.name)}
                                                         styles={customStyles}
                                                     />
                                                 </Form.Group>
@@ -5847,13 +5905,13 @@ function CreateOperation() {
                                                     <span className="input-title">Vəzifəsi </span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Vəzifəsi"
-                                                                      value={vacancyName || ''} disabled={true}/>
+                                                                      value={position || ''} disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={4}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Təlimin bitdiyi tarix </span>
+                                                    <span className="input-title">Təlimin başladığı tarix </span>
                                                     <Form.Label className="relative m-0">
                                                         <DatePicker selected={startDate}
                                                                     dateFormat="dd-MM-yyyy"
@@ -5917,15 +5975,15 @@ function CreateOperation() {
                                             </Col>
                                             <Col xs={4}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Təlimin başladığı tarix  </span>
+                                                    <span className="input-title">Təlimin bitdiyi tarix </span>
                                                     <Form.Label className="relative m-0">
                                                         <DatePicker
+                                                            selected={endDate}
                                                             dateFormat="dd-MM-yyyy"
                                                             placeholderText="DD-MM-YYYY"
                                                             showMonthDropdown
                                                             showYearDropdown
                                                             dropdownMode="select"
-                                                            selected={endDate}
                                                             onChange={(date) => setEndDate(date)}
                                                             selectsEnd
                                                             startDate={startDate}
@@ -5995,6 +6053,7 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 
+                                    {/*
                                     <Tab eventKey="29" title="" disabled={tab !== "29"}>
                                         <Row>
                                             <Col xs={12}>
@@ -6019,7 +6078,9 @@ function CreateOperation() {
                                             </Col>
                                         </Row>
                                     </Tab>
+*/}
 
+                                    {/*
                                     <Tab eventKey="30" title="" disabled={tab !== "30"}>
                                         <Row>
                                             <Col xs={6}>
@@ -6476,7 +6537,8 @@ function CreateOperation() {
                                                 )
                                             }
                                         </div>
-                                    </Tab>*/}
+                                    </Tab>
+*/}
 
                                     {/*    <Tab eventKey="31" title="" disabled={tab !== "31"}>
                                         <Row>
@@ -9205,6 +9267,9 @@ function CreateOperation() {
                     </div>
                 </Container>
             </div>
+            {
+                loadingIndicator ? <Indicator/> : null
+            }
         </Aux>
 
     );
