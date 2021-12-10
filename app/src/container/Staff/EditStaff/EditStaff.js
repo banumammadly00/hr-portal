@@ -236,6 +236,27 @@ function EditStaff() {
 
     };
 
+    const getExportDocument = (id, operationName) => {
+        mainAxios({
+            method: 'get',
+            url: `/operations/${id}/export`,
+            responseType: 'arraybuffer',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+
+        }).then((res) => {
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            const link = window.document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `${operationName}.doc`);
+            window.document.body.appendChild(link);
+            link.click();
+        })
+    }
+
+
     const getInstitution = () => {
         mainAxios({
             method: 'get',
@@ -1812,11 +1833,32 @@ function EditStaff() {
                                                     <td>{item.type}</td>
                                                     <td>{item.createdAt}</td>
                                                     <td>
-                                                        <div className="flex">
+                                                        <td>
+                                                            <div className="flex">
                                                              <span className={statuses[item.statusAz]}>
                                                                  {item.statusAz}
                                                              </span>
-                                                        </div>
+                                                                <Button className="btn-export"
+                                                                        onClick={() => getExportDocument(item.id, item.type)}>
+                                                                    <svg width="20" height="20" viewBox="0 0 22 22"
+                                                                         fill="none"
+                                                                         xmlns="http://www.w3.org/2000/svg">
+                                                                        <path
+                                                                            d="M17.1875 19.25H4.81247C4.63013 19.25 4.45527 19.1776 4.32635 19.0486C4.19742 18.9197 4.125 18.7448 4.125 18.5625V3.4375C4.125 3.25517 4.19742 3.0803 4.32635 2.95137C4.45527 2.82244 4.63013 2.75 4.81247 2.75H13.0627L17.875 7.5625V18.5625C17.875 18.7448 17.8026 18.9197 17.6737 19.0486C17.5447 19.1776 17.3699 19.25 17.1875 19.25V19.25Z"
+                                                                            stroke="#040647" strokeLinecap="round"
+                                                                            strokeLinejoin="round"/>
+                                                                        <path d="M13.0625 2.75V7.5625H17.8757"
+                                                                              stroke="#040647"
+                                                                              strokeLinecap="round" strokeLinejoin="round"/>
+                                                                        <path d="M8.25 11.6875H13.75" stroke="#040647"
+                                                                              strokeLinecap="round" strokeLinejoin="round"/>
+                                                                        <path d="M8.25 14.4375H13.75" stroke="#040647"
+                                                                              strokeLinecap="round" strokeLinejoin="round"/>
+                                                                    </svg>
+
+                                                                </Button>
+                                                            </div>
+                                                        </td>
                                                     </td>
                                                 </tr>
                                             )

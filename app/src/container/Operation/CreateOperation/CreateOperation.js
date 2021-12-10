@@ -642,11 +642,7 @@ function CreateOperation() {
                     total += parseFloat(i)
                 }
             }
-            console.log(vacArr);
-            console.log('total', total);
-            console.log('newDate', newDate)
             let totalDate = parseFloat((parseFloat(total) + newDate) - 1);
-            console.log('totalDate', totalDate)
             x.setDate(totalDate);
             let formatDate = moment(x).format("YYYY-MM-DD");
             setVacationEndDate(formatDate)
