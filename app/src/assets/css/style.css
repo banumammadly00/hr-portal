@@ -1038,6 +1038,11 @@ td {
     margin: 0;
 }
 
+.create-operation .block-title {
+    padding-top: 10px;
+    font-size: 16px;
+}
+
 .btn-export, .btn-export:focus, .btn-export:hover, .table .btn-block .btn-confirm, .table .btn-block .btn-cancel {
     background: rgba(25, 54, 81, 0.05);
     width: 40px;
