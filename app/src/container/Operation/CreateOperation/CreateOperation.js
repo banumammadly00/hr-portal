@@ -483,7 +483,8 @@ function CreateOperation() {
             },
             params: {
                 from: moment(from).format('YYYY-MM-DD'),
-                to: to
+                to: to,
+                operationType: operationType
             }
         }).then((res) => {
                 setJobDay(res.data.startJob);
