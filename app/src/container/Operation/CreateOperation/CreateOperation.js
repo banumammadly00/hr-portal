@@ -21,14 +21,6 @@ const disciplineOptions = [
     {value: "SIDDETLI_TOHMET ", label: "Şiddətli töhmət"},
 ];
 
-const vacationReasonOptions = [
-    {value: 1, label: "Ailə üzvlərindən birinin rəhmətə getməsi"},
-    {value: 2, label: "İşçinin ailə həyatı qurması"},
-    {value: 3, label: "İşçinin uşağının birinci sinifə getməsi"},
-    {value: 4, label: "İşçinin övladının hərbi xidmətə yola salınması və ya hərbi xidmətdə ziyarət"},
-]
-
-
 const reasonOptions = [
     {value: 1, label: "İş vaxtından artıq işə cəlb edilmə haqqında "},
     {value: 2, label: "İstirahət və ya bayram günündə işə cəlb edilmə haqqında "},
@@ -70,6 +62,7 @@ function CreateOperation() {
 
 
     /*------Employee----------*/
+    const [employeeId, setEmployeeId] = useState('');
     const [employee, setEmployee] = useState([]);
     const [department, setDepartment] = useState('')
     const [subDepartment, setSubDepartment] = useState('');
@@ -82,6 +75,9 @@ function CreateOperation() {
     const [vacationDay, setVacationDay] = useState('');
     const [seriesNumber, setSeriesNumber] = useState('');
     const [sicNo, setSicNo] = useState('');
+    const [collectiveAgreeOpt, setCollectiveAgreeOpt] = useState([]);
+    const [selectedCollectAgree, setSelectedCollectAgree] = useState(null);
+
 
     /*------Vacancy----------*/
     const [vacancy, setVacancy] = useState([]);
@@ -94,6 +90,7 @@ function CreateOperation() {
     const [vacancyWorkPlace, setVacancyWorkPlace] = useState('');
     const [vacancyCategory, setVacancyCategory] = useState('');
     const [vacancyObeyDepartment, setVacancyObeyDepartment] = useState('');
+
 
     /*------General----------*/
     const [mainOfOrder, setMainOfOrder] = useState('');
@@ -143,7 +140,6 @@ function CreateOperation() {
     const [nonWorkDay, setNonWorkDay] = useState(null);
     const [givenNonWorkDay, setGivenNonWorkDay] = useState(null);
     const [selectedReason, setSelectedReason] = useState(null);
-    const [selectedVacationReason, setSelectedVacationReason] = useState(null);
     const [year, setYear] = useState(new Date().getFullYear());
     const [save, setSave] = useState(false);
 
@@ -153,7 +149,6 @@ function CreateOperation() {
     const [departments, setDepartments] = useState('');
     const [vacancyNames, setVacancyNames] = useState('');
 
-    const [employeeId, setEmployeeId] = useState('');
     const [positionId, setPositionId] = useState('');
     const [employeeIds, setEmployeeIds] = useState([]);
     const [documentId, setDocumentId] = useState('');
@@ -206,104 +201,6 @@ function CreateOperation() {
             position: null,
         }])
     }
-
-    /*const customStyles = {
-        option: (provided, state) => ({
-            ...provided,
-            color: '#193651',
-            backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '5px 16px',
-            margin: '0',
-            fontSize: '14px',
-            "&:first-of-type": {
-                borderRadius: '2px 2px 0 0',
-            },
-            "&:hover": {
-                backgroundColor: '#FFF',
-            },
-            "&:last-child": {
-                borderBottom: 'none',
-                borderRadius: '0 0 2px 2px',
-            },
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-start',
-            position: 'relative',
-            textAlign: 'left'
-
-        }),
-
-        indicatorSeparator: () => {
-        },
-
-        indicatorsContainer: (provided) => ({
-            ...provided,
-            paddingRight: '4px'
-        }),
-
-        control: (provided) => ({
-            ...provided,
-            minHeight: '42px',
-            fontSize: '14px',
-            padding: '0',
-            margin: '0',
-            color: '#66615b',
-            backgroundColor: '#FAFCFF',
-            boxShadow: 'none',
-            border: '1px solid rgba(4, 6, 71, 0.1)',
-            "&:hover": {
-                borderColor: 'rgba(4, 6, 71, 0.1)',
-            },
-
-        }),
-
-        container: (provided) => ({
-            ...provided,
-            width: '100%',
-        }),
-
-        valueContainer: (provided) => ({
-            ...provided,
-            padding: '2px 8px 2px 12px'
-        }),
-
-
-        menu: (provided) => ({
-            ...provided,
-            borderRadius: '2px',
-            padding: '10px 0',
-            margin: '0',
-            borderColor: 'red',
-            width: '100%'
-        }),
-
-        dropdownIndicator: defaultStyles => ({
-            ...defaultStyles,
-            'svg path': {
-                fill: 'rgba(24,24,24, .8)',
-            },
-
-            'svg': {
-                width: '18px'
-            },
-        }),
-
-        menuList: base => ({
-            ...base,
-            padding: 0,
-            borderColor: 'red'
-
-        }),
-
-        placeholder: (provided) => ({
-            ...provided,
-            width: '100%',
-            textAlign: 'left',
-            whiteSpace: 'nowrap'
-
-        }),
-
-    };*/
 
     const getOperationName = () => {
         mainAxios({
@@ -528,6 +425,20 @@ function CreateOperation() {
         );
     }
 
+    const getCollectAgreement = () => {
+        mainAxios({
+            method: 'get',
+            url: '/collective-agreements',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then((res) => {
+                setCollectiveAgreeOpt(res.data);
+            }
+        );
+    }
+
     const resetData = () => {
         setSelectedPosition(null);
         setMainOfOrder('');
@@ -621,6 +532,13 @@ function CreateOperation() {
             "employeeIds": employeeIds
         };
 
+        let collectiveAgreement = {
+            "collectiveAgreementReasonId": selectedCollectAgree !== null ? selectedCollectAgree.id : null,
+            "day": vacationDay !== '' ? vacationDay : null,
+            "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
+            "startJob": jobDay !== '' ? jobDay : null,
+            "to": vacationEndDate !== '' ? vacationEndDate : null
+        };
         let data = {
             "header": {
                 "department": "string",
@@ -639,6 +557,7 @@ function CreateOperation() {
             "socialVacation": tab == "20" ? socialVacation : null,
             "meeting": tab == "38" ? meeting : null,
             "warning": tab == "45" ? warning : null,
+            "collectiveAgreement": tab == "22" ? collectiveAgreement : null,
         }
 
         mainAxios({
@@ -715,6 +634,7 @@ function CreateOperation() {
         getEmployee();
         getGrade();
         getSubGrade();
+        getCollectAgreement();
     }, []);
 
     return (
@@ -893,7 +813,6 @@ function CreateOperation() {
                                             </Col>
                                         </Row>
                                     </Tab>
-
                                     <Tab eventKey="2" title="" disabled={tab !== "2"}>
                                         <Row>
                                             <Col xs={6}>
@@ -1015,7 +934,6 @@ function CreateOperation() {
                                             </Col>
                                         </Row>
                                     </Tab>
-
                                     <Tab eventKey="7" title="" disabled={tab !== "7"}>
                                         <Row>
                                             <Col xs={6}>
@@ -1459,7 +1377,8 @@ function CreateOperation() {
                                         </div>
                                     </Tab>*/}
 
-                                    {/*    <Tab eventKey="9" title="" disabled={tab !== "9"}>
+                                    {/*
+                                        <Tab eventKey="9" title="" disabled={tab !== "9"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
@@ -1677,7 +1596,9 @@ function CreateOperation() {
                                             </Row>
                                         </div>
                                     </Tab>
+*/}
 
+                                    {/*
                                     <Tab eventKey="10" title="" disabled={tab !== "10"}>
                                         <div className="block-inn">
                                             <Row>
@@ -1862,7 +1783,8 @@ function CreateOperation() {
                                             </Row>
                                         </div>
                                     </Tab>
-
+*/}
+                                    {/*
                                     <Tab eventKey="11" title="" disabled={tab !== "11"}>
                                         <Row>
                                             <Col xs={6}>
@@ -4767,8 +4689,6 @@ function CreateOperation() {
                                         </Row>
                                     </Tab>
 */}
-
-                                    {/*
                                     <Tab eventKey="22" title="" disabled={tab !== "22"}>
                                         <Row>
                                             <Col xs={6}>
@@ -4780,13 +4700,15 @@ function CreateOperation() {
                                                         value={selectedStaff}
                                                         onChange={(val) => {
                                                             let id = val.id
-                                                            setEmployeeId(id)
-                                                            getEmployee(id)
+                                                            setEmployeeId(id);
+                                                            setShowVacation(true)
+                                                            getEmployeeDetail(id)
                                                             setSelectedStaff(val);
+                                                            getVacation(id)
                                                         }}
-                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
-                                                        options={staff}
-                                                        getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
+                                                        isSearchable={employee ? employee.length > 5 ? true : false : false}
+                                                        options={employee}
+                                                        getOptionLabel={(option) => (option.name)}
                                                         styles={customStyles}
                                                     />
                                                 </Form.Group>
@@ -4818,161 +4740,52 @@ function CreateOperation() {
                                                     <span className="input-title">Vəzifəsi </span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Vəzifəsi"
-                                                                      value={vacancyName || ''} disabled={true}/>
+                                                                      value={position || ''} disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">Ödənişli istirahət müddəti</span>
-                                                    <Form.Label>
-                                                        <Form.Control placeholder="Məzuniyyət müddəti "
-                                                                      value={dayInEvent}
-                                                                      type="number"
-                                                                      onChange={(e) => setDayInEvent(e.target.value)}
-                                                        />
-                                                    </Form.Label>
-                                                </Form.Group>
-                                            </Col>
-                                            <Col xs={12}>
-                                                <Form.Group className="form-group">
-                                                    <span className="input-title">Ödənişli istirahətə buraxılma tarixləri</span>
-                                                    <div className="flex">
-                                                        <Form.Label className="relative m-0">
-                                                            <DatePicker selected={startDate}
-                                                                        dateFormat="dd-MM-yyyy"
-                                                                        placeholderText="DD-MM-YYYY"
-                                                                        showMonthDropdown
-                                                                        showYearDropdown
-                                                                        dropdownMode="select"
-                                                                        selectsStart
-                                                                        startDate={startDate}
-                                                                        endDate={endDate}
-                                                                        onChange={(date) => setStartDate(date)}/>
-                                                            <Button className="btn-transparent">
-                                                                <svg width="18" height="18"
-                                                                     viewBox="0 0 18 18" fill="none"
-                                                                     xmlns="http://www.w3.org/2000/svg">
-                                                                    <g opacity="0.8"
-                                                                       clipPath="url(#clip0)">
-                                                                        <path
-                                                                            d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
-                                                                            fill="#181818"/>
-                                                                    </g>
-                                                                    <defs>
-                                                                        <clipPath id="clip0">
-                                                                            <rect width="17.399"
-                                                                                  height="18"
-                                                                                  fill="white"
-                                                                                  transform="translate(0.449219)"/>
-                                                                        </clipPath>
-                                                                    </defs>
-                                                                </svg>
-                                                            </Button>
-                                                        </Form.Label>
-                                                        <span className="break-line"></span>
-                                                        <Form.Label className="relative m-0">
-                                                            <DatePicker
-                                                                dateFormat="dd-MM-yyyy"
-                                                                placeholderText="DD-MM-YYYY"
-                                                                showMonthDropdown
-                                                                showYearDropdown
-                                                                dropdownMode="select"
-                                                                selected={endDate}
-                                                                onChange={(date) => setEndDate(date)}
-                                                                selectsEnd
-                                                                startDate={startDate}
-                                                                endDate={endDate}
-                                                                minDate={startDate}/>
-                                                            <Button className="btn-transparent">
-                                                                <svg width="18" height="18"
-                                                                     viewBox="0 0 18 18" fill="none"
-                                                                     xmlns="http://www.w3.org/2000/svg">
-                                                                    <g opacity="0.8"
-                                                                       clipPath="url(#clip0)">
-                                                                        <path
-                                                                            d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
-                                                                            fill="#181818"/>
-                                                                        <path
-                                                                            d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
-                                                                            fill="#181818"/>
-                                                                    </g>
-                                                                    <defs>
-                                                                        <clipPath id="clip0">
-                                                                            <rect width="17.399"
-                                                                                  height="18"
-                                                                                  fill="white"
-                                                                                  transform="translate(0.449219)"/>
-                                                                        </clipPath>
-                                                                    </defs>
-                                                                </svg>
-                                                            </Button>
-                                                        </Form.Label>
+                                                    <Form.Control placeholder="Məzuniyyət müddəti "
+                                                                  value={vacationDay}
+                                                                  type="number"
+                                                                  onChange={(e) => {
+                                                                      setVacationDay(e.target.value);
+                                                                      let day = e.target.value;
+                                                                      getCalculatedDate(day, startDate)
+                                                                  }}
+                                                    />
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['collectiveAgreement.day'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['collectiveAgreement.day']}</span>
+                                                                : null
+                                                        }
                                                     </div>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">İşə başlama tarixi </span>
+                                                    <span
+                                                        className="input-title">Ödənişli istirahətin başlama tarixi</span>
                                                     <Form.Label className="relative m-0">
-                                                        <DatePicker selected={joinDate}
+                                                        <DatePicker selected={startDate}
                                                                     dateFormat="dd-MM-yyyy"
                                                                     placeholderText="DD-MM-YYYY"
                                                                     showMonthDropdown
                                                                     showYearDropdown
                                                                     dropdownMode="select"
-                                                                    onChange={(date) => setJoinDate(date)}/>
+                                                                    selectsStart
+                                                                    startDate={startDate}
+                                                                    endDate={endDate}
+                                                                    onChange={(date) => {
+                                                                        setStartDate(date);
+                                                                        let setDate = date !== null ? date : 0;
+                                                                        getCalculatedDate(vacationDay, setDate)
+                                                                    }}/>
                                                         <Button className="btn-transparent">
                                                             <svg width="18" height="18"
                                                                  viewBox="0 0 18 18" fill="none"
@@ -5021,6 +4834,151 @@ function CreateOperation() {
                                                             </svg>
                                                         </Button>
                                                     </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['collectiveAgreement.from'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['collectiveAgreement.from']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Ödənişli istirahətin bitdiyi tarixi</span>
+                                                    <Form.Label className="relative m-0">
+                                                        <Form.Control placeholder="YYYY-MM-DD"
+                                                                      type="text"
+                                                                      disabled={true}
+                                                                      value={vacationEndDate || ''}
+                                                        />
+                                                        <Button className="btn-transparent">
+                                                            <svg width="18" height="18"
+                                                                 viewBox="0 0 18 18" fill="none"
+                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                <g opacity="0.8"
+                                                                   clipPath="url(#clip0)">
+                                                                    <path
+                                                                        d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
+                                                                        fill="#181818"/>
+                                                                </g>
+                                                                <defs>
+                                                                    <clipPath id="clip0">
+                                                                        <rect width="17.399"
+                                                                              height="18"
+                                                                              fill="white"
+                                                                              transform="translate(0.449219)"/>
+                                                                    </clipPath>
+                                                                </defs>
+                                                            </svg>
+                                                        </Button>
+                                                    </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['collectiveAgreement.to'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['collectiveAgreement.to']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">İşə başlama tarixi </span>
+                                                    <Form.Label className="relative m-0">
+                                                        <Form.Control placeholder="YYYY-MM-DD"
+                                                                      type="text"
+                                                                      disabled={true}
+                                                                      value={jobDay || ''}
+                                                        />
+                                                        <Button className="btn-transparent">
+                                                            <svg width="18" height="18"
+                                                                 viewBox="0 0 18 18" fill="none"
+                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                <g opacity="0.8"
+                                                                   clipPath="url(#clip0)">
+                                                                    <path
+                                                                        d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
+                                                                        fill="#181818"/>
+                                                                    <path
+                                                                        d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
+                                                                        fill="#181818"/>
+                                                                </g>
+                                                                <defs>
+                                                                    <clipPath id="clip0">
+                                                                        <rect width="17.399"
+                                                                              height="18"
+                                                                              fill="white"
+                                                                              transform="translate(0.449219)"/>
+                                                                    </clipPath>
+                                                                </defs>
+                                                            </svg>
+                                                        </Button>
+                                                    </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['collectiveAgreement.startJob'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['collectiveAgreement.startJob']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={6}>
@@ -5029,20 +4987,30 @@ function CreateOperation() {
                                                         className="input-title">Ödənişli istirahət verilməsinin səbəbi </span>
                                                     <Select
                                                         placeholder="Ödənişli istirahət verilməsinin səbəbi"
-                                                        value={selectedVacationReason}
+                                                        value={selectedCollectAgree}
                                                         onChange={(val) => {
-                                                            setSelectedVacationReason(val);
+                                                            setSelectedCollectAgree(val);
                                                         }}
-                                                        isSearchable={vacationReasonOptions ? vacationReasonOptions.length > 5 ? true : false : false}
-                                                        options={vacationReasonOptions}
-                                                        getOptionLabel={(option) => option.label}
+                                                        isSearchable={collectiveAgreeOpt ? collectiveAgreeOpt.length > 5 ? true : false : false}
+                                                        options={collectiveAgreeOpt}
+                                                        getOptionLabel={(option) => option.reason}
+                                                        getOptionValue={(option) => option.reason}
                                                         styles={customStyles}
                                                     />
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['collectiveAgreement.collectiveAgreementReasonId'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['collectiveAgreement.collectiveAgreementReasonId']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                         </Row>
                                     </Tab>
-*/}
+
 
                                     {/*     <Tab eventKey="23" title="" disabled={tab !== "23"}>
                                         <Row>
@@ -9188,101 +9156,102 @@ function CreateOperation() {
                                                     <div className="addition-content">
                                                         {
                                                             employeeInfoArr.map((item, index) =>
-                                                                <div key={uid(item, index)}
-                                                                     className={index === 0 ? '' : 'add-item'}>
-                                                                    {
-                                                                        index === 0 ? null :
-                                                                            <div className="add-item-top">
-                                                                                <p className="m-0"> #{index + 1}.
-                                                                                    Digər </p>
-                                                                                <Button
-                                                                                    className="btn-transparent btn-remove flex-center"
-                                                                                    onClick={() => {
-                                                                                        employeeInfoArr.splice(index, 1);
-                                                                                        setEmployeeInfoArr([...employeeInfoArr], employeeInfoArr)
-                                                                                    }}>
-                                                                                    <svg width="14" height="14"
-                                                                                         viewBox="0 0 14 14" fill="none"
-                                                                                         xmlns="http://www.w3.org/2000/svg">
-                                                                                        <path
-                                                                                            d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
-                                                                                            fill="#CF3131"/>
-                                                                                        <path
-                                                                                            d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
-                                                                                            fill="#CF3131"/>
-                                                                                        <path
-                                                                                            d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
-                                                                                            fill="#CF3131"/>
-                                                                                    </svg>
-                                                                                    <span>Sil</span>
-                                                                                </Button>
-                                                                            </div>
-                                                                    }
-                                                                    <Row>
-                                                                        <Col xs={3}>
-                                                                            <Form.Group className="form-group">
-                                                                                <span className="input-title">İşçinin soyadı, adı, atasının adı *</span>
-                                                                                <Form.Label>
-                                                                                    <Select
-                                                                                        placeholder="Adı seçin"
-                                                                                        isSearchable={employee ? employee.length > 5 ? true : false : false}
-                                                                                        options={employee}
-                                                                                        getOptionLabel={(option) => (option.name)}
-                                                                                        styles={customStyles}
-                                                                                        onChange={(val) => {
-                                                                                            let id = val.id;
-                                                                                            getWarningDetail(id, index);
-                                                                                        }}
-                                                                                    />
-                                                                                </Form.Label>
-                                                                                <div
-                                                                                    className="validation-block flex-start">
-                                                                                    {
-
-                                                                                        errors[`workVacation.vacations[${index}].vacationType`] !== '' ?
-                                                                                            <span
-                                                                                                className="text-validation">{errors[`workVacation.vacations[${index}].vacationType`]}</span>
-                                                                                            : null
-                                                                                    }
+                                                                    <div key={uid(item, index)}
+                                                                         className={index === 0 ? '' : 'add-item'}>
+                                                                        {
+                                                                            index === 0 ? null :
+                                                                                <div className="add-item-top">
+                                                                                    <p className="m-0"> #{index + 1}.
+                                                                                        Digər </p>
+                                                                                    <Button
+                                                                                        className="btn-transparent btn-remove flex-center"
+                                                                                        onClick={() => {
+                                                                                            employeeInfoArr.splice(index, 1);
+                                                                                            setEmployeeInfoArr([...employeeInfoArr], employeeInfoArr)
+                                                                                        }}>
+                                                                                        <svg width="14" height="14"
+                                                                                             viewBox="0 0 14 14" fill="none"
+                                                                                             xmlns="http://www.w3.org/2000/svg">
+                                                                                            <path
+                                                                                                d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
+                                                                                                fill="#CF3131"/>
+                                                                                            <path
+                                                                                                d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
+                                                                                                fill="#CF3131"/>
+                                                                                            <path
+                                                                                                d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
+                                                                                                fill="#CF3131"/>
+                                                                                        </svg>
+                                                                                        <span>Sil</span>
+                                                                                    </Button>
                                                                                 </div>
-                                                                            </Form.Group>
-                                                                        </Col>
-                                                                        <Col xs={3}>
-                                                                            <Form.Group className="form-group">
-                                                                                <span className="input-title">İşlədiyi struktur bölmə </span>
-                                                                                <Form.Label>
-                                                                                    <Form.Control
-                                                                                        placeholder="İşlədiyi struktur bölmə"
-                                                                                        value={item.department || ''}
-                                                                                        disabled={true}/>
-                                                                                </Form.Label>
-                                                                            </Form.Group>
-                                                                        </Col>
-                                                                        <Col xs={3}>
-                                                                            <Form.Group className="form-group">
-                                                                                <span className="input-title">İşlədiyi alt struktur bölmə </span>
-                                                                                <Form.Label>
-                                                                                    <Form.Control
-                                                                                        placeholder="İşlədiyi struktur bölmə"
-                                                                                        value={item.subDepartment || ''}
-                                                                                        disabled={true}/>
-                                                                                </Form.Label>
-                                                                            </Form.Group>
-                                                                        </Col>
-                                                                        <Col xs={3}>
-                                                                            <Form.Group className="form-group">
+                                                                        }
+                                                                        <Row>
+                                                                            <Col xs={3}>
+                                                                                <Form.Group className="form-group">
+                                                                                    <span className="input-title">İşçinin soyadı, adı, atasının adı *</span>
+                                                                                    <Form.Label>
+                                                                                        <Select
+                                                                                            placeholder="Adı seçin"
+                                                                                            isSearchable={employee ? employee.length > 5 ? true : false : false}
+                                                                                            options={employee}
+                                                                                            getOptionLabel={(option) => (option.name)}
+                                                                                            styles={customStyles}
+                                                                                            onChange={(val) => {
+                                                                                                let id = val.id;
+                                                                                                getWarningDetail(id, index);
+                                                                                            }}
+                                                                                        />
+                                                                                    </Form.Label>
+                                                                                    <div
+                                                                                        className="validation-block flex-start">
+                                                                                        {
+
+                                                                                            errors[`workVacation.vacations[${index}].vacationType`] !== '' ?
+                                                                                                <span
+                                                                                                    className="text-validation">{errors[`workVacation.vacations[${index}].vacationType`]}</span>
+                                                                                                : null
+                                                                                        }
+                                                                                    </div>
+                                                                                </Form.Group>
+                                                                            </Col>
+                                                                            <Col xs={3}>
+                                                                                <Form.Group className="form-group">
+                                                                                    <span className="input-title">İşlədiyi struktur bölmə </span>
+                                                                                    <Form.Label>
+                                                                                        <Form.Control
+                                                                                            placeholder="İşlədiyi struktur bölmə"
+                                                                                            value={item.department || ''}
+                                                                                            disabled={true}/>
+                                                                                    </Form.Label>
+                                                                                </Form.Group>
+                                                                            </Col>
+                                                                            <Col xs={3}>
+                                                                                <Form.Group className="form-group">
+                                                        <span
+                                                            className="input-title">İşlədiyi alt struktur bölmə </span>
+                                                                                    <Form.Label>
+                                                                                        <Form.Control
+                                                                                            placeholder="İşlədiyi struktur bölmə"
+                                                                                            value={item.subDepartment || ''}
+                                                                                            disabled={true}/>
+                                                                                    </Form.Label>
+                                                                                </Form.Group>
+                                                                            </Col>
+                                                                            <Col xs={3}>
+                                                                                <Form.Group className="form-group">
                                                                                 <span
                                                                                     className="input-title">Vəzifəsi </span>
-                                                                                <Form.Label>
-                                                                                    <Form.Control placeholder="Vəzifəsi"
-                                                                                                  value={item.position || ''}
-                                                                                                  disabled={true}/>
-                                                                                </Form.Label>
-                                                                            </Form.Group>
-                                                                        </Col>
-                                                                    </Row>
+                                                                                    <Form.Label>
+                                                                                        <Form.Control placeholder="Vəzifəsi"
+                                                                                                      value={item.position || ''}
+                                                                                                      disabled={true}/>
+                                                                                    </Form.Label>
+                                                                                </Form.Group>
+                                                                            </Col>
+                                                                        </Row>
 
-                                                                </div>
+                                                                    </div>
                                                             )
                                                         }
                                                         <div className="flex-end">
