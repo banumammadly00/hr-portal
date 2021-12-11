@@ -484,7 +484,6 @@ function CreateOperation() {
             employeeIds.push(i.id)
         }
 
-
         let workVacation = {
             "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
             "to": getEndDate !== '' ? getEndDate : null,
@@ -539,6 +538,14 @@ function CreateOperation() {
             "startJob": jobDay !== '' ? jobDay : null,
             "to": vacationEndDate !== '' ? vacationEndDate : null
         };
+
+        let changeJob = {
+            "date": joinDate !== null ? moment(joinDate).format("YYYY-MM-DD") : null,
+            "gradeId": selectedGrade !== null ? selectedGrade.id : null,
+            "individualAddition": individualAddition !== '' ? parseFloat(individualAddition) : null,
+            "subGradeId": selectedSubGrade !== null ? selectedSubGrade.id : null,
+            "testPeriod": testPeriod !== "" ? parseFloat(testPeriod) : null,
+        };
         let data = {
             "header": {
                 "department": "string",
@@ -558,6 +565,7 @@ function CreateOperation() {
             "meeting": tab == "38" ? meeting : null,
             "warning": tab == "45" ? warning : null,
             "collectiveAgreement": tab == "22" ? collectiveAgreement : null,
+            "changeJob": tab == "9" ? changeJob : null,
         }
 
         mainAxios({
@@ -1377,8 +1385,8 @@ function CreateOperation() {
                                         </div>
                                     </Tab>*/}
 
-                                    {/*
-                                        <Tab eventKey="9" title="" disabled={tab !== "9"}>
+
+                                    <Tab eventKey="9" title="" disabled={tab !== "9"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
@@ -1390,12 +1398,12 @@ function CreateOperation() {
                                                         onChange={(val) => {
                                                             let id = val.id
                                                             setEmployeeId(id)
-                                                            getEmployee(id)
+                                                            getEmployeeDetail(id)
                                                             setSelectedStaff(val);
                                                         }}
-                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
-                                                        options={staff}
-                                                        getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
+                                                        isSearchable={employee ? employee.length > 5 ? true : false : false}
+                                                        options={employee}
+                                                        getOptionLabel={(option) => (option.name)}
                                                         styles={customStyles}
                                                     />
                                                 </Form.Group>
@@ -1408,12 +1416,12 @@ function CreateOperation() {
                                                         value={selectedPosition}
                                                         onChange={(val) => {
                                                             setSelectedPosition(val);
-                                                            getPositionIdData(val.value);
-                                                            setPositionId(val.value)
+                                                            getVacancyData(val.id);
+                                                            setVacancyId(val.id);
                                                         }}
-                                                        isSearchable={position ? position.length > 5 ? true : false : false}
-                                                        options={position}
-                                                        getOptionLabel={(option) => option.value}
+                                                        isSearchable={vacancy ? vacancy.length > 5 ? true : false : false}
+                                                        options={vacancy}
+                                                        getOptionLabel={(option) => `${option.id}. ${option.position} - ${option.department}`}
                                                         styles={customStyles}
                                                     />
                                                 </Form.Group>
@@ -1432,7 +1440,7 @@ function CreateOperation() {
                                                     <span className="input-title">İşlədiyi vəzifəsi</span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Alt struktur bölmənin adı daxil edin"
-                                                                      value={vacancyName || ''} disabled={true}/>
+                                                                      value={position || ''} disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
@@ -1440,13 +1448,13 @@ function CreateOperation() {
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">Dəyişiklik tarixi *</span>
                                                     <Form.Label className="relative m-0">
-                                                        <DatePicker selected={changeDate}
+                                                        <DatePicker selected={joinDate}
                                                                     dateFormat="dd-MM-yyyy"
                                                                     placeholderText="DD-MM-YYYY"
                                                                     showMonthDropdown
                                                                     showYearDropdown
                                                                     dropdownMode="select"
-                                                                    onChange={(date) => setChangeDate(date)}/>
+                                                                    onChange={(date) => setJoinDate(date)}/>
                                                         <Button className="btn-transparent">
                                                             <svg width="18" height="18"
                                                                  viewBox="0 0 18 18" fill="none"
@@ -1495,6 +1503,15 @@ function CreateOperation() {
                                                             </svg>
                                                         </Button>
                                                     </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['changeJob.date'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['changeJob.date']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={6}>
@@ -1502,7 +1519,7 @@ function CreateOperation() {
                                                     <span className="input-title">Keçirildiyi struktur bölmə</span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Keçirildiyi struktur bölmə"
-                                                                      value={positionDepartment || ''}
+                                                                      value={vacancyDepartment || ''}
                                                                       disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>
@@ -1512,13 +1529,76 @@ function CreateOperation() {
                                                     <span className="input-title">Keçirildiyi vəzifə</span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Keçirildiyi vəzifə"
-                                                                      value={positionVacancyName || ''}
+                                                                      value={vacancyPosition || ''}
                                                                       disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Sınaq müddəti </span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Sınaq müddəti"
+                                                                      type="number"
+                                                                      value={testPeriod || ''}
+                                                                      onChange={(e) => setTestPeriod(e.target.value)}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Dərəcə</span>
+                                                    <Select
+                                                        placeholder="Dərəcə"
+                                                        value={selectedGrade}
+                                                        onChange={(val) => {
+                                                            setSelectedGrade(val)
+                                                        }}
+                                                        isSearchable={gradeArr ? gradeArr.length > 5 ? true : false : false}
+                                                        options={gradeArr}
+                                                        getOptionLabel={(option) => (option.grade)}
+                                                        styles={customStyles}
+                                                    />
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['changeJob.gradeId'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['changeJob.gradeId']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Alt dərəcə </span>
+                                                    <Select
+                                                        placeholder="Alt dərəcə"
+                                                        value={selectedSubGrade}
+                                                        onChange={(val) => {
+                                                            setSelectedSubGrade(val)
+                                                        }}
+                                                        isSearchable={subGrade ? subGrade.length > 5 ? true : false : false}
+                                                        options={subGrade}
+                                                        getOptionLabel={(option) => (option.subGrade)}
+                                                        styles={customStyles}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Digər fərdi əlavə </span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Digər fərdi əlavə"
+                                                                      type="number"
+                                                                      value={individualAddition || ''}
+                                                                      onChange={(e) => setIndividualAddition(e.target.value)}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
                                         </Row>
-                                        <div>
+                                       {/* <div>
                                             <div className="block-title">
                                                 Faktiki əmək haqqı: AZN (vergilər və digər ödənişlər daxil olmaqla)
                                             </div>
@@ -1594,9 +1674,9 @@ function CreateOperation() {
                                                     </Form.Group>
                                                 </Col>
                                             </Row>
-                                        </div>
+                                        </div>*/}
                                     </Tab>
-*/}
+
 
                                     {/*
                                     <Tab eventKey="10" title="" disabled={tab !== "10"}>
@@ -4847,7 +4927,8 @@ function CreateOperation() {
                                             </Col>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Ödənişli istirahətin bitdiyi tarixi</span>
+                                                    <span
+                                                        className="input-title">Ödənişli istirahətin bitdiyi tarixi</span>
                                                     <Form.Label className="relative m-0">
                                                         <Form.Control placeholder="YYYY-MM-DD"
                                                                       type="text"
