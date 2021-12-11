@@ -49,7 +49,8 @@ function OperationSchedule() {
                 status: status
             }
         }).then((res) => {
-            setCurrentPage(page)
+            setCurrentPage(page);
+            console.log(res.data.content);
             setOperation(res.data.content);
             setTotalRecord(res.data.totalElements);
             setEmptyData(true)

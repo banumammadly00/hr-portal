@@ -472,8 +472,8 @@ function EditStaff() {
                 data.workCondition !== 'Zərərsiz' ? setCondition(true) : setCondition(false);
                 setPositionFunctionArr(data.functionalities);
                 setSelectedInstitution(data.workInstitution);
-                setWorkConditionPer(data.conditionalAdditionPercentage);
-                setWorkConditionVac(data.conditionalAdditionVacation);
+                setWorkConditionPer(data.conditionalAdditionPercentage !== null ? data.conditionalAdditionPercentage : '');
+                setWorkConditionVac(data.conditionalAdditionVacation !== null ? data.conditionalAdditionVacation : '');
                 setSelectedFamilyJob(data.jobFamily);
                 setSelectedDepartment(data.department);
                 setObeyDepartment(data.subordinateDepartment);
@@ -628,7 +628,8 @@ function EditStaff() {
 
         let data = {
             "generalInformation": {
-                "conditionalAdditionPercentage": workConditionPer !== '' ? workConditionPer : null,
+                "conditionalAdditionPercentage": workConditionPer !== '' ? parseFloat(workConditionPer) : null,
+                "conditionalAdditionVacation": workConditionVac !== '' ? parseFloat(workConditionVac) : null,
                 "count": parseFloat(vacancyCount),
                 "curatorId": selectedCurator !== null ? selectedCurator.id : null,
                 "departmentId": selectedDepartment !== null ? selectedDepartment.id : null,
@@ -988,7 +989,7 @@ function EditStaff() {
                                                             onChange={(val) => {
                                                                 let value = val.value;
                                                                 setSelectedWorkCondition(val);
-                                                                value !== 'HARMLESS' ? setCondition(true) : setCondition(false)
+                                                                value !== 'HARMLESS' ? setCondition(true) : setCondition(false);
                                                             }}
                                                             options={workConditionOptions}
                                                             isSearchable={workConditionOptions ? workConditionOptions.length > 5 ? true : false : false}
@@ -1027,29 +1028,6 @@ function EditStaff() {
                                                         </div>
                                                     </Form.Group>
                                                 </Col>
-
-                                                <Col xs={6}>
-                                                    <Form.Group className="form-group">
-                                                            <span
-                                                                className="input-title">Ştat vahidinin kateqoriyası * </span>
-                                                        <Select
-                                                            placeholder="Kateqoriyanı seçin"
-                                                            value={selectedVacancyCategory}
-                                                            onChange={setSelectedVacancyCategory}
-                                                            isSearchable={vacancyCategoryOptions ? vacancyCategoryOptions.length > 5 ? true : false : false}
-                                                            options={vacancyCategoryOptions}
-                                                            styles={customStyles}
-                                                        />
-                                                        <div className="validation-block flex-start">
-                                                            {
-                                                                errors['generalInformation.positionCategory'] !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors['generalInformation.positionCategory']}</span>
-                                                                    : null
-                                                            }
-                                                        </div>
-                                                    </Form.Group>
-                                                </Col>
                                                 {
                                                     showCondition ?
                                                         <>
@@ -1078,6 +1056,28 @@ function EditStaff() {
                                                         </>
                                                         : null
                                                 }
+                                                <Col xs={6}>
+                                                    <Form.Group className="form-group">
+                                                            <span
+                                                                className="input-title">Ştat vahidinin kateqoriyası * </span>
+                                                        <Select
+                                                            placeholder="Kateqoriyanı seçin"
+                                                            value={selectedVacancyCategory}
+                                                            onChange={setSelectedVacancyCategory}
+                                                            isSearchable={vacancyCategoryOptions ? vacancyCategoryOptions.length > 5 ? true : false : false}
+                                                            options={vacancyCategoryOptions}
+                                                            styles={customStyles}
+                                                        />
+                                                        <div className="validation-block flex-start">
+                                                            {
+                                                                errors['generalInformation.positionCategory'] !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors['generalInformation.positionCategory']}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
+                                                    </Form.Group>
+                                                </Col>
                                                 <Col xs={6}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">İş ailəsi </span>
