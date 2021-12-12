@@ -77,6 +77,9 @@ function CreateOperation() {
     const [sicNo, setSicNo] = useState('');
     const [collectiveAgreeOpt, setCollectiveAgreeOpt] = useState([]);
     const [selectedCollectAgree, setSelectedCollectAgree] = useState(null);
+    const [employeeMainSalary, setEmployeeMainSalary] = useState('');
+    const [employeeIndividualAdd, setEmployeeIndividualAdd] = useState('');
+    const [employeeConditionalAdd, setEmployeeConditionalAdd] = useState('');
 
 
     /*------Vacancy----------*/
@@ -271,15 +274,12 @@ function CreateOperation() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            let data = res.data.content
-
-            /*     setDepartment(data.departmentName);
-                 setSubDepartment(data.subDepartmentName);
-                 setVacancyName(data.vacancyName);
-                 setSalary(data.salary)
-                 setOwnAdditionalSalary(data.ownAdditionalSalary);
-                 setAdditionalSalary(data.additionalSalary);
-                 setWorkMode(data.workMode)*/
+            let salary = res.data.salary;
+            if(salary !== null) {
+                setEmployeeMainSalary(salary.mainSalary);
+                setEmployeeIndividualAdd(salary.individualAddition);
+                setEmployeeConditionalAdd(salary.conditionalAddition);
+            }
         });
     }
 
@@ -573,8 +573,7 @@ function CreateOperation() {
             "meeting": tab == "38" ? meeting : null,
             "warning": tab == "45" ? warning : null,
             "collectiveAgreement": tab == "22" ? collectiveAgreement : null,
-            "changeJob": tab == "9" ? changeJob : null,
-            "changeWorkPlace": tab == "13" ? changeWorkPlace : null,
+            "changeJob": tab == "9" || tab == "13" ? changeJob : null,
         }
 
         mainAxios({
@@ -1405,7 +1404,8 @@ function CreateOperation() {
                                                         onChange={(val) => {
                                                             let id = val.id
                                                             setEmployeeId(id)
-                                                            getEmployeeDetail(id)
+                                                            getEmployeeDetail(id);
+                                                            getEmployeeData(id);
                                                             setSelectedStaff(val);
                                                         }}
                                                         isSearchable={employee ? employee.length > 5 ? true : false : false}
@@ -1448,6 +1448,35 @@ function CreateOperation() {
                                                     <Form.Label>
                                                         <Form.Control placeholder="Alt struktur bölmənin adı daxil edin"
                                                                       value={position || ''} disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Ştat üzrə əsas əmək haqqı</span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Ştat üzrə əsas əmək haqqı"
+                                                                      value={employeeMainSalary || ''} disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Əmək şəraitinə görə əlavə </span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Əmək şəraitinə görə əlavə"
+                                                                      value={employeeConditionalAdd || ''}
+                                                                      disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Digər fərdi əlavə</span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Digər fərdi əlavə daxil edin"
+                                                                      value={employeeIndividualAdd || ''}
+                                                                      disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
@@ -1605,42 +1634,7 @@ function CreateOperation() {
                                                 </Form.Group>
                                             </Col>
                                         </Row>
-                                       {/* <div>
-                                            <div className="block-title">
-                                                Faktiki əmək haqqı: AZN (vergilər və digər ödənişlər daxil olmaqla)
-                                            </div>
-                                            <Row>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Ştat üzrə əsas əmək haqqı</span>
-                                                        <Form.Label>
-                                                            <Form.Control placeholder="Ştat üzrə əsas əmək haqqı"
-                                                                          value={salary || ''} disabled={true}/>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Əmək şəraitinə görə əlavə </span>
-                                                        <Form.Label>
-                                                            <Form.Control placeholder="Əmək şəraitinə görə əlavə"
-                                                                          value={additionalSalary || ''}
-                                                                          disabled={true}/>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <Form.Group className="form-group">
-                                                        <span className="input-title">Digər fərdi əlavə</span>
-                                                        <Form.Label>
-                                                            <Form.Control placeholder="Digər fərdi əlavə daxil edin"
-                                                                          value={ownAdditionalSalary || ''}
-                                                                          disabled={true}/>
-                                                        </Form.Label>
-                                                    </Form.Group>
-                                                </Col>
-                                            </Row>
-                                        </div>
+{/*
                                         <div>
                                             <div className="block-title">
                                                 Keçirildiyi əmək haqqı (AZN) vergilər və digər ödənişlər daxil olmaqla):
@@ -1681,7 +1675,8 @@ function CreateOperation() {
                                                     </Form.Group>
                                                 </Col>
                                             </Row>
-                                        </div>*/}
+                                        </div>
+*/}
                                     </Tab>
                                     {/*
                                     <Tab eventKey="10" title="" disabled={tab !== "10"}>
@@ -2140,9 +2135,9 @@ function CreateOperation() {
                                     <Tab eventKey="13" title="" disabled={tab !== "13"}>
                                         <div className="block-inn">
                                             <Row>
-                                                <Col xs={6}>
+                                                <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">İşçinin ərizəsinə və təhsil müəssisəsi tərəfindən verilən çağırış </span>
+                                                        <span className="input-title">İşçi. ərizə. və təhsil müəs. tərəfindən ver. çağırış </span>
                                                         <Form.Label>
                                                             <Form.Control
                                                                 placeholder="İşçinin ərizəsinə və təhsil müəssisəsi tərəfindən verilən çağırış"
@@ -2151,7 +2146,7 @@ function CreateOperation() {
                                                         </Form.Label>
                                                     </Form.Group>
                                                 </Col>
-                                                <Col xs={6}>
+                                                <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşçinin soyadı, adı, ata adı *</span>
@@ -2162,6 +2157,7 @@ function CreateOperation() {
                                                                 let id = val.id
                                                                 setEmployeeId(id)
                                                                 getEmployeeDetail(id)
+                                                                getEmployeeData(id);
                                                                 setSelectedStaff(val);
                                                             }}
                                                             isSearchable={employee ? employee.length > 5 ? true : false : false}
@@ -2171,7 +2167,7 @@ function CreateOperation() {
                                                         />
                                                     </Form.Group>
                                                 </Col>
-                                                <Col xs={6}>
+                                                <Col xs={4}>
                                                     <Form.Group className="form-group">
                                                         <span className="input-title">Ştatın nömrəsi</span>
                                                         <Select
@@ -2267,6 +2263,46 @@ function CreateOperation() {
                                                                     </defs>
                                                                 </svg>
                                                             </Button>
+                                                        </Form.Label>
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col xs={6}>
+                                                    <Form.Group className="form-group">
+                                                        <span className="input-title">Sınaq müddəti </span>
+                                                        <Form.Label>
+                                                            <Form.Control placeholder="Sınaq müddəti"
+                                                                          type="number"
+                                                                          value={testPeriod || ''}
+                                                                          onChange={(e) => setTestPeriod(e.target.value)}/>
+                                                        </Form.Label>
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col xs={4}>
+                                                    <Form.Group className="form-group">
+                                                        <span className="input-title">Ştat üzrə əsas əmək haqqı</span>
+                                                        <Form.Label>
+                                                            <Form.Control placeholder="Ştat üzrə əsas əmək haqqı"
+                                                                          value={employeeMainSalary || ''} disabled={true}/>
+                                                        </Form.Label>
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col xs={4}>
+                                                    <Form.Group className="form-group">
+                                                        <span className="input-title">Əmək şəraitinə görə əlavə </span>
+                                                        <Form.Label>
+                                                            <Form.Control placeholder="Əmək şəraitinə görə əlavə"
+                                                                          value={employeeConditionalAdd || ''}
+                                                                          disabled={true}/>
+                                                        </Form.Label>
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col xs={4}>
+                                                    <Form.Group className="form-group">
+                                                        <span className="input-title">Digər fərdi əlavə</span>
+                                                        <Form.Label>
+                                                            <Form.Control placeholder="Digər fərdi əlavə daxil edin"
+                                                                          value={employeeIndividualAdd || ''}
+                                                                          disabled={true}/>
                                                         </Form.Label>
                                                     </Form.Group>
                                                 </Col>
