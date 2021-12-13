@@ -1015,6 +1015,10 @@ td {
     padding: 30px 20px 50px;
 }
 
+.create-operation .table-striped {
+    padding: 20px 0;
+}
+
 .create-operation textarea.form-control {
     height: 100px;
 }
@@ -1649,7 +1653,8 @@ td {
 }
 
 .table-striped {
-    padding: 20px 0;
+    padding: 20px;
+    margin: 0;
 }
 
 .table-striped .table th {

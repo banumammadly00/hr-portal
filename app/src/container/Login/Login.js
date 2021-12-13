@@ -4,7 +4,6 @@ import {Container, Row, Col, Form, Button, Image} from 'react-bootstrap';
 import {Link, useHistory} from 'react-router-dom';
 import {mainAxios} from "../../components/Axios/axios";
 import Spinner from 'react-bootstrap/Spinner'
-import DatePicker from "react-datepicker";
 import Swal from "sweetalert2";
 
 

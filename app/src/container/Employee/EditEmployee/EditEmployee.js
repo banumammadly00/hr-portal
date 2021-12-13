@@ -12,6 +12,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import {uid} from "react-uid";
 import Indicator from "../../../components/Loading/Indicator";
 import Paginate from "../../../components/Pagination/Pagination";
+import {customStyles, customGroupStyles} from "../../../components/Select/SelectStyle";
 import Swal from "sweetalert2";
 
 const statuses = {
@@ -288,203 +289,12 @@ function EditEmployee() {
     const [operation, setOperation] = useState([])
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [recordSize, setRecordSize] = useState(20)
-
-    const customStyles = {
-        option: (provided, state) => ({
-            ...provided,
-            color: '#193651',
-            backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '5px 16px',
-            margin: '0',
-            fontSize: '14px',
-            "&:first-of-type": {
-                borderRadius: '2px 2px 0 0',
-            },
-            "&:hover": {
-                backgroundColor: '#FFF',
-            },
-            "&:last-child": {
-                borderBottom: 'none',
-                borderRadius: '0 0 2px 2px',
-            },
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-start',
-            position: 'relative',
-            textAlign: 'left'
-
-        }),
-
-        indicatorSeparator: () => {
-        },
-
-        indicatorsContainer: (provided) => ({
-            ...provided,
-            paddingRight: '4px'
-        }),
-
-        control: (provided) => ({
-            ...provided,
-            minHeight: '42px',
-            fontSize: '14px',
-            padding: '0',
-            margin: '0',
-            color: '#66615b',
-            backgroundColor: '#FAFCFF',
-            boxShadow: 'none',
-            border: '1px solid rgba(4, 6, 71, 0.1)',
-            "&:hover": {
-                borderColor: 'rgba(4, 6, 71, 0.1)',
-            },
-
-        }),
-
-        container: (provided) => ({
-            ...provided,
-            width: '100%',
-        }),
-
-        valueContainer: (provided) => ({
-            ...provided,
-            padding: '2px 8px 2px 12px'
-        }),
+    const [recordSize, setRecordSize] = useState(20);
 
 
-        menu: (provided) => ({
-            ...provided,
-            borderRadius: '2px',
-            padding: '10px 0',
-            margin: '0',
-            borderColor: 'red',
-            width: '100%'
-        }),
+    /*Vacation*/
 
-        dropdownIndicator: defaultStyles => ({
-            ...defaultStyles,
-            'svg path': {
-                fill: 'rgba(24,24,24, .8)',
-            },
-
-            'svg': {
-                width: '18px'
-            },
-        }),
-
-        menuList: base => ({
-            ...base,
-            padding: 0,
-            borderColor: 'red'
-
-        }),
-
-        placeholder: (provided) => ({
-            ...provided,
-            width: '100%',
-            textAlign: 'left',
-            whiteSpace: 'nowrap'
-
-        }),
-
-    };
-
-    const customGroupStyles = {
-        option: (provided, state) => ({
-            ...provided,
-            color: '#040647',
-            backgroundColor: state.isSelected ? '#F3F8FF' : 'transparent',
-            padding: '10px 16px',
-            margin: '0',
-            fontSize: '16px',
-            "&:first-of-type": {
-                borderRadius: '2px 2px 0 0',
-            },
-            "&:hover": {
-                backgroundColor: '#FAFCFF',
-            },
-            "&:last-child": {
-                borderBottom: 'none',
-                borderRadius: '0 0 2px 2px',
-            },
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            position: 'relative'
-
-        }),
-
-        indicatorSeparator: () => {
-        },
-
-        indicatorsContainer: (provided) => ({
-            ...provided,
-            paddingRight: '4px'
-        }),
-
-        control: (provided) => ({
-            ...provided,
-            minHeight: '42px',
-            fontSize: '14px',
-            padding: '0',
-            margin: '0',
-            color: '#66615b',
-            backgroundColor: '#FAFCFF',
-            boxShadow: 'none',
-            border: '1px solid rgba(4, 6, 71, 0.1)',
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0,
-            borderRight: 0,
-            "&:hover": {
-                borderColor: 'rgba(4, 6, 71, 0.1)',
-            },
-
-        }),
-
-        container: (provided) => ({
-            ...provided,
-            width: '100%',
-        }),
-
-        valueContainer: (provided) => ({
-            ...provided,
-            padding: '2px 8px 2px 12px'
-        }),
-
-        menu: (provided) => ({
-            ...provided,
-            borderRadius: '2px',
-            padding: '0',
-            margin: '0',
-            borderColor: 'red',
-            width: '100%'
-        }),
-
-        dropdownIndicator: defaultStyles => ({
-            ...defaultStyles,
-            'svg path': {
-                fill: 'rgba(24,24,24, .8)',
-            },
-
-            'svg': {
-                width: '18px'
-            },
-        }),
-
-        menuList: base => ({
-            ...base,
-            padding: 0,
-
-        }),
-
-        placeholder: (provided) => ({
-            ...provided,
-            width: '100%',
-            textAlign: 'left',
-            whiteSpace: 'nowrap'
-
-        }),
-
-    };
+    const [vacation, setVacation] = useState([])
 
     const getExportDocument = (id, operationName) => {
         mainAxios({
@@ -961,6 +771,21 @@ function EditEmployee() {
         });
     }
 
+    const getVacation = () => {
+        mainAxios({
+            method: 'get',
+            url: '/vacations/period/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+                setVacation(res.data)
+            }
+        );
+    }
+
+
     const sendGeneralData = () => {
         setLoadingIndicator(true);
         let idCardSelected = selectedSerial !== null ? selectedSerial.value : null;
@@ -1410,6 +1235,7 @@ function EditEmployee() {
         getRewardOrganization();
         getCitizenControl();
         getCertificate();
+        getVacation();
         getOperation(1)
     }, []);
 
@@ -2770,7 +2596,7 @@ function EditEmployee() {
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="education" title="Təhsil məlumatları">
+                        <Tab eventKey="education" title="Təhsil m.">
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
@@ -4274,7 +4100,7 @@ function EditEmployee() {
                                 </Tabs>
                             </div>
                         </Tab>
-                        <Tab eventKey="bank" title="Bank məlumatları">
+                        <Tab eventKey="bank" title="Bank m.">
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">
@@ -4881,6 +4707,46 @@ function EditEmployee() {
                             </div>
                             <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
                                       click={(page) => getOperation(page)}/>
+                        </Tab>
+                        <Tab eventKey="vacation" title="Məzuniyyət">
+                            <div className="block">
+                                <div className="table-striped">
+                                    <Table  responsive="sm">
+                                        <thead>
+                                        <tr>
+                                            <th>Tarixə görə</th>
+                                            <th>Əsas məz.</th>
+                                            <th>Staja görə</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {
+                                            vacation.length > 0 ?
+                                                vacation.map((item, index) =>
+                                                    <tr key={index}>
+                                                        <td>{item.startDate} - {item.endDate}</td>
+                                                        <td>{item.main}</td>
+                                                        <td>{item.experience}</td>
+                                                    </tr>
+                                                )
+                                                :
+                                                <tr>
+                                                    <td colSpan={3}>
+                                                        <p className="text-center m-0">Məlumat
+                                                            yoxdur</p>
+                                                    </td>
+                                                </tr>
+                                        }
+                                        </tbody>
+                                    </Table>
+                                </div>
+                            </div>
+                            <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
+                                      click={(page) => getOperation(page)}/>
+                        </Tab>
+                        <Tab eventKey="salary" title="Əmək haqqı">
+                            <div className="block">
+                            </div>
                         </Tab>
                     </Tabs>
                 </Container>

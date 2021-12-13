@@ -120,7 +120,11 @@ function ViewEmployee() {
     const [operation, setOperation] = useState([])
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [recordSize, setRecordSize] = useState(15)
+    const [recordSize, setRecordSize] = useState(15);
+
+    /*Vacation*/
+
+    const [vacation, setVacation] = useState([])
 
     const getEmployeeInfo = () => {
         mainAxios({
@@ -290,9 +294,24 @@ function ViewEmployee() {
         })
     }
 
+    const getVacation = () => {
+        mainAxios({
+            method: 'get',
+            url: '/vacations/period/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+                setVacation(res.data)
+            }
+        );
+    }
+
 
     useEffect(() => {
         getEmployeeInfo();
+        getVacation()
         getOperation(1)
     }, []);
 
@@ -851,7 +870,7 @@ function ViewEmployee() {
                                 </div>
                             </div>
                         </Tab>
-                        <Tab eventKey="education" title="Təhsil məlumatları">
+                        <Tab eventKey="education" title="Təhsil m.">
                             <div className="block">
                                 <div className="flex view-top">
                                     <div className="upload-content flex-start">
@@ -1311,7 +1330,7 @@ function ViewEmployee() {
                                 </div>
                             </div>
                         </Tab>
-                        <Tab eventKey="bank" title="Bank məlumatları">
+                        <Tab eventKey="bank" title="Bank m.">
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="flex view-top">
@@ -1689,6 +1708,45 @@ function ViewEmployee() {
                             </div>
                             <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
                                       click={(page) => getOperation(page)}/>
+                        </Tab>
+                        <Tab eventKey="vacation" title="Məzuniyyət">
+                            <div className="block">
+                                <div className="table-striped">
+                                    <Table responsive>
+                                        <thead>
+                                        <tr>
+                                            <th>Tarixə görə</th>
+                                            <th>Əsas məz.</th>
+                                            <th>Staja görə</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {
+                                            vacation.length > 0 ?
+                                                vacation.map((item, index) =>
+                                                    <tr key={index}>
+                                                        <td>{item.startDate} - {item.endDate}</td>
+                                                        <td>{item.main}</td>
+                                                        <td>{item.experience}</td>
+                                                    </tr>
+                                                )
+                                                :
+                                                <tr>
+                                                    <td colSpan={3}>
+                                                        <span className="text-center m-0">Məlumat yoxdur</span>
+                                                    </td>
+                                                </tr>
+                                        }
+                                        </tbody>
+                                    </Table>
+                                </div>
+                            </div>
+                            <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
+                                      click={(page) => getOperation(page)}/>
+                        </Tab>
+                        <Tab eventKey="salary" title="Əmək haqqı">
+                            <div className="block">
+                            </div>
                         </Tab>
                     </Tabs>
                 </Container>

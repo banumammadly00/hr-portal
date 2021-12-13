@@ -9,7 +9,7 @@ import moment from "moment";
 import Swal from 'sweetalert2';
 import {uid} from "react-uid";
 import Indicator from "../../../components/Loading/Indicator";
-import customStyles from "../../../components/Select/SelectStyle";
+import {customStyles} from "../../../components/Select/SelectStyle";
 
 const WorkModeOptions = [
     {value: 'DAILY', label: 'Gündəlik'},
@@ -3244,8 +3244,8 @@ function CreateOperation() {
                                                                 <tbody>
                                                                 {
                                                                     vacation.length > 0 ?
-                                                                        vacation.map((item) =>
-                                                                            <tr>
+                                                                        vacation.map((item, index) =>
+                                                                            <tr key={index}>
                                                                                 <td>{item.startDate} - {item.endDate}</td>
                                                                                 <td>{item.main}</td>
                                                                                 <td>{item.experience}</td>
