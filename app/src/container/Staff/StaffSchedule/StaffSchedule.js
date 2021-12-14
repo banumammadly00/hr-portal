@@ -8,6 +8,11 @@ import Paginate from "../../../components/Pagination/Pagination";
 import Select from "react-select";
 import {customStyles} from "../../../components/Select/SelectStyle";
 
+const vacancyLimitOptions = [
+    {value: 'EMPTY', label: 'Boş'},
+    {value: 'FULL', label: 'Dolu'},
+]
+
 function StaffSchedule() {
     const history = useHistory();
     const [vacancy, setVacancy] = useState([]);
@@ -23,12 +28,14 @@ function StaffSchedule() {
     const [selectedDepartment, setSelectedDepartment] = useState(null)
     const [subDepartment, setSubDepartment] = useState([]);
     const [selectedSubDepartment, setSelectedSubDepartment] = useState(null)
-    const [selectedPosition, setSelectedPosition] = useState(null)
+    const [selectedPosition, setSelectedPosition] = useState(null);
+    const [selectedLimit, setSelectedLimit] = useState(null);
     const [showFilter, setShowFilter] = useState(false);
 
     let depart = selectedDepartment !== null ? selectedDepartment.id : null;
     let subDepart = selectedDepartment !== null ? selectedDepartment.id : null;
     let positionId = selectedPosition !== null ? selectedPosition.id : null;
+    let limit = selectedLimit !== null ? selectedLimit.value : null;
 
     const handleRowClick = (item) => {
         history.push(`/staff/view/${item.id}`);
@@ -44,7 +51,6 @@ function StaffSchedule() {
             },
         }).then((res) => {
             setDepartment(res.data);
-            //console.log(departmentArr)
         });
     }
 
@@ -78,6 +84,7 @@ function StaffSchedule() {
         setSelectedSubDepartment(null);
         setSelectedPosition(null);
         setSelectedDepartment(null);
+        setSelectedLimit(null);
         getVacancy(1)
     }
 
@@ -95,7 +102,7 @@ function StaffSchedule() {
         });
     }
 
-    const getVacancy = (page, depart, subDepart, position) => {
+    const getVacancy = (page, depart, subDepart, position, limitVal) => {
         mainAxios({
             method: 'get',
             url: '/vacancies',
@@ -109,6 +116,7 @@ function StaffSchedule() {
                 departmentId: depart,
                 subDepartmentId: subDepart,
                 positionId: position,
+                vacancyLimit: limitVal,
             }
         }).then((res) => {
             setCurrentPage(page);
@@ -174,7 +182,8 @@ function StaffSchedule() {
                                                         setSelectedSubDepartment(null)
                                                         let subDepartId = selectedSubDepartment !== null ? selectedSubDepartment.id : null;
                                                         let positionId = selectedPosition !== null ? selectedPosition.id : null;
-                                                        getVacancy(1, id, subDepartId, positionId)
+                                                        let limitVal = selectedLimit !== null ? selectedLimit.value : null;
+                                                        getVacancy(1, id, subDepartId, positionId, limitVal)
                                                     }}
                                                     isSearchable={department ? department.length > 5 ? true : false : false}
                                                     options={department}
@@ -194,7 +203,8 @@ function StaffSchedule() {
                                                         setSelectedSubDepartment(val);
                                                         let departId = selectedDepartment !== null ? selectedDepartment.id : null;
                                                         let positionId = selectedPosition !== null ? selectedPosition.id : null;
-                                                        getVacancy(1, departId, id, positionId)
+                                                        let limitVal = selectedLimit !== null ? selectedLimit.value : null;
+                                                        getVacancy(1, departId, id, positionId, limitVal)
                                                     }}
                                                     isSearchable={subDepartment ? subDepartment.length > 5 ? true : false : false}
                                                     options={subDepartment}
@@ -214,11 +224,33 @@ function StaffSchedule() {
                                                         setSelectedPosition(val);
                                                         let departId = selectedDepartment !== null ? selectedDepartment.id : null;
                                                         let subDepartId = selectedSubDepartment !== null ? selectedSubDepartment.id : null;
-                                                        getVacancy(1, departId, subDepartId, id)
+                                                        let limitVal = selectedLimit !== null ? selectedLimit.value : null;
+                                                        getVacancy(1, departId, subDepartId, id, limitVal)
                                                     }}
                                                     isSearchable={position ? position.length > 5 ? true : false : false}
                                                     options={position}
                                                     getOptionLabel={(option) => (option.name)}
+                                                    styles={customStyles}
+                                                />
+                                            </Form.Group>
+                                        </div>
+                                        <div className="filter-item">
+                                            <Form.Group className="form-group m-0">
+                                                <span className="input-title">Ştat limiti</span>
+                                                <Select
+                                                    placeholder="Ştat limitini seçin"
+                                                    value={selectedLimit}
+                                                    onChange={(val) => {
+                                                        let id = val.value
+                                                        setSelectedLimit(val);
+                                                        let departId = selectedDepartment !== null ? selectedDepartment.id : null;
+                                                        let subDepartId = selectedSubDepartment !== null ? selectedSubDepartment.id : null;
+                                                        let positionId = selectedPosition !== null ? selectedPosition.id : null;
+                                                        getVacancy(1, departId, subDepartId, positionId, id)
+                                                    }}
+                                                    isSearchable={vacancyLimitOptions ? vacancyLimitOptions.length > 5 ? true : false : false}
+                                                    options={vacancyLimitOptions}
+                                                    getOptionLabel={(option) => (option.label)}
                                                     styles={customStyles}
                                                 />
                                             </Form.Group>
@@ -258,7 +290,7 @@ function StaffSchedule() {
                         </Table>
                     </div>
                     <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
-                              click={(page) => getVacancy(page, depart, subDepart, positionId)}/>
+                              click={(page) => getVacancy(page, depart, subDepart, positionId, limit)}/>
                 </Container>
             </div>
         </Aux>
