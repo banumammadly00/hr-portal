@@ -3320,7 +3320,7 @@ function CreateOperation() {
                                                     />
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={6}>
+                                            <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşlədiyi struktur bölmə </span>
@@ -3331,7 +3331,7 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={6}>
+                                            <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşlədiyi alt struktur bölmə </span>
@@ -3342,7 +3342,7 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={6}>
+                                            <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">Vəzifəsi </span>
                                                     <Form.Label>
@@ -3623,7 +3623,7 @@ function CreateOperation() {
                                                                     <Row>
                                                                         <Col xs={6}>
                                                                             <Form.Group className="form-group">
-                                                                                <span className="input-title">Tətil növünü seçin</span>
+                                                                                <span className="input-title">Məzuniyyət növünü seçin</span>
                                                                                 <Form.Label>
                                                                                     <Select
                                                                                         placeholder="Adı seçin"
@@ -3651,10 +3651,10 @@ function CreateOperation() {
                                                                         </Col>
                                                                         <Col xs={6}>
                                                                             <Form.Group className="form-group">
-                                                                                <span className="input-title">Tətil gün. sayı daxil edin</span>
+                                                                                <span className="input-title">Məzuniyyət gün. sayı daxil edin</span>
                                                                                 <Form.Label>
                                                                                     <Form.Control
-                                                                                        placeholder="Tətil gün. sayı daxil edin"
+                                                                                        placeholder="Məzuniyyət gün. sayı daxil edin"
                                                                                         onChange={(e) => {
                                                                                             vacationArr[index].day = e.target.value;
                                                                                             setVacationArr([...vacationArr], vacationArr);
