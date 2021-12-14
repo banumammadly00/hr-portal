@@ -1183,7 +1183,7 @@ function ViewEmployee() {
                                 </div>
                             </div>
                         </Tab>
-                        <Tab eventKey="company" title="Əvvəlki iş yeri">
+                        <Tab eventKey="company" title="Əmək fəaliyyəti">
                             <div className="block">
                                 <div className="form-list">
                                     <div className="flex view-top">

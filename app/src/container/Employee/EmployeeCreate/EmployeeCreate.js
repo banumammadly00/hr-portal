@@ -3095,7 +3095,7 @@ function EmployeeCreate() {
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="company" title="Əvvəlki iş yeri">
+                        <Tab eventKey="company" title="Əmək fəaliyyəti">
                             <div className="block">
                                 <Form className="form-list">
                                     <div className="add-block">

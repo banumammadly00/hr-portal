@@ -77,7 +77,7 @@ function Sidebar(props) {
                                     </clipPath>
                                 </defs>
                             </svg>
-                            <span>Kadr ə.</span>
+                            <span>Kadr əmrləri</span>
                         </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>

@@ -3405,7 +3405,7 @@ function EditEmployee() {
                                 </Form>
                             </div>
                         </Tab>
-                        <Tab eventKey="company" title="Əvvəlki iş yeri">
+                        <Tab eventKey="company" title="Əmək fəaliyyəti">
                             <div className="block inner-tab">
                                 <Tabs activeKey={tab} onSelect={(k) => setTab(k)}>
                                     <Tab eventKey="internal" title="Daxili">
