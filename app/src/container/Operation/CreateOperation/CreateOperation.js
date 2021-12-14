@@ -111,6 +111,8 @@ function CreateOperation() {
     const [joinDate, setJoinDate] = useState(null);
     const [jobDay, setJobDay] = useState('')
     const [showVacation, setShowVacation] = useState(false);
+    const [vacDraftMain, setVacDraftMain] = useState('');
+    const [vacDraftExp, setVacDraftExp] = useState('');
 
     const [vacationArr, setVacationArr] = useState([{
         vacationType: null,
@@ -404,6 +406,23 @@ function CreateOperation() {
             }
         );
     }
+
+    const getVacationDraft = (id) => {
+        mainAxios({
+            method: 'get',
+            url: '/vacations/draft/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+                setVacDraftMain(res.data.main);
+                console.log(vacDraftMain)
+                setVacDraftExp(res.data.experience);
+            }
+        );
+    }
+
 
     const getJobDay = (to, from) => {
         mainAxios({
@@ -3240,8 +3259,8 @@ function CreateOperation() {
                                                                 <thead>
                                                                 <tr>
                                                                     <th>Tarixə görə</th>
-                                                                    <th>Əsas məz.</th>
-                                                                    <th>Staja görə</th>
+                                                                    <th>Əsas məz. {vacDraftMain !== '' ? `( - ${parseFloat(vacDraftMain)} )` : null}</th>
+                                                                    <th>Staja görə {vacDraftExp !== '' ? `( - ${parseFloat(vacDraftExp)} )` : null}</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -3291,7 +3310,8 @@ function CreateOperation() {
                                                             setShowVacation(true)
                                                             getEmployeeDetail(id)
                                                             setSelectedStaff(val);
-                                                            getVacation(id)
+                                                            getVacation(id);
+                                                            getVacationDraft(id)
                                                         }}
                                                         isSearchable={employee ? employee.length > 5 ? true : false : false}
                                                         options={employee}
