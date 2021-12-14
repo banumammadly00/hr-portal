@@ -4339,11 +4339,10 @@ function EditEmployee() {
                                                 </Col>
                                                 <Col xs={8}>
                                                     <Form.Group className="form-group">
-                                                                <span
-                                                                    className="input-title">İşçinin aid oldu kvota üzrə məlumatlar</span>
+                                                                <span className="input-title">İşçinin aid oldu kvota üzrə məlumatlar</span>
                                                         <Form.Label className="relative m-0">
                                                             <Select
-                                                                placeholder="Yetkinlik yaşına çatmamış uşaqları tərbiyə edən tək və çoxuşaqlı valideynlər"
+                                                                placeholder="İşçinin aid oldu kvotanı seçin"
                                                                 value={selectedQuota || ''}
                                                                 onChange={(val) => {
                                                                     setSelectedQuota(val);

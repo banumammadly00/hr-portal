@@ -3700,7 +3700,7 @@ function EmployeeCreate() {
                                                                     className="input-title">İşçinin aid oldu kvota üzrə məlumatlar</span>
                                                         <Form.Label className="relative m-0">
                                                             <Select
-                                                                placeholder="İşçinin aid oldu kvotanı daxil edin"
+                                                                placeholder="İşçinin aid oldu kvotanı seçin"
                                                                 value={selectedQuota}
                                                                 onChange={(val) => {
                                                                     setSelectedQuota(val);
