@@ -536,7 +536,7 @@ function CreateOperation() {
             "day": vacationDay !== '' ? vacationDay : null,
             "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
             "startJob": jobDay !== '' ? jobDay : null,
-            "to": vacationEndDate !== '' ? vacationEndDate : null
+            "to": getEndDate !== '' ? getEndDate : null
         };
 
         let changeJob = {
@@ -545,13 +545,6 @@ function CreateOperation() {
             "individualAddition": individualAddition !== '' ? parseFloat(individualAddition) : null,
             "subGradeId": selectedSubGrade !== null ? selectedSubGrade.id : null,
             "testPeriod": testPeriod !== "" ? parseFloat(testPeriod) : null,
-        };
-
-        let changeWorkPlace =   {
-            "date": joinDate !== null ? moment(joinDate).format("YYYY-MM-DD") : null,
-            "gradeId": selectedGrade !== null ? selectedGrade.id : null,
-            "individualAddition": individualAddition !== '' ? parseFloat(individualAddition) : null,
-            "subGradeId": selectedSubGrade !== null ? selectedSubGrade.id : null,
         };
 
         let data = {
@@ -5032,7 +5025,7 @@ function CreateOperation() {
                                                         <Form.Control placeholder="YYYY-MM-DD"
                                                                       type="text"
                                                                       disabled={true}
-                                                                      value={vacationEndDate || ''}
+                                                                      value={getEndDate || ''}
                                                         />
                                                         <Button className="btn-transparent">
                                                             <svg width="18" height="18"
