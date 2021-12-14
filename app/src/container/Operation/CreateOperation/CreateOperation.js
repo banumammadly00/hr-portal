@@ -275,7 +275,7 @@ function CreateOperation() {
             },
         }).then((res) => {
             let salary = res.data.salary;
-            if(salary !== null) {
+            if (salary !== null) {
                 setEmployeeMainSalary(salary.mainSalary);
                 setEmployeeIndividualAdd(salary.individualAddition);
                 setEmployeeConditionalAdd(salary.conditionalAddition);
@@ -1389,6 +1389,16 @@ function CreateOperation() {
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
+                                                    <span className="input-title">Əsaslandırma</span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Əmrin əsası daxil edin"
+                                                                      value={mainOfOrder || ''}
+                                                                      onChange={(e) => setMainOfOrder(e.target.value)}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşçinin adı, soyadı, atasının adı *</span>
                                                     <Select
@@ -1627,7 +1637,7 @@ function CreateOperation() {
                                                 </Form.Group>
                                             </Col>
                                         </Row>
-{/*
+                                        {/*
                                         <div>
                                             <div className="block-title">
                                                 Keçirildiyi əmək haqqı (AZN) vergilər və digər ödənişlər daxil olmaqla):
@@ -1858,7 +1868,7 @@ function CreateOperation() {
                                     </Tab>
 */}
 
-{/*
+                                    {/*
                                     <Tab eventKey="11" title="" disabled={tab !== "11"}>
                                         <Row>
                                             <Col xs={6}>
@@ -2021,7 +2031,7 @@ function CreateOperation() {
                                     </Tab>
 */}
 
-{/*
+                                    {/*
                                     <Tab eventKey="12" title="" disabled={tab !== "12"}>
                                         <Row>
                                             <Col xs={6}>
@@ -2130,12 +2140,11 @@ function CreateOperation() {
                                             <Row>
                                                 <Col xs={4}>
                                                     <Form.Group className="form-group">
-                                                        <span className="input-title">İşçi. ərizə. və təhsil müəs. tərəfindən ver. çağırış </span>
+                                                        <span className="input-title">Əsaslandırma</span>
                                                         <Form.Label>
-                                                            <Form.Control
-                                                                placeholder="İşçinin ərizəsinə və təhsil müəssisəsi tərəfindən verilən çağırış"
-                                                                value={mainOfOrder}
-                                                                onChange={(e) => setMainOfOrder(e.target.value)}/>
+                                                            <Form.Control placeholder="Əmrin əsası daxil edin"
+                                                                          value={mainOfOrder || ''}
+                                                                          onChange={(e) => setMainOfOrder(e.target.value)}/>
                                                         </Form.Label>
                                                     </Form.Group>
                                                 </Col>
@@ -2275,7 +2284,8 @@ function CreateOperation() {
                                                         <span className="input-title">Ştat üzrə əsas əmək haqqı</span>
                                                         <Form.Label>
                                                             <Form.Control placeholder="Ştat üzrə əsas əmək haqqı"
-                                                                          value={employeeMainSalary || ''} disabled={true}/>
+                                                                          value={employeeMainSalary || ''}
+                                                                          disabled={true}/>
                                                         </Form.Label>
                                                     </Form.Group>
                                                 </Col>
@@ -2384,7 +2394,7 @@ function CreateOperation() {
                                                 </Col>
                                             </Row>
                                         </div>
-                                    {/*    <div className="block-inn">
+                                        {/*    <div className="block-inn">
                                             <div className="block-title">
                                                 Faktiki əmək haqqı: AZN (vergilər və digər ödənişlər daxil olmaqla)
                                             </div>
@@ -2462,7 +2472,7 @@ function CreateOperation() {
                                         </div>*/}
                                     </Tab>
 
-{/*
+                                    {/*
                                     <Tab eventKey="14" title="" disabled={tab !== "14"}>
                                         <Row>
                                             <Col xs={6}>
@@ -3260,6 +3270,16 @@ function CreateOperation() {
                                             }
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
+                                                    <span className="input-title">Əsaslandırma</span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Əmrin əsası daxil edin"
+                                                                      value={mainOfOrder || ''}
+                                                                      onChange={(e) => setMainOfOrder(e.target.value)}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşçinin adı, soyadı, atasının adı *</span>
                                                     <Select
@@ -3657,13 +3677,12 @@ function CreateOperation() {
                                                 </div>
                                             </Col>
                                         </Row>
-
                                     </Tab>
                                     <Tab eventKey="18" title="" disabled={tab !== "18"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">İşçinin ərizəsinə və təhsil müəssisəsi tərəfindən verilən çağırış </span>
+                                                    <span className="input-title">Əsaslandırma</span>
                                                     <Form.Label>
                                                         <Form.Control
                                                             placeholder="İşçinin ərizəsinə və təhsil müəssisəsi tərəfindən verilən çağırış"
@@ -3971,6 +3990,16 @@ function CreateOperation() {
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
+                                                    <span className="input-title">Əsaslandırma</span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Əmrin əsası daxil edin"
+                                                                      value={mainOfOrder || ''}
+                                                                      onChange={(e) => setMainOfOrder(e.target.value)}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşçinin soyadı, adı, atasının adı *</span>
                                                     <Select
@@ -4264,6 +4293,16 @@ function CreateOperation() {
                                     </Tab>
                                     <Tab eventKey="20" title="" disabled={tab !== "20"}>
                                         <Row>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Əsaslandırma</span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Əmrin əsası daxil edin"
+                                                                      value={mainOfOrder || ''}
+                                                                      onChange={(e) => setMainOfOrder(e.target.value)}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
                                                     <span
@@ -4863,6 +4902,16 @@ function CreateOperation() {
 */}
                                     <Tab eventKey="22" title="" disabled={tab !== "22"}>
                                         <Row>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Əsaslandırma</span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Əmrin əsası daxil edin"
+                                                                      value={mainOfOrder || ''}
+                                                                      onChange={(e) => setMainOfOrder(e.target.value)}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
                                                     <span
@@ -6239,7 +6288,7 @@ function CreateOperation() {
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Təlimə göndərilmə zərurəti </span>
+                                                    <span className="input-title">Əsaslandırma </span>
                                                     <Form.Label>
                                                         <Form.Control
                                                             placeholder="Təlimə göndərilmə zərurəti daxil edin"
