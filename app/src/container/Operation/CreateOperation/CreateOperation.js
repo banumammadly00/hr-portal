@@ -417,7 +417,6 @@ function CreateOperation() {
             },
         }).then((res) => {
                 setVacDraftMain(res.data.main);
-                console.log(vacDraftMain)
                 setVacDraftExp(res.data.experience);
             }
         );

@@ -63,7 +63,6 @@ function EmployeeSchedule() {
             },
         }).then((res) => {
             setDepartment(res.data);
-            //console.log(departmentArr)
         }).catch((error) => {
             setDepartment([])
         });

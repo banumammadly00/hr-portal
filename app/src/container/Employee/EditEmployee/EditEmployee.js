@@ -318,9 +318,11 @@ function EditEmployee() {
 
 
     const uploadImage = (event) => {
-        setPhoto('')
-        setPhoto(URL.createObjectURL(event.target.files[0]));
-        setUploadFile(event.target.files[0])
+        if (event.target.files.length !== 0) {
+            setPhoto('');
+            setPhoto(URL.createObjectURL(event.target.files[0]));
+            setUploadFile(event.target.files[0])
+        }
     }
 
     const removeImage = () => {
