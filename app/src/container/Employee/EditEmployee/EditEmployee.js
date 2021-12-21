@@ -4602,8 +4602,6 @@ function EditEmployee() {
                                                                 <input type="radio" name="prisoner"
                                                                        checked={!checkPrisoner}
                                                                        onChange={(e) => {
-                                                                           console.log(false)
-
                                                                            setCheckPrisoner(false)
                                                                        }}/>
                                                                 <span className="radio-mark"></span>
@@ -4718,6 +4716,9 @@ function EditEmployee() {
                                             <th>Tarixə görə</th>
                                             <th>Əsas məz.</th>
                                             <th>Staja görə</th>
+                                            <th>Kollektiv məz. görə</th>
+                                            <th>Uşağa görə</th>
+                                            <th>İş şərait. görə</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -4728,6 +4729,9 @@ function EditEmployee() {
                                                         <td>{item.startDate} - {item.endDate}</td>
                                                         <td>{item.main}</td>
                                                         <td>{item.experience}</td>
+                                                        <td>{item.collectiveAgreement}</td>
+                                                        <td>{item.children}</td>
+                                                        <td>{item.workCondition}</td>
                                                     </tr>
                                                 )
                                                 :
@@ -4742,8 +4746,6 @@ function EditEmployee() {
                                     </Table>
                                 </div>
                             </div>
-                            <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
-                                      click={(page) => getOperation(page)}/>
                         </Tab>
                         <Tab eventKey="salary" title="Əmək haqqı">
                             <div className="block">

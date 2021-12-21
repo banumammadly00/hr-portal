@@ -92,6 +92,9 @@ function SettingEdit() {
     const [selectedMaxGrade, setSelectedMaxGrade] = useState(null);
     const [evaluation, setEvaluation] = useState('');
 
+    const [selectedCity, setSelectedCity] = useState(null);
+    const [amount, setAmount] = useState('');
+
     const [active, setActive] = useState(false)
 
     const getCountry = () => {
@@ -912,6 +915,19 @@ function SettingEdit() {
         });
     }
 
+    const deleteDepartment = (id) => {
+        mainAxios({
+            method: 'delete',
+            url: '/departments/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            getDepartment()
+        });
+    }
+
     const getSubDepartments = () => {
         mainAxios({
             method: 'get',
@@ -943,18 +959,6 @@ function SettingEdit() {
         });
     }
 
-    const deleteDepartment = (id) => {
-        mainAxios({
-            method: 'delete',
-            url: '/departments/' + id,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-        }).then((res) => {
-            getDepartment()
-        });
-    }
 
     const sendEvaluation = () => {
         let data = {
@@ -973,6 +977,26 @@ function SettingEdit() {
         }).then((res) => {
         });
     }
+
+    const sendPayment = () => {
+        setActive(true);
+        let data = {
+            amount: amount !== '' ? parseFloat(amount) : null ,
+            cityId : selectedCity !== null ? selectedCity.id : null
+        }
+        mainAxios({
+            method: 'post',
+            url: '/payments',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            data: data
+        }).then((res) => {
+
+        });
+    }
+
 
 
     useEffect(() => {
@@ -2614,6 +2638,210 @@ function SettingEdit() {
 
                     }
                 </div>
+
+                <div className="block-inn">
+                    <Row>
+                        <Col xs={6}>
+                            <div className="block-title flex">
+                               Ezamiyyət ödənişi
+                            </div>
+                            <Dropdown autoClose="outside">
+                                <Dropdown.Toggle className={active ? 'active' : ''}>
+                                    Struktur vahidinin adı
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {
+                                        departmentArr ?
+                                            departmentArr.map((item, index) =>
+                                                <Dropdown.Item key={index}>
+                                                    {item.name}
+                                                    <button type="button" className="btn-transparent btn-delete"
+                                                            onClick={() => deleteDepartment(item.id)}>
+                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M6.70355 6.00312L11.8475 0.859214C12.046 0.667475 12.0515 0.351111 11.8598 0.152578C11.668 -0.0459554 11.3517 -0.0514604 11.1531 0.140279C11.149 0.144291 11.1449 0.14839 11.1408 0.152578L5.99688 5.29648L0.852968 0.152548C0.654435 -0.0391912 0.33807 -0.0336862 0.14633 0.164847C-0.0407242 0.358519 -0.0407242 0.665542 0.14633 0.859214L5.29024 6.00312L0.14633 11.147C-0.0487768 11.3422 -0.0487768 11.6585 0.14633 11.8537C0.341467 12.0487 0.657831 12.0487 0.852968 11.8537L5.99688 6.70976L11.1408 11.8537C11.3393 12.0454 11.6557 12.0399 11.8474 11.8414C12.0345 11.6477 12.0345 11.3407 11.8474 11.147L6.70355 6.00312Z"
+                                                                fill="#040647"/>
+                                                        </svg>
+                                                    </button>
+                                                </Dropdown.Item>
+                                            )
+                                            : null
+                                    }
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <div className="flex-end">
+                                <button type="button" className="btn-color"
+                                        onClick={() => setShowDepartment(true)}>
+                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M11.8346 6.83366H6.83464V11.8337H5.16797V6.83366H0.167969V5.16699H5.16797V0.166992H6.83464V5.16699H11.8346V6.83366Z"
+                                            fill="#3083DC"/>
+                                    </svg>
+                                    əlavə et
+                                </button>
+                            </div>
+                        </Col>
+                    </Row>
+                    {
+                        showDepartment ?
+                            <div>
+                                {
+                                    departmentArr.length > 0 ?
+                                        <div className="addition">
+                                            <Row className="flex-center">
+                                                <Col xs={6}>
+                                                    <Form.Group className="m-0">
+                                                        <Select
+                                                            placeholder="Struktur vahidinin adı  seç"
+                                                            value={selectedDepartment}
+                                                            onChange={(val) => {
+                                                                setSelectedDepartment(val);
+                                                                setShowSubDepartment(true)
+                                                            }}
+                                                            options={departmentOptions}
+                                                            isSearchable={departmentOptions ? departmentOptions.length > 5 ? true : false : false}
+                                                            styles={customStyles}
+                                                            getOptionLabel={(option) => (option.name)}
+                                                        />
+                                                    </Form.Group>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                        :
+                                        <div className="addition">
+                                            <Row className="flex-center">
+                                                <Col xs={3}>
+                                                    <Form.Group className="m-0">
+                                                        <Form.Label>
+                                                            <Form.Control
+                                                                value={department}
+                                                                placeholder=" Struktur vahidinin adı  daxil edin"
+                                                                onChange={(e => setDepartment(e.target.value))}/>
+                                                        </Form.Label>
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col xs={3}>
+                                                    <Form.Group className="m-0">
+                                                        <Form.Label>
+                                                            <Form.Control
+                                                                value={subDepartment}
+                                                                placeholder=" Struktur bölmənin adı  daxil edin"
+                                                                onChange={(e => setSubDepartment(e.target.value))}/>
+                                                        </Form.Label>
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col xs={4}>
+                                                    <ul className="btn-block list-unstyled m-0 flex-start">
+                                                        <li>
+                                                            <button type="button" className="btn-transparent"
+                                                                    onClick={() => sendDepartment()}>
+                                                                <svg width="16" height="12" viewBox="0 0 16 12"
+                                                                     fill="none"
+                                                                     xmlns="http://www.w3.org/2000/svg">
+                                                                    <path
+                                                                        d="M15.3696 0.327361C14.8557 -0.139829 14.0564 -0.103215 13.5867 0.413197L5.88442 8.89458L2.16332 5.11165C1.67212 4.61415 0.874137 4.60658 0.37791 5.0965C-0.11959 5.58515 -0.127168 6.38441 0.362755 6.88191L5.02072 11.6169C5.25937 11.8593 5.58259 11.9945 5.92097 11.9945C5.92854 11.9945 5.9374 11.9945 5.94497 11.9957C6.29347 11.9881 6.62178 11.8391 6.85535 11.5816L15.4554 2.11156C15.9239 1.59381 15.886 0.795825 15.3696 0.327361Z"
+                                                                        fill="#2ED06A"/>
+                                                                </svg>
+                                                                Yadda saxla
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                }
+                                {
+                                    showSubDepartment ?
+                                        <div className="addition">
+                                            <Row className="flex-center">
+                                                <Col xs={3}>
+                                                    <Form.Group className="m-0">
+                                                        <Form.Label>
+                                                            <Form.Control
+                                                                value={selectedDepartment !==null ? selectedDepartment.name : null}
+                                                                disabled={true}/>
+                                                        </Form.Label>
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col xs={3}>
+                                                    <Form.Group className="m-0">
+                                                        <Form.Label>
+                                                            <Form.Control
+                                                                value={subDepartment}
+                                                                placeholder=" Struktur bölmənin adı  daxil edin"
+                                                                onChange={(e => setSubDepartment(e.target.value))}/>
+                                                        </Form.Label>
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col xs={4}>
+                                                    <ul className="btn-block list-unstyled m-0 flex-start">
+                                                        <li>
+                                                            <button type="button" className="btn-transparent"
+                                                                    onClick={() => sendDepartment()}>
+                                                                <svg width="16" height="12" viewBox="0 0 16 12"
+                                                                     fill="none"
+                                                                     xmlns="http://www.w3.org/2000/svg">
+                                                                    <path
+                                                                        d="M15.3696 0.327361C14.8557 -0.139829 14.0564 -0.103215 13.5867 0.413197L5.88442 8.89458L2.16332 5.11165C1.67212 4.61415 0.874137 4.60658 0.37791 5.0965C-0.11959 5.58515 -0.127168 6.38441 0.362755 6.88191L5.02072 11.6169C5.25937 11.8593 5.58259 11.9945 5.92097 11.9945C5.92854 11.9945 5.9374 11.9945 5.94497 11.9957C6.29347 11.9881 6.62178 11.8391 6.85535 11.5816L15.4554 2.11156C15.9239 1.59381 15.886 0.795825 15.3696 0.327361Z"
+                                                                        fill="#2ED06A"/>
+                                                                </svg>
+                                                                Yadda saxla
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </Col>
+                                            </Row>
+                                        </div>
+
+                                        : null
+                                }
+                            </div>
+                            : null
+
+                    }
+                </div>
+
+
+                <div className="block-inn">
+                    <div className="row">
+                        <Col xs={3}>
+                            <div className="flex">
+                                <Form.Group className="form-group m-0 w-100">
+                                    <Select
+                                        placeholder="Şəhər seçin"
+                                        value={selectedCity}
+                                        onChange={setSelectedCity}
+                                        options={cityArr}
+                                        isSearchable={cityArr ? cityArr.length > 5 ? true : false : false}
+                                        styles={customStyles}
+                                        getOptionLabel={(option) => (option.name)}
+                                    />
+                                </Form.Group>
+                            </div>
+                        </Col>
+                        <Col xs={2}>
+                            <Form.Group className="form-group">
+                                <Form.Label>
+                                    <Form.Control
+                                        value={amount}
+                                        type="number"
+                                        placeholder="Qiymətləndirmə"
+                                        onChange={e => setAmount(e.target.value)}/>
+                                </Form.Label>
+                            </Form.Group>
+                        </Col>
+                        <Col xs={1}>
+                            <div className="btn-block">
+                                <button className="btn-green-border" onClick={()=> sendPayment()}>
+                                    Saxla
+                                </button>
+                            </div>
+                        </Col>
+                    </div>
+                </div>
+
                 <div className="block-inn">
                     <div className="row">
                         <Col xs={3}>

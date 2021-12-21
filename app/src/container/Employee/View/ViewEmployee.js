@@ -590,6 +590,9 @@ function ViewEmployee() {
                             </div>
                         </Tab>
                         <Tab eventKey="contact" title="Ünvan və əlaqə">
+{/*
+                            <ViewContact familyCondition = {familyCondition}/>
+*/}
                             <div className="block">
                                 <div className="flex view-top">
                                     <div className="upload-content flex-start">
@@ -1854,12 +1857,15 @@ function ViewEmployee() {
                         <Tab eventKey="vacation" title="Məzuniyyət">
                             <div className="block">
                                 <div className="table-striped">
-                                    <Table responsive>
+                                    <Table  responsive="sm">
                                         <thead>
                                         <tr>
                                             <th>Tarixə görə</th>
                                             <th>Əsas məz.</th>
                                             <th>Staja görə</th>
+                                            <th>Kollektiv məz. görə</th>
+                                            <th>Uşağa görə</th>
+                                            <th>İş şərait. görə</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -1870,12 +1876,16 @@ function ViewEmployee() {
                                                         <td>{item.startDate} - {item.endDate}</td>
                                                         <td>{item.main}</td>
                                                         <td>{item.experience}</td>
+                                                        <td>{item.collectiveAgreement}</td>
+                                                        <td>{item.children}</td>
+                                                        <td>{item.workCondition}</td>
                                                     </tr>
                                                 )
                                                 :
                                                 <tr>
                                                     <td colSpan={3}>
-                                                        <span className="text-center m-0">Məlumat yoxdur</span>
+                                                        <p className="text-center m-0">Məlumat
+                                                            yoxdur</p>
                                                     </td>
                                                 </tr>
                                         }
@@ -1883,8 +1893,6 @@ function ViewEmployee() {
                                     </Table>
                                 </div>
                             </div>
-                            <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
-                                      click={(page) => getOperation(page)}/>
                         </Tab>
                         <Tab eventKey="salary" title="Əmək haqqı">
                             <div className="block">

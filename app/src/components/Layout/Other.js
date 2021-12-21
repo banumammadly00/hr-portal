@@ -11,7 +11,7 @@ import EditStaff from "../../container/Staff/EditStaff/EditStaff";
 import ViewStaff from "../../container/Staff/ViewStaff/ViewStaff";
 import EmployeeSchedule from "../../container/Employee/EmployeeSchedule/EmployeeSchedule";
 import EmployeeCreate from "../../container/Employee/EmployeeCreate/EmployeeCreate";
-import ViewEmployee from "../../container/Employee/ViewEmployee/ViewEmployee";
+import ViewEmployee from "../../container/Employee/View/ViewEmployee";
 import EditEmployee from "../../container/Employee/EditEmployee/EditEmployee";
 import SalaryEmployee from "../../container/Employee/SalaryEmployee/SalaryEmployee";
 import CreateOperation from "../../container/Operation/CreateOperation/CreateOperation";
