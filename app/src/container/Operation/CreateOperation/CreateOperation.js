@@ -716,11 +716,8 @@ function CreateOperation() {
         let startD = startDay !== 0 ? parseFloat(startDay.getTime()) : 0;
         let endD = endDay !== 0 ? parseFloat(endDay.getTime()) : 0;
         if (endD > startD) {
-            console.log(endDay);
-            console.log(startDate)
             let total = Math.abs((endDay - startD) / (1000 * 3600 * 24));
-            console.log(total)
-            setBusinessTripPeriod(total)
+            setBusinessTripPeriod(total + 1)
         } else {
             setBusinessTripPeriod('')
         }
