@@ -47,8 +47,12 @@ const jobTimeOptions = [
 ]
 
 const vacationType = [
-    {value: 'MAIN', label: 'Main'},
-    {value: 'EXPERIENCE', label: 'Experience'},
+    {value: 'MAIN', label: 'Əsas məzuniyyət'},
+    {value: 'EXPERIENCE', label: 'Staja görə əlavə məz.'},
+    {value: 'CONDITIONAL', label: ' Əmək şəraitinə görə əlavə məz.'},
+    {value: 'AGREEMENT', label: 'Kollektiv müqaviləyə əsasən məz.'},
+    {value: 'CHILD', label: 'Uşağa görə'},
+    {value: 'DEBT', label: 'Borc'},
 ]
 
 function CreateOperation() {
@@ -3366,12 +3370,12 @@ function CreateOperation() {
                                                             <Table responsive>
                                                                 <thead>
                                                                 <tr>
-                                                                    <th>Tarixə görə</th>
+                                                                    <th>İş ili dövrü</th>
                                                                     <th>Əsas məz. {vacDraftMain !== '' ? `( - ${parseFloat(vacDraftMain)} )` : null}</th>
                                                                     <th>Staja görə {vacDraftExp !== '' ? `( - ${parseFloat(vacDraftExp)} )` : null}</th>
                                                                     <th>Kollektiv məz. görə</th>
                                                                     <th>Uşağa görə</th>
-                                                                    <th>İş şərait. görə</th>
+                                                                    <th>Əmək şərait. görə</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -3739,12 +3743,11 @@ function CreateOperation() {
                                                                             <Row>
                                                                                 <Col>
                                                                                     <Form.Group className="form-group">
-                                                                                        <span className="input-title">Tarixi seçin</span>
+                                                                                        <span className="input-title">İş ili dövrünü seçin</span>
                                                                                         <Form.Label>
                                                                                             <Select
-                                                                                                placeholder="Tarixi seçin"
+                                                                                                placeholder="İş ili dövrünü seçin"
                                                                                                 onChange={(val) => {
-                                                                                                    console.log(val)
                                                                                                     vacationArr[index].startDate = val.startDate;
                                                                                                     setVacationArr([...vacationArr], vacationArr)
                                                                                                 }}
@@ -3772,7 +3775,7 @@ function CreateOperation() {
                                                                                         <span className="input-title">Məzuniyyət növünü seçin</span>
                                                                                         <Form.Label>
                                                                                             <Select
-                                                                                                placeholder="Adı seçin"
+                                                                                                placeholder="Məzuniyyət növünü seçin"
                                                                                                 onChange={(val) => {
                                                                                                     vacationArr[index].vacationType = val.value;
                                                                                                     setVacationArr([...vacationArr], vacationArr)

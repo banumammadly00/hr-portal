@@ -1860,12 +1860,12 @@ function ViewEmployee() {
                                     <Table  responsive="sm">
                                         <thead>
                                         <tr>
-                                            <th>Tarixə görə</th>
+                                            <th>İş ili dövrü</th>
                                             <th>Əsas məz.</th>
                                             <th>Staja görə</th>
                                             <th>Kollektiv məz. görə</th>
                                             <th>Uşağa görə</th>
-                                            <th>İş şərait. görə</th>
+                                            <th>Əmək şərait. görə</th>
                                         </tr>
                                         </thead>
                                         <tbody>
