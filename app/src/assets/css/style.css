@@ -1718,6 +1718,18 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+.date-title {
+    display: flex;
+    align-items: flex-start;
+    color: rgba(24, 24, 24, 0.9);
+    font-size: 16px;
+    margin-right: 40px;
+}
+
+.date-title span {
+    font-weight: 500;
+}
+
 @media only screen and (min-width: 1600px){
     .export-block {
         width: 80%;

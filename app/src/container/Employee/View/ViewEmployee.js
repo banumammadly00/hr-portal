@@ -1866,6 +1866,7 @@ function ViewEmployee() {
                                             <th>Kollektiv məz. görə</th>
                                             <th>Uşağa görə</th>
                                             <th>Əmək şərait. görə</th>
+                                            <th>Borca  görə</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -1879,6 +1880,7 @@ function ViewEmployee() {
                                                         <td>{item.collectiveAgreement}</td>
                                                         <td>{item.children}</td>
                                                         <td>{item.workCondition}</td>
+                                                        <td>{item.debt}</td>
                                                     </tr>
                                                 )
                                                 :
