@@ -88,6 +88,7 @@ function CreateOperation() {
     const [selectedCity, setSelectedCity] = useState(null);
     const [paymentAmount, setPaymentAmount] = useState(null);
     const [nonWorkDayArr, setNonWorkDayArr] = useState([]);
+    const [nonWorkDay, setNonWorkDay] = useState([]);
     const [businessTripCheck, setBusinessTripCheck] = useState(true);
     const [businessPaymentCheck, setBusinessPaymentCheck] = useState(true);
     const [changeTempo, setChangeTempo] = useState(false);
@@ -805,7 +806,8 @@ function CreateOperation() {
                 }
             }).then((res) => {
                     setNonWorkDayArr(res.data);
-                    getBusinessTripNumber(res.data, endDay)
+                    setNonWorkDay(res.data.length)
+                    getBusinessTripNumber(res.data.length, endDay)
                 }
             );
         }
@@ -821,11 +823,12 @@ function CreateOperation() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             params: {
-                number: nonWork.length,
+                number: nonWork,
                 to: moment(endDay).format('YYYY-MM-DD')
             }
         }).then((res) => {
                 setJobDay(res.data);
+                setNonWorkDay(nonWork)
             }
         );
     }
@@ -7483,7 +7486,9 @@ function CreateOperation() {
                                                                     <input type="radio" name="business"
                                                                            checked={!businessTripCheck}
                                                                            onChange={(e) => {
-                                                                               setBusinessTripCheck(false)
+                                                                               setBusinessTripCheck(false);
+                                                                               let number = nonWorkDay !== 0 ? nonWorkDay - 1 : 0
+                                                                               getBusinessTripNumber(number, endDate)
                                                                            }}/>
                                                                     <span className="radio-mark"></span>
                                                                 </label>
@@ -7519,7 +7524,8 @@ function CreateOperation() {
                                                                            checked={businessTripCheck}
                                                                            onChange={(e) => {
                                                                                setBusinessTripCheck(true);
-
+                                                                               let number = nonWorkDay < 2 ? nonWorkDay + 1 : 2
+                                                                               getBusinessTripNumber(number, endDate)
                                                                            }}/>
                                                                     <span className="radio-mark"></span>
                                                                 </label>
@@ -7543,6 +7549,8 @@ function CreateOperation() {
                                                                                        checked={!businessPaymentCheck}
                                                                                        onChange={(e) => {
                                                                                            setBusinessPaymentCheck(false);
+                                                                                           let number = nonWorkDay !== 0 ? nonWorkDay - 1 : 0
+                                                                                           getBusinessTripNumber(number, endDate)
                                                                                        }}/>
                                                                                 <span className="radio-mark"></span>
                                                                             </label>
@@ -7577,7 +7585,9 @@ function CreateOperation() {
                                                                                 <input type="radio" name="businessTrip"
                                                                                        checked={businessPaymentCheck}
                                                                                        onChange={(e) => {
-                                                                                           setBusinessPaymentCheck(true)
+                                                                                           setBusinessPaymentCheck(true);
+                                                                                           let number = nonWorkDay < 2 ? nonWorkDay + 1 : 2
+                                                                                           getBusinessTripNumber(number, endDate)
                                                                                        }}/>
                                                                                 <span className="radio-mark"></span>
                                                                             </label>
