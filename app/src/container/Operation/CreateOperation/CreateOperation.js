@@ -138,6 +138,9 @@ function CreateOperation() {
     const [vacDraftMain, setVacDraftMain] = useState('');
     const [vacDraftExp, setVacDraftExp] = useState('');
     const [amount, setAmount] = useState('');
+    const [selectedVacOp, setSelectedVacOp] = useState(null);
+    const [vacOperationOption, setVacOperationOption] = useState([]);
+    const [debtCheck, setDebtCheck] = useState(false);
 
     const [vacationArr, setVacationArr] = useState([{
         vacationType: null,
@@ -323,7 +326,6 @@ function CreateOperation() {
                 setEmployeeIndividualAdd(salary.individualAddition);
                 setEmployeeConditionalAdd(salary.conditionalAddition);
             }
-
             if (tab == '12') {
                 getVacancyData(data.vacancyId)
             }
@@ -518,6 +520,25 @@ function CreateOperation() {
         );
     }
 
+    const getVacationOperation = (id) => {
+        mainAxios({
+            method: 'get',
+            url: 'vacations/operations/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            params: {
+                operationType: operationType,
+            }
+        }).then((res) => {
+                console.log(res)
+                setVacOperationOption(res.data)
+            }
+        );
+
+    }
+
     const resetData = () => {
         setSelectedPosition(null);
         setMainOfOrder('');
@@ -676,9 +697,23 @@ function CreateOperation() {
             "date": joinDate !== null ? moment(joinDate).format("YYYY-MM-DD") : null,
             "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
             "gradeId": selectedGrade !== null ? selectedGrade.id : null,
-            "percent": amount !=='' ? parseFloat(amount) : null,
+            "percent": amount !== '' ? parseFloat(amount) : null,
             "subGradeId": selectedSubGrade !== null ? selectedSubGrade.id : null,
             "to": endDate !== null ? moment(endDate).format("YYYY-MM-DD") : null
+        };
+
+        let partialVacation = {
+            "day": vacationDay !== '' ? vacationDay : null,
+            "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
+            "startJob": jobDay !== '' ? jobDay : null,
+            "to": getEndDate !== '' ? getEndDate : null
+        };
+
+        let vacationDisable = {
+            "callBackDate": joinDate !== null ? moment(joinDate).format("YYYY-MM-DD") : null,
+            "callBackReason": callBackReason !== '' ? callBackReason : null,
+            "debt": !debtCheck,
+            "operationId": selectedVacOp !== null ? selectedVacOp.id : null
         };
 
         let data = {
@@ -709,6 +744,8 @@ function CreateOperation() {
             "changeWorkMode": tab == '12' ? changeWorkMode : null,
             "temporaryPass": tab == '14' ? temporaryPass : null,
             "temporaryAssignment": tab == '15' ? temporaryAssignment : null,
+            "partialVacation": tab == '21' ? partialVacation : null,
+            "vacationDisable": tab == '24' ? vacationDisable : null,
         }
 
         mainAxios({
@@ -873,7 +910,7 @@ function CreateOperation() {
                                                 resetData()
                                                 setOperationType(val.type)
                                                 setSave(true);
-                                                setTab(val.orderNo)
+                                                setTab(val.orderNo);
                                             }}
                                             options={operationTypeArr}
                                             isSearchable={operationTypeArr ? operationTypeArr.length > 5 ? true : false : false}
@@ -2073,8 +2110,6 @@ function CreateOperation() {
                                             </Row>
                                         </div>
                                     </Tab>
-
-
                                     <Tab eventKey="11" title="" disabled={tab !== "11"}>
                                         <Row>
                                             <Col xs={4}>
@@ -2298,8 +2333,6 @@ function CreateOperation() {
                                             </Col>
                                         </Row>
                                     </Tab>
-
-
                                     <Tab eventKey="12" title="" disabled={tab !== "12"}>
                                         <Row>
                                             <Col xs={6}>
@@ -2437,8 +2470,6 @@ function CreateOperation() {
                                             </Col>
                                         </Row>
                                     </Tab>
-
-
                                     <Tab eventKey="13" title="" disabled={tab !== "13"}>
                                         <div className="block-inn">
                                             <Row>
@@ -2774,8 +2805,6 @@ function CreateOperation() {
                                             </Row>
                                         </div>*/}
                                     </Tab>
-
-
                                     <Tab eventKey="14" title="" disabled={tab !== "14"}>
                                         <Row>
                                             <Col xs={6}>
@@ -2923,6 +2952,15 @@ function CreateOperation() {
                                                             </svg>
                                                         </Button>
                                                     </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['temporaryPass.date'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['temporaryPass.date']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={4}>
@@ -2988,6 +3026,15 @@ function CreateOperation() {
                                                             </svg>
                                                         </Button>
                                                     </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['temporaryPass.from'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['temporaryPass.from']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={4}>
@@ -3054,6 +3101,15 @@ function CreateOperation() {
                                                             </svg>
                                                         </Button>
                                                     </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['temporaryPass.to'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['temporaryPass.to']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={6}>
@@ -3097,10 +3153,8 @@ function CreateOperation() {
                                                     />
                                                 </Form.Group>
                                             </Col>
-
                                         </Row>
                                     </Tab>
-
                                     <Tab eventKey="15" title="" disabled={tab !== "15"}>
                                         <Row>
                                             <Col xs={6}>
@@ -3123,53 +3177,53 @@ function CreateOperation() {
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={6}>
-                                               <Form.Group>
-                                                   <div className="input-title flex-center">
-                                                       <div className="check-block">
-                                                           <label className="check-button">
-                                                               <input type="checkbox"
-                                                                      name="checkForeign"
-                                                                      checked={changeTempo}
-                                                                      onChange={(e) => {
-                                                                          setChangeTempo(e.target.checked)
-                                                                      }}/>
-                                                               <span className="checkmark"></span>
-                                                           </label>
-                                                       </div>
-                                                       <span
-                                                           className="input-title m-0">{changeTempo ? 'Əvəz edilən işçi' : '  Boş ştata həvalə'}</span>
-                                                   </div>
-                                                   {
-                                                       changeTempo ?
-                                                           <Select
-                                                               placeholder="Əvəz edilən işçini seç"
-                                                               value={selectedAssignEmpId}
-                                                               onChange={(val) => {
-                                                                   let id = val.id;
-                                                                   setSelectedAssignEmpId(val);
-                                                                   getAssignEmpDetail(id)
-                                                               }}
-                                                               isSearchable={employee ? employee.length > 5 ? true : false : false}
-                                                               options={employee}
-                                                               getOptionLabel={(option) => (option.name)}
-                                                               styles={customStyles}
-                                                           />
-                                                           :
-                                                           <Select
-                                                               placeholder="Boş ştatın nömrəsini seç"
-                                                               value={selectedPosition}
-                                                               onChange={(val) => {
-                                                                   setSelectedPosition(val);
-                                                                   getVacancyData(val.id);
-                                                                   setVacancyId(val.id);
-                                                               }}
-                                                               isSearchable={vacancy ? vacancy.length > 5 ? true : false : false}
-                                                               options={vacancy}
-                                                               getOptionLabel={(option) => `${option.id}. ${option.position} - ${option.department}`}
-                                                               styles={customStyles}
-                                                           />
-                                                   }
-                                               </Form.Group>
+                                                <Form.Group>
+                                                    <div className="input-title flex-center">
+                                                        <div className="check-block">
+                                                            <label className="check-button">
+                                                                <input type="checkbox"
+                                                                       name="checkForeign"
+                                                                       checked={changeTempo}
+                                                                       onChange={(e) => {
+                                                                           setChangeTempo(e.target.checked)
+                                                                       }}/>
+                                                                <span className="checkmark"></span>
+                                                            </label>
+                                                        </div>
+                                                        <span
+                                                            className="input-title m-0">{changeTempo ? 'Əvəz edilən işçi' : '  Boş ştata həvalə'}</span>
+                                                    </div>
+                                                    {
+                                                        changeTempo ?
+                                                            <Select
+                                                                placeholder="Əvəz edilən işçini seç"
+                                                                value={selectedAssignEmpId}
+                                                                onChange={(val) => {
+                                                                    let id = val.id;
+                                                                    setSelectedAssignEmpId(val);
+                                                                    getAssignEmpDetail(id)
+                                                                }}
+                                                                isSearchable={employee ? employee.length > 5 ? true : false : false}
+                                                                options={employee}
+                                                                getOptionLabel={(option) => (option.name)}
+                                                                styles={customStyles}
+                                                            />
+                                                            :
+                                                            <Select
+                                                                placeholder="Boş ştatın nömrəsini seç"
+                                                                value={selectedPosition}
+                                                                onChange={(val) => {
+                                                                    setSelectedPosition(val);
+                                                                    getVacancyData(val.id);
+                                                                    setVacancyId(val.id);
+                                                                }}
+                                                                isSearchable={vacancy ? vacancy.length > 5 ? true : false : false}
+                                                                options={vacancy}
+                                                                getOptionLabel={(option) => `${option.id}. ${option.position} - ${option.department}`}
+                                                                styles={customStyles}
+                                                            />
+                                                    }
+                                                </Form.Group>
                                             </Col>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
@@ -3454,7 +3508,7 @@ function CreateOperation() {
                                                     <span className="input-title">Həvalə olunan vəzifə</span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Həvalə olunan vəzifə"
-                                                                      value={changeTempo ?  assignPosition : vacancyPosition}
+                                                                      value={changeTempo ? assignPosition : vacancyPosition}
                                                                       disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>
@@ -5176,7 +5230,6 @@ function CreateOperation() {
                                     </Tab>
 
 
-                                    {/*
                                     <Tab eventKey="21" title="" disabled={tab !== "21"}>
                                         <Row>
                                             <Col xs={6}>
@@ -5188,13 +5241,14 @@ function CreateOperation() {
                                                         value={selectedStaff}
                                                         onChange={(val) => {
                                                             let id = val.id
-                                                            setEmployeeId(id)
-                                                            getEmployee(id)
+                                                            setEmployeeId(id);
+                                                            getEmployeeDetail(id)
                                                             setSelectedStaff(val);
+                                                            getVacation(id)
                                                         }}
-                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
-                                                        options={staff}
-                                                        getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
+                                                        isSearchable={employee ? employee.length > 5 ? true : false : false}
+                                                        options={employee}
+                                                        getOptionLabel={(option) => (option.name)}
                                                         styles={customStyles}
                                                     />
                                                 </Form.Group>
@@ -5226,7 +5280,7 @@ function CreateOperation() {
                                                     <span className="input-title">Vəzifəsi </span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Vəzifəsi"
-                                                                      value={vacancyName || ''} disabled={true}/>
+                                                                      value={position || ''} disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
@@ -5235,10 +5289,23 @@ function CreateOperation() {
                                                     <span className="input-title">Məzuniyyət müddəti</span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Məzuniyyət müddəti "
-                                                                      value={dayInEvent}
+                                                                      value={vacationDay}
                                                                       type="number"
-                                                                      onChange={(e) => setDayInEvent(e.target.value)}
+                                                                      onChange={(e) => {
+                                                                          setVacationDay(e.target.value);
+                                                                          let day = e.target.value;
+                                                                          getCalculatedDate(day, startDate)
+                                                                      }}
                                                         />
+                                                        <div className="validation-block flex-start">
+                                                            {
+
+                                                                errors['partialVacation.day'] !== '' ?
+                                                                    <span
+                                                                        className="text-validation">{errors['partialVacation.day']}</span>
+                                                                    : null
+                                                            }
+                                                        </div>
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
@@ -5252,10 +5319,11 @@ function CreateOperation() {
                                                                     showMonthDropdown
                                                                     showYearDropdown
                                                                     dropdownMode="select"
-                                                                    selectsStart
-                                                                    startDate={startDate}
-                                                                    endDate={endDate}
-                                                                    onChange={(date) => setStartDate(date)}/>
+                                                                    onChange={(date) => {
+                                                                        setStartDate(date);
+                                                                        let setDate = date !== null ? date : 0;
+                                                                        getCalculatedDate(vacationDay, setDate)
+                                                                    }}/>
                                                         <Button className="btn-transparent">
                                                             <svg width="18" height="18"
                                                                  viewBox="0 0 18 18" fill="none"
@@ -5304,24 +5372,26 @@ function CreateOperation() {
                                                             </svg>
                                                         </Button>
                                                     </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['partialVacation.from'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['partialVacation.from']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">Məzuniyyətin bitdiyi tarix</span>
                                                     <Form.Label className="relative m-0">
-                                                        <DatePicker
-                                                            dateFormat="dd-MM-yyyy"
-                                                            placeholderText="DD-MM-YYYY"
-                                                            showMonthDropdown
-                                                            showYearDropdown
-                                                            dropdownMode="select"
-                                                            selected={endDate}
-                                                            onChange={(date) => setEndDate(date)}
-                                                            selectsEnd
-                                                            startDate={startDate}
-                                                            endDate={endDate}
-                                                            minDate={startDate}/>
+                                                        <Form.Control placeholder="YYYY-MM-DD"
+                                                                      type="text"
+                                                                      disabled={true}
+                                                                      value={getEndDate || ''}
+                                                        />
                                                         <Button className="btn-transparent">
                                                             <svg width="18" height="18"
                                                                  viewBox="0 0 18 18" fill="none"
@@ -5370,19 +5440,26 @@ function CreateOperation() {
                                                             </svg>
                                                         </Button>
                                                     </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['partialVacation.to'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['partialVacation.to']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">İşə başlama tarixi </span>
                                                     <Form.Label className="relative m-0">
-                                                        <DatePicker selected={joinDate}
-                                                                    dateFormat="dd-MM-yyyy"
-                                                                    placeholderText="DD-MM-YYYY"
-                                                                    showMonthDropdown
-                                                                    showYearDropdown
-                                                                    dropdownMode="select"
-                                                                    onChange={(date) => setJoinDate(date)}/>
+                                                        <Form.Control placeholder="YYYY-MM-DD"
+                                                                      type="text"
+                                                                      disabled={true}
+                                                                      value={jobDay || ''}
+                                                        />
                                                         <Button className="btn-transparent">
                                                             <svg width="18" height="18"
                                                                  viewBox="0 0 18 18" fill="none"
@@ -5431,11 +5508,20 @@ function CreateOperation() {
                                                             </svg>
                                                         </Button>
                                                     </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['partialVacation.startJob'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['partialVacation.startJob']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
                                         </Row>
                                     </Tab>
-*/}
+
 
                                     <Tab eventKey="22" title="" disabled={tab !== "22"}>
                                         <Row>
@@ -5505,7 +5591,7 @@ function CreateOperation() {
                                             <Col xs={4}>
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">Ödənişli istirahət müddəti</span>
-                                                    <Form.Control placeholder="Məzuniyyət müddəti "
+                                                    <Form.Control placeholder="Ödənişli istirahət müddəti "
                                                                   value={vacationDay}
                                                                   type="number"
                                                                   onChange={(e) => {
@@ -5768,7 +5854,7 @@ function CreateOperation() {
                                     </Tab>
 
 
-                                    {/*     <Tab eventKey="23" title="" disabled={tab !== "23"}>
+                                    {/* <Tab eventKey="23" title="" disabled={tab !== "23"}>
                                         <Row>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
@@ -6170,7 +6256,7 @@ function CreateOperation() {
                                                 </Form.Group>
                                             </Col>
                                         </Row>
-                                    </Tab>
+                                    </Tab>*/}
 
                                     <Tab eventKey="24" title="" disabled={tab !== "24"}>
                                         <Row>
@@ -6183,18 +6269,50 @@ function CreateOperation() {
                                                         value={selectedStaff}
                                                         onChange={(val) => {
                                                             let id = val.id
-                                                            setEmployeeId(id)
-                                                            getEmployee(id)
+                                                            setEmployeeId(id);
+                                                            setShowVacation(true)
+                                                            getEmployeeDetail(id)
                                                             setSelectedStaff(val);
+                                                            getVacation(id);
+                                                            getVacationOperation(id)
                                                         }}
-                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
-                                                        options={staff}
-                                                        getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
+                                                        isSearchable={employee ? employee.length > 5 ? true : false : false}
+                                                        options={employee}
+                                                        getOptionLabel={(option) => (option.name)}
                                                         styles={customStyles}
                                                     />
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={6}>
+                                            {
+                                                showVacation ?
+                                                    <Col xs={6}>
+                                                        <Form.Group className="form-group">
+                                                            <span className="input-title">Geri çağırıldığı məz. əmri</span>
+                                                            <Select
+                                                                placeholder="Geri çağırıldığı məz. əmri"
+                                                                value={selectedVacOp}
+                                                                onChange={(val) => {
+                                                                    setSelectedVacOp(val)
+                                                                }}
+                                                                isSearchable={vacOperationOption ? vacOperationOption.length > 5 ? true : false : false}
+                                                                options={vacOperationOption}
+                                                                getOptionLabel={(option) => (option.id)}
+                                                                styles={customStyles}
+                                                            />
+                                                            <div className="validation-block flex-start">
+                                                                {
+
+                                                                    errors['vacationDisableRequestDto.operationId'] !== '' ?
+                                                                        <span
+                                                                            className="text-validation">{errors['vacationDisableRequestDto.operationId']}</span>
+                                                                        : null
+                                                                }
+                                                            </div>
+                                                        </Form.Group>
+                                                    </Col>
+                                                    : null
+                                            }
+                                            <Col xs={showVacation ? 4 : 6}>
                                                 <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşlədiyi struktur bölmə </span>
@@ -6205,7 +6323,7 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={4}>
+                                            <Col xs={showVacation ? 4 : 6}>
                                                 <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşlədiyi alt struktur bölmə </span>
@@ -6216,7 +6334,7 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={4}>
+                                            <Col xs={showVacation ? 4 : 6}>
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">Vəzifəsi </span>
                                                     <Form.Label>
@@ -6225,21 +6343,19 @@ function CreateOperation() {
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={4}>
+                                            <Col xs={6}>
                                                 <Form.Group className="form-group">
                                                     <span
-                                                        className="input-title">Məzuniyyətin başladığı tarix</span>
+                                                        className="input-title">Geri çağırılma tarixi</span>
                                                     <Form.Label className="relative m-0">
-                                                        <DatePicker selected={startDate}
+                                                        <DatePicker selected={joinDate}
                                                                     dateFormat="dd-MM-yyyy"
                                                                     placeholderText="DD-MM-YYYY"
                                                                     showMonthDropdown
                                                                     showYearDropdown
                                                                     dropdownMode="select"
                                                                     selectsStart
-                                                                    startDate={startDate}
-                                                                    endDate={endDate}
-                                                                    onChange={(date) => setStartDate(date)}/>
+                                                                    onChange={(date) => setJoinDate(date)}/>
                                                         <Button className="btn-transparent">
                                                             <svg width="18" height="18"
                                                                  viewBox="0 0 18 18" fill="none"
@@ -6288,137 +6404,18 @@ function CreateOperation() {
                                                             </svg>
                                                         </Button>
                                                     </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['vacationDisableRequestDto.callBackDate'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['vacationDisableRequestDto.callBackDate']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={4}>
-                                                <Form.Group className="form-group">
-                                                    <span
-                                                        className="input-title">Məzuniyyətin bitdiyi tarix</span>
-                                                    <Form.Label className="relative m-0">
-                                                        <DatePicker
-                                                            dateFormat="dd-MM-yyyy"
-                                                            placeholderText="DD-MM-YYYY"
-                                                            showMonthDropdown
-                                                            showYearDropdown
-                                                            dropdownMode="select"
-                                                            selected={endDate}
-                                                            onChange={(date) => setEndDate(date)}
-                                                            selectsEnd
-                                                            startDate={startDate}
-                                                            endDate={endDate}
-                                                            minDate={startDate}/>
-                                                        <Button className="btn-transparent">
-                                                            <svg width="18" height="18"
-                                                                 viewBox="0 0 18 18" fill="none"
-                                                                 xmlns="http://www.w3.org/2000/svg">
-                                                                <g opacity="0.8"
-                                                                   clipPath="url(#clip0)">
-                                                                    <path
-                                                                        d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
-                                                                        fill="#181818"/>
-                                                                </g>
-                                                                <defs>
-                                                                    <clipPath id="clip0">
-                                                                        <rect width="17.399"
-                                                                              height="18"
-                                                                              fill="white"
-                                                                              transform="translate(0.449219)"/>
-                                                                    </clipPath>
-                                                                </defs>
-                                                            </svg>
-                                                        </Button>
-                                                    </Form.Label>
-                                                </Form.Group>
-                                            </Col>
-                                            <Col xs={4}>
-                                                <Form.Group className="form-group">
-                                                    <span className="input-title">Geri çağırılma tarixi </span>
-                                                    <Form.Label className="relative m-0">
-                                                        <DatePicker selected={callBackDate}
-                                                                    dateFormat="dd-MM-yyyy"
-                                                                    placeholderText="DD-MM-YYYY"
-                                                                    showMonthDropdown
-                                                                    showYearDropdown
-                                                                    dropdownMode="select"
-                                                                    onChange={(date) => setCallBackDate(date)}/>
-                                                        <Button className="btn-transparent">
-                                                            <svg width="18" height="18"
-                                                                 viewBox="0 0 18 18" fill="none"
-                                                                 xmlns="http://www.w3.org/2000/svg">
-                                                                <g opacity="0.8"
-                                                                   clipPath="url(#clip0)">
-                                                                    <path
-                                                                        d="M5.34327 8.75391H4.25583C3.97432 8.75391 3.74609 8.99002 3.74609 9.28125C3.74609 9.57248 3.97432 9.80859 4.25583 9.80859H5.34327C5.62478 9.80859 5.853 9.57248 5.853 9.28125C5.853 8.99002 5.62478 8.75391 5.34327 8.75391Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M5.34327 11.0039H4.25583C3.97432 11.0039 3.74609 11.24 3.74609 11.5312C3.74609 11.8225 3.97432 12.0586 4.25583 12.0586H5.34327C5.62478 12.0586 5.853 11.8225 5.853 11.5312C5.853 11.24 5.62478 11.0039 5.34327 11.0039Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M5.34327 13.2539H4.25583C3.97432 13.2539 3.74609 13.49 3.74609 13.7812C3.74609 14.0725 3.97432 14.3086 4.25583 14.3086H5.34327C5.62478 14.3086 5.853 14.0725 5.853 13.7812C5.853 13.49 5.62478 13.2539 5.34327 13.2539Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M9.69092 8.75391H8.60349C8.32198 8.75391 8.09375 8.99002 8.09375 9.28125C8.09375 9.57248 8.32198 9.80859 8.60349 9.80859H9.69092C9.97243 9.80859 10.2007 9.57248 10.2007 9.28125C10.2007 8.99002 9.97243 8.75391 9.69092 8.75391Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M9.69092 11.0039H8.60349C8.32198 11.0039 8.09375 11.24 8.09375 11.5312C8.09375 11.8225 8.32198 12.0586 8.60349 12.0586H9.69092C9.97243 12.0586 10.2007 11.8225 10.2007 11.5312C10.2007 11.24 9.97243 11.0039 9.69092 11.0039Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M9.69092 13.2539H8.60349C8.32198 13.2539 8.09375 13.49 8.09375 13.7812C8.09375 14.0725 8.32198 14.3086 8.60349 14.3086H9.69092C9.97243 14.3086 10.2007 14.0725 10.2007 13.7812C10.2007 13.49 9.97243 13.2539 9.69092 13.2539Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M14.0425 8.75391H12.955C12.6735 8.75391 12.4453 8.99002 12.4453 9.28125C12.4453 9.57248 12.6735 9.80859 12.955 9.80859H14.0425C14.324 9.80859 14.5522 9.57248 14.5522 9.28125C14.5522 8.99002 14.324 8.75391 14.0425 8.75391Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M14.0425 11.0039H12.955C12.6735 11.0039 12.4453 11.24 12.4453 11.5312C12.4453 11.8225 12.6735 12.0586 12.955 12.0586H14.0425C14.324 12.0586 14.5522 11.8225 14.5522 11.5312C14.5522 11.24 14.324 11.0039 14.0425 11.0039Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M14.0425 13.2539H12.955C12.6735 13.2539 12.4453 13.49 12.4453 13.7812C12.4453 14.0725 12.6735 14.3086 12.955 14.3086H14.0425C14.324 14.3086 14.5522 14.0725 14.5522 13.7812C14.5522 13.49 14.324 13.2539 14.0425 13.2539Z"
-                                                                        fill="#181818"/>
-                                                                    <path
-                                                                        d="M16.319 2.28516H15.0956V1.40625C15.0956 1.11502 14.8674 0.878906 14.5859 0.878906C14.3044 0.878906 14.0762 1.11502 14.0762 1.40625V2.28516H9.65845V1.40625C9.65845 1.11502 9.43023 0.878906 9.14872 0.878906C8.86721 0.878906 8.63898 1.11502 8.63898 1.40625V2.28516H4.22127V1.40625C4.22127 1.11502 3.99304 0.878906 3.71153 0.878906C3.43002 0.878906 3.20179 1.11502 3.20179 1.40625V2.28516H1.97843C1.13522 2.28516 0.449219 2.99486 0.449219 3.86719V15.5391C0.449219 16.4114 1.13522 17.1211 1.97843 17.1211H16.319C17.1622 17.1211 17.8482 16.4114 17.8482 15.5391C17.8482 15.1987 17.8482 4.16338 17.8482 3.86719C17.8482 2.99486 17.1622 2.28516 16.319 2.28516ZM1.46869 3.86719C1.46869 3.57641 1.69736 3.33984 1.97843 3.33984H3.20179V4.21875C3.20179 4.50998 3.43002 4.74609 3.71153 4.74609C3.99304 4.74609 4.22127 4.50998 4.22127 4.21875V3.33984H8.63898V4.21875C8.63898 4.50998 8.86721 4.74609 9.14872 4.74609C9.43023 4.74609 9.65845 4.50998 9.65845 4.21875V3.33984H14.0762V4.21875C14.0762 4.50998 14.3044 4.74609 14.5859 4.74609C14.8674 4.74609 15.0956 4.50998 15.0956 4.21875V3.33984H16.319C16.6001 3.33984 16.8287 3.57641 16.8287 3.86719V5.94141H1.46869V3.86719ZM16.319 16.0664H1.97843C1.69736 16.0664 1.46869 15.8298 1.46869 15.5391V6.99609H16.8287V15.5391C16.8287 15.8298 16.6001 16.0664 16.319 16.0664Z"
-                                                                        fill="#181818"/>
-                                                                </g>
-                                                                <defs>
-                                                                    <clipPath id="clip0">
-                                                                        <rect width="17.399"
-                                                                              height="18"
-                                                                              fill="white"
-                                                                              transform="translate(0.449219)"/>
-                                                                    </clipPath>
-                                                                </defs>
-                                                            </svg>
-                                                        </Button>
-                                                    </Form.Label>
-                                                </Form.Group>
-                                            </Col>
-                                            <Col xs={4}>
+                                            <Col xs={6}>
                                                 <Form.Group className="form-group">
                                                     <span className="input-title">Geri çağırılma səbəbi</span>
                                                     <Form.Label>
@@ -6427,10 +6424,34 @@ function CreateOperation() {
                                                                       onChange={(e) => setCallBackReason(e.target.value)}
                                                         />
                                                     </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['vacationDisableRequestDto.callBackReason'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['vacationDisableRequestDto.callBackReason']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
                                                 </Form.Group>
                                             </Col>
+                                            <Col xs={4}>
+                                                <div className="block-title flex-center">
+                                                    <div className="check-block">
+                                                        <label className="check-button">
+                                                            <input type="checkbox"
+                                                                   checked={debtCheck}
+                                                                   onChange={(e) => {
+                                                                       setDebtCheck(e.target.checked);
+                                                                   }}/>
+                                                            <span className="checkmark"></span>
+                                                        </label>
+                                                    </div>
+                                                    Məzuniyyətdən geri çağırılmanı pul ilə ödə
+                                                </div>
+                                            </Col>
                                         </Row>
-                                    </Tab>*/}
+                                    </Tab>
 
                                     {/*     <Tab eventKey="25" title="" disabled={tab !== "25"}>
                                         <Row>
