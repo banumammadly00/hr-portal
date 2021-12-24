@@ -183,7 +183,6 @@ function CreateOperation() {
     const [vacancyNames, setVacancyNames] = useState('');
 
     const [positionId, setPositionId] = useState('');
-    const [employeeIds, setEmployeeIds] = useState([]);
     const [documentId, setDocumentId] = useState('');
     const [salary, setSalary] = useState('');
     const [vacancyName, setVacancyName] = useState('');
@@ -743,6 +742,11 @@ function CreateOperation() {
             "to": getEndDate !== '' ? getEndDate : null
         };
 
+        let reward = {
+            "amount": amount !== '' ? parseFloat(amount) : null,
+            employeeIds: employeeIds
+        };
+
         let data = {
             "header": {
                 "department": "string",
@@ -777,6 +781,7 @@ function CreateOperation() {
             "discipline": tab == '47' ? discipline : null,
             "financialHelp": tab == '33' ? financialHelp : null,
             "selection": tab == '36' ? election : null,
+            "reward": tab == '34' ? reward : null,
         }
 
         mainAxios({
@@ -8491,8 +8496,6 @@ function CreateOperation() {
                                             </Col>
                                         </Row>
                                     </Tab>
-
-                                    {/*
                                     <Tab eventKey="34" title="" disabled={tab !== "34"}>
                                         <Row>
                                             <Col xs={6}>
@@ -8507,71 +8510,142 @@ function CreateOperation() {
                                             </Col>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
-                                                    <span
-                                                        className="input-title">Mükafatlandırılan işçinin soyadı, adı, atasının adı *</span>
-                                                    <Select
-                                                        placeholder="İşçinin adı, soyadı, atasının adı"
-                                                        value={selectedStaff}
-                                                        onChange={(val) => {
-                                                            let id = val.id
-                                                            setEmployeeId(id)
-                                                            getEmployee(id)
-                                                            setSelectedStaff(val);
-                                                        }}
-                                                        isSearchable={staff ? staff.length > 5 ? true : false : false}
-                                                        options={staff}
-                                                        getOptionLabel={(option) => (key == 'EMPLOYEE' ? option.fullName : option.vacancyName)}
-                                                        styles={customStyles}
-                                                    />
-                                                </Form.Group>
-                                            </Col>
-                                            <Col xs={6}>
-                                                <Form.Group className="form-group">
-                                                    <span
-                                                        className="input-title">İşlədiyi struktur bölmə </span>
-                                                    <Form.Label>
-                                                        <Form.Control
-                                                            placeholder="İşlədiyi struktur bölmə"
-                                                            value={department || ''} disabled={true}/>
-                                                    </Form.Label>
-                                                </Form.Group>
-                                            </Col>
-                                            <Col xs={6}>
-                                                <Form.Group className="form-group">
-                                                    <span
-                                                        className="input-title">İşlədiyi alt struktur bölmə </span>
-                                                    <Form.Label>
-                                                        <Form.Control
-                                                            placeholder="İşlədiyi struktur bölmə"
-                                                            value={subDepartment || ''} disabled={true}/>
-                                                    </Form.Label>
-                                                </Form.Group>
-                                            </Col>
-                                            <Col xs={6}>
-                                                <Form.Group className="form-group">
-                                                    <span className="input-title">Vəzifəsi </span>
-                                                    <Form.Label>
-                                                        <Form.Control placeholder="İşlədiyi vəzifəsi"
-                                                                      value={vacancyName || ''} disabled={true}/>
-                                                    </Form.Label>
-                                                </Form.Group>
-                                            </Col>
-                                            <Col xs={6}>
-                                                <Form.Group className="form-group">
                                                     <span className="input-title">Mükafatın məbləği Azn (vergilər və digər ödənişlər daxil olmaqla və ya xaric olmaqla):  </span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Mükafatın məbləği  məbləği "
-                                                                      value={achievement}
+                                                                      value={amount || ''}
                                                                       type="number"
-                                                                      onChange={(e) => setAchievement(e.target.value)}
+                                                                      onChange={(e) => setAmount(e.target.value)}
                                                         />
                                                     </Form.Label>
                                                 </Form.Group>
                                             </Col>
+                                            <Col xs={12}>
+                                                <div className="block-inn">
+                                                    <div className="block-title ">
+                                                        Mükafatlandırılan işçi və ya işçilər
+                                                    </div>
+                                                    <div className="addition-content">
+                                                        {
+                                                            employeeInfoArr.map((item, index) =>
+                                                                <div key={uid(item, index)}
+                                                                     className={index === 0 ? '' : 'add-item'}>
+                                                                    {
+                                                                        index === 0 ? null :
+                                                                            <div className="add-item-top">
+                                                                                <p className="m-0"> #{index + 1}.
+                                                                                    Digər </p>
+                                                                                <Button
+                                                                                    className="btn-transparent btn-remove flex-center"
+                                                                                    onClick={() => {
+                                                                                        employeeInfoArr.splice(index, 1);
+                                                                                        setEmployeeInfoArr([...employeeInfoArr], employeeInfoArr)
+                                                                                    }}>
+                                                                                    <svg width="14" height="14"
+                                                                                         viewBox="0 0 14 14" fill="none"
+                                                                                         xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path
+                                                                                            d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
+                                                                                            fill="#CF3131"/>
+                                                                                        <path
+                                                                                            d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
+                                                                                            fill="#CF3131"/>
+                                                                                        <path
+                                                                                            d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
+                                                                                            fill="#CF3131"/>
+                                                                                    </svg>
+                                                                                    <span>Sil</span>
+                                                                                </Button>
+                                                                            </div>
+                                                                    }
+                                                                    <Row>
+                                                                        <Col xs={3}>
+                                                                            <Form.Group className="form-group">
+                                                                                <span className="input-title">İşçinin soyadı, adı, atasının adı *</span>
+                                                                                <Form.Label>
+                                                                                    <Select
+                                                                                        placeholder="Adı seçin"
+                                                                                        isSearchable={employee ? employee.length > 5 ? true : false : false}
+                                                                                        options={employee}
+                                                                                        getOptionLabel={(option) => (option.name)}
+                                                                                        getOptionValue={(option) => (option.name)}
+                                                                                        styles={customStyles}
+                                                                                        onChange={(val) => {
+                                                                                            let id = val.id;
+                                                                                            getWarningDetail(id, index);
+                                                                                        }}
+                                                                                    />
+                                                                                </Form.Label>
+                                                                                <div
+                                                                                    className="validation-block flex-start">
+                                                                                    {
+
+                                                                                        errors[`workVacation.vacations[${index}].vacationType`] !== '' ?
+                                                                                            <span
+                                                                                                className="text-validation">{errors[`workVacation.vacations[${index}].vacationType`]}</span>
+                                                                                            : null
+                                                                                    }
+                                                                                </div>
+                                                                            </Form.Group>
+                                                                        </Col>
+                                                                        <Col xs={3}>
+                                                                            <Form.Group className="form-group">
+                                                                                <span className="input-title">İşlədiyi struktur bölmə </span>
+                                                                                <Form.Label>
+                                                                                    <Form.Control
+                                                                                        placeholder="İşlədiyi struktur bölmə"
+                                                                                        value={item.department || ''}
+                                                                                        disabled={true}/>
+                                                                                </Form.Label>
+                                                                            </Form.Group>
+                                                                        </Col>
+                                                                        <Col xs={3}>
+                                                                            <Form.Group className="form-group">
+                                                                                <span className="input-title">İşlədiyi alt struktur bölmə </span>
+                                                                                <Form.Label>
+                                                                                    <Form.Control
+                                                                                        placeholder="İşlədiyi struktur bölmə"
+                                                                                        value={item.subDepartment || ''}
+                                                                                        disabled={true}/>
+                                                                                </Form.Label>
+                                                                            </Form.Group>
+                                                                        </Col>
+                                                                        <Col xs={3}>
+                                                                            <Form.Group className="form-group">
+                                                                                <span
+                                                                                    className="input-title">Vəzifəsi </span>
+                                                                                <Form.Label>
+                                                                                    <Form.Control placeholder="Vəzifəsi"
+                                                                                                  value={item.position || ''}
+                                                                                                  disabled={true}/>
+                                                                                </Form.Label>
+                                                                            </Form.Group>
+                                                                        </Col>
+                                                                    </Row>
+
+                                                                </div>
+                                                            )
+                                                        }
+                                                        <div className="flex-end">
+                                                            <button type="button" className="btn-color"
+                                                                    onClick={() => addEmployeeInfoArr()}>
+                                                                <svg width="12" height="12" viewBox="0 0 12 12"
+                                                                     fill="none"
+                                                                     xmlns="http://www.w3.org/2000/svg">
+                                                                    <path
+                                                                        d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                                        stroke="#3083DC" strokeWidth="1.3"
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"/>
+                                                                </svg>
+                                                                <span>əlavə et</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Col>
                                         </Row>
                                     </Tab>
-*/}
-
                                     <Tab eventKey="35" title="" disabled={tab !== "35"}>
                                         <Row>
                                             <Col xs={6}>
@@ -8725,7 +8799,8 @@ function CreateOperation() {
                                             </Col>
                                             <Col xs={4}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Seçkidə iştirak edəcəyi müddət (gün)</span>
+                                                    <span
+                                                        className="input-title">Seçkidə iştirak edəcəyi müddət (gün)</span>
                                                     <Form.Control placeholder="Ödənişli istirahət müddəti "
                                                                   value={vacationDay}
                                                                   type="number"
