@@ -673,10 +673,10 @@ function EditStaff() {
         });
     }
 
-    const getOperation = (page, status) => {
+    const getOperation = (page) => {
         mainAxios({
             method: 'get',
-            url: '/operations',
+            url: `/vacancies/${id}/operations`,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -684,10 +684,9 @@ function EditStaff() {
             params: {
                 page: page - 1,
                 size: recordSize,
-                status: status
             }
         }).then((res) => {
-            setCurrentPage(page);
+            setCurrentPage(page)
             setOperation(res.data.content);
             setTotalRecord(res.data.totalElements);
             setEmptyData(true)

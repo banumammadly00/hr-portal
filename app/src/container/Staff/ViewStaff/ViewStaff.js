@@ -24,7 +24,6 @@ function ViewStaff() {
     const [key, setKey] = useState(activeKey !== undefined ? activeKey : 'general');
     const [emptyData, setEmptyData] = useState(false);
 
-
     /*General*/
     const [institution, setInstitution] = useState([]);
     const [department, setDepartment] = useState([]);
@@ -123,21 +122,20 @@ function ViewStaff() {
         });
     }
 
-    const getOperation = (page, status) => {
+    const getOperation = (page) => {
         mainAxios({
             method: 'get',
-            url: '/operations',
+            url: `/vacancies/${id}/operations`,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             params: {
                 page: page - 1,
-                size: recordSize,
-                status: status
+                size: recordSize
             }
         }).then((res) => {
-            setCurrentPage(page);
+            setCurrentPage(page)
             setOperation(res.data.content);
             setTotalRecord(res.data.totalElements);
             setEmptyData(true)

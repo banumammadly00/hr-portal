@@ -268,10 +268,10 @@ function ViewEmployee() {
         });
     }
 
-    const getOperation = (page, status) => {
+    const getOperation = (page) => {
         mainAxios({
             method: 'get',
-            url: '/operations',
+            url: `/employees/${id}/operations`,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -279,7 +279,6 @@ function ViewEmployee() {
             params: {
                 page: page - 1,
                 size: recordSize,
-                status: status
             }
         }).then((res) => {
             setCurrentPage(page);
