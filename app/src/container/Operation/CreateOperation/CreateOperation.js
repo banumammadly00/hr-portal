@@ -92,7 +92,6 @@ function CreateOperation() {
     const [businessTripCheck, setBusinessTripCheck] = useState(true);
     const [businessPaymentCheck, setBusinessPaymentCheck] = useState(true);
     const [changeTempo, setChangeTempo] = useState(false);
-    //const [businessCheck, setBusinessCheck] = useState(true);
     const [note, setNote] = useState('');
     const [selectedAssignEmpId, setSelectedAssignEmpId] = useState(null);
     const [assignDepartment, setAssignDepartment] = useState('');
@@ -116,8 +115,8 @@ function CreateOperation() {
     const [vacancyCategory, setVacancyCategory] = useState('');
     const [vacancyObeyDepartment, setVacancyObeyDepartment] = useState('');
     const [businessTripPayment, setBusinessTripPayment] = useState('');
-    const [insteadDayOffFrom, setInsteadDayOffFrom] = useState(null);
-    const [insteadDayOffTo, setInsteadDayOffTo] = useState(null);
+/*    const [insteadDayOffFrom, setInsteadDayOffFrom] = useState(null);
+    const [insteadDayOffTo, setInsteadDayOffTo] = useState(null);*/
 
 
     /*------General----------*/
@@ -136,12 +135,12 @@ function CreateOperation() {
     const [joinDate, setJoinDate] = useState(null);
     const [jobDay, setJobDay] = useState('')
     const [showVacation, setShowVacation] = useState(false);
-    const [vacDraftMain, setVacDraftMain] = useState('');
-    const [vacDraftExp, setVacDraftExp] = useState('');
     const [amount, setAmount] = useState('');
     const [selectedVacOp, setSelectedVacOp] = useState(null);
     const [vacOperationOption, setVacOperationOption] = useState([]);
     const [debtCheck, setDebtCheck] = useState(false);
+    const [checkOut, setCheckOut] = useState(false);
+    const [checkIn, setCheckIn] = useState(false);
 
     const [vacationArr, setVacationArr] = useState([{
         vacationType: null,
@@ -470,7 +469,8 @@ function CreateOperation() {
             params: {
                 from: moment(from).format('YYYY-MM-DD'),
                 to: to,
-                operationType: operationType
+                operationType: operationType,
+                employeeId: employeeId
             }
         }).then((res) => {
                 setJobDay(res.data.startJob);
@@ -652,8 +652,8 @@ function CreateOperation() {
             "dayOffDateFrom": nonWorkDayArr.length > 0 ? nonWorkDayArr[0] : null,
             "dayOffDateTo": nonWorkDayArr.length > 1 ? nonWorkDayArr[1] : null,
             "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
-            "insteadDayOffFrom": insteadDayOffFrom !== null ? moment(insteadDayOffFrom).format("YYYY-MM-DD") : null,
-            "insteadDayOffTo": insteadDayOffTo !== null ? moment(insteadDayOffTo).format("YYYY-MM-DD") : null,
+            //"insteadDayOffFrom": insteadDayOffFrom !== null ? moment(insteadDayOffFrom).format("YYYY-MM-DD") : null,
+            //"insteadDayOffTo": insteadDayOffTo !== null ? moment(insteadDayOffTo).format("YYYY-MM-DD") : null,
             "insteadPayment": businessTripPayment !== '' ? parseFloat(businessTripPayment) : null,
             "notes": note !== '' ? note : null,
             "cityId": selectedCity !== null ? selectedCity.id : null,
@@ -7156,7 +7156,21 @@ function CreateOperation() {
                                             </Col>
                                             <Col xs={4}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Ezamiyyətin başladığı tarix  </span>
+                                                    <div className="input-title flex-center">
+                                                        <div className="check-block">
+                                                            <label className="check-button">
+                                                                <input type="checkbox"
+                                                                       name="checkForeign"
+                                                                       checked={checkIn}
+                                                                       onChange={(e) => {
+                                                                           setCheckIn(e.target.checked)
+                                                                       }}/>
+                                                                <span className="checkmark"></span>
+                                                            </label>
+                                                        </div>
+                                                        <span
+                                                            className="input-title m-0">Ezamiyyətin başladığı tarix / Otele giriş daxildir </span>
+                                                    </div>
                                                     <Form.Label className="relative m-0">
                                                         <DatePicker selected={startDate}
                                                                     dateFormat="dd-MM-yyyy"
@@ -7237,7 +7251,21 @@ function CreateOperation() {
                                             </Col>
                                             <Col xs={4}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Ezamiyyətin bitdiyi tarix  </span>
+                                                    <div className="input-title flex-center">
+                                                        <div className="check-block">
+                                                            <label className="check-button">
+                                                                <input type="checkbox"
+                                                                       name="checkForeign"
+                                                                       checked={checkOut}
+                                                                       onChange={(e) => {
+                                                                           setCheckOut(e.target.checked)
+                                                                       }}/>
+                                                                <span className="checkmark"></span>
+                                                            </label>
+                                                        </div>
+                                                        <span
+                                                            className="input-title m-0">Ezamiyyətin bitdiyi tarix / Oteldən çıxış daxildir </span>
+                                                    </div>
                                                     <Form.Label className="relative m-0">
                                                         <DatePicker
                                                             dateFormat="dd-MM-yyyy"
@@ -7564,7 +7592,7 @@ function CreateOperation() {
                                                                                         <Form.Label
                                                                                             className="relative m-0">
                                                                                             <Form.Control
-                                                                                                value={(insteadDayOffFrom !== null && insteadDayOffTo !== null) ? '' : businessTripPayment}
+                                                                                                value={'' || businessTripPayment}
                                                                                                 type="number"
                                                                                                 placeholder="Ödənişi daxil edin "
                                                                                                 onChange={e => setBusinessTripPayment(e.target.value)}/>
