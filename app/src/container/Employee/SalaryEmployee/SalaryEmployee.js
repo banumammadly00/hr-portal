@@ -36,57 +36,37 @@ function SalaryEmployee() {
 
     const [loading, setLoading] = useState(false)
 
-    const getSalary = (page) => {
-       if(selectedMonth == currentMonth) {
-           mainAxios({
-               method: 'get',
-               url: '/salaries',
-               headers: {
-                   'Content-Type': 'application/json',
-                   'Authorization': 'Bearer ' + localStorage.getItem('token')
-               },
-               params: {
-                   page: page - 1,
-                   size: recordSize,
-               }
-           }).then((res) => {
-               setLoading(false)
-               setCurrentPage(page)
-               setSalary(res.data.content);
-               setTotalRecord(res.data.totalElements);
-           });
-       }
+    const getSalary = (month,year,page) => {
+        let params = {
+            page: page - 1,
+            size: recordSize,
+        };
 
-       else {
-           mainAxios({
-               method: 'get',
-               url: '/salaries',
-               headers: {
-                   'Content-Type': 'application/json',
-                   'Authorization': 'Bearer ' + localStorage.getItem('token')
-               },
-               params: {
-                   page: page - 1,
-                   size: recordSize,
-                   year: 2021,
-                   month: selectedMonth
-               }
-           }).then((res) => {
-               setLoading(false)
-               setCurrentPage(page)
-               setSalary(res.data.content);
-               setTotalRecord(res.data.totalElements);
-           });
-       }
-    }
+        console.log(month, currentMonth, year, currentYear)
+        if (month != currentMonth || year != currentYear) {
+            params.year = year;
+            params.month = month
+        }
 
-    const resetFilter = () => {
-        getSalary(1)
+        mainAxios({
+            method: 'get',
+            url: '/salaries',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            params
+        }).then((res) => {
+            setLoading(false)
+            setCurrentPage(page)
+            setSalary(res.data.content);
+            setTotalRecord(res.data.totalElements);
+        });
     }
 
     useEffect(() => {
-        getSalary(1);
-        for (let i = 2021; i <= currentYear; i++) {
+        getSalary(selectedMonth, selectedYear,1);
+        for (let i = 2021; i <= 2022; i++) {
             yearOptions.push({value: i, label: i});
         }
     }, []);
@@ -111,7 +91,9 @@ function SalaryEmployee() {
                                             placeholder="Year"
                                             onChange={(val) => {
                                                 val = val.value
-                                                setSelectedYear(val)
+                                                setSelectedYear(val);
+                                                let month = selectedMonth !== null ? selectedMonth : currentMonth;
+                                                getSalary(month, val, 1)
                                             }}
                                             options={yearOptions}
                                             styles={customStyles}
@@ -127,6 +109,8 @@ function SalaryEmployee() {
                                             onChange={(val) => {
                                                 val = val.value
                                                 setSelectedMonth(val);
+                                                let year = selectedYear !== null ? selectedYear : currentYear
+                                                getSalary(val, year, 1)
                                             }}
                                             options={monthOptions}
                                             styles={customStyles}
@@ -137,17 +121,14 @@ function SalaryEmployee() {
 
                                 </div>
                             </div>
-                            <Button className="btn-main" onClick={() => getSalary(1)}>
+                          {/*  <Button className="btn-main" onClick={() => getSalary(1)}>
                                 Hesabla
-                            </Button>
+                            </Button>*/}
                         </div>
                     </div>
 
                     <div className="block">
                         <Table responsive="sm" hover className={["m-0", loading ? 'active' : ''].join(' ')}>
-                            <tbody>
-
-                            </tbody>
                             <thead>
                             <tr>
                                 <th>S.A.A</th>
@@ -158,7 +139,7 @@ function SalaryEmployee() {
                                 <th>Həmkarlar</th>
                                 <th>Gəlir verg.</th>
                                 <th>Tibbi sığorta</th>
-                                <th>İşsizlik </th>
+                                <th>İşsizlik</th>
                                 <th>İş. gün. sayı</th>
                             </tr>
                             </thead>
@@ -170,13 +151,13 @@ function SalaryEmployee() {
                                             <td>{item.fullName}</td>
                                             <td>{item.salaryDetails !== null ? item.salaryDetails.gross : null}</td>
                                             <td>{item.salaryDetails !== null ? item.salaryDetails.net : null}</td>
-                                            <td>{item.salaryDetails !==null ? item.salaryDetails.calculated : null}</td>
-                                            <td>{item.salaryDetails !==null ? item.salaryDetails.dsmfTax : null}</td>
-                                            <td>{item.salaryDetails !==null ? item.salaryDetails.hysTax : null}</td>
-                                            <td>{item.salaryDetails !==null ? item.salaryDetails.incomingTax : null}</td>
-                                            <td>{item.salaryDetails !==null ? item.salaryDetails.medicalInsuranceTax : null}</td>
-                                            <td>{item.salaryDetails !==null ? item.salaryDetails.unemploymentTax : null}</td>
-                                            <td>{item.salaryDetails !==null ? item.salaryDetails.workedDayCount : null}</td>
+                                            <td>{item.salaryDetails !== null ? item.salaryDetails.calculated : null}</td>
+                                            <td>{item.salaryDetails !== null ? item.salaryDetails.dsmfTax : null}</td>
+                                            <td>{item.salaryDetails !== null ? item.salaryDetails.hysTax : null}</td>
+                                            <td>{item.salaryDetails !== null ? item.salaryDetails.incomingTax : null}</td>
+                                            <td>{item.salaryDetails !== null ? item.salaryDetails.medicalInsuranceTax : null}</td>
+                                            <td>{item.salaryDetails !== null ? item.salaryDetails.unemploymentTax : null}</td>
+                                            <td>{item.salaryDetails !== null ? item.salaryDetails.workedDayCount : null}</td>
                                         </tr>
                                     )
                                     : null

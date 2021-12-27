@@ -6,6 +6,11 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Select from "react-select";
 import {customStyles} from "../../../components/Select/SelectStyle";
 
+const cityTypeOption = [
+    { value : '', label: 'Ölkədaxili'},
+    { value : '', label: 'Ölkəxarici'}
+]
+
 function SettingEdit() {
 
     const [countryArr, setCountryArr] = useState([]);
@@ -14,7 +19,8 @@ function SettingEdit() {
 
     const [cityArr, setCityArr] = useState([]);
     const [city, setCity] = useState('');
-    const [showCity, setShowCity] = useState(false)
+    const [showCity, setShowCity] = useState(false);
+    const [selectedCityType, setSelectedCityType] = useState(null)
 
     const [regionArr, setRegionArr] = useState([]);
     const [region, setRegion] = useState('');
@@ -1154,7 +1160,7 @@ function SettingEdit() {
                         showCity ?
                             <div className="addition">
                                 <Row className="flex-center">
-                                    <Col xs={6}>
+                                    <Col xs={3}>
                                         <Form.Group className="m-0">
                                             <Form.Label>
                                                 <Form.Control
@@ -1162,6 +1168,20 @@ function SettingEdit() {
                                                     placeholder="Şəhər daxil edin"
                                                     onChange={(e => setCity(e.target.value))}/>
                                             </Form.Label>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col xs={3}>
+                                        <Form.Group className="m-0">
+                                                <Select
+                                                    placeholder="Şəhər seçin"
+                                                    value={selectedCityType}
+                                                    onChange={(val) => setSelectedCityType(val)}
+                                                    options={cityTypeOption}
+                                                    isSearchable={cityTypeOption ? cityTypeOption.length > 5 ? true : false : false}
+                                                    styles={customStyles}
+                                                    getOptionLabel={(option) => (option.label)}
+                                                    getOptionValue={(option) => (option.label)}
+                                                />
                                         </Form.Group>
                                     </Col>
                                     <Col xs={4}>

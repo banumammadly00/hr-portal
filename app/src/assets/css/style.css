@@ -116,7 +116,7 @@ label, .react-time-picker {
     width: 100%;
 }
 
-.form-control:disabled, .form-control[readonly], .react-datepicker-wrapper input[type="text"]:disabled  {
+.form-control:disabled, .form-control[readonly], .react-datepicker-wrapper input[type="text"]:disabled {
     background-color: rgba(233, 236, 239, .66);
     opacity: 1;
 }
@@ -613,7 +613,7 @@ label, .react-time-picker {
     vertical-align: middle;
 }
 
-.table>:not(:first-child) {
+.table > :not(:first-child) {
     border: none;
 }
 
@@ -623,7 +623,7 @@ label, .react-time-picker {
 }
 
 .table-hover > tbody > tr:hover {
-    --bs-table-hover-bg: rgba(48, 131, 220 , 0.06);
+    --bs-table-hover-bg: rgba(48, 131, 220, 0.06);
 }
 
 .table-hover > tbody > tr.disabled {
@@ -632,10 +632,9 @@ label, .react-time-picker {
 
 .table th {
     letter-spacing: 0.03em;
-    color: #193651;
-    opacity: 0.6;
+    color: rgba(25, 54, 81, 0.6);
     font-weight: 600;
-    padding: 20px 30px 20px 30px ;
+    padding: 20px 30px 20px 30px;
 }
 
 td {
@@ -872,7 +871,7 @@ td {
     display: flex;
 }
 
-.block-item .block-user-name .in, .block-item .block-user-name .out,  .block-item .block-user-name .new {
+.block-item .block-user-name .in, .block-item .block-user-name .out, .block-item .block-user-name .new {
     font-weight: 500;
     color: #2ED06A;
     margin-left: 10px;
@@ -1339,6 +1338,11 @@ td {
     padding: 20px !important;
 }
 
+.staff-salary th {
+    position: sticky;
+    top: 0;
+}
+
 .staff-id {
     font-weight: 500;
     font-size: 24px;
@@ -1394,7 +1398,7 @@ td {
     border-top-right-radius: 6px;
 }
 
-.calendar .fc-col-header  th {
+.calendar .fc-col-header th {
     background-color: rgba(48, 131, 220, .08);
     padding: 15px !important;
     opacity: 1;
@@ -1430,10 +1434,10 @@ td {
 
 .calendar .fc-theme-standard th {
     border: none;
-    padding: 0 ;
+    padding: 0;
 }
 
-.calendar .fc-theme-standard .fc-scrollgrid-section-body .fc-day-sat, .calendar .fc-theme-standard .fc-scrollgrid-section-body  .fc-day-sun {
+.calendar .fc-theme-standard .fc-scrollgrid-section-body .fc-day-sat, .calendar .fc-theme-standard .fc-scrollgrid-section-body .fc-day-sun {
     background-color: rgba(247, 247, 247, .7);
 }
 
@@ -1519,7 +1523,7 @@ td {
     padding: 30px 60px;
 }
 
-.setting .dropdown .dropdown-toggle, .setting .dropdown .dropdown-toggle:active , .setting .dropdown .dropdown-toggle:active:focus {
+.setting .dropdown .dropdown-toggle, .setting .dropdown .dropdown-toggle:active, .setting .dropdown .dropdown-toggle:active:focus {
     background: #FAFCFF;
     border: 1px solid rgba(4, 6, 71, 0.1);
     box-sizing: border-box;
@@ -1709,7 +1713,7 @@ td {
     font-weight: 500;
     background: #FFFFFF;
     border-radius: 12px;
-    box-shadow: 0 0 6px rgba(166 ,166, 166, .16);
+    box-shadow: 0 0 6px rgba(166, 166, 166, .16);
 }
 
 input::-webkit-outer-spin-button,
@@ -1742,7 +1746,7 @@ input::-webkit-inner-spin-button {
     padding-right: 5px;
 }
 
-@media only screen and (min-width: 1600px){
+@media only screen and (min-width: 1600px) {
     .export-block {
         width: 80%;
     }
@@ -1770,6 +1774,18 @@ input::-webkit-inner-spin-button {
 @media (min-width: 992px) {
     .modal-sure .modal-md {
         max-width: 450px;
+    }
+}
+
+@media (min-height: 700px) {
+    .staff-salary .table-responsive-sm {
+        height: 700px;
+    }
+}
+
+@media (max-height: 700px) {
+    .staff-salary .table-responsive-sm {
+        height: 500px;
     }
 }
 

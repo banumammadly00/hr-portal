@@ -125,6 +125,9 @@ function CreateOperation() {
     const [endTime, setEndTime] = useState('');
     const [newStartTime, setNewStartTime] = useState('');
     const [newEndTime, setNewEndTime] = useState('');
+    const [otherExpCheck, setOtherExpCheck] = useState(false);
+    const [dailyExpCheck, setDailyExpCheck] = useState(false);
+    const [hotelExpCheck, setHotelExpCheck] = useState(false);
 
 
     const [vacationArr, setVacationArr] = useState([{
@@ -442,7 +445,6 @@ function CreateOperation() {
                 operationType: operationType,
             }
         }).then((res) => {
-                console.log(res)
                 setVacOperationOption(res.data)
             }
         );
@@ -661,8 +663,8 @@ function CreateOperation() {
         };
 
         let reduceWorkHours = {
-            "currentFrom": startTime !== ''  ? startTime : null,
-            "currentTo": endTime !== '' ?  endTime : null,
+            "currentFrom": startTime !== '' ? startTime : null,
+            "currentTo": endTime !== '' ? endTime : null,
             "newFrom": newStartTime !== '' ? newStartTime : null,
             "newTo": newEndTime !== '' ? newEndTime : null
         };
@@ -7548,20 +7550,89 @@ function CreateOperation() {
                                                 :
                                                 null
                                         }
-                                        <Col xs={12}>
-                                            <Form.Group className="form-group">
-                                                <span className="input-title">Qeyd</span>
-                                                <Form.Label>
-                                                    <Form.Control as="textarea"
-                                                                  onChange={(e) => {
-                                                                      setNote(e.target.value)
-                                                                  }}
-                                                                  value={note}
-                                                                  placeholder="Text..."
-                                                    />
-                                                </Form.Label>
-                                            </Form.Group>
-                                        </Col>
+                                        <Row>
+                                            <Col xs={3}>
+                                                <div className="block-title flex-center">
+                                                    <div className="check-block">
+                                                        <label className="check-button">
+                                                            <input type="checkbox"
+                                                                   checked={hotelExpCheck}
+                                                                   onChange={(e) => {
+                                                                       setHotelExpCheck(e.target.checked);
+                                                                   }}
+                                                            />
+                                                            <span className="checkmark"></span>
+                                                        </label>
+                                                    </div>
+                                                    Mehmanxana xərcləri
+                                                </div>
+                                            </Col>
+                                            <Col xs={3}>
+                                                <div className="block-title flex-center">
+                                                    <div className="check-block">
+                                                        <label className="check-button">
+                                                            <input type="checkbox"
+                                                                   checked={dailyExpCheck}
+                                                                   onChange={(e) => {
+                                                                       setDailyExpCheck(e.target.checked);
+                                                                   }}
+                                                            />
+                                                            <span className="checkmark"></span>
+                                                        </label>
+                                                    </div>
+                                                    Gündəlik xərclər
+                                                </div>
+                                            </Col>
+                                            <Col xs={3}>
+                                                <div className="block-title flex-center">
+                                                    <div className="check-block">
+                                                        <label className="check-button">
+                                                            <input type="checkbox"
+                                                                   checked={otherExpCheck}
+                                                                   onChange={(e) => {
+                                                                       setOtherExpCheck(e.target.checked);
+                                                                   }}
+                                                            />
+                                                            <span className="checkmark"></span>
+                                                        </label>
+                                                    </div>
+                                                    Əlavə gündəlik xərclər
+                                                </div>
+                                            </Col>
+                                            {
+                                                otherExpCheck ?
+                                                    <Col xs={12}>
+                                                        <Form.Group className="form-group">
+                                                            <span className="input-title">Gündəlik məbləği daxil edin</span>
+                                                            <Form.Label>
+                                                                <Form.Control
+                                                                              onChange={(e) => {
+                                                                                  setAmount(e.target.value)
+                                                                              }}
+                                                                              value={amount}
+                                                                              placeholder="Gündəlik məbləği daxil edin"
+                                                                />
+                                                            </Form.Label>
+                                                        </Form.Group>
+                                                    </Col>
+                                                    : null
+                                            }
+                                            <Col xs={12}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">Qeyd</span>
+                                                    <Form.Label>
+                                                        <Form.Control as="textarea"
+                                                                      onChange={(e) => {
+                                                                          setNote(e.target.value)
+                                                                      }}
+                                                                      value={note}
+                                                                      placeholder="Text..."
+                                                        />
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+
+                                        </Row>
                                     </Tab>
 
 
@@ -10090,7 +10161,6 @@ function CreateOperation() {
                                                         <TimePicker
                                                             onChange={(val) => {
                                                                 setEndTime(val);
-                                                                console.log(val)
                                                             }}
                                                             value={endTime}
                                                         />
