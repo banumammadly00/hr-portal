@@ -29,7 +29,7 @@ function SalaryEmployee() {
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [recordSize, setRecordSize] = useState(20);
-    const [selectedMonth, setSelectedMonth] = useState(currentMonth - 1);
+    const [selectedMonth, setSelectedMonth] = useState(currentMonth);
     const [yearOptions, setYearOptions] = useState([]);
 
     const [selectedYear, setSelectedYear] = useState(currentYear);
@@ -37,25 +37,47 @@ function SalaryEmployee() {
     const [loading, setLoading] = useState(false)
 
     const getSalary = (page) => {
-        mainAxios({
-            method: 'get',
-            url: '/salaries',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-            params: {
-                page: page - 1,
-                size: recordSize,
-                year: 2021,
-                month: selectedMonth
-            }
-        }).then((res) => {
-            setLoading(false)
-            setCurrentPage(page)
-            setSalary(res.data.content);
-            setTotalRecord(res.data.totalElements);
-        });
+       if(selectedMonth == currentMonth) {
+           mainAxios({
+               method: 'get',
+               url: '/salaries',
+               headers: {
+                   'Content-Type': 'application/json',
+                   'Authorization': 'Bearer ' + localStorage.getItem('token')
+               },
+               params: {
+                   page: page - 1,
+                   size: recordSize,
+               }
+           }).then((res) => {
+               setLoading(false)
+               setCurrentPage(page)
+               setSalary(res.data.content);
+               setTotalRecord(res.data.totalElements);
+           });
+       }
+
+       else {
+           mainAxios({
+               method: 'get',
+               url: '/salaries',
+               headers: {
+                   'Content-Type': 'application/json',
+                   'Authorization': 'Bearer ' + localStorage.getItem('token')
+               },
+               params: {
+                   page: page - 1,
+                   size: recordSize,
+                   year: 2021,
+                   month: selectedMonth
+               }
+           }).then((res) => {
+               setLoading(false)
+               setCurrentPage(page)
+               setSalary(res.data.content);
+               setTotalRecord(res.data.totalElements);
+           });
+       }
     }
 
     const resetFilter = () => {
@@ -95,24 +117,11 @@ function SalaryEmployee() {
                                             styles={customStyles}
                                         />
                                     </Form.Group>
-                                    {/*  <Form.Group className="form-group m-0">
-                                            <span className="input-title">Struktur vahidinin adı</span>
-                                            <Select
-                                                placeholder="Struktur vahidini seçin"
-                                                onChange={(val) => {
-
-                                                }}
-                                                isSearchable={}
-                                                options={}
-                                                getOptionLabel={(option) => (option.name)}
-                                                styles={customStyles}
-                                            />
-                                        </Form.Group>*/}
                                 </div>
                                 <div className="filter-item">
                                     <Form.Group className="m-0 form-group">
                                         <Select
-                                            defaultValue={monthOptions[currentMonth - 2]}
+                                            defaultValue={monthOptions[currentMonth - 1]}
                                             value={selectedMonth.label}
                                             placeholder="Month"
                                             onChange={(val) => {
