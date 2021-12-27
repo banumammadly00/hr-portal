@@ -77,7 +77,7 @@ button:focus {
     position: relative;
 }
 
-label {
+label, .react-time-picker {
     width: 100%;
 }
 
@@ -102,7 +102,7 @@ label {
     display: block;
 }
 
-.form-control, .form-control:focus, .react-datepicker__input-container input {
+.form-control, .form-control:focus, .react-datepicker__input-container input, .react-time-picker__wrapper {
     background-color: #FAFCFF;
     border: 1px solid rgba(4, 6, 71, 0.1);
     box-sizing: border-box;
@@ -1728,6 +1728,18 @@ input::-webkit-inner-spin-button {
 
 .date-title span {
     font-weight: 500;
+}
+
+.react-time-picker__inputGroup {
+    text-align: left;
+}
+
+.react-time-picker__button {
+    padding: 0;
+}
+
+.react-time-picker__button:not(:last-child) {
+    padding-right: 5px;
 }
 
 @media only screen and (min-width: 1600px){
