@@ -149,7 +149,6 @@ function SalaryEmployee() {
                                 <th>Həmkarlar</th>
                                 <th>Gəlir verg.</th>
                                 <th>Tibbi sığorta</th>
-                                <th>Port Tax</th>
                                 <th>İşsizlik </th>
                                 <th>İş. gün. sayı</th>
                             </tr>
@@ -167,7 +166,6 @@ function SalaryEmployee() {
                                             <td>{item.salaryDetails !==null ? item.salaryDetails.hysTax : null}</td>
                                             <td>{item.salaryDetails !==null ? item.salaryDetails.incomingTax : null}</td>
                                             <td>{item.salaryDetails !==null ? item.salaryDetails.medicalInsuranceTax : null}</td>
-                                            <td>{item.salaryDetails !==null ? item.salaryDetails.portTax : null}</td>
                                             <td>{item.salaryDetails !==null ? item.salaryDetails.unemploymentTax : null}</td>
                                             <td>{item.salaryDetails !==null ? item.salaryDetails.workedDayCount : null}</td>
                                         </tr>
