@@ -22,6 +22,30 @@ const monthOptions = [
     {value: 12, label: 'December'},
 ]
 
+const vacancyOptions = [
+    {value : '' , label: 'Vəzifə maaşı'},
+    {value : '' , label: 'Fərdi əlavə'},
+    {value : '' , label: 'Fərdi əlavə %'},
+]
+
+const productionOptions = [
+    {value : '' , label: 'Norma iş gün'},
+    {value : '' , label: 'Norma iş saatı'},
+]
+
+const calculationOptions = [
+    {value : '' , label: 'Hesablanmış əmək haqqı (Tarif vəzifə maaşına görə)'},
+    {value : '' , label: 'Fərdi əlavə (Fix məbləğ)'},
+    {value : '' , label: 'Fərdi əlavə %'},
+    {value : '' , label: 'Orta aylıq əmək haqqın saxlanılması'},
+    {value : '' , label: 'Təhsil məzuniyyəti'},
+    {value : '' , label: 'Əmək məzuniyyəti'},
+    {value : '' , label: 'Normadan artıq saatların sayı'},
+    {value : '' , label: 'Normadan artıq saat'},
+    {value : '' , label: 'Gecə saatların sayı'},
+    {value : '' , label: 'Gecə saatı'},
+]
+
 function SalaryEmployee() {
     let currentMonth = (new Date().getMonth() + 1);
     let currentYear = (new Date().getFullYear());

@@ -1943,7 +1943,7 @@ function ViewEmployee() {
                         <Tab eventKey="vacation" title="Məzuniyyət">
                             <div className="block">
                                 <div className="table-striped">
-                                    <Table responsive="sm">
+                                    <Table  responsive="sm">
                                         <thead>
                                         <tr>
                                             <th>İş ili dövrü</th>
@@ -1961,17 +1961,17 @@ function ViewEmployee() {
                                                 vacation.map((item, index) =>
                                                     <tr key={index}>
                                                         <td>{item.startDate} - {item.endDate}</td>
-                                                        <td>{item.main}</td>
-                                                        <td>{item.experience}</td>
-                                                        <td>{item.collectiveAgreement}</td>
-                                                        <td>{item.children}</td>
-                                                        <td>{item.workCondition}</td>
-                                                        <td>{item.debt}</td>
+                                                        <td>{item.main} {item.approvedVacation.MAIN !== undefined ? ` - ${item.approvedVacation.MAIN}` : ''} </td>
+                                                        <td>{item.experience} {item.approvedVacation.EXPERIENCE !== undefined ? ` - ${item.approvedVacation.EXPERIENCE}` : ''}</td>
+                                                        <td>{item.collectiveAgreement} {item.approvedVacation.AGREEMENT !== undefined ? ` - ${item.approvedVacation.AGREEMENT}` : ''}</td>
+                                                        <td>{item.children} {item.approvedVacation.CHILD !== undefined ? ` - ${item.approvedVacation.CHILD}` : ''}</td>
+                                                        <td>{item.workCondition} {item.approvedVacation.CONDITIONAL !== undefined ? ` - ${item.approvedVacation.CONDITIONAL}` : ''}</td>
+                                                        <td>{item.debt} {item.approvedVacation.DEBT !== undefined ? ` - ${item.approvedVacation.DEBT}` : ''}</td>
                                                     </tr>
                                                 )
                                                 :
                                                 <tr>
-                                                    <td colSpan={3}>
+                                                    <td colSpan={6}>
                                                         <p className="text-center m-0">Məlumat
                                                             yoxdur</p>
                                                     </td>
