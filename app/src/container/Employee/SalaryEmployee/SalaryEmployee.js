@@ -32,9 +32,13 @@ function SalaryEmployee() {
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
     const [yearOptions, setYearOptions] = useState([]);
 
+
     const [selectedYear, setSelectedYear] = useState(currentYear);
 
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+
+    let year = selectedYear !== null ? selectedYear : currentYear;
+    let month = selectedMonth !== null ? selectedMonth : currentMonth;
 
     const getSalary = (month,year,page) => {
         let params = {
@@ -66,7 +70,7 @@ function SalaryEmployee() {
 
     useEffect(() => {
         getSalary(selectedMonth, selectedYear,1);
-        for (let i = 2021; i <= 2022; i++) {
+        for (let i = 2021; i <= currentYear; i++) {
             yearOptions.push({value: i, label: i});
         }
     }, []);
@@ -166,7 +170,7 @@ function SalaryEmployee() {
                         </Table>
                     </div>
                     <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
-                              click={(page) => getSalary(page)}/>
+                              click={(page) => getSalary(month, year,page)}/>
                 </Container>
             </div>
         </Aux>
