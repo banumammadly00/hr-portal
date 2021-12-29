@@ -3,8 +3,9 @@ import Aux from "../../../hoc/Auxiliary";
 import {Table, Container, Button, Form} from 'react-bootstrap';
 import {mainAxios} from "../../../components/Axios/axios";
 import Paginate from "../../../components/Pagination/Pagination";
-import Select from "react-select";
+import Select, {components} from "react-select";
 import {customStyles} from "../../../components/Select/SelectStyle";
+import EmptyData from "../../../components/EmptyData/EmptyData";
 
 
 const monthOptions = [
@@ -23,27 +24,91 @@ const monthOptions = [
 ]
 
 const vacancyOptions = [
-    {value : '' , label: 'Vəzifə maaşı'},
-    {value : '' , label: 'Fərdi əlavə'},
-    {value : '' , label: 'Fərdi əlavə %'},
+    {value: 'mainSalary', label: 'Vəzifə maaşı'},
+    {value: 'individualAddition', label: 'Fərdi əlavə'},
+    {value: 'conditionalAddition', label: 'Fərdi əlavə %'},
+    {value: 'hysTax', label: 'Limançı 2%'},
 ]
 
 const productionOptions = [
-    {value : '' , label: 'Norma iş gün'},
-    {value : '' , label: 'Norma iş saatı'},
+    {value: 'jobDayCount', label: 'Norma iş gün'},
+    {value: '', label: 'Norma iş saatı'},
 ]
 
 const calculationOptions = [
-    {value : '' , label: 'Hesablanmış əmək haqqı (Tarif vəzifə maaşına görə)'},
-    {value : '' , label: 'Fərdi əlavə (Fix məbləğ)'},
-    {value : '' , label: 'Fərdi əlavə %'},
-    {value : '' , label: 'Orta aylıq əmək haqqın saxlanılması'},
-    {value : '' , label: 'Təhsil məzuniyyəti'},
-    {value : '' , label: 'Əmək məzuniyyəti'},
-    {value : '' , label: 'Normadan artıq saatların sayı'},
-    {value : '' , label: 'Normadan artıq saat'},
-    {value : '' , label: 'Gecə saatların sayı'},
-    {value : '' , label: 'Gecə saatı'},
+    {value: 'mainSalaryResult', label: 'Hesablanmış əmək haqqı (Tarif vəzifə maaşına görə)'},
+    {value: 'individualAdditionResult', label: 'Fərdi əlavə (Fix məbləğ)'},
+    {value: 'conditionalAdditionResult', label: 'Fərdi əlavə %'},
+    {value: '', label: 'Orta aylıq əmək haqqın saxlanılması'},
+    {value: 'educationVacationPay', label: 'Təhsil məzuniyyəti'},
+    {value: '', label: 'Əmək məzuniyyəti'},
+    {value: 'overtimeHours', label: 'Normadan artıq saatların sayı'},
+    {value: 'overtimeAmount', label: 'Normadan artıq saat'},
+    {value: 'nightHours', label: 'Gecə saatların sayı'},
+    {value: 'nightAmount', label: 'Gecə saatı'},
+    {value: 'eveningHours', label: 'Axşam saatı sayı'},
+    {value: '', label: 'Axşam saatı '},
+    {value: 'overtimeHolidayHours', label: 'Bayram saatı (Normadan artıq) sayı'},
+    {value: 'overtimeHolidayAmount', label: 'Bayram saatı (Normadan artıq)'},
+    {value: 'holidayHours', label: 'Bayram saatı (Norma daxili) sayı'},
+    {value: 'holidayAmount', label: 'Bayram saatı (Norma daxili)'},
+    {value: 'offDayCount', label: 'Bayram və istirahət günü işə çıxma (Günlərin sayı)'},
+    {value: 'offDayAmount', label: 'Bayram və istirahət günü işə çıxma'},
+    {value: '', label: 'Müvəqqəti həvalə(Maaş fərqi)'},
+    {value: '', label: 'İstifadə edilməmiş məzuniyyət günlərinə görə kompensasiya'},
+    {value: '', label: 'Müvəqqəti həvalə(%)'},
+    {value: '', label: 'İxtisara salınmaya görə ödənişlər'},
+    {value: '', label: 'Maddi yardım '},
+    {value: '', label: 'Maddi yardım (ölümlə əlaqədar) '},
+    {value: '', label: 'Maddi yardım (Təqaüdə gedənlər) '},
+    {value: '', label: 'Mükafat'},
+    {value: '', label: 'Mükafat Bayram günü ilə əlaqdəar'},
+    {value: '', label: 'Yemək pulu'},
+    {value: '', label: 'Xəstəlik vərəqəsi(DSMF tərəfindən)'},
+    {value: '', label: 'Xəstəlik vərəqəsi(Liman tərəfindən)'},
+    {value: 'totalResult', label: 'Cəmi  hesablanıb'},
+]
+
+const taxOptions = [
+    {value: 'discountAmount', label: 'Güzəşt Məbləği'},
+    {value: 'hysPASA', label: 'PAŞA HYS'},
+    {value: 'forIncomingTax', label: 'Gəlir vergisinə cəlb olunan hissəsi'},
+]
+
+const exemptionOptions = [
+    {value: 'incomingTax', label: 'Gəlir vergisi'},
+    {value: 'dsmfTax', label: 'M.D.S.S 3%'},
+    {value: 'unemploymentTax', label: 'İşsizlik 0,5%'},
+    {value: 'medicalInsuranceTax', label: 'İTS 2%'},
+    {value: 'hysTax', label: 'Limançı 2%'},
+    {value: '', label: 'Paşa HYS'},
+    {value: 'totalTax', label: 'Cəmi tutulub'},
+]
+
+const netExemptionOptions = [
+    {value: '', label: 'Aliment (Fix)'},
+    {value: '', label: 'Aliment %'},
+    {value: '', label: 'Kredit %'},
+    {value: '', label: 'Şəxsi borc (Fix)'},
+    {value: '', label: 'Cərimə %'},
+    {value: '', label: 'Yap (Fix)'},
+    {value: '', label: 'Ödənilmiş məz'},
+    {value: '', label: 'Ödənilmiş avans'},
+    {value: '', label: 'Dsmf tərəfindən ödənilmiş XV'},
+]
+
+const employerPayOptions = [
+    {value: '', label: 'M.D.S.S 22%'},
+    {value: '', label: 'İşsizlik 0,5%'},
+    {value: '', label: 'İTS 2%'},
+    {value: '', label: 'Limançı 1%'},
+]
+
+const cols = [
+    {value: 'fullName', label: 'S.A.A'},
+    {value: 'workedDayCount', label: 'Faktiki iş günü'},
+    {value: 'net', label: 'Net'},
+    {value: 'xsa', label: 'Plastik Karta köç. məbləğ'},
 ]
 
 function SalaryEmployee() {
@@ -55,7 +120,17 @@ function SalaryEmployee() {
     const [recordSize, setRecordSize] = useState(20);
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
     const [yearOptions, setYearOptions] = useState([]);
+    const [selectedVacancy, setSelectedVacancy] = useState([]);
+    const [selectedProduction, setSelectedProduction] = useState([]);
+    const [selectedCalculation, setSelectedCalculation] = useState([]);
+    const [selectedTax, setSelectedTax] = useState([]);
+    const [selectedExemption, setSelectedExemption] = useState([]);
+    const [selectedNet, setSelectedNet] = useState([]);
+    const [selectedEmployer, setSelectedEmployer] = useState([]);
+    const [tableCols, setTableCols] = useState(cols);
 
+
+    console.log(tableCols)
 
     const [selectedYear, setSelectedYear] = useState(currentYear);
 
@@ -64,13 +139,21 @@ function SalaryEmployee() {
     let year = selectedYear !== null ? selectedYear : currentYear;
     let month = selectedMonth !== null ? selectedMonth : currentMonth;
 
-    const getSalary = (month,year,page) => {
+    const Option = props => {
+        return (<div>
+            <components.Option {...props}>
+                <label>{props.value}</label>
+                <input type="checkbox" checked={props.isSelected} onChange={() => null}/>
+            </components.Option>
+        </div>);
+    };
+
+    const getSalary = (month, year, page) => {
         let params = {
             page: page - 1,
             size: recordSize,
         };
 
-        console.log(month, currentMonth, year, currentYear)
         if (month != currentMonth || year != currentYear) {
             params.year = year;
             params.month = month
@@ -92,12 +175,18 @@ function SalaryEmployee() {
         });
     }
 
+
     useEffect(() => {
-        getSalary(selectedMonth, selectedYear,1);
+        getSalary(selectedMonth, selectedYear, 1);
         for (let i = 2021; i <= currentYear; i++) {
             yearOptions.push({value: i, label: i});
         }
     }, []);
+
+    useEffect(() => {
+        let arr = cols.concat(selectedVacancy, selectedProduction, selectedCalculation, selectedTax, selectedExemption, selectedNet, selectedEmployer)
+        setTableCols(arr)
+    }, [selectedVacancy, selectedProduction, selectedCalculation, selectedTax, selectedExemption, selectedNet, selectedEmployer])
 
     return (
         <Aux>
@@ -143,58 +232,210 @@ function SalaryEmployee() {
                                             options={monthOptions}
                                             styles={customStyles}
                                             isSearchable={false}
+
+                                        />
+                                    </Form.Group>
+
+                                </div>
+                                <div className="filter-item">
+                                    <Form.Group className="m-0 form-group">
+                                        <Select
+                                            placeholder="Ştat"
+                                            onChange={async (val) => {
+                                                setSelectedVacancy(val);
+                                            }}
+                                            isMulti
+                                            options={vacancyOptions}
+                                            styles={customStyles}
+                                            isSearchable={false}
                                             getOptionLabel={(option) => option.label}
+                                            getOptionValue={(option) => option.label}
+                                            hideSelectedOptions={false}
+                                            controlShouldRenderValue={false}
+                                            closeMenuOnSelect={false}
+                                            clearable={false}
+                                            components={{Option}}
+                                        />
+                                    </Form.Group>
+                                </div>
+                                <div className="filter-item">
+                                    <Form.Group className="m-0 form-group">
+                                        <Select
+                                            placeholder="İstehsalat təqviminə görə"
+                                            onChange={(val) => {
+                                                setSelectedProduction(val);
+                                            }}
+                                            isMulti
+                                            options={productionOptions}
+                                            styles={customStyles}
+                                            isSearchable={false}
+                                            getOptionLabel={(option) => option.label}
+                                            getOptionValue={(option) => option.label}
+                                            hideSelectedOptions={false}
+                                            controlShouldRenderValue={false}
+                                            closeMenuOnSelect={false}
+                                            clearable={false}
+                                            components={{Option}}
+                                        />
+                                    </Form.Group>
+
+                                </div>
+                                <div className="filter-item">
+                                    <Form.Group className="m-0 form-group">
+                                        <Select
+                                            placeholder="Hesablama"
+                                            onChange={(val) => {
+                                                setSelectedCalculation(val);
+                                            }}
+                                            isMulti
+                                            options={calculationOptions}
+                                            styles={customStyles}
+                                            isSearchable={false}
+                                            getOptionLabel={(option) => option.label}
+                                            getOptionValue={(option) => option.label}
+                                            hideSelectedOptions={false}
+                                            controlShouldRenderValue={false}
+                                            closeMenuOnSelect={false}
+                                            clearable={false}
+                                            components={{Option}}
+                                        />
+                                    </Form.Group>
+                                </div>
+                                <div className="filter-item">
+                                    <Form.Group className="m-0 form-group">
+                                        <Select
+                                            placeholder="Vergiyə cəlb olunmayan məbləğ (Güzəştlər və HYS)"
+                                            onChange={(val) => {
+                                                setSelectedTax(val);
+                                            }}
+                                            isMulti
+                                            options={taxOptions}
+                                            styles={customStyles}
+                                            isSearchable={false}
+                                            getOptionLabel={(option) => option.label}
+                                            getOptionValue={(option) => option.label}
+                                            hideSelectedOptions={false}
+                                            controlShouldRenderValue={false}
+                                            closeMenuOnSelect={false}
+                                            clearable={false}
+                                            components={{Option}}
+                                        />
+                                    </Form.Group>
+
+                                </div>
+                                <div className="filter-item">
+                                    <Form.Group className="m-0 form-group">
+                                        <Select
+                                            placeholder="Tutulma"
+                                            onChange={(val) => {
+                                                setSelectedExemption(val);
+                                            }}
+                                            isMulti
+                                            options={exemptionOptions}
+                                            styles={customStyles}
+                                            isSearchable={false}
+                                            getOptionLabel={(option) => option.label}
+                                            getOptionValue={(option) => option.label}
+                                            hideSelectedOptions={false}
+                                            controlShouldRenderValue={false}
+                                            closeMenuOnSelect={false}
+                                            clearable={false}
+                                            components={{Option}}
+                                        />
+                                    </Form.Group>
+
+                                </div>
+                                <div className="filter-item">
+                                    <Form.Group className="m-0 form-group">
+                                        <Select
+                                            placeholder="Netdən olan tutulmalar"
+                                            onChange={(val) => {
+                                                setSelectedNet(val);
+                                            }}
+                                            isMulti
+                                            options={netExemptionOptions}
+                                            styles={customStyles}
+                                            isSearchable={false}
+                                            getOptionLabel={(option) => option.label}
+                                            getOptionValue={(option) => option.label}
+                                            hideSelectedOptions={false}
+                                            controlShouldRenderValue={false}
+                                            closeMenuOnSelect={false}
+                                            clearable={false}
+                                            components={{Option}}
+                                        />
+                                    </Form.Group>
+
+                                </div>
+                                <div className="filter-item">
+                                    <Form.Group className="m-0 form-group">
+                                        <Select
+                                            placeholder="İşəgötürən tərəfindən ödəniləcək "
+                                            onChange={(val) => {
+                                                setSelectedEmployer(val);
+                                            }}
+                                            isMulti
+                                            options={employerPayOptions}
+                                            styles={customStyles}
+                                            isSearchable={false}
+                                            getOptionLabel={(option) => option.label}
+                                            getOptionValue={(option) => option.label}
+                                            hideSelectedOptions={false}
+                                            controlShouldRenderValue={false}
+                                            closeMenuOnSelect={false}
+                                            clearable={false}
+                                            components={{Option}}
                                         />
                                     </Form.Group>
 
                                 </div>
                             </div>
-                          {/*  <Button className="btn-main" onClick={() => getSalary(1)}>
+                            {/*  <Button className="btn-main" onClick={() => getSalary(1)}>
                                 Hesabla
                             </Button>*/}
                         </div>
                     </div>
 
                     <div className="block">
-                        <Table responsive="sm" hover className={["m-0", loading ? 'active' : ''].join(' ')}>
-                            <thead>
-                            <tr>
-                                <th>S.A.A</th>
-                                <th>Gross</th>
-                                <th>Net</th>
-                                <th>Yekun əmək h.</th>
-                                <th>D.S.M.F</th>
-                                <th>Həmkarlar</th>
-                                <th>Gəlir verg.</th>
-                                <th>Tibbi sığorta</th>
-                                <th>İşsizlik</th>
-                                <th>İş. gün. sayı</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                salary.length > 0 ?
-                                    salary.map((item, index) =>
-                                        <tr key={index}>
-                                            <td>{item.fullName}</td>
-                                            <td>{item.salaryDetails !== null ? item.salaryDetails.gross : null}</td>
-                                            <td>{item.salaryDetails !== null ? item.salaryDetails.net : null}</td>
-                                            <td>{item.salaryDetails !== null ? item.salaryDetails.calculated : null}</td>
-                                            <td>{item.salaryDetails !== null ? item.salaryDetails.dsmfTax : null}</td>
-                                            <td>{item.salaryDetails !== null ? item.salaryDetails.hysTax : null}</td>
-                                            <td>{item.salaryDetails !== null ? item.salaryDetails.incomingTax : null}</td>
-                                            <td>{item.salaryDetails !== null ? item.salaryDetails.medicalInsuranceTax : null}</td>
-                                            <td>{item.salaryDetails !== null ? item.salaryDetails.unemploymentTax : null}</td>
-                                            <td>{item.salaryDetails !== null ? item.salaryDetails.workedDayCount : null}</td>
-                                        </tr>
-                                    )
-                                    : null
-                            }
-                            </tbody>
-                        </Table>
+                        {
+                            salary.length > 0 ?
+                                <Table responsive="sm" hover className={["m-0", loading ? 'active' : ''].join(' ')}>
+                                    <thead>
+                                    <tr>
+                                        {
+                                            tableCols.map((item, index) =>
+                                                <th key={index}>{item.label}</th>
+                                            )
+                                        }
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {
+                                        salary.map((item, index) =>
+                                            <tr key={index}>
+                                                {
+                                                    tableCols.map((tdItem, index) =>
+                                                        <td key={index}>{
+                                                            tdItem.value == 'fullName' ?
+                                                                item[tdItem.value]
+                                                                :
+                                                                item.salaryDetails[tdItem.value]
+                                                        }</td>
+                                                    )
+                                                }
+                                            </tr>
+                                        )
+                                    }
+                                    </tbody>
+                                </Table>
+                                :
+                                <EmptyData/>
+
+                        }
+
                     </div>
                     <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
-                              click={(page) => getSalary(month, year,page)}/>
+                              click={(page) => getSalary(month, year, page)}/>
                 </Container>
             </div>
         </Aux>

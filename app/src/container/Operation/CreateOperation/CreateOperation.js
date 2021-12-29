@@ -559,18 +559,6 @@ function CreateOperation() {
             "testPeriod": testPeriod !== "" ? parseFloat(testPeriod) : null,
         };
 
-        let businessTrip = {
-            "day": businessTripPeriod !== '' ? parseFloat(businessTripPeriod) : null,
-            "dayOffDateFrom": nonWorkDayArr.length > 0 ? nonWorkDayArr[0] : null,
-            "dayOffDateTo": nonWorkDayArr.length > 1 ? nonWorkDayArr[1] : null,
-            "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
-            "insteadPayment": businessTripPayment !== '' ? parseFloat(businessTripPayment) : null,
-            "notes": note !== '' ? note : null,
-            "cityId": selectedCity !== null ? selectedCity.id : null,
-            "startJob": jobDay !== '' ? jobDay : null,
-            "to": endDate !== null ? moment(endDate).format("YYYY-MM-DD") : null
-        };
-
         let additionalSalary = {
             "date": joinDate !== null ? moment(joinDate).format("YYYY-MM-DD") : null,
             "gradeId": selectedGrade !== null ? selectedGrade.id : null,
@@ -667,6 +655,37 @@ function CreateOperation() {
             "currentTo": endTime !== '' ? endTime : null,
             "newFrom": newStartTime !== '' ? newStartTime : null,
             "newTo": newEndTime !== '' ? newEndTime : null
+        };
+
+        /*let businessTrip = {
+            "day": businessTripPeriod !== '' ? parseFloat(businessTripPeriod) : null,
+            "dayOffDateFrom": nonWorkDayArr.length > 0 ? nonWorkDayArr[0] : null,
+            "dayOffDateTo": nonWorkDayArr.length > 1 ? nonWorkDayArr[1] : null,
+            "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
+            "insteadPayment": businessTripPayment !== '' ? parseFloat(businessTripPayment) : null,
+            "notes": note !== '' ? note : null,
+            "cityId": selectedCity !== null ? selectedCity.id : null,
+            "startJob": jobDay !== '' ? jobDay : null,
+            "to": endDate !== null ? moment(endDate).format("YYYY-MM-DD") : null
+        };*/
+
+        let businessTrip = {
+            "cityId": selectedCity !== null ? selectedCity.id : null,
+            "dailyEatPay": dailyExpCheck,
+            "dailyHotelPay": hotelExpCheck,
+            "day": businessTripPeriod !== '' ? parseFloat(businessTripPeriod) : null,
+            "dayOffDateFrom": nonWorkDayArr.length > 0 ? nonWorkDayArr[0] : null,
+            "dayOffDateTo": nonWorkDayArr.length > 1 ? nonWorkDayArr[1] : null,
+            "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
+            "fromCheckInHotel": checkOut,
+            "insteadDayOffFrom": "string",
+            "insteadDayOffTo": "string",
+            "insteadPayment": 0,
+            "notes":  note !== '' ? note : null,
+            "otherDailyPayment": otherExpCheck,
+            "startJob": jobDay !== '' ? jobDay : null,
+            "to": endDate !== null ? moment(endDate).format("YYYY-MM-DD") : null,
+            "toCheckInHotel": checkIn
         };
 
         let data = {
@@ -7603,14 +7622,15 @@ function CreateOperation() {
                                                 otherExpCheck ?
                                                     <Col xs={12}>
                                                         <Form.Group className="form-group">
-                                                            <span className="input-title">Gündəlik məbləği daxil edin</span>
+                                                            <span
+                                                                className="input-title">Gündəlik məbləği daxil edin</span>
                                                             <Form.Label>
                                                                 <Form.Control
-                                                                              onChange={(e) => {
-                                                                                  setAmount(e.target.value)
-                                                                              }}
-                                                                              value={amount}
-                                                                              placeholder="Gündəlik məbləği daxil edin"
+                                                                    onChange={(e) => {
+                                                                        setAmount(e.target.value)
+                                                                    }}
+                                                                    value={amount}
+                                                                    placeholder="Gündəlik məbləği daxil edin"
                                                                 />
                                                             </Form.Label>
                                                         </Form.Group>
