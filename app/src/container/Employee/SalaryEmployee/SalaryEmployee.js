@@ -27,7 +27,6 @@ const vacancyOptions = [
     {value: 'mainSalary', label: 'Vəzifə maaşı'},
     {value: 'individualAddition', label: 'Fərdi əlavə'},
     {value: 'conditionalAddition', label: 'Fərdi əlavə %'},
-    {value: 'hysTax', label: 'Limançı 2%'},
 ]
 
 const productionOptions = [

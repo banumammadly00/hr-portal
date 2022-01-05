@@ -75,6 +75,9 @@ function EmployeeCreate() {
         {value: "MOTHER", label: 'Ana'},
         {value: "SISTER", label: 'Bacı'},
         {value: "BROTHER", label: 'Qardaş'},
+        {value: "WIFE", label: 'Həyat yoldaşı'},
+        {value: "SON", label: 'Oğul'},
+        {value: "DAUGHTER", label: 'Qız'},
     ];
 
     const eduDegreeOptions = [

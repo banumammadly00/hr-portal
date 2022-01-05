@@ -37,6 +37,11 @@ const vacationType = [
     {value: 'DEBT', label: 'Borc'},
 ]
 
+const jobTypeOptions = [
+    {value: 'MAIN', label: 'Əsas iş yeri'},
+    {value: 'ADDITIONAL', label: 'Əlavə iş yeri'},
+]
+
 function CreateOperation() {
     let history = useHistory();
     const [operationType, setOperationType] = useState([]);
@@ -104,6 +109,7 @@ function CreateOperation() {
     const [testPeriod, setTestPeriod] = useState('');
     const [individualAddition, setIndividualAddition] = useState('');
     const [selectedJobTime, setSelectedJobTime] = useState(null);
+    const [selectedJobType, setSelectedJobType] = useState(null);
     const [grade, setGrade] = useState([])
     const [gradeArr, setGradeArr] = useState([]);
     const [selectedGrade, setSelectedGrade] = useState(null);
@@ -487,7 +493,8 @@ function CreateOperation() {
             "individualAddition": individualAddition !== '' ? parseFloat(individualAddition) : null,
             "subGradeId": selectedSubGrade !== null ? selectedSubGrade.id : null,
             "testPeriod": testPeriod !== "" ? parseFloat(testPeriod) : null,
-            "jobTime": selectedJobTime !== null ? selectedJobTime.value : null
+            "jobTime": selectedJobTime !== null ? selectedJobTime.value : null,
+            "jobType": selectedJobType !== null ? selectedJobType.value : null
         }
 
         let employeeIds = [];
@@ -656,18 +663,6 @@ function CreateOperation() {
             "newFrom": newStartTime !== '' ? newStartTime : null,
             "newTo": newEndTime !== '' ? newEndTime : null
         };
-
-        /*let businessTrip = {
-            "day": businessTripPeriod !== '' ? parseFloat(businessTripPeriod) : null,
-            "dayOffDateFrom": nonWorkDayArr.length > 0 ? nonWorkDayArr[0] : null,
-            "dayOffDateTo": nonWorkDayArr.length > 1 ? nonWorkDayArr[1] : null,
-            "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
-            "insteadPayment": businessTripPayment !== '' ? parseFloat(businessTripPayment) : null,
-            "notes": note !== '' ? note : null,
-            "cityId": selectedCity !== null ? selectedCity.id : null,
-            "startJob": jobDay !== '' ? jobDay : null,
-            "to": endDate !== null ? moment(endDate).format("YYYY-MM-DD") : null
-        };*/
 
         let businessTrip = {
             "cityId": selectedCity !== null ? selectedCity.id : null,
@@ -1260,6 +1255,21 @@ function CreateOperation() {
                                                                       value={vacancyPosition || ''}
                                                                       disabled={true}/>
                                                     </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={4}>
+                                                <Form.Group className="form-group">
+                                                    <span className="input-title">İş yeri seçin </span>
+                                                    <Select
+                                                        placeholder="İş yeri seçin"
+                                                        value={selectedJobType}
+                                                        onChange={(val) =>
+                                                            setSelectedJobType(val)
+                                                        }
+                                                        isSearchable={jobTypeOptions ? jobTypeOptions.length > 5 ? true : false : false}
+                                                        options={jobTypeOptions}
+                                                        styles={customStyles}
+                                                    />
                                                 </Form.Group>
                                             </Col>
                                             <Col xs={4}>
