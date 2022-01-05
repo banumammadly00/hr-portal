@@ -8515,7 +8515,7 @@ function CreateOperation() {
                                             </Col>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Maddi yardımın məbləği </span>
+                                                    <span className="input-title">Maddi yardımın məbləği (vergilər və digər ödənişər daxil olmaqla) </span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Maddi yardımın məbləği "
                                                                       value={amount || ''}
@@ -8550,7 +8550,7 @@ function CreateOperation() {
                                             </Col>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Mükafatın məbləği Azn  </span>
+                                                    <span className="input-title">Mükafatın məbləği Azn (vergilər və digər ödənişlər daxil olmaqla)  </span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Mükafatın məbləği  məbləği "
                                                                       value={amount || ''}
