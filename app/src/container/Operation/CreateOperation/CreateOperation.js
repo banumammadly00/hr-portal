@@ -671,6 +671,7 @@ function CreateOperation() {
 
         let businessTrip = {
             "cityId": selectedCity !== null ? selectedCity.id : null,
+            "count": 0,
             "dailyEatPay": dailyExpCheck,
             "dailyHotelPay": hotelExpCheck,
             "day": businessTripPeriod !== '' ? parseFloat(businessTripPeriod) : null,
@@ -678,9 +679,7 @@ function CreateOperation() {
             "dayOffDateTo": nonWorkDayArr.length > 1 ? nonWorkDayArr[1] : null,
             "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
             "fromCheckInHotel": checkOut,
-            "insteadDayOffFrom": "string",
-            "insteadDayOffTo": "string",
-            "insteadPayment": 0,
+            "insteadPayment": amount !== '' ? parseFloat(amount) : 0,
             "notes":  note !== '' ? note : null,
             "otherDailyPayment": otherExpCheck,
             "startJob": jobDay !== '' ? jobDay : null,
@@ -708,7 +707,6 @@ function CreateOperation() {
             "warning": tab == "45" ? warning : null,
             "collectiveAgreement": tab == "22" ? collectiveAgreement : null,
             "changeJob": tab == "9" || tab == "13" ? changeJob : null,
-            "businessTrip": tab == "30" ? businessTrip : null,
             "additionalSalary": tab == "11" ? additionalSalary : null,
             "academicAdditional": tab == "35" ? academicAdditional : null,
             "changeSalary": tab == "10" ? changeSalary : null,
@@ -725,6 +723,7 @@ function CreateOperation() {
             "reward": tab == '34' ? reward : null,
             "remove": tab == '41' ? dismissal : null,
             "reduceWorkHours": tab == '43' ? reduceWorkHours : null,
+            "businessTrip": tab == '30' ? businessTrip : null,
         }
 
         mainAxios({
@@ -8516,7 +8515,7 @@ function CreateOperation() {
                                             </Col>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Maddi yardımın məbləği (vergilər və digər ödənişər xaric olmaqla) </span>
+                                                    <span className="input-title">Maddi yardımın məbləği </span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Maddi yardımın məbləği "
                                                                       value={amount || ''}
@@ -8551,7 +8550,7 @@ function CreateOperation() {
                                             </Col>
                                             <Col xs={6}>
                                                 <Form.Group className="form-group">
-                                                    <span className="input-title">Mükafatın məbləği Azn (vergilər və digər ödənişlər daxil olmaqla və ya xaric olmaqla):  </span>
+                                                    <span className="input-title">Mükafatın məbləği Azn  </span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Mükafatın məbləği  məbləği "
                                                                       value={amount || ''}
