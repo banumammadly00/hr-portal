@@ -685,7 +685,9 @@ function EditEmployee() {
             let tmpBusinessIntArr = [];
             for (let i of businessData) {
                 if (i.businessStatus == 'Daxili') {
-                    let obj = {};
+                    let obj = {
+                        businessStatus : null
+                    };
                     obj.company = i.company;
                     obj.department = i.department;
                     obj.subDepartment = i.subDepartment;
@@ -693,7 +695,8 @@ function EditEmployee() {
                     obj.dismissalReason = i.dismissalReason;
                     for (let j of businessOptions) {
                         if (i.businessStatus == j.label) {
-                            obj.businessStatus = j
+                            obj.businessStatus = j;
+                            break;
                         }
                     }
                     obj.startDate = i.startDate;
@@ -709,7 +712,9 @@ function EditEmployee() {
             let tmpBusinessExtArr = [];
             for (let i of businessData) {
                 if (i.businessStatus == 'Xarici') {
-                    let obj = {};
+                    let obj = {
+                        businessStatus : null
+                    };
                     obj.company = i.company;
                     obj.department = i.department;
                     obj.subDepartment = i.subDepartment;
@@ -717,7 +722,8 @@ function EditEmployee() {
                     obj.dismissalReason = i.dismissalReason;
                     for (let j of businessOptions) {
                         if (i.businessStatus == j.label) {
-                            obj.businessStatus = j
+                            obj.businessStatus = j;
+                            break;
                         }
                     }
                     obj.startDate = i.startDate;

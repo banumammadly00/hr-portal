@@ -676,7 +676,7 @@ function CreateOperation() {
             "fromCheckInHotel": checkOut,
             "insteadPayment": amount !== '' ? parseFloat(amount) : 0,
             "notes": note !== '' ? note : null,
-            "otherDailyPayment": otherExpCheck,
+            "otherDailyPayment": amount !== '' ? parseFloat(amount) : 0,
             "startJob": jobDay !== '' ? jobDay : null,
             "to": endDate !== null ? moment(endDate).format("YYYY-MM-DD") : null,
             "toCheckInHotel": checkIn
