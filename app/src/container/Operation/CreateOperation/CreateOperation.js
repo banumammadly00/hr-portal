@@ -674,7 +674,6 @@ function CreateOperation() {
             "dayOffDateTo": nonWorkDayArr.length > 1 ? nonWorkDayArr[1] : null,
             "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
             "fromCheckInHotel": checkOut,
-            "insteadPayment": amount !== '' ? parseFloat(amount) : 0,
             "notes": note !== '' ? note : null,
             "otherDailyPayment": amount !== '' ? parseFloat(amount) : 0,
             "startJob": jobDay !== '' ? jobDay : null,
@@ -7094,9 +7093,9 @@ function CreateOperation() {
                                                     <div className="validation-block flex-start">
                                                         {
 
-                                                            errors['businessTrip.paymentId'] !== '' ?
+                                                            errors['businessTrip.cityId'] !== '' ?
                                                                 <span
-                                                                    className="text-validation">{errors['businessTrip.paymentId']}</span>
+                                                                    className="text-validation">{errors['businessTrip.cityId']}</span>
                                                                 : null
                                                         }
                                                     </div>
@@ -7487,12 +7486,12 @@ function CreateOperation() {
                                                                     <Col xs={12}>
                                                                         <Form.Group className="form-group">
                                                                             <span
-                                                                                className="input-title">Ödənişi daxil edin </span>
+                                                                                className="input-title">Əvəz edilən ödəniş </span>
                                                                             <Form.Label className="relative m-0">
                                                                                 <Form.Control
                                                                                     value={'' || businessTripPayment}
-                                                                                    type="number"
-                                                                                    placeholder="Ödənişi daxil edin "
+                                                                                    disabled={true}
+                                                                                    placeholder="Əvəz edilən ödəniş"
                                                                                     onChange={e => setBusinessTripPayment(e.target.value)}/>
                                                                             </Form.Label>
                                                                         </Form.Group>
@@ -7548,13 +7547,13 @@ function CreateOperation() {
                                                                             <Row>
                                                                                 <Col xs={12}>
                                                                                     <Form.Group className="form-group">
-                                                                                        <span className="input-title">Ödənişi daxil edin </span>
+                                                                                        <span className="input-title">Əvəz edilən ödəniş </span>
                                                                                         <Form.Label
                                                                                             className="relative m-0">
                                                                                             <Form.Control
                                                                                                 value={'' || businessTripPayment}
-                                                                                                type="number"
-                                                                                                placeholder="Ödənişi daxil edin "
+                                                                                                disabled={true}
+                                                                                                placeholder="Əvəz edilən ödəniş"
                                                                                                 onChange={e => setBusinessTripPayment(e.target.value)}/>
                                                                                         </Form.Label>
                                                                                     </Form.Group>
