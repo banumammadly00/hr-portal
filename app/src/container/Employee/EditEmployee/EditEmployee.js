@@ -649,16 +649,21 @@ function EditEmployee() {
 
             let tmpEducation = []
             for (let i of educationData.universities) {
-                let obj = {};
+                let obj = {
+                    degree: null,
+                    educationType: null
+                };
                 for (let j of eduDegreeOptions) {
                     if (i.degree === j.label) {
-                        obj.degree = j
+                        obj.degree = j;
+                        break;
                     }
                 }
 
                 for (let k of educationTypeOptions) {
                     if (i.educationType === k.label) {
-                        obj.educationType = k
+                        obj.educationType = k;
+                        break;
                     }
                 }
                 obj.abroadStudyNo = i.abroadStudyNo;
@@ -672,6 +677,7 @@ function EditEmployee() {
                 obj.foreignOption = i.abroadStudyNo !== null ? 1 : 0
                 tmpEducation.push(obj)
             }
+            console.log(tmpEducation)
             if (tmpEducation.length > 0)
                 setEducationArr(tmpEducation)
 
@@ -938,7 +944,6 @@ function EditEmployee() {
     }
 
     const sendEducationData = () => {
-        console.log(educationArr)
         setLoadingIndicator(true);
         for (let i of educationArr) {
             delete i.foreignOption
