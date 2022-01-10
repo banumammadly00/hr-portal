@@ -16,6 +16,8 @@ import EditEmployee from "../../container/Employee/EditEmployee/EditEmployee";
 import SalaryEmployee from "../../container/Employee/SalaryEmployee/SalaryEmployee";
 import CreateOperation from "../../container/Operation/CreateOperation/CreateOperation";
 import OperationSchedule from "../../container/Operation/OperationSchedule/OperationSchedule";
+import BusinessTripSchedule from "../../container/BusinessTrip/BusinessTripSchedule";
+import WorkSchedule from "../../container/Work/WorkSchedule/WorkSchedule";
 import Header from "../Header/Header";
 import Sidebar from "../Sidebar/Sidebar";
 import Setting from "../../container/Setting/Setting";
@@ -48,6 +50,8 @@ function Other () {
                         <ProtectedRoute exact path="/staff/view/:id" component={ViewStaff}/>
                         <ProtectedRoute exact path="/operation" component={OperationSchedule}/>
                         <ProtectedRoute path="/operation/create" component={CreateOperation}/>
+                        <ProtectedRoute path="/businessTrip" component={BusinessTripSchedule}/>
+                        <ProtectedRoute path="/workSchedule" component={WorkSchedule}/>
                         <ProtectedRoute path="/setting" component={Setting}/>
                     </Switch>
                 </main>

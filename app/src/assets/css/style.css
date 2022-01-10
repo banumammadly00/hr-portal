@@ -1471,10 +1471,6 @@ td {
     bottom: 0;
 }
 
-.calendar .fc .fc-day-sat .fc-bg-event:before, .calendar .fc .fc-day-sun .fc-bg-event:before {
-    content: unset;
-}
-
 .calendar .fc .fc-daygrid-day.fc-day-today {
     background-color: rgba(46, 208, 106, 0.08);
 }

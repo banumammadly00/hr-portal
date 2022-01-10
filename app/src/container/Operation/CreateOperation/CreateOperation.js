@@ -88,6 +88,7 @@ function CreateOperation() {
     const [assignWorkPlace, setAssignWorkPlace] = useState('');
     const [assignCheck, setAssignCheck] = useState('');
     const [selectedVacation, setSelectedVacation] = useState(null);
+    const [tripSalary, setTripSalary] = useState('');
 
 
     /*------Vacancy----------*/
@@ -101,7 +102,6 @@ function CreateOperation() {
     const [vacancyWorkPlace, setVacancyWorkPlace] = useState('');
     const [vacancyCategory, setVacancyCategory] = useState('');
     const [vacancyObeyDepartment, setVacancyObeyDepartment] = useState('');
-    const [businessTripPayment, setBusinessTripPayment] = useState('');
 
 
     /*------General----------*/
@@ -664,7 +664,11 @@ function CreateOperation() {
             "newTo": newEndTime !== '' ? newEndTime : null
         };
 
-        let businessTripCount = Number(businessTripCheck) + (nonWorkDayArr.length > 1 ?  Number(businessPaymentCheck) : 0 );
+        let businessTripCount = Number(businessTripCheck) + (nonWorkDayArr.length > 1 ? Number(businessPaymentCheck) : 0);
+
+        let totalTripSalary = (businessTripCheck ? 0 : parseFloat(tripSalary) ) + (businessPaymentCheck ? 0 : parseFloat(tripSalary));
+
+        console.log(businessTripCheck ? 0 : parseFloat(tripSalary) ,  businessPaymentCheck ? 0 : parseFloat(tripSalary))
 
         let businessTrip = {
             "cityId": selectedCity !== null ? selectedCity.id : null,
@@ -675,8 +679,8 @@ function CreateOperation() {
             "dayOffDateFrom": nonWorkDayArr.length > 0 ? nonWorkDayArr[0] : null,
             "dayOffDateTo": nonWorkDayArr.length > 1 ? nonWorkDayArr[1] : null,
             "from": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
+            "insteadPayment": totalTripSalary,
             "fromCheckInHotel": checkOut,
-            "notes": note !== '' ? note : null,
             "otherDailyPayment": amount !== '' ? parseFloat(amount) : 0,
             "startJob": jobDay !== '' ? jobDay : null,
             "to": endDate !== null ? moment(endDate).format("YYYY-MM-DD") : null,
@@ -767,6 +771,25 @@ function CreateOperation() {
         });
     }
 
+    const getBusinessTripSalary = (date, staff) => {
+       if (date !== null && staff !== null) {
+           mainAxios({
+               method: 'get',
+               url: 'business-trips/salary',
+               headers: {
+                   'Content-Type': 'application/json',
+                   'Authorization': 'Bearer ' + localStorage.getItem('token')
+               },
+               params: {
+                   date : moment(date).format('YYYY-MM-DD'),
+                   employeeId : staff.id
+               }
+           }).then((res) => {
+                    setTripSalary(res.data)
+               }
+           );
+       }
+    }
 
     const getCalculatedDate = (elem, setDate) => {
         let vacArr = [];
@@ -7034,6 +7057,8 @@ function CreateOperation() {
                                                             setEmployeeId(id)
                                                             getEmployeeDetail(id)
                                                             setSelectedStaff(val);
+                                                            getBusinessTripSalary(endDate, val);
+
                                                         }}
                                                         isSearchable={employee ? employee.length > 5 ? true : false : false}
                                                         options={employee}
@@ -7149,7 +7174,7 @@ function CreateOperation() {
                                                                         getBusinessTripDay(date, endDay);
                                                                         setBusinessTripCheck(true);
                                                                         setBusinessPaymentCheck(true);
-                                                                        setBusinessTripPayment('')
+                                                                        setTripSalary('')
                                                                     }}/>
                                                         <Button className="btn-transparent">
                                                             <svg width="18" height="18"
@@ -7240,9 +7265,10 @@ function CreateOperation() {
                                                                 let startDay = startDate !== null ? startDate : 0
                                                                 getDayCount(startDay, date);
                                                                 getBusinessTripDay(startDay, date);
+                                                                getBusinessTripSalary(date, selectedStaff);
                                                                 setBusinessTripCheck(true);
                                                                 setBusinessPaymentCheck(true);
-                                                                setBusinessTripPayment('')
+                                                                setTripSalary('')
                                                             }}
                                                             selectsEnd
                                                             startDate={startDate}
@@ -7491,7 +7517,7 @@ function CreateOperation() {
                                                                                 className="input-title">Əvəz edilən ödəniş </span>
                                                                             <Form.Label className="relative m-0">
                                                                                 <Form.Control
-                                                                                    value={'' || businessTripPayment}
+                                                                                    value={'' || tripSalary}
                                                                                     placeholder="Əvəz edilən ödəniş "
                                                                                     disabled={true}
                                                                                 />
@@ -7554,7 +7580,7 @@ function CreateOperation() {
                                                                                         <Form.Label
                                                                                             className="relative m-0">
                                                                                             <Form.Control
-                                                                                                value={'' || businessTripPayment}
+                                                                                                value={'' || tripSalary}
                                                                                                 placeholder="Əvəz edilən ödəniş "
                                                                                                 disabled={true}
                                                                                             />
@@ -7656,21 +7682,6 @@ function CreateOperation() {
                                                     </Col>
                                                     : null
                                             }
-                                            <Col xs={12}>
-                                                <Form.Group className="form-group">
-                                                    <span className="input-title">Qeyd</span>
-                                                    <Form.Label>
-                                                        <Form.Control as="textarea"
-                                                                      onChange={(e) => {
-                                                                          setNote(e.target.value)
-                                                                      }}
-                                                                      value={note}
-                                                                      placeholder="Text..."
-                                                        />
-                                                    </Form.Label>
-                                                </Form.Group>
-                                            </Col>
-
                                         </Row>
                                     </Tab>
 
