@@ -59,8 +59,8 @@ function WorkSchedule() {
     }
 
     const timeDiffer = (day, startTime, endTime) => {
-        let startDate = startTime!== null ? (day.concat(" , ",'20:00')) : null;
-        let endDate = endTime!== null ? (day.concat(" , ", '01:00')) : null;
+        let startDate = startTime !== null ? (day.concat(" , ", '20:00')) : null;
+        let endDate = endTime !== null ? (day.concat(" , ", '01:00')) : null;
         console.log((new Date(endDate)).getHours())
         let diffHour = ((new Date(endDate)).getTime() - (new Date(startDate)).getTime());
         console.log(diffHour)
@@ -201,7 +201,7 @@ function WorkSchedule() {
                                                     weekdays.length > 0 ?
                                                         weekdays.map((day, dayIndex) =>
                                                             <td className={[today !== day.date ? '' : 'td-today', 'td-weekday'].join(' ')}
-                                                                onClick={() => setData(Object.assign(employeeArr[item][day.date], {startDate: weekdays[0]}, {endDate: weekdays[6]}, {name: item}))}
+                                                                onClick={() => setData(Object.assign(employeeArr[item][day.date], {startDate: weekdays[0]}, {endDate: weekdays[6]}, {name: item}, {weekday:  `${day.day} ${months[day.month]}`}))}
                                                                 key={dayIndex}>
                                                                 {
                                                                     employeeArr[item][day.date] !== undefined ?

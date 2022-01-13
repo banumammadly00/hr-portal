@@ -16,12 +16,12 @@ function CalendarDayModal(props) {
                 <h4>Ləğv etmək istədiyinizə <br/> əminsinizmi? </h4>
                 <ul className="btn-block flex list-unstyled m-0">
                     <li className="w-100">
-                        <button type="button" className="btn-green-border" onClick={props.onHide}>
+                        <button type="button" className="btn-main-border" onClick={props.onHide}>
                             Xeyr
                         </button>
                     </li>
                     <li className="w-100">
-                        <button type="button" className="btn-effect" onClick={() => {
+                        <button type="button" className="btn-main" onClick={() => {
                             props.click(props.data.id, props.data.description, false, props.data.date)
                         }}>
                             Bəli

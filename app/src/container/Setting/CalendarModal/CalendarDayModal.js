@@ -24,12 +24,12 @@ function CalendarDayModal(props) {
                 </Form.Group>
                 <ul className="btn-block flex list-unstyled m-0">
                     <li className="w-100">
-                        <button type="button" className="btn-green-border" onClick={props.onHide}>
+                        <button type="button" className="btn-main-border" onClick={props.onHide}>
                             Bağla
                         </button>
                     </li>
                     <li className="w-100">
-                        <button type="button" className="btn-effect" onClick={() => {
+                        <button type="button" className="btn-main" onClick={() => {
                             props.click(props.data.id, reason, true, props.data.date)
                         }}>
                             Əlavə et
