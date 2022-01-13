@@ -53,7 +53,8 @@ function OperationSchedule() {
             setCurrentPage(page);
             setOperation(res.data.content);
             setTotalRecord(res.data.totalElements);
-            setEmptyData(true)
+            setEmptyData(true);
+            console.log(res.data.content.length)
         });
     }
 

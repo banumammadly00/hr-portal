@@ -340,19 +340,6 @@ function EmployeeCreate() {
         });
     }
 
-    /* const getQuota = () => {
-         mainAxios({
-             method: 'get',
-             url: '/employee/quota',
-             headers: {
-                 'Content-Type': 'application/json',
-                 'Authorization': 'Bearer ' + localStorage.getItem('token')
-             },
-         }).then((res) => {
-             setQuota(res.data.data)
-         });
-     }*/
-
     const getReward = () => {
         mainAxios({
             method: 'get',
@@ -912,7 +899,6 @@ function EmployeeCreate() {
         getCountry();
         getRegion();
         getUniversity();
-        /*getQuota();*/
         getCitizenControl();
         getReward();
         getCertificate();
@@ -1747,15 +1733,6 @@ function EmployeeCreate() {
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
                                                         />
-                                                        {/*  <div className="validation-block flex-start">
-                                                            {
-
-                                                                errors['contactInformation.livingAddress.countryId'] !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors['contactInformation.livingAddress.countryId']}</span>
-                                                                    : null
-                                                            }
-                                                        </div>*/}
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1772,15 +1749,6 @@ function EmployeeCreate() {
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
                                                         />
-                                                        {/* <div className="validation-block flex-start">
-                                                            {
-
-                                                                errors['contactInformation.livingAddress.cityId'] !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors['contactInformation.livingAddress.cityId']}</span>
-                                                                    : null
-                                                            }
-                                                        </div>*/}
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1797,15 +1765,6 @@ function EmployeeCreate() {
                                                             getOptionLabel={(option) => (option.name)}
                                                             styles={customStyles}
                                                         />
-                                                        {/* <div className="validation-block flex-start">
-                                                            {
-
-                                                                errors['contactInformation.livingAddress.districtId'] !== '' ?
-                                                                    <span
-                                                                        className="text-validation">{errors['contactInformation.livingAddress.districtId']}</span>
-                                                                    : null
-                                                            }
-                                                        </div>*/}
                                                     </Form.Group>
                                                 </Col>
                                                 <Col xs={4}>
@@ -1899,15 +1858,6 @@ function EmployeeCreate() {
                                                                     getOptionLabel={(option) => (option.name)}
                                                                     styles={customStyles}
                                                                 />
-                                                                {/* <div className="validation-block flex-start">
-                                                                    {
-
-                                                                        errors['contactInformation.registeredAddress.countryId'] !== '' ?
-                                                                            <span
-                                                                                className="text-validation">{errors['contactInformation.registeredAddress.countryId']}</span>
-                                                                            : null
-                                                                    }
-                                                                </div>*/}
                                                             </Form.Group>
                                                         </Col>
                                                         <Col xs={4}>
@@ -1925,15 +1875,6 @@ function EmployeeCreate() {
                                                                     getOptionLabel={(option) => (option.name)}
                                                                     styles={customStyles}
                                                                 />
-                                                                {/*   <div className="validation-block flex-start">
-                                                                    {
-
-                                                                        errors['contactInformation.registeredAddress.cityId'] !== '' ?
-                                                                            <span
-                                                                                className="text-validation">{errors['contactInformation.registeredAddress.cityId']}</span>
-                                                                            : null
-                                                                    }
-                                                                </div>*/}
                                                             </Form.Group>
                                                         </Col>
                                                         <Col xs={4}>
@@ -1951,15 +1892,6 @@ function EmployeeCreate() {
                                                                     getOptionLabel={(option) => (option.name)}
                                                                     styles={customStyles}
                                                                 />
-                                                                {/*  <div className="validation-block flex-start">
-                                                                    {
-
-                                                                        errors['contactInformation.registeredAddress.districtId'] !== '' ?
-                                                                            <span
-                                                                                className="text-validation">{errors['contactInformation.registeredAddress.districtId']}</span>
-                                                                            : null
-                                                                    }
-                                                                </div>*/}
                                                             </Form.Group>
                                                         </Col>
                                                         <Col xs={4}>

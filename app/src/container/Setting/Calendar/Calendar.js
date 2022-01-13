@@ -63,7 +63,6 @@ function Calendar() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             data: data
-
         }).then((res) => {
             getDay(year, month)
             setModalShow(false);
@@ -79,7 +78,7 @@ function Calendar() {
 
     }
 
-    const handleDateClick = (arg) => { // bind with an arrow function
+    const handleDateClick = (arg) => {
         let day = getDayEvent(arg.dateStr);
         setModalData(day)
         if (day.holiday) {

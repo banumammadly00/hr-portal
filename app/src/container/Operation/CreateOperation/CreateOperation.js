@@ -668,8 +668,6 @@ function CreateOperation() {
 
         let totalTripSalary = (businessTripCheck ? 0 : parseFloat(tripSalary) ) + (businessPaymentCheck ? 0 : parseFloat(tripSalary));
 
-        console.log(businessTripCheck ? 0 : parseFloat(tripSalary) ,  businessPaymentCheck ? 0 : parseFloat(tripSalary))
-
         let businessTrip = {
             "cityId": selectedCity !== null ? selectedCity.id : null,
             "count": businessTripCount,

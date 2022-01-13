@@ -165,7 +165,7 @@ label, .react-time-picker {
     margin: 0;
 }
 
-.btn-effect, .btn-effect:hover, .btn-effect:focus, .btn-border, .btn-main, .btn-green-border {
+.btn-effect, .btn-effect:hover, .btn-effect:focus, .btn-border, .btn-main, .btn-green-border, .btn-main-border {
     background: #2ED06A;
     border: none;
     border-radius: 4px;
@@ -188,6 +188,13 @@ label, .react-time-picker {
     color: #193651;
 }
 
+.btn-main-border, .btn-main-border:hover, .btn-main-border:focus {
+    background: transparent;
+    border-radius: 4px;
+    border: 1px solid #3083DC;
+    color: #3083DC;
+}
+
 .btn-green-border, .btn-green-border:focus, .btn-green-border:hover {
     background: transparent;
     border-radius: 4px;
@@ -196,7 +203,7 @@ label, .react-time-picker {
 }
 
 .btn-main, .btn-main:hover, .btn-main:focus {
-    background-color: rgba(48, 131, 220, .8);
+    background-color: #3083DC;
     color: #FFFFFF;
     border-radius: 4px;
     border: none;
@@ -1494,7 +1501,7 @@ td {
     padding: 40px 20px;
 }
 
-.modal-sure h4 {
+.modal-sure h4, .modal-work-schedule h4 {
     font-size: 22px;
     line-height: 28px;
     text-align: center;
@@ -1502,7 +1509,7 @@ td {
     margin-bottom: 40px;
 }
 
-.modal-sure.modal-calendar h4 {
+.modal-sure.modal-calendar h4, .modal-work-schedule h4 {
     text-align: left;
     opacity: 0.7;
     font-size: 24px;
@@ -1510,6 +1517,15 @@ td {
 
 .modal-sure .btn-block li:not(:last-child) {
     margin-right: 15px;
+}
+
+.modal-work-schedule .modal-body {
+    padding: 25px 25px 35px;
+}
+
+.modal-work-schedule h4 {
+    margin-bottom: 25px;
+    font-size: 20px;
 }
 
 .setting .nav-tabs {
@@ -1804,6 +1820,61 @@ input::-webkit-inner-spin-button {
     width: auto;
     margin: 0;
 }
+
+.check-content, .repeat-block {
+    color: #193651;
+    font-size: 16px;
+}
+
+.check-content {
+    margin-bottom: 20px;
+}
+
+.modal-work-schedule .check-button {
+    height: 24px;
+}
+.modal-work-schedule .check-button .checkmark {
+    width: 24px;
+    height: 24px;
+}
+
+.modal-work-schedule .check-button .checkmark:after {
+    left: 8px;
+    height: 12px;
+    width: 6px;
+    bottom: 6px;
+}
+
+.repeat-block .form-group {
+    width: 70px;
+    margin: 0 10px ;
+}
+
+.repeat-block .form-group .form-control {
+    text-align: center;
+}
+
+.holiday-in, .work-hours-content {
+    margin-bottom: 30px;
+}
+
+.modal-work-schedule .btn-block button {
+    height: 48px;
+    width: 125px;
+}
+
+.modal-work-schedule .btn-block {
+    margin: 35px 0 0;
+}
+
+.modal-work-schedule .work-hours-block {
+    align-items: flex-end;
+}
+
+.modal-work-schedule .work-hours-block .break-line {
+    margin: 20px 10px;
+}
+
 
 
 @media only screen and (min-width: 1600px) {

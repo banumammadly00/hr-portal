@@ -3,20 +3,27 @@ import Aux from "../../../hoc/Auxiliary";
 import {mainAxios} from "../../../components/Axios/axios";
 import {Button, Col, Container, Form, OverlayTrigger, Row, Tab, Table, Tabs, Tooltip} from "react-bootstrap";
 import EmptyData from "../../../components/EmptyData/EmptyData";
-import {ReactSVG} from 'react-svg'
+import {ReactSVG} from 'react-svg';
+import WorkDayModal from '../WorkDayModal/WorkDayModal'
 import {Link} from "react-router-dom";
 import Select from "react-select";
 import {customStyles} from "../../../components/Select/SelectStyle";
 import DatePicker from "react-datepicker";
 import {addWeeks} from "@fullcalendar/react";
+import CalendarDayModal from "../../Setting/CalendarModal/CalendarDayModal";
+import format from "@popperjs/core/lib/utils/format";
+import moment from "moment";
 
 const months = ['Yan', 'Fev', 'Mart', 'Apr', 'May', 'İyun', 'İyul', 'Avq', 'Sent', 'Okt', 'Nov', 'Dek']
 
 function WorkSchedule() {
-
-    //const [month, setMonth] = useState(months[new Date().getMonth()]);
     const [firstDay, setFirstDay] = useState();
-    const [weekdays, setWeekdays] = useState([])
+    const [weekdays, setWeekdays] = useState([]);
+    const [modalShow, setModalShow] = React.useState(false);
+    const [employeeArr, setEmployeeArr] = React.useState(false);
+    const [modalData, setModalData] = React.useState('');
+
+    let today = moment(new Date()).format('YYYY-MM-DD')
 
 
     const prevWeekDays = () => {
@@ -31,20 +38,71 @@ function WorkSchedule() {
         setFirstDay(date)
     }
 
+    const setData = (day) => {
+        setModalData(day)
+        setModalShow(true)
+    }
+
     const setDays = () => {
         let arr = [];
-        for (let i=0;i<=6;i++) {
+        for (let i = 0; i <= 6; i++) {
             let date = new Date(firstDay);
-            date.setDate(date.getDate()+i)
+            date.setDate(date.getDate() + i)
             arr[i] = {
                 day: date.getDate(),
                 month: date.getMonth(),
-                year: date.getFullYear()
+                date: moment(date).format('YYYY-MM-DD')
             }
         }
+        setWeekdays(arr);
+        getShiftSchedule(arr[0], arr[6])
+    }
 
-        console.log(arr)
-        setWeekdays(arr)
+    const timeDiffer = (startDate, endDate) => {
+        var diff = endDate.getTime() - startDate.getTime();
+    }
+
+    const getShiftSchedule = (startDate, endDate) => {
+        if (!isNaN(startDate.day)) {
+            mainAxios({
+                method: 'get',
+                url: '/shift-schedule',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                params: {
+                    endDate: endDate.date,
+                    startDate: startDate.date
+                }
+            }).then((res) => {
+                setEmployeeArr(res.data);
+            });
+        }
+    }
+
+    const sendData = (breakHour, dayId, employeeId, jobOnOffDay, offDay,shiftFrom, shiftTo, repeatFrom) => {
+        let data = {
+            "breakHour": breakHour,
+            "dayId": dayId,
+            "employeeId": employeeId,
+            "jobOnOffDay": jobOnOffDay,
+            "offDay": offDay,
+            "repeatFrom": repeatFrom,
+            "shiftFrom": shiftFrom !== '' ?  shiftFrom : null,
+            "shiftTo": shiftTo !== '' ?  shiftTo : null,
+        }
+        mainAxios({
+            method: 'post',
+            url: '/shift-schedule',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            data: data
+        }).then((res) => {
+            setModalShow(false);
+        });
     }
 
     const getMonday = async () => {
@@ -58,14 +116,14 @@ function WorkSchedule() {
         await getMonday();
     }, []);
 
-    useEffect(()=> {
-        setDays()
+    useEffect(() => {
+        setDays();
     }, [firstDay])
 
     return (
         <Aux>
             {
-                weekdays.length > 0 ?  <div className="table-weekly-calendar">
+                weekdays.length > 0 ? <div className="table-weekly-calendar">
                     <Container fluid>
                         <div className="title-block flex-center">
                             <Col xs={5}>
@@ -122,41 +180,60 @@ function WorkSchedule() {
                                     <th>C {weekdays[4].day}</th>
                                     <th>Ş {weekdays[5].day}</th>
                                     <th>B {weekdays[6].day}</th>
-                                    <th>Total weekly</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td className="td-name">Murad Dadaşov</td>
-                                    <td className="td-today">
-                                        <span className="flex">09:00 - 20:00</span>
-                                        <span className="td-hour">4 saat</span>
-                                        <ReactSVG src={require('../../../assets/img/evening.svg').default} wrapper="span"
-                                                  className="wrapper-svg"/>
-                                    </td>
-                                    <td></td>
-                                    <td>
-                                        <span className="flex">09:00 - 20:00</span>
-                                        <span className="td-hour">4 saat</span>
-                                        <ReactSVG src={require('../../../assets/img/day.svg').default} wrapper="span"
-                                                  className="wrapper-svg"/>
-                                    </td>
-                                    <td>
-                                        <span className="td-holiday">İstirahət <br/> günü </span>
-                                    </td>
-                                    <td>
-                                        <span className="flex">09:00 - 20:00</span>
-                                        <span className="td-hour">4 saat</span>
-                                        <span className="td-operation flex">Əmr</span>
-                                        <ReactSVG src={require('../../../assets/img/night.svg').default} wrapper="span"
-                                                  className="wrapper-svg"/>
-                                    </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+                                {
+                                    Object.keys(employeeArr).length > 0 ?
+                                    Object.keys(employeeArr).map((item, index) =>
+                                        <tr key={index}>
+                                            <td className="td-name">{item}</td>
+                                            {
+                                                weekdays.length > 0 ?
+                                                    weekdays.map((day, dayIndex) =>
+                                                        <td className={today !== day.date ? '' : 'td-today'} onClick={() => setData( employeeArr[item][day.date])} key={dayIndex}>
+                                                            {
+                                                                employeeArr[item][day.date] !== undefined ?
+                                                                employeeArr[item][day.date].offDay  ?
+                                                                    <span className="td-holiday">İstirahət <br/> günü </span>
+                                                                    :
+                                                                    <>
+                                                                        {
+                                                                            employeeArr[item][day.date].shiftFrom !== null ?
+                                                                                <span className="flex">{employeeArr[item][day.date].shiftFrom} - {employeeArr[item][day.date].shiftTo}</span>
+                                                                                : null
+                                                                        }
+                                                                        {/*<span className="td-hour">4 saat</span>*/}
+                                                                        {
+                                                                            employeeArr[item][day.date].shiftType !== null ?
+                                                                                <ReactSVG
+                                                                                    src={require(`../../../assets/img/${employeeArr[item][day.date].shiftType}.svg`).default}
+                                                                                    wrapper="span"
+                                                                                    className="wrapper-svg"/>
+                                                                                : null
+                                                                        }
+                                                                    </>
+                                                                    : null
+                                                            }
+
+                                                        </td>
+                                                    )
+                                                    : null
+                                            }
+                                        </tr>
+                                    )
+                                        : null
+                                }
                                 </tbody>
                             </Table>
+                            <WorkDayModal
+                                show={modalShow}
+                                onHide={() => setModalShow(false)}
+                                 data={modalData}
+                                 click={(breakHour, dayId, employeeId, jobOnOffDay, offDay,shiftFrom, shiftTo, repeatFrom) => {
+                                     sendData(breakHour, dayId, employeeId, jobOnOffDay, offDay,shiftFrom, shiftTo, repeatFrom)
+                                 }}
+                            />
                         </div>
                     </Container>
                 </div> : ''
