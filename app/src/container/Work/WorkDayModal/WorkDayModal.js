@@ -16,6 +16,7 @@ function WorkDayModal(props) {
     const [workHour, setWorkHour] = useState('');
 
     useEffect(() => {
+        console.log(props);
         setCheckHoliday(props.data.offDay);
         setCheckBreak(props.data.breakHour);
         setCheckOverTime(props.data.jobOnOffDay);
@@ -32,7 +33,7 @@ function WorkDayModal(props) {
             className="modal-work-schedule"
             centered>
             <Modal.Body>
-                <h4>Tunjay Bagirov, Cümə 10 Yanvar </h4>
+                <h4> {props.data.name}, Cümə 10 Yanvar </h4>
                 <div className="holiday-in">
                     <div className="check-content flex-center">
                         <div className="check-block">

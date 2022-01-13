@@ -58,9 +58,14 @@ function WorkSchedule() {
         getShiftSchedule(arr[0], arr[6])
     }
 
-    const timeDiffer = (day, startDate, endDate) => {
-        /*let diff = endDate.getTime() - startDate.getTime();
-        return (diff / 60000);*/
+    const timeDiffer = (day, startTime, endTime) => {
+        let startDate = startTime!== null ? (day.concat(" , ",'20:00')) : null;
+        let endDate = endTime!== null ? (day.concat(" , ", '01:00')) : null;
+        console.log((new Date(endDate)).getHours())
+        let diffHour = ((new Date(endDate)).getTime() - (new Date(startDate)).getTime());
+        console.log(diffHour)
+        //console.log(Math.abs(Math.round(diffHour)))
+        //return diffHour
     }
 
     const getShiftSchedule = (startDate, endDate) => {
@@ -77,7 +82,7 @@ function WorkSchedule() {
                     startDate: startDate.date
                 }
             }).then((res) => {
-                setEmployeeArr(res.data);
+                setEmployeeArr(res.data.content);
             });
         }
     }
@@ -119,6 +124,8 @@ function WorkSchedule() {
     }, []);
 
     useEffect(() => {
+        let diffHour = ((new Date('2022-01-13, 20:00')).getHours() - (new Date('2022-01-13, 01:00')).getHours());
+        console.log(diffHour)
         setDays();
     }, [firstDay])
 
@@ -194,7 +201,7 @@ function WorkSchedule() {
                                                     weekdays.length > 0 ?
                                                         weekdays.map((day, dayIndex) =>
                                                             <td className={[today !== day.date ? '' : 'td-today', 'td-weekday'].join(' ')}
-                                                                onClick={() => setData(Object.assign(employeeArr[item][day.date], {startDate: weekdays[0]}, {endDate: weekdays[6]}))}
+                                                                onClick={() => setData(Object.assign(employeeArr[item][day.date], {startDate: weekdays[0]}, {endDate: weekdays[6]}, {name: item}))}
                                                                 key={dayIndex}>
                                                                 {
                                                                     employeeArr[item][day.date] !== undefined ?
@@ -208,9 +215,9 @@ function WorkSchedule() {
                                                                                             className="flex">{employeeArr[item][day.date].shiftFrom} - {employeeArr[item][day.date].shiftTo}</span>
                                                                                         : null
                                                                                 }
-                                                                                {/*
-                                                                        <span className="td-hour"> {timeDiffer(day.date,employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo)}4 saat</span>
-*/}
+
+                                                                                {/*<span className="td-hour"> {timeDiffer(day.date, employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo)}4 saat</span>*/}
+
                                                                                 {
                                                                                     employeeArr[item][day.date].shiftType !== null ?
                                                                                         <ReactSVG
