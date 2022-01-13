@@ -5,8 +5,8 @@ import TimePicker from "react-time-picker";
 
 
 function WorkDayModal(props) {
-    const [checkHoliday, setCheckHoliday] = useState(props.data.offDay);
-
+    console.log(props);
+    const [checkHoliday, setCheckHoliday] = useState(false);
     const [checkRepeat, setCheckRepeat] = useState(false);
     const [checkBreak, setCheckBreak] = useState(false);
     const [checkOverTime, setCheckOverTime] = useState(false);
@@ -184,7 +184,7 @@ function WorkDayModal(props) {
                     </li>
                     <li>
                         <button type="button" className="btn-main" onClick={() => {
-                            props.click(checkBreak, props.data.dayId, props.data.employeeId, checkOverTime, checkHoliday, startTime, endTime, day)
+                            props.click(checkBreak, checkOverTime, checkHoliday, startTime, endTime, day, props.data)
                         }}>
                             Əlavə et
                         </button>

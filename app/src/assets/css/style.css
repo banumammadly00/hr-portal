@@ -1782,6 +1782,10 @@ input::-webkit-inner-spin-button {
     padding: 20px 12px;
 }
 
+.table-weekly-calendar .td-weekday {
+    width: 200px;
+}
+
 .table-weekly-calendar .table-striped .td-name {
     font-size: 18px;
 }
