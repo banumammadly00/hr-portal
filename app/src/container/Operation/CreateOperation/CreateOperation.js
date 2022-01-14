@@ -461,7 +461,6 @@ function CreateOperation() {
         setSelectedPosition(null);
         setMainOfOrder('');
         setSelectedStaff(null);
-        setSelectedStaff(null);
         setDepartment('');
         setSubDepartment('');
         setPosition('');
@@ -1105,7 +1104,7 @@ function CreateOperation() {
                                                     <span className="input-title">Struktur bölmənin adı </span>
                                                     <Form.Label>
                                                         <Form.Control placeholder="Struktur bölmənin adı"
-                                                                      value={vacancySubDepartment || ''}
+                                                                      value={vacancyDepartment || ''}
                                                                       disabled={true}/>
                                                     </Form.Label>
                                                 </Form.Group>
@@ -1260,7 +1259,7 @@ function CreateOperation() {
                                                     <span
                                                         className="input-title">İşə qəbul olduğu alt struktur bölmə </span>
                                                     <Form.Label>
-                                                        <Form.Control placeholder="Tabe struktur bölmənin adı"
+                                                        <Form.Control placeholder="Alt struktur bölmənin adı"
                                                                       value={vacancySubDepartment || ''}
                                                                       disabled={true}/>
                                                     </Form.Label>

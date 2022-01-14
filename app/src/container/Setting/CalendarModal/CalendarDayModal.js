@@ -22,13 +22,13 @@ function CalendarDayModal(props) {
                                       onChange={(e => setReason(e.target.value))}/>
                     </Form.Label>
                 </Form.Group>
-                <ul className="btn-block flex list-unstyled m-0">
-                    <li className="w-100">
+                <ul className="btn-block flex-end list-unstyled m-0">
+                    <li>
                         <button type="button" className="btn-main-border" onClick={props.onHide}>
                             Bağla
                         </button>
                     </li>
-                    <li className="w-100">
+                    <li>
                         <button type="button" className="btn-main" onClick={() => {
                             props.click(props.data.id, reason, true, props.data.date)
                         }}>

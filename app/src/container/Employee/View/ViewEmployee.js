@@ -1265,7 +1265,7 @@ function ViewEmployee() {
                                             Limana qədər əmək fəaliyyəti barədə məlumatlar
                                         </div>
 
-                                        <div className="card inner-tab">
+                                        <div className="card inner-tab flex-vertical-center">
                                             {
                                                 companyExtArr.length == 0 && companyIntArr.length == 0 ?
                                                     <div className="card-in">

@@ -1093,7 +1093,7 @@ td {
     width: 120px;
 }
 
-.operation .table th:nth-child(3) {
+.operation .table .th-date {
     width: 200px;
 }
 
@@ -1199,7 +1199,7 @@ td {
     margin-left: 35px;
 }
 
-.pending, .cancelled, .confirmed, .done {
+.pending, .cancelled, .confirmed, .done, .open, .close {
     background: rgba(250, 158, 50, 0.1);
     border-radius: 4px;
     font-weight: 500;
@@ -1214,7 +1214,7 @@ td {
     justify-content: center;
 }
 
-.cancelled {
+.cancelled, .close {
     background: rgba(24, 24, 24, 0.1);
     color: rgba(24, 24, 24, 0.5);
 }
@@ -1224,7 +1224,7 @@ td {
     color: rgba(48, 131, 200, .9);
 }
 
-.confirmed {
+.confirmed, .open {
     background: rgba(46, 208, 106, 0.1);
     color: rgba(46, 208, 106, .9);
 }
@@ -1705,37 +1705,36 @@ td {
     align-items: center;
     justify-content: center;
     margin: 0 0 30px 0;
+    background: rgba(48, 131, 220, 0.1);
+    border-radius: 6px;
     border: none;
-}
-
-.inner-tab .nav-tabs li:first-child .nav-link {
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
-}
-
-.inner-tab .nav-tabs li:last-child .nav-link {
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
+    min-width: 300px;
 }
 
 .inner-tab .nav-tabs .nav-link {
     border: none;
-    background: rgba(48, 131, 220, 0.1);
     margin: 0;
     width: 150px;
     color: #3083DC;
-    padding: 10px;
+    padding: 13px 10px;
     font-size: 18px;
     font-weight: 500;
-    border-radius: 0;
 }
 
 .inner-tab .nav-tabs .nav-item.show .nav-link, .inner-tab .nav-tabs .nav-link.active {
     color: #3083DC;
     font-weight: 500;
     background: #FFFFFF;
-    border-radius: 12px;
+    border-radius: 6px;
     box-shadow: 0 0 6px rgba(166, 166, 166, .16);
+}
+
+.inner-tab {
+    flex-direction: column;
+}
+
+.tab-content {
+    width: 100%;
 }
 
 input::-webkit-outer-spin-button,
@@ -1784,6 +1783,14 @@ input::-webkit-inner-spin-button {
 
 .table-weekly-calendar .td-weekday {
     width: 200px;
+}
+
+.table-weekly-calendar .filter-block {
+    margin-bottom: 15px;
+}
+
+.table-weekly-calendar .filter-block .btn-color {
+    font-weight: 500;
 }
 
 .table-weekly-calendar .table-striped .td-name {
@@ -1862,7 +1869,7 @@ input::-webkit-inner-spin-button {
     margin-bottom: 30px;
 }
 
-.modal-work-schedule .btn-block button {
+.modal-body .btn-block button {
     height: 48px;
     width: 125px;
 }

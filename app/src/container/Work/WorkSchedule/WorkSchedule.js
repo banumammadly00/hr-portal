@@ -13,6 +13,8 @@ import {addWeeks} from "@fullcalendar/react";
 import CalendarDayModal from "../../Setting/CalendarModal/CalendarDayModal";
 import format from "@popperjs/core/lib/utils/format";
 import moment from "moment";
+import EmployeeAddModal from "../EmployeeModal/EmployeeAddModal/EmployeeAddModal";
+import Paginate from "../../../components/Pagination/Pagination";
 
 const months = ['Yan', 'Fev', 'Mart', 'Apr', 'May', 'İyun', 'İyul', 'Avq', 'Sent', 'Okt', 'Nov', 'Dek']
 
@@ -22,6 +24,11 @@ function WorkSchedule() {
     const [modalShow, setModalShow] = React.useState(false);
     const [employeeArr, setEmployeeArr] = React.useState(false);
     const [modalData, setModalData] = React.useState('');
+    const [modalEmployee, setModalEmployee] = React.useState(false);
+
+    const [totalRecord, setTotalRecord] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [recordSize, setRecordSize] = useState(20);
 
     let today = moment(new Date()).format('YYYY-MM-DD')
 
@@ -43,7 +50,7 @@ function WorkSchedule() {
         setModalShow(true)
     }
 
-    const setDays = () => {
+    const setDays = (page) => {
         let arr = [];
         for (let i = 0; i <= 6; i++) {
             let date = new Date(firstDay);
@@ -55,7 +62,7 @@ function WorkSchedule() {
             }
         }
         setWeekdays(arr);
-        getShiftSchedule(arr[0], arr[6])
+        getShiftSchedule(page, arr[0], arr[6])
     }
 
     const timeDiffer = (day, startTime, endTime) => {
@@ -64,11 +71,9 @@ function WorkSchedule() {
         console.log((new Date(endDate)).getHours())
         let diffHour = ((new Date(endDate)).getTime() - (new Date(startDate)).getTime());
         console.log(diffHour)
-        //console.log(Math.abs(Math.round(diffHour)))
-        //return diffHour
     }
 
-    const getShiftSchedule = (startDate, endDate) => {
+    const getShiftSchedule = (page, startDate, endDate) => {
         if (!isNaN(startDate.day)) {
             mainAxios({
                 method: 'get',
@@ -78,11 +83,16 @@ function WorkSchedule() {
                     'Authorization': 'Bearer ' + localStorage.getItem('token')
                 },
                 params: {
+                    page: page - 1,
                     endDate: endDate.date,
-                    startDate: startDate.date
+                    startDate: startDate.date,
+                    size: recordSize,
                 }
             }).then((res) => {
+                setCurrentPage(page);
                 setEmployeeArr(res.data.content);
+                setTotalRecord(res.data.totalElements);
+
             });
         }
     }
@@ -124,9 +134,13 @@ function WorkSchedule() {
     }, []);
 
     useEffect(() => {
-        let diffHour = ((new Date('2022-01-13, 20:00')).getHours() - (new Date('2022-01-13, 01:00')).getHours());
-        console.log(diffHour)
-        setDays();
+        let startDate = new Date("2014-10-20 20:00");
+        let endDate = new Date("2014-10-21 01:00");
+        let timestampDiff = endDate.getTime() - startDate.getTime();
+        let diffHour = Math.floor(new Date(timestampDiff) / (60 * 60 * 1000));
+        let diffMinute = (new Date(timestampDiff) / (60000)) - diffHour * 60;
+        console.log(diffHour, diffMinute)
+        setDays(1);
     }, [firstDay])
 
     return (
@@ -134,12 +148,7 @@ function WorkSchedule() {
             {
                 weekdays.length > 0 ? <div className="table-weekly-calendar">
                     <Container fluid>
-                        <div className="title-block flex-center">
-                            <Col xs={5}>
-                                <div className="title flex-center">
-                                    İş qrafiki
-                                </div>
-                            </Col>
+                        <div className="title-block flex-vertical-center">
                             <Col xs={2}>
                                 <div className="table-month flex">
                                     <button className="btn-transparent" onClick={() => prevWeekDays()}>
@@ -177,6 +186,16 @@ function WorkSchedule() {
                                 </div>
                             </Col>
                         </div>
+                        {/* <div className="filter-block flex-end">
+                            <Col xs={3} className="flex-end">
+                                <button className="btn-color" onClick={()=> addEmployee()}>
+                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M14.25 9.59961H9.75V14.0996H8.25V9.59961H3.75V8.09961H8.25V3.59961H9.75V8.09961H14.25V9.59961Z" fill="#3083DC"/>
+                                    </svg>
+                                    İşçi əlavə et
+                                </button>
+                            </Col>
+                        </div>*/}
                         <div className="table-striped p-0">
                             <Table responsive="sm">
                                 <thead>
@@ -201,7 +220,7 @@ function WorkSchedule() {
                                                     weekdays.length > 0 ?
                                                         weekdays.map((day, dayIndex) =>
                                                             <td className={[today !== day.date ? '' : 'td-today', 'td-weekday'].join(' ')}
-                                                                onClick={() => setData(Object.assign(employeeArr[item][day.date], {startDate: weekdays[0]}, {endDate: weekdays[6]}, {name: item}, {weekday:  `${day.day} ${months[day.month]}`}))}
+                                                                onClick={() => setData(Object.assign(employeeArr[item][day.date], {startDate: weekdays[0]}, {endDate: weekdays[6]}, {name: item}, {weekday: `${day.day} ${months[day.month]}`}))}
                                                                 key={dayIndex}>
                                                                 {
                                                                     employeeArr[item][day.date] !== undefined ?
@@ -248,7 +267,17 @@ function WorkSchedule() {
                                     sendData(breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData)
                                 }}
                             />
+                            <EmployeeAddModal
+                                show={modalEmployee}
+                                onHide={() => setModalEmployee(false)}
+                                data={modalData}
+                                click={(breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData) => {
+                                    sendData(breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData)
+                                }}
+                            />
                         </div>
+                        <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
+                                  click={(page) => setDays(page)}/>
                     </Container>
                 </div> : ''
             }
