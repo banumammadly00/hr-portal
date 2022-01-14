@@ -65,12 +65,13 @@ function WorkSchedule() {
         getShiftSchedule(page, arr[0], arr[6])
     }
 
-    const timeDiffer = (day, startTime, endTime) => {
-        let startDate = startTime !== null ? (day.concat(" , ", '20:00')) : null;
-        let endDate = endTime !== null ? (day.concat(" , ", '01:00')) : null;
-        console.log((new Date(endDate)).getHours())
-        let diffHour = ((new Date(endDate)).getTime() - (new Date(startDate)).getTime());
-        console.log(diffHour)
+    const timeDiffer = (day, startTime, endTime) => {/*  let startDate = startTime !== null ? (day.concat(" , ", startTime)) : null;
+        let endDate = endTime !== null ? (day.concat(" , ", endTime)) : null;
+        let timestampDiff = endDate.getTime() - startDate.getTime();
+        let diffHour = Math.floor(new Date(timestampDiff) / (60 * 60 * 1000));
+        let diffMinute = (new Date(timestampDiff) / (60000)) - diffHour * 60;
+        return diffHour*/
+
     }
 
     const getShiftSchedule = (page, startDate, endDate) => {
@@ -118,7 +119,7 @@ function WorkSchedule() {
             data: data
         }).then((res) => {
             setModalShow(false);
-            getShiftSchedule(propsData.startDate, propsData.endDate)
+           getShiftSchedule(currentPage,propsData.startDate, propsData.endDate)
         });
     }
 
@@ -134,12 +135,7 @@ function WorkSchedule() {
     }, []);
 
     useEffect(() => {
-        let startDate = new Date("2014-10-20 20:00");
-        let endDate = new Date("2014-10-21 01:00");
-        let timestampDiff = endDate.getTime() - startDate.getTime();
-        let diffHour = Math.floor(new Date(timestampDiff) / (60 * 60 * 1000));
-        let diffMinute = (new Date(timestampDiff) / (60000)) - diffHour * 60;
-        console.log(diffHour, diffMinute)
+
         setDays(1);
     }, [firstDay])
 
@@ -186,16 +182,6 @@ function WorkSchedule() {
                                 </div>
                             </Col>
                         </div>
-                        {/* <div className="filter-block flex-end">
-                            <Col xs={3} className="flex-end">
-                                <button className="btn-color" onClick={()=> addEmployee()}>
-                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M14.25 9.59961H9.75V14.0996H8.25V9.59961H3.75V8.09961H8.25V3.59961H9.75V8.09961H14.25V9.59961Z" fill="#3083DC"/>
-                                    </svg>
-                                    İşçi əlavə et
-                                </button>
-                            </Col>
-                        </div>*/}
                         <div className="table-striped p-0">
                             <Table responsive="sm">
                                 <thead>
@@ -235,7 +221,9 @@ function WorkSchedule() {
                                                                                         : null
                                                                                 }
 
-                                                                                {/*<span className="td-hour"> {timeDiffer(day.date, employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo)}4 saat</span>*/}
+{/*
+                                                                                <span className="td-hour"> {timeDiffer(day.date, employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo)} saat</span>
+*/}
 
                                                                                 {
                                                                                     employeeArr[item][day.date].shiftType !== null ?
