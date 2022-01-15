@@ -128,9 +128,6 @@ function SalaryEmployee() {
     const [selectedEmployer, setSelectedEmployer] = useState([]);
     const [tableCols, setTableCols] = useState(cols);
 
-
-    console.log(tableCols)
-
     const [selectedYear, setSelectedYear] = useState(currentYear);
 
     const [loading, setLoading] = useState(false);

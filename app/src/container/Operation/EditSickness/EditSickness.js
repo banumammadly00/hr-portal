@@ -13,7 +13,7 @@ import Indicator from "../../../components/Loading/Indicator";
 
 const sickStatusOptions = [
     {value: "OPEN", label: "Açıq"},
-    {value: 'CLOSe', label: 'Bağlı'},
+    {value: 'CLOSE', label: 'Bağlı'},
 ]
 
 
@@ -90,13 +90,19 @@ function EditSickness() {
         }).then((res) => {
             let data = res.data;
             data.startDate !== null ? setStartDate(new Date(data.startDate)) : setStartDate(null);
-            setSelectedStaff(data.employeeId);
+            setSelectedStaff({id: data.employeeId, name: data.fullName});
+            getEmployeeDetail(data.employeeId);
             data.endDate !==null ? setEndDate(new Date(data.endDate)) : setEndDate(new Date(data.endDate));
             data.joinDate !==null ? setJoinDate(new Date(data.startJobDate)) : setJoinDate(new Date(data.startJobDate));
-            setPractice(data.portExperience);
+            setPractice(parseFloat(data.portExperience));
             setGeneralPractice(data.totalExperience);
             setSSn(data.ssn);
-            setSicknessSerialNum(data.ssn);
+            setSicknessSerialNum(data.series);
+            for (let i of sickStatusOptions) {
+                if (data.sickStatus === i.label) {
+                    setSelectedSickStatus(i)
+                }
+            }
         });
     }
 
@@ -178,6 +184,7 @@ function EditSickness() {
                                                 placeholder="İşçinin adı, soyadı, atasının adı"
                                                 value={selectedStaff}
                                                 onChange={(val) => {
+                                                    console.log(val);
                                                     let id = val.id
                                                     getEmployeeDetail(id);
                                                     setSelectedStaff(val);
@@ -470,8 +477,8 @@ function EditSickness() {
                                         <Form.Group className="form-group">
                                             <span className="input-title">Əmək q. itirdiyi günədək Limanda işlə. fasiləsiz staj.</span>
                                             <Form.Label>
-                                                <Form.Control placeholder="Alt struktur bölmənin adı daxil edin"
-                                                              value={practice || ''} disabled={true}/>
+                                                <Form.Control placeholder="Əmək q. itirdiyi günədək Limanda işlə. fasiləsiz staj"
+                                                              value={practice} disabled={true} type="number"/>
                                             </Form.Label>
                                         </Form.Group>
                                     </Col>
@@ -479,8 +486,8 @@ function EditSickness() {
                                         <Form.Group className="form-group">
                                             <span className="input-title">Ümumi əmək stajı</span>
                                             <Form.Label>
-                                                <Form.Control placeholder="Alt struktur bölmənin adı daxil edin"
-                                                              value={generalPractice || ''} disabled={true}/>
+                                                <Form.Control placeholder="Ümumi əmək stajı"
+                                                              value={generalPractice} disabled={true} type="number"/>
                                             </Form.Label>
                                         </Form.Group>
                                     </Col>
@@ -488,7 +495,7 @@ function EditSickness() {
                                         <Form.Group className="form-group">
                                             <span className="input-title">SSN</span>
                                             <Form.Label>
-                                                <Form.Control placeholder="Alt struktur bölmənin adı daxil edin"
+                                                <Form.Control placeholder="SSN"
                                                               value={ssn || ''} disabled={true}/>
                                             </Form.Label>
                                         </Form.Group>

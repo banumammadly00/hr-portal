@@ -2,16 +2,8 @@ import React, {useState, useEffect} from 'react';
 import Aux from "../../../hoc/Auxiliary";
 import {mainAxios} from "../../../components/Axios/axios";
 import {Button, Col, Container, Form, OverlayTrigger, Row, Tab, Table, Tabs, Tooltip} from "react-bootstrap";
-import EmptyData from "../../../components/EmptyData/EmptyData";
 import {ReactSVG} from 'react-svg';
 import WorkDayModal from '../WorkDayModal/WorkDayModal'
-import {Link} from "react-router-dom";
-import Select from "react-select";
-import {customStyles} from "../../../components/Select/SelectStyle";
-import DatePicker from "react-datepicker";
-import {addWeeks} from "@fullcalendar/react";
-import CalendarDayModal from "../../Setting/CalendarModal/CalendarDayModal";
-import format from "@popperjs/core/lib/utils/format";
 import moment from "moment";
 import EmployeeAddModal from "../EmployeeModal/EmployeeAddModal/EmployeeAddModal";
 import Paginate from "../../../components/Pagination/Pagination";
@@ -28,7 +20,7 @@ function WorkSchedule() {
 
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [recordSize, setRecordSize] = useState(20);
+    const [recordSize, setRecordSize] = useState(15);
 
     let today = moment(new Date()).format('YYYY-MM-DD')
 
@@ -65,12 +57,17 @@ function WorkSchedule() {
         getShiftSchedule(page, arr[0], arr[6])
     }
 
-    const timeDiffer = (day, startTime, endTime) => {/*  let startDate = startTime !== null ? (day.concat(" , ", startTime)) : null;
-        let endDate = endTime !== null ? (day.concat(" , ", endTime)) : null;
-        let timestampDiff = endDate.getTime() - startDate.getTime();
-        let diffHour = Math.floor(new Date(timestampDiff) / (60 * 60 * 1000));
-        let diffMinute = (new Date(timestampDiff) / (60000)) - diffHour * 60;
-        return diffHour*/
+    const timeDiffer = (day, startTime, endTime) => {
+        if (startTime !== null && endTime !== null) {
+            let startDate = new Date(day.concat(" , ", startTime));
+            let endDate = new Date(day.concat(" , ", endTime));
+            if (endDate.getTime() > startDate.getTime()) {
+                let timestampDiff = endDate.getTime() - startDate.getTime();
+                let diffHour = Math.floor(new Date(timestampDiff) / (60 * 60 * 1000));
+                let diffMinute = (new Date(timestampDiff) / (60000)) - diffHour * 60;
+                return diffHour
+            }
+        }
 
     }
 
@@ -119,7 +116,7 @@ function WorkSchedule() {
             data: data
         }).then((res) => {
             setModalShow(false);
-           getShiftSchedule(currentPage,propsData.startDate, propsData.endDate)
+            getShiftSchedule(currentPage, propsData.startDate, propsData.endDate)
         });
     }
 
@@ -206,7 +203,12 @@ function WorkSchedule() {
                                                     weekdays.length > 0 ?
                                                         weekdays.map((day, dayIndex) =>
                                                             <td className={[today !== day.date ? '' : 'td-today', 'td-weekday'].join(' ')}
-                                                                onClick={() => setData(Object.assign(employeeArr[item][day.date], {startDate: weekdays[0]}, {endDate: weekdays[6]}, {name: item}, {weekday: `${day.day} ${months[day.month]}`}))}
+                                                                onClick={() => setData(Object.assign(employeeArr[item][day.date],
+                                                                    {startDate: weekdays[0]}, {endDate: weekdays[6]},
+                                                                    {name: item},
+                                                                    {weekday: `${day.day} ${months[day.month]}`},
+                                                                    {today: day.date}
+                                                                ))}
                                                                 key={dayIndex}>
                                                                 {
                                                                     employeeArr[item][day.date] !== undefined ?
@@ -220,10 +222,13 @@ function WorkSchedule() {
                                                                                             className="flex">{employeeArr[item][day.date].shiftFrom} - {employeeArr[item][day.date].shiftTo}</span>
                                                                                         : null
                                                                                 }
-
-{/*
-                                                                                <span className="td-hour"> {timeDiffer(day.date, employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo)} saat</span>
-*/}
+                                                                                {
+                                                                                    timeDiffer(day.date, employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo) > 0 ?
+                                                                                        <span className="td-hour">
+                                                                                              { timeDiffer(day.date, employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo)} saat
+                                                                                        </span>
+                                                                                        : null
+                                                                                }
 
                                                                                 {
                                                                                     employeeArr[item][day.date].shiftType !== null ?

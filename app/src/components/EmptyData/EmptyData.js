@@ -6,7 +6,7 @@ function EmptyData() {
         <div className="empty-data">
             <div className="empty-in flex-vertical-center">
                 <svg width="130" height="130" viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M65 113.75C91.9239 113.75 113.75 91.9239 113.75 65C113.75 38.0761 91.9239 16.25 65 16.25C38.0761 16.25 16.25 38.0761 16.25 65C16.25 91.9239 38.0761 113.75 65 113.75Z" fill="#E6E6E6" stroke="#193651" stroke-opacity="0.55" strokeWidth="8" stroke-miterlimit="10"/>
+                    <path d="M65 113.75C91.9239 113.75 113.75 91.9239 113.75 65C113.75 38.0761 91.9239 16.25 65 16.25C38.0761 16.25 16.25 38.0761 16.25 65C16.25 91.9239 38.0761 113.75 65 113.75Z" fill="#E6E6E6" stroke="#193651" strokeOpacity="0.55" strokeWidth="8" strokeMiterlimit="10"/>
                     <path opacity="0.7" d="M93.4375 48.75L77.1875 65" stroke="#193651" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
                     <path opacity="0.7" d="M93.4375 65L77.1875 48.75" stroke="#193651" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
                     <path opacity="0.7" d="M52.8125 48.75L36.5625 65" stroke="#193651" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>

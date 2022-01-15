@@ -5,7 +5,6 @@ import TimePicker from "react-time-picker";
 
 
 function WorkDayModal(props) {
-    console.log(props);
     const [checkHoliday, setCheckHoliday] = useState(false);
     const [checkRepeat, setCheckRepeat] = useState(false);
     const [checkBreak, setCheckBreak] = useState(false);
@@ -16,8 +15,6 @@ function WorkDayModal(props) {
     const [workHour, setWorkHour] = useState('');
 
     useEffect(() => {
-        console.log(props);
-        console.log(props.weekday)
         setCheckHoliday(props.data.offDay);
         setCheckBreak(props.data.breakHour);
         setCheckOverTime(props.data.jobOnOffDay);
