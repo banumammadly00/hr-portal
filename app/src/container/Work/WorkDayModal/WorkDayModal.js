@@ -7,23 +7,30 @@ import TimePicker from "react-time-picker";
 function WorkDayModal(props) {
     console.log(props);
     const [checkHoliday, setCheckHoliday] = useState(false);
-    const [checkRepeat, setCheckRepeat] = useState(false);
-    const [checkBreak, setCheckBreak] = useState(false);
+    const [checkRepeat, setCheckRepeat] = useState(props.data.repeatFrom !== null ? 1 : 0);
+    const [checkBreak, setCheckBreak] = useState(props.data.breakHour);
     const [checkOverTime, setCheckOverTime] = useState(false);
     const [day, setDay] = useState(props.data.repeatFrom);
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
-    const [workHour, setWorkHour] = useState('');
+    const [workHour, setWorkHour] = useState(props.data.workHour !== undefined ? props.data.workHour : '');
+
+   /* const setBreakHour = (checkBreak) => {
+       let hour = workHour !== undefined ? workHour - 1 : '';
+        checkBreak ? setWorkHour(hour) : setWorkHour(props.data.workHour);
+    }*/
 
     useEffect(() => {
         setCheckHoliday(props.data.offDay);
         setCheckBreak(props.data.breakHour);
         setCheckOverTime(props.data.jobOnOffDay);
         setDay(props.data.repeatFrom);
+        setCheckRepeat(props.data.repeatFrom !== null ? 1 : 0);
         setStartTime(props.data.shiftFrom);
         setEndTime(props.data.shiftTo);
-        setWorkHour(props.data.workHour)
-    }, [props.data.offDay, props.data.breakHour, props.data.jobOnOffDay, props.data.repeatFrom, props.data.shiftFrom, props.data.shiftTo, props.data.workHour])
+        setWorkHour(props.data.workHour !== undefined ? props.data.workHour : '');
+        //setBreakHour(props.data.breakHour);
+    }, [props.data.offDay, props.data.breakHour, props.data.jobOnOffDay, props.data.repeatFrom, props.data.workHour, props.data.shiftFrom, props.data.shiftTo])
 
     return (
         <Modal
@@ -121,6 +128,7 @@ function WorkDayModal(props) {
                                                        checked={checkBreak}
                                                        onChange={(e) => {
                                                            setCheckBreak(e.target.checked);
+                                                         //  setBreakHour(e.target.checked);
                                                        }}/>
                                                 <span className="checkmark"></span>
                                             </label>

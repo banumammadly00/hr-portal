@@ -98,7 +98,7 @@ function WorkSchedule() {
 
     const sendData = (breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData) => {
         let data = {
-            "breakHour": breakHour,
+            "breakHour": parseFloat(breakHour),
             "dayId": propsData.dayId,
             "employeeId": propsData.employeeId,
             "jobOnOffDay": jobOnOffDay,
