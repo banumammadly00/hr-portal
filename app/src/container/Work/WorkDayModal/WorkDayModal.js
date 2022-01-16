@@ -7,13 +7,13 @@ import TimePicker from "react-time-picker";
 function WorkDayModal(props) {
     console.log(props);
     const [checkHoliday, setCheckHoliday] = useState(false);
-    const [checkRepeat, setCheckRepeat] = useState(props.data.repeatFrom !== null ? 1 : 0);
+    const [checkRepeat, setCheckRepeat] = useState(false);
     const [checkBreak, setCheckBreak] = useState(props.data.breakHour);
     const [checkOverTime, setCheckOverTime] = useState(false);
-    const [day, setDay] = useState(props.data.repeatFrom);
+    const [day, setDay] = useState('');
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
-    const [workHour, setWorkHour] = useState(props.data.workHour !== undefined ? props.data.workHour : '');
+    const [workHour, setWorkHour] = useState('');
 
    /* const setBreakHour = (checkBreak) => {
        let hour = workHour !== undefined ? workHour - 1 : '';
