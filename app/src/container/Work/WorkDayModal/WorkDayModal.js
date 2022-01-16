@@ -15,10 +15,11 @@ function WorkDayModal(props) {
     const [endTime, setEndTime] = useState('');
     const [workHour, setWorkHour] = useState('');
 
-   /* const setBreakHour = (checkBreak) => {
-       let hour = workHour !== undefined ? workHour - 1 : '';
-        checkBreak ? setWorkHour(hour) : setWorkHour(props.data.workHour);
-    }*/
+    const setBreakHour = (checkBreak) => {
+        if (props.data.workHour !== undefined) {
+            checkBreak ? setWorkHour(props.data.workHour - 1) : setWorkHour(props.data.workHour);
+        }
+    }
 
     useEffect(() => {
         setCheckHoliday(props.data.offDay);
@@ -29,7 +30,7 @@ function WorkDayModal(props) {
         setStartTime(props.data.shiftFrom);
         setEndTime(props.data.shiftTo);
         setWorkHour(props.data.workHour !== undefined ? props.data.workHour : '');
-        //setBreakHour(props.data.breakHour);
+        setBreakHour(props.data.breakHour);
     }, [props.data.offDay, props.data.breakHour, props.data.jobOnOffDay, props.data.repeatFrom, props.data.workHour, props.data.shiftFrom, props.data.shiftTo])
 
     return (
@@ -128,7 +129,7 @@ function WorkDayModal(props) {
                                                        checked={checkBreak}
                                                        onChange={(e) => {
                                                            setCheckBreak(e.target.checked);
-                                                         //  setBreakHour(e.target.checked);
+                                                           setBreakHour(e.target.checked);
                                                        }}/>
                                                 <span className="checkmark"></span>
                                             </label>
