@@ -21,6 +21,7 @@ function WorkSchedule() {
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [recordSize, setRecordSize] = useState(15);
+    const [modalDate, setModalDate] = useState('')
 
     let today = moment(new Date()).format('YYYY-MM-DD')
 
@@ -207,7 +208,7 @@ function WorkSchedule() {
                                                                     {startDate: weekdays[0]}, {endDate: weekdays[6]},
                                                                     {name: item},
                                                                     {weekday: `${day.day} ${months[day.month]}`},
-                                                                    {today: day.date}
+                                                                    {workHour: timeDiffer(day.date,employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo )},
                                                                 ))}
                                                                 key={dayIndex}>
                                                                 {
@@ -225,7 +226,7 @@ function WorkSchedule() {
                                                                                 {
                                                                                     timeDiffer(day.date, employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo) > 0 ?
                                                                                         <span className="td-hour">
-                                                                                              { timeDiffer(day.date, employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo)} saat
+                                                                                              {timeDiffer(day.date, employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo)} saat
                                                                                         </span>
                                                                                         : null
                                                                                 }
