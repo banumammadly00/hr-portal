@@ -5,7 +5,6 @@ import TimePicker from "react-time-picker";
 
 
 function WorkDayModal(props) {
-    console.log(props);
     const [checkHoliday, setCheckHoliday] = useState(false);
     const [checkRepeat, setCheckRepeat] = useState(false);
     const [checkBreak, setCheckBreak] = useState(props.data.breakHour);
@@ -152,22 +151,28 @@ function WorkDayModal(props) {
                                         <span>Əlavə iş saatı</span>
                                     </div>
                                 </Col>
-                                <Col xs={6}>
-                                    <div className="check-content flex-center">
-                                        <div className="check-block">
-                                            <label className="check-button">
-                                                <input type="checkbox"
-                                                       checked={checkRepeat}
-                                                       onChange={(e) => {
-                                                           setCheckRepeat(e.target.checked);
-                                                       }}/>
-                                                <span className="checkmark"></span>
-                                            </label>
-                                        </div>
-                                        <span>Təkrarla</span>
-                                    </div>
-                                </Col>
+                                {
+                                    props.data.repeatFrom !== null ?
+                                        null
+                                        :
+                                        <Col xs={6}>
+                                            <div className="check-content flex-center">
+                                                <div className="check-block">
+                                                    <label className="check-button">
+                                                        <input type="checkbox"
+                                                               checked={checkRepeat}
+                                                               onChange={(e) => {
+                                                                   setCheckRepeat(e.target.checked);
+                                                               }}/>
+                                                        <span className="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                                <span>Təkrarla</span>
+                                            </div>
+                                        </Col>
+                                }
                             </div>
+
                             {
                                 checkRepeat ?
                                     <div className="repeat-block flex-center">
@@ -176,6 +181,7 @@ function WorkDayModal(props) {
                                             <Form.Label>
                                                 <Form.Control
                                                     type="number"
+                                                    disabled={props.data.repeatFrom !== null ? true : false}
                                                     value={day}
                                                     onChange={(e => setDay(e.target.value))}/>
                                             </Form.Label>
@@ -186,20 +192,28 @@ function WorkDayModal(props) {
                             }
                         </div>
                 }
-                <ul className="btn-block flex-end list-unstyled">
-                    <li>
-                        <button type="button" className="btn-main-border" onClick={props.onHide}>
-                            Bağla
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" className="btn-main" onClick={() => {
-                            props.click(checkBreak, checkOverTime, checkHoliday, startTime, endTime, day, props.data)
-                        }}>
-                            Əlavə et
-                        </button>
-                    </li>
-                </ul>
+                <div className="btn-block flex">
+                    <button type="button" className="btn btn-cancel" onClick={() => {
+                        props.clickDelete(props.data)
+                    }}>
+                        Sil
+                    </button>
+                    <ul className="flex-end list-unstyled m-0">
+                        <li>
+                            <button type="button" className="btn-main-border" onClick={props.onHide}>
+                                Bağla
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" className="btn-main" onClick={() => {
+                                props.clickData(checkBreak, checkOverTime, checkHoliday, startTime, endTime, day, props.data)
+                            }}>
+                                Əlavə et
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
             </Modal.Body>
         </Modal>
     );

@@ -1832,6 +1832,11 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+.modal-work-schedule .btn.btn-cancel {
+    border: 1px solid;
+    box-shadow: none;
+}
+
 .check-content, .repeat-block {
     color: #193651;
     font-size: 16px;

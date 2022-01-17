@@ -121,6 +121,19 @@ function WorkSchedule() {
         });
     }
 
+    const deleteDay = (propsData) => {
+        mainAxios({
+            method: 'delete',
+            url: `/shift-schedule/${propsData.id}`,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            setModalShow(false);
+            getShiftSchedule(currentPage, propsData.startDate, propsData.endDate)
+        });
+    }
     const getMonday = async () => {
         let d = new Date();
         let day = d.getDay(),
@@ -257,16 +270,11 @@ function WorkSchedule() {
                                 show={modalShow}
                                 onHide={() => setModalShow(false)}
                                 data={modalData}
-                                click={(breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData) => {
+                                clickData={(breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData) => {
                                     sendData(breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData)
                                 }}
-                            />
-                            <EmployeeAddModal
-                                show={modalEmployee}
-                                onHide={() => setModalEmployee(false)}
-                                data={modalData}
-                                click={(breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData) => {
-                                    sendData(breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData)
+                                clickDelete={(propsData) => {
+                                    deleteDay(propsData)
                                 }}
                             />
                         </div>

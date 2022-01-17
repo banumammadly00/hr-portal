@@ -384,7 +384,7 @@ function CreateSickness() {
                                     </Col>
                                     <Col xs={4}>
                                         <Form.Group className="form-group">
-                                            <span className="input-title">•	İşə başlama tarixi</span>
+                                            <span className="input-title">İşə başlama tarixi</span>
                                             <Form.Label className="relative m-0">
                                                 <DatePicker selected={joinDate}
                                                             dateFormat="dd-MM-yyyy"
@@ -452,7 +452,6 @@ function CreateSickness() {
                                             </div>
                                         </Form.Group>
                                     </Col>
-
                                 </Row>
                             </div>
                             <div className="flex-vertical-center btn-block">
