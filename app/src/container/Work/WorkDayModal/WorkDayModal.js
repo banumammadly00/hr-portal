@@ -193,11 +193,15 @@ function WorkDayModal(props) {
                         </div>
                 }
                 <div className="btn-block flex">
-                    <button type="button" className="btn btn-cancel" onClick={() => {
-                        props.clickDelete(props.data)
-                    }}>
-                        Sil
-                    </button>
+                    {
+                        props.data.id !== null ?
+                            <button type="button" className="btn btn-cancel" onClick={() => {
+                                props.clickDelete(props.data)
+                            }}>
+                                Sil
+                            </button>
+                            : null
+                    }
                     <ul className="flex-end list-unstyled m-0">
                         <li>
                             <button type="button" className="btn-main-border" onClick={props.onHide}>
