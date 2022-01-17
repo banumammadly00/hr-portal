@@ -5,7 +5,7 @@ body {
     font-size: 14px;
 }
 
-a, a:hover, a:focus, button, path, body {
+a, a:hover, a:focus, button, path, body, .fileList-item {
     -webkit-transition: .2s ease-in-out;
     -moz-transition: .2s ease-in-out;
     -ms-transition: .2s ease-in-out;
@@ -102,7 +102,7 @@ label, .react-time-picker {
     display: block;
 }
 
-.form-control, .form-control:focus, .react-datepicker__input-container input, .react-time-picker__wrapper {
+.form-control, .form-control:focus, .react-datepicker__input-container input, .react-time-picker__wrapper, .input-file .upload-content {
     background-color: #FAFCFF;
     border: 1px solid rgba(4, 6, 71, 0.1);
     box-sizing: border-box;
@@ -1892,6 +1892,51 @@ input::-webkit-inner-spin-button {
 }
 
 
+.input-file .upload-content .form-control {
+    width: 50px;
+    right: 0;
+    left: auto;
+    z-index: 999;
+}
+
+.add-btn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.form-group .btn-remove {
+    background-color: transparent;
+    border: none;
+}
+
+.fileList-item {
+    background: rgba(48, 131, 220, 0.12);
+    border-radius: 4px;
+    height: 34px;
+    display: inline-block;
+    padding: 8px;
+    margin-right: 10px;
+    min-width: 110px;
+    color: #3083DC;
+}
+
+.fileList-item:hover {
+    background: #3083DC;
+    color: #fff;
+}
+
+.fileList-item:hover svg path {
+    fill: #fff;
+}
+
+.fileList-item .btn-transparent {
+    margin-left: 10px;
+}
+
+.fileList-item .btn-transparent svg {
+    margin: 0;
+}
 
 @media only screen and (min-width: 1600px) {
     .export-block {

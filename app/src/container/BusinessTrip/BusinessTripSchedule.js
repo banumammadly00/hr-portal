@@ -133,7 +133,7 @@ function BusinessTripSchedule() {
                         </div>
                     </div>
                     <div className="block">
-                      {/*  <Table responsive="sm">
+                        <Table responsive="sm">
                             <thead>
                             <tr>
                                 <th>Əmr ID</th>
@@ -146,7 +146,7 @@ function BusinessTripSchedule() {
                             </thead>
                             <tbody>
                             </tbody>
-                        </Table>*/}
+                        </Table>
                         <EmptyData/>
                     </div>
                 </Container>

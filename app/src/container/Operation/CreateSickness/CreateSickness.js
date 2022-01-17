@@ -58,6 +58,7 @@ function CreateSickness() {
     const [loadingIndicator, setLoadingIndicator] = useState(false);
     const [sicknessSerialNum, setSicknessSerialNum] = useState('');
     const [obeyDepartment, setObeyDepartment] = useState(false);
+    const [sicknessFileArr, setSicknessFileArr]= useState(['']);
 
     const getEmployee = () => {
         mainAxios({
@@ -95,7 +96,7 @@ function CreateSickness() {
         });
     }
 
-    const senData = () => {
+    const sendData = () => {
         setLoadingIndicator(true);
         let data = {
             "employeeId": selectedStaff !==null ? selectedStaff.id : null,
@@ -104,7 +105,6 @@ function CreateSickness() {
             "startDate": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
             "startJobDate": joinDate !== null ? moment(joinDate).format("YYYY-MM-DD") : null,
         }
-
         mainAxios({
             method: 'post',
             url: '/sick',
@@ -115,13 +115,13 @@ function CreateSickness() {
             },
         }).then((res) => {
             setLoadingIndicator(false);
+            sendSicknessFile(res.data)
             Swal.fire({
                 icon: 'success',
                 text: 'Məlumatlar qeyd edildi!',
                 showConfirmButton: false,
                 timer: 1500
             });
-            history.push("/operation")
         }).catch((error) => {
             setLoadingIndicator(false)
             Swal.fire({
@@ -136,6 +136,28 @@ function CreateSickness() {
             } else {
                 setErrors({})
             }
+        });
+    }
+
+    const addSicknessFileArr = () => {
+        setSicknessFileArr(sicknessFileArr => [...sicknessFileArr, " "])
+    }
+
+    const sendSicknessFile = (id) => {
+        const formData = new FormData();
+        for (let i = 0 ; i < sicknessFileArr.length ; i++) {
+            formData.append("files", sicknessFileArr[i]);
+        }
+        mainAxios({
+            method: 'post',
+            url: `/sick/${id}/attach`,
+            data: formData,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        }).then((res) => {
+            history.push("/operation")
         });
     }
 
@@ -181,6 +203,15 @@ function CreateSickness() {
                                                 getOptionValue={(option) => (option.name)}
                                                 styles={customStyles}
                                             />
+                                            <div className="validation-block flex-start">
+                                                {
+
+                                                    errors['employeeId'] !== '' ?
+                                                        <span
+                                                            className="text-validation">{errors['employeeId']}</span>
+                                                        : null
+                                                }
+                                            </div>
                                         </Form.Group>
                                     </Col>
                                     <Col xs={6}>
@@ -233,7 +264,7 @@ function CreateSickness() {
                                             </Form.Label>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={4}>
+                                    <Col xs={6}>
                                         <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">Xəstəliyin başladığı tarix </span>
@@ -299,15 +330,15 @@ function CreateSickness() {
                                             <div className="validation-block flex-start">
                                                 {
 
-                                                    errors['temporaryPass.from'] !== '' ?
+                                                    errors['startDate'] !== '' ?
                                                         <span
-                                                            className="text-validation">{errors['temporaryPass.from']}</span>
+                                                            className="text-validation">{errors['startDate']}</span>
                                                         : null
                                                 }
                                             </div>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={4}>
+                                    <Col xs={6}>
                                         <Form.Group className="form-group">
                                             <span className="input-title">Xəstəliyin bitdiyi tarix </span>
                                             <Form.Label className="relative m-0">
@@ -371,18 +402,9 @@ function CreateSickness() {
                                                     </svg>
                                                 </Button>
                                             </Form.Label>
-                                            <div className="validation-block flex-start">
-                                                {
-
-                                                    errors['temporaryPass.to'] !== '' ?
-                                                        <span
-                                                            className="text-validation">{errors['temporaryPass.to']}</span>
-                                                        : null
-                                                }
-                                            </div>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={4}>
+                                    <Col xs={6}>
                                         <Form.Group className="form-group">
                                             <span className="input-title">İşə başlama tarixi</span>
                                             <Form.Label className="relative m-0">
@@ -441,21 +463,91 @@ function CreateSickness() {
                                                     </svg>
                                                 </Button>
                                             </Form.Label>
-                                            <div className="validation-block flex-start">
-                                                {
-
-                                                    errors['temporaryPass.date'] !== '' ?
-                                                        <span
-                                                            className="text-validation">{errors['temporaryPass.date']}</span>
-                                                        : null
-                                                }
-                                            </div>
                                         </Form.Group>
+                                    </Col>
+                                    <Col xs={6}>
+                                        <div className="block-inn relative">
+                                            <div className="addition-content">
+                                                {
+                                                    sicknessFileArr.map((item, index) =>
+                                                        <Form.Group className="form-group input-file" key={index}>
+                                                            <div className="flex">
+                                                                <span className="input-title">Fayl daxil edin</span>
+
+                                                                {
+                                                                    index === 0 ? null :
+                                                                        <button
+                                                                            className=" btn-remove flex-center"
+                                                                            onClick={() => {
+                                                                                sicknessFileArr.splice(index, 1);
+                                                                                setSicknessFileArr([...sicknessFileArr], sicknessFileArr)
+                                                                            }}>
+                                                                            <svg width="14" height="14"
+                                                                                 viewBox="0 0 14 14" fill="none"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path
+                                                                                    d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
+                                                                                    fill="#CF3131"/>
+                                                                                <path
+                                                                                    d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
+                                                                                    fill="#CF3131"/>
+                                                                                <path
+                                                                                    d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
+                                                                                    fill="#CF3131"/>
+                                                                            </svg>
+                                                                            <span>Sil</span>
+                                                                        </button>
+                                                                }
+                                                            </div>
+
+                                                            <Form.Label className="relative m-0 upload-content">
+                                                                <Form.Control placeholder="Alt struktur bölmənin adı daxil edin"
+                                                                              type="file"
+                                                                              onChange={(e) => {
+                                                                                  sicknessFileArr[index] = e.target.files[0];
+                                                                                  setSicknessFileArr([...sicknessFileArr], sicknessFileArr);
+                                                                                  console.log(sicknessFileArr)
+                                                                              }}
+                                                                />
+                                                                <p className="m-0 flex-center">{item !== undefined ? item.name : ''}</p>
+                                                                <Button className="btn-transparent">
+                                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <g clipPath="url(#clip0_2354_34)">
+                                                                            <path d="M5.45996 20C4.11644 20 2.85691 19.4801 1.91322 18.536C0.969524 17.5919 0.449219 16.3328 0.449219 14.9893C0.449219 13.6461 0.969144 12.3866 1.91322 11.4429L12.2866 1.06951C13.7708 -0.413877 16.077 -0.347366 17.6508 1.22647C19.2247 2.80031 19.2923 5.10614 17.8082 6.59066L8.063 16.3358C7.14819 17.2506 5.65835 17.2522 4.74202 16.3358C3.82645 15.4199 3.82683 13.93 4.74202 13.0149L11.3433 6.41356C11.566 6.19084 11.9267 6.19084 12.1494 6.41356C12.3721 6.63627 12.3721 6.99695 12.1494 7.21967L5.54813 13.821C5.07723 14.2919 5.07723 15.0584 5.54813 15.5297C6.01979 16.0006 6.78599 15.9999 7.25689 15.5297L17.0021 5.78455C18.0263 4.75991 17.9591 3.14692 16.8447 2.03258C15.7304 0.918241 14.1174 0.85097 13.0927 1.87562L2.71933 12.249C1.99075 12.9776 1.5894 13.9509 1.5894 14.9893C1.5894 16.028 1.99075 17.0013 2.71933 17.7299C3.44791 18.4585 4.42125 18.8598 5.45996 18.8598C6.49828 18.8598 7.47162 18.4585 8.2002 17.7299L18.5736 7.35649C18.7963 7.13377 19.157 7.13377 19.3797 7.35649C19.6024 7.57921 19.6024 7.93988 19.3797 8.1626L9.00631 18.536C8.06262 19.4797 6.80309 20 5.45996 20Z" fill="#193651"/>
+                                                                        </g>
+                                                                        <defs>
+                                                                            <clipPath id="clip0_2354_34">
+                                                                                <rect width="20" height="20" fill="white"/>
+                                                                            </clipPath>
+                                                                        </defs>
+                                                                    </svg>
+                                                                </Button>
+                                                            </Form.Label>
+                                                        </Form.Group>
+                                                    )
+                                                }
+                                                <div className="flex-end">
+                                                    <button type="button" className=" add-btn btn-color" onClick={()=> addSicknessFileArr()}
+                                                            >
+                                                        <svg width="12" height="12" viewBox="0 0 12 12"
+                                                             fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                                stroke="#3083DC" strokeWidth="1.3"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"/>
+                                                        </svg>
+                                                        <span>əlavə et</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </Col>
                                 </Row>
                             </div>
                             <div className="flex-vertical-center btn-block">
-                                <Button className="btn-effect" onClick={() => senData()}>
+                                <Button className="btn-effect" onClick={() => sendData()}>
                                     Yadda saxla
                                 </Button>
                             </div>

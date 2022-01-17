@@ -89,6 +89,7 @@ function CreateOperation() {
     const [assignCheck, setAssignCheck] = useState('');
     const [selectedVacation, setSelectedVacation] = useState(null);
     const [tripSalary, setTripSalary] = useState('');
+    const [obeyDepartment, setObeyDepartment] = useState('');
 
 
     /*------Vacancy----------*/
@@ -10830,6 +10831,121 @@ function CreateOperation() {
                                                             errors['vacationDisable.callBackReason'] !== '' ?
                                                                 <span
                                                                     className="text-validation">{errors['vacationDisable.callBackReason']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
+                                                </Form.Group>
+                                            </Col>
+                                        </Row>
+                                    </Tab>
+
+                                    <Tab eventKey="50" title="" disabled={tab !== "50"}>
+                                        <Row>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span
+                                                        className="input-title">İşçinin soyadı, adı, atasının adı *</span>
+                                                    <Select
+                                                        placeholder="İşçinin adı, soyadı, atasının adı"
+                                                        value={selectedStaff}
+                                                        onChange={(val) => {
+                                                            let id = val.id
+                                                            setEmployeeId(id)
+                                                            getEmployeeDetail(id)
+                                                            setSelectedStaff(val);
+                                                        }}
+                                                        isSearchable={employee ? employee.length > 5 ? true : false : false}
+                                                        options={employee}
+                                                        getOptionLabel={(option) => (option.name)}
+                                                        getOptionValue={(option) => (option.name)}
+                                                        styles={customStyles}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span
+                                                        className="input-title">İşçinin işlədiyi struktur bölmə </span>
+                                                    <Form.Label>
+                                                        <Form.Control
+                                                            placeholder="İşlədiyi struktur bölmə"
+                                                            value={department || ''} disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span
+                                                        className="input-title">İşçinin işlədiyi alt struktur bölmə </span>
+                                                    <Form.Label>
+                                                        <Form.Control
+                                                            placeholder="İşlədiyi struktur bölmə"
+                                                            value={subDepartment || ''} disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span
+                                                        className="input-title">Tabe struktur bölmənin adı</span>
+                                                    <Form.Label>
+                                                        <Form.Control
+                                                            placeholder="İşlədiyi struktur bölmə"
+                                                            value={obeyDepartment || ''} disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span
+                                                        className="input-title">İşçinin vəzifəsi </span>
+                                                    <Form.Label>
+                                                        <Form.Control placeholder="Vəzifəsi"
+                                                                      value={position || ''} disabled={true}/>
+                                                    </Form.Label>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span
+                                                        className="input-title">İşçinin faktiki işə başladığı saat</span>
+                                                    <Form.Label className="relative m-0">
+                                                        <TimePicker
+                                                            onChange={(val) => {
+                                                                setStartTime(val);
+                                                            }}
+                                                            value={startTime}
+                                                        />
+                                                    </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['reduceWorkHours.currentFrom'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['reduceWorkHours.currentFrom']}</span>
+                                                                : null
+                                                        }
+                                                    </div>
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={6}>
+                                                <Form.Group className="form-group">
+                                                    <span
+                                                        className="input-title">İşçinin faktiki işinin bitdiyi saat</span>
+                                                    <Form.Label className="relative m-0">
+                                                        <TimePicker
+                                                            onChange={(val) => {
+                                                                setEndTime(val);
+                                                            }}
+                                                            value={endTime}
+                                                        />
+                                                    </Form.Label>
+                                                    <div className="validation-block flex-start">
+                                                        {
+
+                                                            errors['reduceWorkHours.currentTo'] !== '' ?
+                                                                <span
+                                                                    className="text-validation">{errors['reduceWorkHours.currentTo']}</span>
                                                                 : null
                                                         }
                                                     </div>
