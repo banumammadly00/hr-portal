@@ -3,18 +3,12 @@ import Aux from "../../../../hoc/Auxiliary";
 import {Container, Tabs, Tab, Table, Button, OverlayTrigger, Tooltip, Form, Row, Col} from 'react-bootstrap';
 import {Link, useHistory, useLocation, useParams, useRouteMatch} from 'react-router-dom';
 import {mainAxios} from "../../../../components/Axios/axios";
-import Paginate from "../../../../components/Pagination/Pagination";
 import Swal from "sweetalert2";
 import moment from "moment";
 import Select from "react-select";
 import {customStyles} from "../../../../components/Select/SelectStyle";
 import DatePicker from "react-datepicker";
 import Indicator from "../../../../components/Loading/Indicator";
-
-const sickStatusOptions = [
-    {value: "OPEN", label: "Açıq"},
-    {value: 'CLOSE', label: 'Bağlı'},
-]
 
 
 function EditSickness() {
@@ -38,7 +32,6 @@ function EditSickness() {
     const [practice, setPractice] = useState('');
     const [generalPractice, setGeneralPractice] = useState('');
     const [ssn, setSSn] = useState('');
-    const [selectedSickStatus, setSelectedSickStatus] = useState(null);
     const [sicknessFileArr, setSicknessFileArr] = useState(['']);
     const [sickFileNameArr, setSickFileNameArr] = useState([])
 
@@ -99,11 +92,6 @@ function EditSickness() {
             setSSn(data.ssn);
             setSicknessSerialNum(data.series);
             setSickFileNameArr(data.fileNames);
-            for (let i of sickStatusOptions) {
-                if (data.sickStatus === i.label) {
-                    setSelectedSickStatus(i)
-                }
-            }
         });
     }
 
@@ -120,7 +108,6 @@ function EditSickness() {
             "series": sicknessSerialNum !== '' ? sicknessSerialNum : null,
             "startDate": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
             "startJobDate": joinDate !== null ? moment(joinDate).format("YYYY-MM-DD") : null,
-            "sickStatus": selectedSickStatus !== null ? selectedSickStatus.value : null,
             "ssn": ssn !== '' ? ssn : null,
         }
 
@@ -282,22 +269,6 @@ function EditSickness() {
                                     </Col>
                                     <Col xs={6}>
                                         <Form.Group className="form-group">
-                                                    <span
-                                                        className="input-title">Xəstəlik statusu</span>
-                                            <Select
-                                                placeholder="Xəstəlik statusunu seçin"
-                                                value={selectedSickStatus}
-                                                onChange={(val) => {
-                                                    setSelectedSickStatus(val);
-                                                }}
-                                                isSearchable={sickStatusOptions ? sickStatusOptions.length > 5 ? true : false : false}
-                                                options={sickStatusOptions}
-                                                styles={customStyles}
-                                            />
-                                        </Form.Group>
-                                    </Col>
-                                    <Col xs={6}>
-                                        <Form.Group className="form-group">
                                             <span className="input-title">Xəstəlik vərəqəsinin nömrəsi</span>
                                             <Form.Label>
                                                 <Form.Control placeholder="Xəstəlik vərəqəsinin nömrəsi"
@@ -307,7 +278,7 @@ function EditSickness() {
                                             </Form.Label>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={4}>
+                                    <Col xs={6}>
                                         <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">Xəstəliyin başladığı tarix </span>
@@ -381,7 +352,7 @@ function EditSickness() {
                                             </div>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={4}>
+                                    <Col xs={6}>
                                         <Form.Group className="form-group">
                                             <span className="input-title">Xəstəliyin bitdiyi tarix </span>
                                             <Form.Label className="relative m-0">
@@ -456,7 +427,7 @@ function EditSickness() {
                                             </div>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={4}>
+                                    <Col xs={6}>
                                         <Form.Group className="form-group">
                                             <span className="input-title">İşə başlama tarixi</span>
                                             <Form.Label className="relative m-0">

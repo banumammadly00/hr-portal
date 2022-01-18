@@ -21,7 +21,7 @@ function OvertimeSchedule() {
 
     const [overtimeArr, setOvertimeArr] = useState([]);
 
-    const getOvertime =(page) => {
+    const getOvertime = (page) => {
         mainAxios({
             method: 'get',
             url: '/overtime',
@@ -102,9 +102,9 @@ function OvertimeSchedule() {
                                             <td>{item.startTime} - {item.endTime}</td>
                                             <td>
                                                 <div className="flex">
-                                                                     <span className={statuses[item.status]}>
-                                                                         {item.status}
-                                                                     </span>
+                                                     <span className={statuses[item.status]}>
+                                                         {item.status}
+                                                     </span>
                                                     <ul className="btn-block list-unstyled flex m-0">
                                                         {
                                                             item.status === 'Təsdiq gözləyir' ?
