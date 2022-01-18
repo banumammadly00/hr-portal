@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Aux from "../../../../hoc/Auxiliary";
 import {Table} from 'react-bootstrap';
-import {Link, useHistory} from 'react-router-dom';
+import {Link, useHistory,useLocation} from 'react-router-dom';
 import {mainAxios} from "../../../../components/Axios/axios";
 import Paginate from "../../../../components/Pagination/Pagination";
 import EmptyData from "../../../../components/EmptyData/EmptyData";
@@ -14,7 +14,6 @@ const sickStatuses = {
 
 function SicknessSchedule() {
     const history = useHistory();
-
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [recordSize, setRecordSize] = useState(20);
@@ -41,9 +40,7 @@ function SicknessSchedule() {
     }
 
     const handleRowClick = (item) => {
-        history.push(`/operation/sickness/edit/${item.id}`);
-    }
-
+        history.push({pathname: `/operation/sickness/edit/${item.id}`})}
 
     useEffect(() => {
         getSickness(1)

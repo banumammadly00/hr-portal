@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Aux from "../../../../hoc/Auxiliary";
 import {Button, Table} from 'react-bootstrap';
-import {Link, useHistory} from 'react-router-dom';
 import {mainAxios} from "../../../../components/Axios/axios";
 import Paginate from "../../../../components/Pagination/Pagination";
 import EmptyData from "../../../../components/EmptyData/EmptyData";

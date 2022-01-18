@@ -18,12 +18,9 @@ const sickStatusOptions = [
 
 
 function EditSickness() {
-    const history = useHistory();
-
-
     let params = useParams();
-    let location = useLocation()
     let id = params.id;
+    const history = useHistory();
 
     /*General*/
     const [joinDate, setJoinDate] = useState(null);
@@ -102,8 +99,6 @@ function EditSickness() {
             setSSn(data.ssn);
             setSicknessSerialNum(data.series);
             setSickFileNameArr(data.fileNames);
-            console.log(data.fileNames);
-            console.log(sickFileNameArr)
             for (let i of sickStatusOptions) {
                 if (data.sickStatus === i.label) {
                     setSelectedSickStatus(i)
@@ -146,7 +141,10 @@ function EditSickness() {
                 showConfirmButton: false,
                 timer: 1500
             });
-            history.push("/operation")
+            history.push({
+                pathname: `/operation`,
+                state: 'sickness'
+            })
         }).catch((error) => {
             setLoadingIndicator(false)
             Swal.fire({
@@ -179,21 +177,6 @@ function EditSickness() {
 
     const openSickFile = (fileName) => {
         window.open(`https://hr-portal-api-v2.herokuapp.com/sick/file/${fileName}?token= ${localStorage.getItem('token')}`)
-      /*  mainAxios({
-            method: 'get',
-            url: `/sick/file/${fileName}`,
-            params: {
-                token : localStorage.getItem('token')
-            },
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-        }).then((res) => {
-            const blobWithType = new Blob([res.data]);
-            const urlToPreview = URL.createObjectURL(blobWithType);
-            window.open(urlToPreview, "_blank").focus();
-        });*/
     }
 
     const sendSicknessFile = () => {
@@ -210,7 +193,6 @@ function EditSickness() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            history.push("/operation")
         });
     }
 

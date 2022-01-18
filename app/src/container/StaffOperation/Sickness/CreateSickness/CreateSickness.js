@@ -161,7 +161,10 @@ function CreateSickness() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-            history.push("/operation")
+            history.push({
+                pathname: `/operation`,
+                state: 'sickness'
+            })
         });
     }
 

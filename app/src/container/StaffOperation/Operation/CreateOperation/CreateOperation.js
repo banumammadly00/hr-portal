@@ -794,7 +794,10 @@ function CreateOperation() {
             setTab('');
             resetData();
             setSave(false);
-            history.push("/operation")
+            history.push({
+                pathname: `/operation`,
+                state:  tab =='50' ? 'overtime' : 'operation'
+            })
         }).catch((error) => {
             setLoadingIndicator(false)
             Swal.fire({

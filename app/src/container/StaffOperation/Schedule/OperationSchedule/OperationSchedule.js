@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Aux from "../../../../hoc/Auxiliary";
 import {Table, Container, Button, OverlayTrigger, Tooltip, Form, Tabs, Tab} from 'react-bootstrap';
-import {Link, useHistory} from 'react-router-dom';
+import {Link, useHistory, useLocation} from 'react-router-dom';
 import {mainAxios} from "../../../../components/Axios/axios";
 import Paginate from "../../../../components/Pagination/Pagination";
 import Swal from "sweetalert2";
@@ -26,8 +26,8 @@ const statusOptions = [
 ];
 
 function OperationSchedule() {
-    const history = useHistory();
-    const [key, setKey] = useState('sickness')
+    let location = useLocation();
+    const [key, setKey] = useState(location.state !== null ? location.state : 'sickness')
 
     const [operation, setOperation] = useState([]);
     const [totalRecord, setTotalRecord] = useState('');
@@ -38,7 +38,6 @@ function OperationSchedule() {
     const [selectedStatus, setSelectedStatus] = useState(false);
 
     let status = selectedStatus !== null ? selectedStatus.value : null;
-
 
     const getOperation = (page, status) => {
         mainAxios({
@@ -113,7 +112,6 @@ function OperationSchedule() {
         getOperation(1)
     }
 
-
     useEffect(() => {
         getOperation(1)
     }, []);
@@ -125,7 +123,7 @@ function OperationSchedule() {
                     <div className="inner-tab flex-vertical-center">
                         <Tabs activeKey={key} onSelect={(k) => setKey(k)}>
                             <Tab eventKey="sickness" title="Xəstəliklər">
-                                <SicknessSchedule/>
+                                <SicknessSchedule key={key}/>
                             </Tab>
                             <Tab eventKey="operation" title="Əmrlər">
                                 <div className="title-block flex">
