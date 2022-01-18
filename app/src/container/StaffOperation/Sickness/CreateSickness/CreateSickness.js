@@ -59,6 +59,8 @@ function CreateSickness() {
     const [sicknessSerialNum, setSicknessSerialNum] = useState('');
     const [obeyDepartment, setObeyDepartment] = useState(false);
     const [sicknessFileArr, setSicknessFileArr]= useState(['']);
+    const [ssn, setSSn] = useState('');
+
 
     const getEmployee = () => {
         mainAxios({
@@ -92,7 +94,8 @@ function CreateSickness() {
             setDepartment(data.department);
             setSubDepartment(data.subDepartment);
             setPosition(data.position);
-            setObeyDepartment(data.obeyDepartmentName);
+            setObeyDepartment(data.subordinateDepartment);
+            setSSn(data.ssn);
         });
     }
 
@@ -104,6 +107,7 @@ function CreateSickness() {
             "series": sicknessSerialNum !== '' ?  sicknessSerialNum : null,
             "startDate": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
             "startJobDate": joinDate !== null ? moment(joinDate).format("YYYY-MM-DD") : null,
+            "ssn": ssn !== '' ? ssn : null,
         }
         mainAxios({
             method: 'post',
@@ -462,6 +466,15 @@ function CreateSickness() {
                                                         </defs>
                                                     </svg>
                                                 </Button>
+                                            </Form.Label>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col xs={6}>
+                                        <Form.Group className="form-group">
+                                            <span className="input-title">SSN</span>
+                                            <Form.Label>
+                                                <Form.Control placeholder="SSN"
+                                                              value={ssn || ''} disabled={true}/>
                                             </Form.Label>
                                         </Form.Group>
                                     </Col>

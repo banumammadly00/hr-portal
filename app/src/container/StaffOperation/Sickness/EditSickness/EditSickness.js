@@ -78,7 +78,7 @@ function EditSickness() {
             setDepartment(data.department);
             setSubDepartment(data.subDepartment);
             setPosition(data.position);
-            setObeyDepartment(data.obeyDepartmentName);
+            setObeyDepartment(data.subordinateDepartment);
         });
     }
 
@@ -126,6 +126,7 @@ function EditSickness() {
             "startDate": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
             "startJobDate": joinDate !== null ? moment(joinDate).format("YYYY-MM-DD") : null,
             "sickStatus": selectedSickStatus !== null ? selectedSickStatus.value : null,
+            "ssn": ssn !== '' ? ssn : null,
         }
 
         mainAxios({

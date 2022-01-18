@@ -273,6 +273,7 @@ function CreateOperation() {
             setSubDepartment(data.subDepartment);
             setPosition(data.position);
             setWorkMode(data.workMode);
+            setObeyDepartment(data.subordinateDepartment)
             let salary = res.data.salary;
             if (salary !== null) {
                 setEmployeeMainSalary(salary.mainSalary);
