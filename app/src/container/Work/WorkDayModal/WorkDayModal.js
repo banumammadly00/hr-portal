@@ -5,11 +5,13 @@ import TimePicker from "react-time-picker";
 
 
 function WorkDayModal(props) {
+    console.log(props);
     const [checkHoliday, setCheckHoliday] = useState(false);
-    const [checkRepeat, setCheckRepeat] = useState(false);
+    const [checkRepeat, setCheckRepeat] = useState(props.data.repeatFrom !== null ? 1 : 0);
     const [checkBreak, setCheckBreak] = useState(props.data.breakHour);
     const [checkOverTime, setCheckOverTime] = useState(false);
     const [day, setDay] = useState('');
+    const [repeatDay, setRepeatDay] = useState('');
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [workHour, setWorkHour] = useState('');
@@ -25,6 +27,7 @@ function WorkDayModal(props) {
         setCheckBreak(props.data.breakHour);
         setCheckOverTime(props.data.jobOnOffDay);
         setDay(props.data.repeatFrom);
+        setRepeatDay(props.data.repeatFrom);
         setCheckRepeat(props.data.repeatFrom !== null ? 1 : 0);
         setStartTime(props.data.shiftFrom);
         setEndTime(props.data.shiftTo);
@@ -49,7 +52,6 @@ function WorkDayModal(props) {
                                        checked={checkHoliday}
                                        onChange={(e) => {
                                            setCheckHoliday(e.target.checked);
-                                           setCheckRepeat(false);
                                            setDay('')
                                        }}/>
                                 <span className="checkmark"></span>
@@ -182,7 +184,7 @@ function WorkDayModal(props) {
                                                 <Form.Control
                                                     type="number"
                                                     disabled={props.data.repeatFrom !== null ? true : false}
-                                                    value={day}
+                                                    value={props.data.repeatFrom !== null ? repeatDay : day}
                                                     onChange={(e => setDay(e.target.value))}/>
                                             </Form.Label>
                                         </Form.Group>
@@ -192,7 +194,7 @@ function WorkDayModal(props) {
                             }
                         </div>
                 }
-                <div className="btn-block flex">
+                <div className={['btn-block', props.data.id !== null ? 'flex' : 'flex-end'].join(' ')}>
                     {
                         props.data.id !== null ?
                             <button type="button" className="btn btn-cancel" onClick={() => {

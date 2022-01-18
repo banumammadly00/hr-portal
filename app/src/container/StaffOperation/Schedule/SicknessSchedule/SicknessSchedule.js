@@ -9,7 +9,6 @@ import EmptyData from "../../../../components/EmptyData/EmptyData";
 const sickStatuses = {
     'Açıq': 'OPEN',
     'Bağlı': 'CLOSE',
-    'ger': 'null',
 };
 
 
@@ -18,7 +17,7 @@ function SicknessSchedule() {
 
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [recordSize, setRecordSize] = useState(5);
+    const [recordSize, setRecordSize] = useState(20);
 
     const [sicknessArr, setSicknessArr] = useState([]);
 
