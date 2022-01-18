@@ -18,12 +18,6 @@ const statuses = {
     'Hesablandı': 'done'
 };
 
-const sickStatuses = {
-    'Açıq': 'OPEN',
-    'Bağlı': 'CLOSE',
-    'ger': 'null',
-};
-
 const statusOptions = [
     {value: 'PENDING', label: "Təsdiq gözləyir"},
     {value: 'APPROVED', label: "Təsdiqlənib"},

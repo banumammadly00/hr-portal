@@ -166,7 +166,7 @@ function EditSickness() {
     const deleteSicknessFile = (fileName) => {
         mainAxios({
             method: 'delete',
-            url: `/sick/file/${fileName}`,
+            url: `/sick/${id}/file/${fileName}`,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')

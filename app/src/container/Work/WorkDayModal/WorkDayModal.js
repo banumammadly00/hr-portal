@@ -198,7 +198,7 @@ function WorkDayModal(props) {
                     {
                         props.data.id !== null ?
                             <button type="button" className="btn btn-cancel" onClick={() => {
-                                props.clickDelete(props.data)
+                                props.delete(props.data)
                             }}>
                                 Sil
                             </button>
@@ -212,7 +212,7 @@ function WorkDayModal(props) {
                         </li>
                         <li>
                             <button type="button" className="btn-main" onClick={() => {
-                                props.clickData(checkBreak, checkOverTime, checkHoliday, startTime, endTime, day, props.data)
+                                props.click(checkBreak, checkOverTime, checkHoliday, startTime, endTime, day, props.data)
                             }}>
                                 Əlavə et
                             </button>

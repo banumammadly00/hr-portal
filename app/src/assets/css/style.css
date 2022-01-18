@@ -1287,7 +1287,7 @@ td {
 }
 
 .loading-block {
-    height: calc(100vh - 175px);
+    height: calc(100vh - 300px);
     display: flex;
     align-items: center;
     justify-content: center;

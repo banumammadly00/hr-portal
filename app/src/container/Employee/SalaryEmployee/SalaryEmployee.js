@@ -414,7 +414,7 @@ function SalaryEmployee() {
                                     <tr>
                                         {
                                             tableCols.map((item, index) =>
-                                            <th>
+                                            <th key={index}>
                                                 {
                                                     item.label.length > 20 ?
                                                         <OverlayTrigger placement="top-start" overlay={<Tooltip

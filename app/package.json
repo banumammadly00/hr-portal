@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.7.1",
     "@fullcalendar/core": "^5.10.0",
     "@fullcalendar/daygrid": "^5.10.0",
     "@fullcalendar/interaction": "^5.10.0",
@@ -31,6 +32,7 @@
     "react-scripts": "4.0.3",
     "react-select": "^4.3.1",
     "react-side-nav": "^1.1.1",
+    "react-spinners": "^0.11.0",
     "react-sticky-table": "^5.1.11",
     "react-svg": "^14.1.7",
     "react-time-picker": "^4.4.4",

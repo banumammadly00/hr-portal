@@ -5,11 +5,13 @@ import {Link, useHistory} from 'react-router-dom';
 import {mainAxios} from "../../../../components/Axios/axios";
 import Paginate from "../../../../components/Pagination/Pagination";
 import EmptyData from "../../../../components/EmptyData/EmptyData";
+import Swal from "sweetalert2";
 
-const sickStatuses = {
-    'Açıq': 'OPEN',
-    'Bağlı': 'CLOSE',
-    'ger': 'null',
+const statuses = {
+    'Təsdiq gözləyir': 'pending',
+    'Təsdiqlənib': 'confirmed',
+    'Ləğv edildi': 'cancelled',
+    'Hesablandı': 'done'
 };
 
 
@@ -37,6 +39,34 @@ function OvertimeSchedule() {
             setOvertimeArr(res.data.content);
             setTotalRecord(res.data.totalElements);
         });
+    }
+
+    const changeStatus = (status, id) => {
+        let statusText = status === 2 ? 'Ləğv etmək istədiyinizə əminsinizmi?' : 'Təsdiq etmək istədiyinizə əminsinizmi?'
+        Swal.fire({
+            text: statusText,
+            showCancelButton: true,
+            confirmButtonText: 'Bəli',
+            confirmButtonColor: '#2ed06a',
+            cancelButtonText: 'Xeyr',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                mainAxios({
+                    method: 'put',
+                    url: `/overtime/${id}/change-status`,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    params: {
+                        status: status
+                    }
+                }).then((res) => {
+                    getOvertime(1)
+                });
+            }
+        })
     }
 
 
@@ -71,7 +101,7 @@ function OvertimeSchedule() {
                                             <td>{item.id}</td>
                                             <td>{item.fullName}</td>
                                             <td>{item.startTime} - {item.endTime}</td>
-                                            {/*<td>
+                                            <td>
                                                 <div className="flex">
                                                                      <span className={statuses[item.status]}>
                                                                          {item.status}
@@ -115,7 +145,7 @@ function OvertimeSchedule() {
                                                         }
                                                     </ul>
                                                 </div>
-                                            </td>*/}
+                                            </td>
                                         </tr>
                                     )
                                 }
