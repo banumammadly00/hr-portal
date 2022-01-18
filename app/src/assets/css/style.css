@@ -1790,6 +1790,10 @@ input::-webkit-inner-spin-button {
     margin-bottom: 15px;
 }
 
+.table-weekly-calendar .date-month {
+    margin: 0 20px 0 10px;
+}
+
 .table-weekly-calendar .filter-block .btn-color {
     font-weight: 500;
 }

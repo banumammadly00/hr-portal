@@ -153,10 +153,10 @@ function WorkSchedule() {
     return (
         <Aux>
             {
-                weekdays.length > 0 ? <div className="table-weekly-calendar">
-                    <Container fluid>
-                        <div className="title-block flex-vertical-center">
-                            <Col xs={2}>
+                weekdays.length > 0 ?
+                    <div className="table-weekly-calendar">
+                        <Container fluid>
+                            <div className="title-block flex-vertical-center">
                                 <div className="table-month flex">
                                     <button className="btn-transparent" onClick={() => prevWeekDays()}>
                                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
@@ -173,7 +173,7 @@ function WorkSchedule() {
                                             </defs>
                                         </svg>
                                     </button>
-                                    <span>{weekdays[0].day} {months[weekdays[0].month]} - {weekdays[6].day} {months[weekdays[6].month]}</span>
+                                    <span className="date-month">{weekdays[0].day} {months[weekdays[0].month]} - {weekdays[6].day} {months[weekdays[6].month]}</span>
                                     <button className="btn-transparent" onClick={() => nextWeekDays()}>
                                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
@@ -191,97 +191,97 @@ function WorkSchedule() {
                                         </svg>
                                     </button>
                                 </div>
-                            </Col>
-                        </div>
-                        <div className="table-striped p-0">
-                            <Table responsive="sm">
-                                <thead>
-                                <tr>
-                                    <th>İşçilər</th>
-                                    <th>B.e {weekdays[0].day}</th>
-                                    <th>Ç.a {weekdays[1].day}</th>
-                                    <th>Ç {weekdays[2].day}</th>
-                                    <th>C.a {weekdays[3].day}</th>
-                                    <th>C {weekdays[4].day}</th>
-                                    <th>Ş {weekdays[5].day}</th>
-                                    <th>B {weekdays[6].day}</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {
-                                    Object.keys(employeeArr).length > 0 ?
-                                        Object.keys(employeeArr).map((item, index) =>
-                                            <tr key={index}>
-                                                <td className="td-name">{item}</td>
-                                                {
-                                                    weekdays.length > 0 ?
-                                                        weekdays.map((day, dayIndex) =>
-                                                            <td className={[today !== day.date ? '' : 'td-today', 'td-weekday'].join(' ')}
-                                                                onClick={() => setData(Object.assign(employeeArr[item][day.date],
-                                                                    {startDate: weekdays[0]}, {endDate: weekdays[6]},
-                                                                    {name: item},
-                                                                    {weekday: `${day.day} ${months[day.month]}`},
-                                                                    {workHour: timeDiffer(day.date,employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo )},
-                                                                ))}
-                                                                key={dayIndex}>
-                                                                {
-                                                                    employeeArr[item][day.date] !== undefined ?
-                                                                        employeeArr[item][day.date].offDay ?
-                                                                            <span className="td-holiday">İstirahət <br/> günü </span>
-                                                                            :
-                                                                            <>
-                                                                                {
-                                                                                    employeeArr[item][day.date].shiftFrom !== null ?
-                                                                                        <span
-                                                                                            className="flex">{employeeArr[item][day.date].shiftFrom} - {employeeArr[item][day.date].shiftTo}</span>
-                                                                                        : null
-                                                                                }
-                                                                                {
-                                                                                    timeDiffer(day.date, employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo) > 0 ?
-                                                                                        <span className="td-hour">
+                            </div>
+                            <div className="table-striped p-0">
+                                <Table responsive="sm">
+                                    <thead>
+                                    <tr>
+                                        <th>İşçilər</th>
+                                        <th>B.e {weekdays[0].day}</th>
+                                        <th>Ç.a {weekdays[1].day}</th>
+                                        <th>Ç {weekdays[2].day}</th>
+                                        <th>C.a {weekdays[3].day}</th>
+                                        <th>C {weekdays[4].day}</th>
+                                        <th>Ş {weekdays[5].day}</th>
+                                        <th>B {weekdays[6].day}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {
+                                        Object.keys(employeeArr).length > 0 ?
+                                            Object.keys(employeeArr).map((item, index) =>
+                                                <tr key={index}>
+                                                    <td className="td-name">{item}</td>
+                                                    {
+                                                        weekdays.length > 0 ?
+                                                            weekdays.map((day, dayIndex) =>
+                                                                <td className={[today !== day.date ? '' : 'td-today', 'td-weekday'].join(' ')}
+                                                                    onClick={() => setData(Object.assign(employeeArr[item][day.date],
+                                                                        {startDate: weekdays[0]}, {endDate: weekdays[6]},
+                                                                        {name: item},
+                                                                        {weekday: `${day.day} ${months[day.month]}`},
+                                                                        {workHour: timeDiffer(day.date, employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo)},
+                                                                    ))}
+                                                                    key={dayIndex}>
+                                                                    {
+                                                                        employeeArr[item][day.date] !== undefined ?
+                                                                            employeeArr[item][day.date].offDay ?
+                                                                                <span
+                                                                                    className="td-holiday">İstirahət <br/> günü </span>
+                                                                                :
+                                                                                <>
+                                                                                    {
+                                                                                        employeeArr[item][day.date].shiftFrom !== null ?
+                                                                                            <span
+                                                                                                className="flex">{employeeArr[item][day.date].shiftFrom} - {employeeArr[item][day.date].shiftTo}</span>
+                                                                                            : null
+                                                                                    }
+                                                                                    {
+                                                                                        timeDiffer(day.date, employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo) > 0 ?
+                                                                                            <span className="td-hour">
                                                                                               {timeDiffer(day.date, employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo)} saat
                                                                                         </span>
-                                                                                        : null
-                                                                                }
+                                                                                            : null
+                                                                                    }
 
-                                                                                {
-                                                                                    employeeArr[item][day.date].shiftType !== null ?
-                                                                                        <ReactSVG
-                                                                                            src={require(`../../../assets/img/${employeeArr[item][day.date].shiftType}.svg`).default}
-                                                                                            wrapper="span"
-                                                                                            className="wrapper-svg"/>
-                                                                                        : null
-                                                                                }
-                                                                            </>
-                                                                        : null
-                                                                }
+                                                                                    {
+                                                                                        employeeArr[item][day.date].shiftType !== null ?
+                                                                                            <ReactSVG
+                                                                                                src={require(`../../../assets/img/${employeeArr[item][day.date].shiftType}.svg`).default}
+                                                                                                wrapper="span"
+                                                                                                className="wrapper-svg"/>
+                                                                                            : null
+                                                                                    }
+                                                                                </>
+                                                                            : null
+                                                                    }
 
-                                                            </td>
-                                                        )
-                                                        : null
-                                                }
-                                            </tr>
-                                        )
-                                        : null
-                                }
-                                </tbody>
-                            </Table>
-                            <WorkDayModal
-                                show={modalShow}
-                                onHide={() => setModalShow(false)}
-                                data={modalData}
-                                clickData={(breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData) => {
-                                    sendData(breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData)
-                                }}
-                                clickDelete={(propsData) => {
-                                    deleteDay(propsData)
-                                }}
-                            />
-                        </div>
-                        <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
-                                  click={(page) => setDays(page)}/>
-                    </Container>
-                </div> : ''
+                                                                </td>
+                                                            )
+                                                            : null
+                                                    }
+                                                </tr>
+                                            )
+                                            : null
+                                    }
+                                    </tbody>
+                                </Table>
+                                <WorkDayModal
+                                    show={modalShow}
+                                    onHide={() => setModalShow(false)}
+                                    data={modalData}
+                                    clickData={(breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData) => {
+                                        sendData(breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData)
+                                    }}
+                                    clickDelete={(propsData) => {
+                                        deleteDay(propsData)
+                                    }}
+                                />
+                            </div>
+                            <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
+                                      click={(page) => setDays(page)}/>
+                        </Container>
+                    </div> : ''
             }
         </Aux>
     );
