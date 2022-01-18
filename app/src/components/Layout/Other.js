@@ -14,10 +14,10 @@ import EmployeeCreate from "../../container/Employee/EmployeeCreate/EmployeeCrea
 import ViewEmployee from "../../container/Employee/View/ViewEmployee";
 import EditEmployee from "../../container/Employee/EditEmployee/EditEmployee";
 import SalaryEmployee from "../../container/Employee/SalaryEmployee/SalaryEmployee";
-import CreateOperation from "../../container/Operation/CreateOperation/CreateOperation";
-import CreateSickness from "../../container/Operation/CreateSickness/CreateSickness";
-import EditSickness from "../../container/Operation/EditSickness/EditSickness";
-import OperationSchedule from "../../container/Operation/OperationSchedule/OperationSchedule";
+import CreateOperation from "../../container/StaffOperation/Operation/CreateOperation/CreateOperation";
+import CreateSickness from "../../container/StaffOperation/Sickness/CreateSickness/CreateSickness";
+import EditSickness from "../../container/StaffOperation/Sickness/EditSickness/EditSickness";
+import OperationSchedule from "../../container/StaffOperation/Schedule/OperationSchedule/OperationSchedule";
 import BusinessTripSchedule from "../../container/BusinessTrip/BusinessTripSchedule";
 import WorkSchedule from "../../container/Work/WorkSchedule/WorkSchedule";
 import Header from "../Header/Header";

@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import Aux from "../../../hoc/Auxiliary";
+import Aux from "../../../../hoc/Auxiliary";
 import {Table, Container, Button, OverlayTrigger, Tooltip, Form, Tabs, Tab} from 'react-bootstrap';
 import {Link, useHistory} from 'react-router-dom';
-import {mainAxios} from "../../../components/Axios/axios";
-import Paginate from "../../../components/Pagination/Pagination";
+import {mainAxios} from "../../../../components/Axios/axios";
+import Paginate from "../../../../components/Pagination/Pagination";
 import Swal from "sweetalert2";
 import Select from "react-select";
-import EmptyData from "../../../components/EmptyData/EmptyData";
-import {customStyles} from "../../../components/Select/SelectStyle";
+import EmptyData from "../../../../components/EmptyData/EmptyData";
+import {customStyles} from "../../../../components/Select/SelectStyle";
+import SicknessSchedule from "../SicknessSchedule/SicknessSchedule";
+import OvertimeSchedule from "../OvertimeSchedule/OvertimeSchedule";
 
 const statuses = {
     'Təsdiq gözləyir': 'pending',
@@ -37,10 +39,6 @@ function OperationSchedule() {
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [recordSize, setRecordSize] = useState(20);
-
-    const [sicknessArr, setSicknessArr] = useState([]);
-    const [overtimeArr, setOvertimeArr] = useState([]);
-
 
     const [showFilter, setShowFilter] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState(false);
@@ -116,60 +114,11 @@ function OperationSchedule() {
         })
     }
 
-    const getSickness = (page) => {
-        mainAxios({
-            method: 'get',
-            url: '/sick',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-            params: {
-                page: page - 1,
-                size: recordSize,
-            }
-        }).then((res) => {
-            setCurrentPage(page);
-            setSicknessArr(res.data.content);
-            setTotalRecord(res.data.totalElements);
-        });
-    }
-
-    const handleRowClick = (item) => {
-        history.push(`/operation/sickness/edit/${item.id}`);
-    }
-
     const resetFilter = () => {
         setSelectedStatus(null);
         getOperation(1)
     }
 
-    const getOvertime =(page) => {
-        mainAxios({
-            method: 'get',
-            url: '/overtime',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-            params: {
-                page: page - 1,
-                size: recordSize,
-            }
-        }).then((res) => {
-            setCurrentPage(page);
-            setOvertimeArr(res.data.content);
-            setTotalRecord(res.data.totalElements);
-        });
-    }
-
-    useEffect(() => {
-        getSickness(1)
-    }, []);
-
-    useEffect(() => {
-        getOvertime(1)
-    }, [])
 
     useEffect(() => {
         getOperation(1)
@@ -182,61 +131,7 @@ function OperationSchedule() {
                     <div className="inner-tab flex-vertical-center">
                         <Tabs activeKey={key} onSelect={(k) => setKey(k)}>
                             <Tab eventKey="sickness" title="Xəstəliklər">
-                                <div className="title-block flex">
-                                    <div className="title">
-                                        Xəstəliklər
-                                    </div>
-                                    <div className="btn-block flex-end" onClick={() => {
-                                        setShowFilter(!showFilter)
-                                    }}>
-                                        <Link to={`/operation/sickness/create`} className="btn-main">
-                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M15.8346 10.8337H10.8346V15.8337H9.16797V10.8337H4.16797V9.16699H9.16797V4.16699H10.8346V9.16699H15.8346V10.8337Z"
-                                                    fill="white"/>
-                                            </svg>
-                                            Əlavə et
-                                        </Link>
-                                    </div>
-                                </div>
-                                <div className="block">
-                                    {
-                                        sicknessArr.length > 0 ?
-                                            <Table responsive="sm" hover>
-                                                <thead>
-                                                <tr>
-                                                    <th>İd</th>
-                                                    <th>A.S.A.</th>
-                                                    <th>Başladığı tarix</th>
-                                                    <th>Bitdiyi tarix</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {
-                                                    sicknessArr.map((item, index) =>
-                                                        <tr onClick={() => handleRowClick(item)} key={index}>
-                                                            <td>{item.id}</td>
-                                                            <td>{item.fullName}</td>
-                                                            <td>
-                                                                {item.startDate}
-                                                            </td>
-                                                            <td>{item.startJobDate}
-                                                            </td>
-                                                            <td>
-                                                                 <span className={sickStatuses[item.sickStatus].toLowerCase()}>
-                                                                     {item.sickStatus}
-                                                                 </span>
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                }
-                                                </tbody>
-                                            </Table>
-                                            : <EmptyData/>
-                                    }
-                                </div>
+                                <SicknessSchedule/>
                             </Tab>
                             <Tab eventKey="operation" title="Əmrlər">
                                 <div className="title-block flex">
@@ -414,126 +309,7 @@ function OperationSchedule() {
                                           click={(page) => getOperation(page, status)}/>
                             </Tab>
                             <Tab eventKey="overtime" title="Overtime">
-                                <div className="title-block flex">
-                                    <div className="title">
-                                       Overtime
-                                    </div>
-                                </div>
-                                <div className="block">
-                                    {
-                                        overtimeArr.length > 0 ?
-                                            <Table responsive="sm">
-                                                <thead>
-                                                <tr>
-                                                    <th>İd</th>
-                                                    <th>Əmr</th>
-                                                    <th className="th-date">Tarix</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                                </thead>
-                                               {/* <tbody>
-                                                {
-                                                    overtimeArr.map((item, index) =>
-                                                        <tr key={index}>
-                                                            <td>{item.id}</td>
-                                                            <td>
-                                                                {
-                                                                    item.type.length > 30 ?
-                                                                        <OverlayTrigger placement="top-start"
-                                                                                        overlay={<Tooltip
-                                                                                            id="tooltip-disabled">{item.type}</Tooltip>}>
-                                                                            <p className="m-0 operation-name">{item.type}</p>
-                                                                        </OverlayTrigger>
-                                                                        :
-                                                                        <p className="m-0 operation-name">{item.type}</p>
-                                                                }
-                                                            </td>
-                                                            <td>{item.createdAt}</td>
-                                                            <td>
-                                                                <div className="flex">
-                                                                     <span className={statuses[item.statusAz]}>
-                                                                         {item.statusAz}
-                                                                     </span>
-                                                                    <ul className="btn-block list-unstyled flex m-0">
-                                                                        <li>
-                                                                            <Button className="btn-export"
-                                                                                    onClick={() => getExportDocument(item.id, item.type)}>
-                                                                                <svg width="20" height="20"
-                                                                                     viewBox="0 0 22 22"
-                                                                                     fill="none"
-                                                                                     xmlns="http://www.w3.org/2000/svg">
-                                                                                    <path
-                                                                                        d="M17.1875 19.25H4.81247C4.63013 19.25 4.45527 19.1776 4.32635 19.0486C4.19742 18.9197 4.125 18.7448 4.125 18.5625V3.4375C4.125 3.25517 4.19742 3.0803 4.32635 2.95137C4.45527 2.82244 4.63013 2.75 4.81247 2.75H13.0627L17.875 7.5625V18.5625C17.875 18.7448 17.8026 18.9197 17.6737 19.0486C17.5447 19.1776 17.3699 19.25 17.1875 19.25V19.25Z"
-                                                                                        stroke="#040647"
-                                                                                        strokeLinecap="round"
-                                                                                        strokeLinejoin="round"/>
-                                                                                    <path
-                                                                                        d="M13.0625 2.75V7.5625H17.8757"
-                                                                                        stroke="#040647"
-                                                                                        strokeLinecap="round"
-                                                                                        strokeLinejoin="round"/>
-                                                                                    <path d="M8.25 11.6875H13.75"
-                                                                                          stroke="#040647"
-                                                                                          strokeLinecap="round"
-                                                                                          strokeLinejoin="round"/>
-                                                                                    <path d="M8.25 14.4375H13.75"
-                                                                                          stroke="#040647"
-                                                                                          strokeLinecap="round"
-                                                                                          strokeLinejoin="round"/>
-                                                                                </svg>
-
-                                                                            </Button>
-                                                                        </li>
-                                                                        {
-                                                                            item.statusAz === 'Təsdiq gözləyir' ?
-                                                                                <li>
-                                                                                    <Button className="btn-cancel"
-                                                                                            onClick={() => changeStatus('REJECTED', item.id)}>
-                                                                                        <svg width="14" height="14"
-                                                                                             viewBox="0 0 12 12"
-                                                                                             fill="none"
-                                                                                             xmlns="http://www.w3.org/2000/svg">
-                                                                                            <path
-                                                                                                d="M5.99688 5.08435L11.0339 0.047383C11.0388 0.0422913 11.0438 0.0372908 11.0489 0.0323831C11.0489 0.0323654 11.0489 0.0323479 11.049 0.0323302L11.1531 0.140279C11.3516 -0.0514605 11.668 -0.0459554 11.8598 0.152578C12.0515 0.351111 12.046 0.667475 11.8475 0.859214L5.99688 5.08435ZM5.99688 5.08435L0.959034 0.0464826L0.95905 0.0464665L0.957171 0.0446523C0.69905 -0.204637 0.287728 -0.197483 0.038437 0.0606401C-0.20476 0.312441 -0.20476 0.711621 0.038437 0.963421L0.0384207 0.963437L0.0402643 0.965281L5.07811 6.00312L0.0402643 11.041L0.0402564 11.041C-0.213419 11.2947 -0.213419 11.706 0.0402564 11.9597L0.0402802 11.9597C0.293992 12.2134 0.705306 12.2134 0.959018 11.9597L0.959033 11.9597L5.99688 6.92189L11.0347 11.9597L11.0347 11.9597L11.0366 11.9616C11.2947 12.2109 11.706 12.2037 11.9553 11.9456L11.9553 11.9456C12.1985 11.6938 12.1985 11.2946 11.9553 11.0428L11.9553 11.0428L11.9535 11.041L6.91568 6.00312L11.9526 0.96616L5.99688 5.08435Z"
-                                                                                                fill="#CF3131"
-                                                                                                stroke="#CF3131"
-                                                                                                strokeWidth="0.3"/>
-                                                                                        </svg>
-                                                                                    </Button>
-                                                                                </li>
-                                                                                : null
-                                                                        }
-                                                                        {
-                                                                            item.statusAz === 'Təsdiq gözləyir' ?
-                                                                                <li>
-                                                                                    <Button className="btn-confirm"
-                                                                                            onClick={() => changeStatus('APPROVED', item.id)}>
-                                                                                        <svg width="16" height="12"
-                                                                                             viewBox="0 0 16 12"
-                                                                                             fill="none"
-                                                                                             xmlns="http://www.w3.org/2000/svg">
-                                                                                            <path
-                                                                                                d="M15.3696 0.327361C14.8557 -0.139829 14.0564 -0.103215 13.5867 0.413197L5.88442 8.89458L2.16332 5.11165C1.67212 4.61415 0.874137 4.60658 0.37791 5.0965C-0.11959 5.58515 -0.127168 6.38441 0.362755 6.88191L5.02072 11.6169C5.25937 11.8593 5.58259 11.9945 5.92097 11.9945C5.92854 11.9945 5.9374 11.9945 5.94497 11.9957C6.29347 11.9881 6.62178 11.8391 6.85535 11.5816L15.4554 2.11156C15.9239 1.59381 15.886 0.795825 15.3696 0.327361Z"
-                                                                                                fill="#2ED06A"/>
-                                                                                        </svg>
-                                                                                    </Button>
-                                                                                </li>
-                                                                                : null
-                                                                        }
-                                                                    </ul>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                }
-                                                </tbody>*/}
-                                            </Table>
-                                            :
-                                            <EmptyData/>
-                                    }
-                                </div>
-                                <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
-                                          click={(page) => getOvertime(page, status)}/>
+                                <OvertimeSchedule/>
                             </Tab>
                         </Tabs>
                     </div>

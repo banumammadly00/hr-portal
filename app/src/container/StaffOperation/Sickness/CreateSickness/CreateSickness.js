@@ -1,31 +1,51 @@
 import React, {useState, useEffect} from 'react';
-import Aux from "../../../hoc/Auxiliary";
-import {Container, Tabs, Tab, Table, Button, OverlayTrigger, Tooltip, Form, Row, Col} from 'react-bootstrap';
-import {Link, useHistory, useLocation, useParams, useRouteMatch} from 'react-router-dom';
-import {mainAxios} from "../../../components/Axios/axios";
-import Paginate from "../../../components/Pagination/Pagination";
-import Swal from "sweetalert2";
-import moment from "moment";
-import Select from "react-select";
-import {customStyles} from "../../../components/Select/SelectStyle";
+import Aux from "../../../../hoc/Auxiliary";
+import {Button, Container, Row, Col, Form, Tabs, Tab, Table} from 'react-bootstrap';
+import {Link, useHistory} from 'react-router-dom';
+import Select from 'react-select';
+import {mainAxios} from "../../../../components/Axios/axios";
 import DatePicker from "react-datepicker";
-import Indicator from "../../../components/Loading/Indicator";
+import moment from "moment";
+import Swal from 'sweetalert2';
+import {uid} from "react-uid";
+import Indicator from "../../../../components/Loading/Indicator";
+import {customStyles} from "../../../../components/Select/SelectStyle";
+import TimePicker from 'react-time-picker';
 
-const sickStatusOptions = [
-    {value: "OPEN", label: "Açıq"},
-    {value: 'CLOSE', label: 'Bağlı'},
+
+const WorkModeOptions = [
+    {value: 'DAILY', label: 'Gündəlik'},
+    {value: 'ALTERNATELY', label: 'Növbəli'},
 ]
 
+const disciplineOptions = [
+    {value: "REPRIMAND", label: "Töhmət"},
+    {value: "SEVERE_REPRIMAND ", label: "Şiddətli töhmət"},
+];
 
-function EditSickness() {
-    const history = useHistory();
+const jobTimeOptions = [
+    {value: 'PART_TIME', label: 'Tam'},
+    {value: 'FULL_TIME', label: 'Natamam'},
+]
 
+const vacationType = [
+    {value: 'MAIN', label: 'Əsas məzuniyyət'},
+    {value: 'EXPERIENCE', label: 'Staja görə əlavə məz.'},
+    {value: 'CONDITIONAL', label: ' Əmək şəraitinə görə əlavə məz.'},
+    {value: 'AGREEMENT', label: 'Kollektiv müqaviləyə əsasən məz.'},
+    {value: 'CHILD', label: 'Uşağa görə'},
+    {value: 'DEBT', label: 'Borc'},
+]
 
-    let params = useParams();
-    let location = useLocation()
-    let id = params.id;
+const jobTypeOptions = [
+    {value: 'MAIN', label: 'Əsas iş yeri'},
+    {value: 'ADDITIONAL', label: 'Əlavə iş yeri'},
+]
 
-    /*General*/
+function CreateSickness() {
+    let history = useHistory();
+
+    /*------General----------*/
     const [joinDate, setJoinDate] = useState(null);
     const [selectedStaff, setSelectedStaff] = useState(null);
     const [employee, setEmployee] = useState([]);
@@ -38,13 +58,7 @@ function EditSickness() {
     const [loadingIndicator, setLoadingIndicator] = useState(false);
     const [sicknessSerialNum, setSicknessSerialNum] = useState('');
     const [obeyDepartment, setObeyDepartment] = useState(false);
-    const [practice, setPractice] = useState('');
-    const [generalPractice, setGeneralPractice] = useState('');
-    const [ssn, setSSn] = useState('');
-    const [selectedSickStatus, setSelectedSickStatus] = useState(null);
-    const [sicknessFileArr, setSicknessFileArr] = useState(['']);
-    const [sickFileNameArr, setSickFileNameArr] = useState([])
-
+    const [sicknessFileArr, setSicknessFileArr]= useState(['']);
 
     const getEmployee = () => {
         mainAxios({
@@ -82,55 +96,18 @@ function EditSickness() {
         });
     }
 
-    const getSicknessData = () => {
-        mainAxios({
-            method: 'get',
-            url: '/sick/' + id,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-        }).then((res) => {
-            let data = res.data;
-            data.startDate !== null ? setStartDate(new Date(data.startDate)) : setStartDate(null);
-            setSelectedStaff({id: data.employeeId, name: data.fullName});
-            getEmployeeDetail(data.employeeId);
-            data.endDate !== null ? setEndDate(new Date(data.endDate)) : setEndDate(new Date(data.endDate));
-            data.joinDate !== null ? setJoinDate(new Date(data.startJobDate)) : setJoinDate(new Date(data.startJobDate));
-            setPractice(parseFloat(data.portExperience));
-            setGeneralPractice(data.totalExperience);
-            setSSn(data.ssn);
-            setSicknessSerialNum(data.series);
-            setSickFileNameArr(data.fileNames);
-            console.log(data.fileNames);
-            console.log(sickFileNameArr)
-            for (let i of sickStatusOptions) {
-                if (data.sickStatus === i.label) {
-                    setSelectedSickStatus(i)
-                }
-            }
-        });
-    }
-
-
-    const addSicknessFileArr = () => {
-        setSicknessFileArr(sicknessFileArr => [...sicknessFileArr, " "])
-    }
-
-    const updateData = () => {
+    const sendData = () => {
         setLoadingIndicator(true);
         let data = {
-            "employeeId": selectedStaff !== null ? selectedStaff.id : null,
+            "employeeId": selectedStaff !==null ? selectedStaff.id : null,
             "endDate": endDate !== null ? moment(endDate).format("YYYY-MM-DD") : null,
-            "series": sicknessSerialNum !== '' ? sicknessSerialNum : null,
+            "series": sicknessSerialNum !== '' ?  sicknessSerialNum : null,
             "startDate": startDate !== null ? moment(startDate).format("YYYY-MM-DD") : null,
             "startJobDate": joinDate !== null ? moment(joinDate).format("YYYY-MM-DD") : null,
-            "sickStatus": selectedSickStatus !== null ? selectedSickStatus.value : null,
         }
-
         mainAxios({
-            method: 'put',
-            url: `/sick/${id}`,
+            method: 'post',
+            url: '/sick',
             data: data,
             headers: {
                 'Content-Type': 'application/json',
@@ -138,14 +115,13 @@ function EditSickness() {
             },
         }).then((res) => {
             setLoadingIndicator(false);
-            sendSicknessFile();
+            sendSicknessFile(res.data)
             Swal.fire({
                 icon: 'success',
                 text: 'Məlumatlar qeyd edildi!',
                 showConfirmButton: false,
                 timer: 1500
             });
-            history.push("/operation")
         }).catch((error) => {
             setLoadingIndicator(false)
             Swal.fire({
@@ -163,9 +139,13 @@ function EditSickness() {
         });
     }
 
-    const sendSicknessFile = () => {
+    const addSicknessFileArr = () => {
+        setSicknessFileArr(sicknessFileArr => [...sicknessFileArr, " "])
+    }
+
+    const sendSicknessFile = (id) => {
         const formData = new FormData();
-        for (let i = 0; i < sicknessFileArr.length; i++) {
+        for (let i = 0 ; i < sicknessFileArr.length ; i++) {
             formData.append("files", sicknessFileArr[i]);
         }
         mainAxios({
@@ -182,7 +162,6 @@ function EditSickness() {
     }
 
     useEffect(() => {
-        getSicknessData();
         getEmployee();
     }, []);
 
@@ -199,7 +178,7 @@ function EditSickness() {
                                           strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
                             </Link>
-                            Xəstəlik
+                            Xəstəlik yarat
                         </div>
                     </div>
                     <div className="block">
@@ -214,7 +193,6 @@ function EditSickness() {
                                                 placeholder="İşçinin adı, soyadı, atasının adı"
                                                 value={selectedStaff}
                                                 onChange={(val) => {
-                                                    console.log(val);
                                                     let id = val.id
                                                     getEmployeeDetail(id);
                                                     setSelectedStaff(val);
@@ -225,6 +203,15 @@ function EditSickness() {
                                                 getOptionValue={(option) => (option.name)}
                                                 styles={customStyles}
                                             />
+                                            <div className="validation-block flex-start">
+                                                {
+
+                                                    errors['employeeId'] !== '' ?
+                                                        <span
+                                                            className="text-validation">{errors['employeeId']}</span>
+                                                        : null
+                                                }
+                                            </div>
                                         </Form.Group>
                                     </Col>
                                     <Col xs={6}>
@@ -236,7 +223,7 @@ function EditSickness() {
                                             </Form.Label>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={4}>
+                                    <Col xs={6}>
                                         <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">İşlədiyi alt struktur bölmə </span>
@@ -247,7 +234,7 @@ function EditSickness() {
                                             </Form.Label>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={4}>
+                                    <Col xs={6}>
                                         <Form.Group className="form-group">
                                             <span className="input-title">Tabe struktur bölmənin adı </span>
                                             <Form.Label>
@@ -257,7 +244,7 @@ function EditSickness() {
                                             </Form.Label>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={4}>
+                                    <Col xs={6}>
                                         <Form.Group className="form-group">
                                             <span className="input-title">İşlədiyi vəzifəsi</span>
                                             <Form.Label>
@@ -268,32 +255,16 @@ function EditSickness() {
                                     </Col>
                                     <Col xs={6}>
                                         <Form.Group className="form-group">
-                                                    <span
-                                                        className="input-title">Xəstəlik statusu</span>
-                                            <Select
-                                                placeholder="Xəstəlik statusunu seçin"
-                                                value={selectedSickStatus}
-                                                onChange={(val) => {
-                                                    setSelectedSickStatus(val);
-                                                }}
-                                                isSearchable={sickStatusOptions ? sickStatusOptions.length > 5 ? true : false : false}
-                                                options={sickStatusOptions}
-                                                styles={customStyles}
-                                            />
-                                        </Form.Group>
-                                    </Col>
-                                    <Col xs={6}>
-                                        <Form.Group className="form-group">
                                             <span className="input-title">Xəstəlik vərəqəsinin nömrəsi</span>
                                             <Form.Label>
                                                 <Form.Control placeholder="Xəstəlik vərəqəsinin nömrəsi"
                                                               value={sicknessSerialNum || ''}
-                                                              onChange={(e) => setSicknessSerialNum(e.target.value)}
+                                                              onChange={(e)=> setSicknessSerialNum(e.target.value)}
                                                 />
                                             </Form.Label>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={4}>
+                                    <Col xs={6}>
                                         <Form.Group className="form-group">
                                                     <span
                                                         className="input-title">Xəstəliyin başladığı tarix </span>
@@ -359,15 +330,15 @@ function EditSickness() {
                                             <div className="validation-block flex-start">
                                                 {
 
-                                                    errors['temporaryPass.from'] !== '' ?
+                                                    errors['startDate'] !== '' ?
                                                         <span
-                                                            className="text-validation">{errors['temporaryPass.from']}</span>
+                                                            className="text-validation">{errors['startDate']}</span>
                                                         : null
                                                 }
                                             </div>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={4}>
+                                    <Col xs={6}>
                                         <Form.Group className="form-group">
                                             <span className="input-title">Xəstəliyin bitdiyi tarix </span>
                                             <Form.Label className="relative m-0">
@@ -431,18 +402,9 @@ function EditSickness() {
                                                     </svg>
                                                 </Button>
                                             </Form.Label>
-                                            <div className="validation-block flex-start">
-                                                {
-
-                                                    errors['temporaryPass.to'] !== '' ?
-                                                        <span
-                                                            className="text-validation">{errors['temporaryPass.to']}</span>
-                                                        : null
-                                                }
-                                            </div>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={4}>
+                                    <Col xs={6}>
                                         <Form.Group className="form-group">
                                             <span className="input-title">İşə başlama tarixi</span>
                                             <Form.Label className="relative m-0">
@@ -503,150 +465,89 @@ function EditSickness() {
                                             </Form.Label>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={4}>
-                                        <Form.Group className="form-group">
-                                            <span className="input-title">Əmək q. itirdiyi günədək Limanda işlə. fasiləsiz staj.</span>
-                                            <Form.Label>
-                                                <Form.Control
-                                                    placeholder="Əmək q. itirdiyi günədək Limanda işlə. fasiləsiz staj"
-                                                    value={practice} disabled={true} type="number"/>
-                                            </Form.Label>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col xs={4}>
-                                        <Form.Group className="form-group">
-                                            <span className="input-title">Ümumi əmək stajı</span>
-                                            <Form.Label>
-                                                <Form.Control placeholder="Ümumi əmək stajı"
-                                                              value={generalPractice} disabled={true} type="number"/>
-                                            </Form.Label>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col xs={4}>
-                                        <Form.Group className="form-group">
-                                            <span className="input-title">SSN</span>
-                                            <Form.Label>
-                                                <Form.Control placeholder="SSN"
-                                                              value={ssn || ''} disabled={true}/>
-                                            </Form.Label>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col xs={12}>
-                                        <div className="block-title">
-                                            Şəkillər *
-                                        </div>
-                                        <Col xs={12}>
-                                            <ul className="fileList list-unstyled flex-center">
+                                    <Col xs={6}>
+                                        <div className="block-inn relative">
+                                            <div className="addition-content">
                                                 {
-                                                    sickFileNameArr.map((item, index) =>
-                                                        <li className="fileList-item flex-center">
-                                                            <span className="fileList-item-name">{item}</span>
-                                                            <button className="btn-transparent" type="button">
-                                                                <svg width="14" height="14" viewBox="0 0 14 14"
-                                                                     fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path
-                                                                        d="M7.87507 7.00003L12.9688 12.0937C13.2104 12.3354 13.2104 12.7271 12.9688 12.9688L12.9688 12.9688C12.8479 13.0896 12.6893 13.15 12.5312 13.15C12.3731 13.15 12.2145 13.0896 12.0937 12.9688L6.99999 7.87509L1.90632 12.9688L1.90631 12.9688C1.7855 13.0896 1.6269 13.15 1.46878 13.15C1.31067 13.15 1.15203 13.0896 1.03124 12.9688M7.87507 7.00003L6.12493 7M7.87507 7.00003L12.9688 1.9063C13.2104 1.66465 13.2104 1.27286 12.9688 1.03123C12.7271 0.789628 12.3353 0.789573 12.0937 1.03124C12.0937 1.03124 12.0937 1.03124 12.0937 1.03124L6.99999 6.12496L1.9063 1.03124C1.66465 0.789591 1.27286 0.789582 1.03123 1.03124C0.789628 1.27288 0.789573 1.66466 1.03124 1.9063C1.03124 1.9063 1.03124 1.9063 1.03124 1.9063L6.12493 7M7.87507 7.00003L6.12493 7M1.03124 12.9688L1.13729 12.8627L1.03124 12.9688C1.03124 12.9688 1.03124 12.9688 1.03124 12.9688ZM1.03124 12.9688C0.789582 12.7272 0.789594 12.3354 1.03124 12.0937L6.12493 7"
-                                                                        fill="#3083DC" stroke="#3083DC"
-                                                                        strokeWidth="0.3"/>
-                                                                </svg>
-                                                            </button>
-                                                        </li>
+                                                    sicknessFileArr.map((item, index) =>
+                                                        <Form.Group className="form-group input-file" key={index}>
+                                                            <div className="flex">
+                                                                <span className="input-title">Fayl daxil edin</span>
+
+                                                                {
+                                                                    index === 0 ? null :
+                                                                        <button
+                                                                            className=" btn-remove flex-center"
+                                                                            onClick={() => {
+                                                                                sicknessFileArr.splice(index, 1);
+                                                                                setSicknessFileArr([...sicknessFileArr], sicknessFileArr)
+                                                                            }}>
+                                                                            <svg width="14" height="14"
+                                                                                 viewBox="0 0 14 14" fill="none"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path
+                                                                                    d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
+                                                                                    fill="#CF3131"/>
+                                                                                <path
+                                                                                    d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
+                                                                                    fill="#CF3131"/>
+                                                                                <path
+                                                                                    d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
+                                                                                    fill="#CF3131"/>
+                                                                            </svg>
+                                                                            <span>Sil</span>
+                                                                        </button>
+                                                                }
+                                                            </div>
+
+                                                            <Form.Label className="relative m-0 upload-content">
+                                                                <Form.Control placeholder="Alt struktur bölmənin adı daxil edin"
+                                                                              type="file"
+                                                                              onChange={(e) => {
+                                                                                  sicknessFileArr[index] = e.target.files[0];
+                                                                                  setSicknessFileArr([...sicknessFileArr], sicknessFileArr);
+                                                                                  console.log(sicknessFileArr)
+                                                                              }}
+                                                                />
+                                                                <p className="m-0 flex-center">{item !== undefined ? item.name : ''}</p>
+                                                                <Button className="btn-transparent">
+                                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <g clipPath="url(#clip0_2354_34)">
+                                                                            <path d="M5.45996 20C4.11644 20 2.85691 19.4801 1.91322 18.536C0.969524 17.5919 0.449219 16.3328 0.449219 14.9893C0.449219 13.6461 0.969144 12.3866 1.91322 11.4429L12.2866 1.06951C13.7708 -0.413877 16.077 -0.347366 17.6508 1.22647C19.2247 2.80031 19.2923 5.10614 17.8082 6.59066L8.063 16.3358C7.14819 17.2506 5.65835 17.2522 4.74202 16.3358C3.82645 15.4199 3.82683 13.93 4.74202 13.0149L11.3433 6.41356C11.566 6.19084 11.9267 6.19084 12.1494 6.41356C12.3721 6.63627 12.3721 6.99695 12.1494 7.21967L5.54813 13.821C5.07723 14.2919 5.07723 15.0584 5.54813 15.5297C6.01979 16.0006 6.78599 15.9999 7.25689 15.5297L17.0021 5.78455C18.0263 4.75991 17.9591 3.14692 16.8447 2.03258C15.7304 0.918241 14.1174 0.85097 13.0927 1.87562L2.71933 12.249C1.99075 12.9776 1.5894 13.9509 1.5894 14.9893C1.5894 16.028 1.99075 17.0013 2.71933 17.7299C3.44791 18.4585 4.42125 18.8598 5.45996 18.8598C6.49828 18.8598 7.47162 18.4585 8.2002 17.7299L18.5736 7.35649C18.7963 7.13377 19.157 7.13377 19.3797 7.35649C19.6024 7.57921 19.6024 7.93988 19.3797 8.1626L9.00631 18.536C8.06262 19.4797 6.80309 20 5.45996 20Z" fill="#193651"/>
+                                                                        </g>
+                                                                        <defs>
+                                                                            <clipPath id="clip0_2354_34">
+                                                                                <rect width="20" height="20" fill="white"/>
+                                                                            </clipPath>
+                                                                        </defs>
+                                                                    </svg>
+                                                                </Button>
+                                                            </Form.Label>
+                                                        </Form.Group>
                                                     )
                                                 }
-
-                                            </ul>
-                                        </Col>
-                                        <Col xs={6}>
-                                            <div className="block-inn relative">
-                                                <div className="addition-content">
-                                                    {
-                                                        sicknessFileArr.map((item, index) =>
-                                                            <Form.Group className="form-group input-file" key={index}>
-                                                                <div className="flex">
-                                                                    <span className="input-title">Fayl daxil edin</span>
-
-                                                                    {
-                                                                        index === 0 ? null :
-                                                                            <button
-                                                                                className=" btn-remove flex-center"
-                                                                                onClick={() => {
-                                                                                    sicknessFileArr.splice(index, 1);
-                                                                                    setSicknessFileArr([...sicknessFileArr], sicknessFileArr)
-                                                                                }}>
-                                                                                <svg width="14" height="14"
-                                                                                     viewBox="0 0 14 14" fill="none"
-                                                                                     xmlns="http://www.w3.org/2000/svg">
-                                                                                    <path
-                                                                                        d="M11.1665 2.69336L10.2739 12.8645H3.7302L2.8378 2.69336L1.70703 2.79248L2.61572 13.1481C2.66354 13.6254 3.07769 13.9997 3.5588 13.9997H10.4453C10.9262 13.9997 11.3405 13.6256 11.3892 13.1413L12.2973 2.79248L11.1665 2.69336Z"
-                                                                                        fill="#CF3131"/>
-                                                                                    <path
-                                                                                        d="M9.08077 0H4.91861C4.397 0 3.97266 0.424348 3.97266 0.945957V2.74326H5.10778V1.13512H8.89155V2.74323H10.0267V0.94593C10.0267 0.424348 9.60238 0 9.08077 0Z"
-                                                                                        fill="#CF3131"/>
-                                                                                    <path
-                                                                                        d="M13.0507 2.17578H0.942574C0.629078 2.17578 0.375 2.42986 0.375 2.74336C0.375 3.05685 0.629078 3.31093 0.942574 3.31093H13.0507C13.3642 3.31093 13.6183 3.05685 13.6183 2.74336C13.6183 2.42986 13.3642 2.17578 13.0507 2.17578Z"
-                                                                                        fill="#CF3131"/>
-                                                                                </svg>
-                                                                                <span>Sil</span>
-                                                                            </button>
-                                                                    }
-                                                                </div>
-
-                                                                <Form.Label className="relative m-0 upload-content">
-                                                                    <Form.Control
-                                                                        placeholder="Alt struktur bölmənin adı daxil edin"
-                                                                        type="file"
-                                                                        onChange={(e) => {
-                                                                            sicknessFileArr[index] = e.target.files[0];
-                                                                            setSicknessFileArr([...sicknessFileArr], sicknessFileArr);
-                                                                            console.log(sicknessFileArr)
-                                                                        }}
-                                                                    />
-                                                                    <p className="m-0 flex-center">{item !== undefined ? item.name : ''}</p>
-                                                                    <Button className="btn-transparent">
-                                                                        <svg width="20" height="20" viewBox="0 0 20 20"
-                                                                             fill="none"
-                                                                             xmlns="http://www.w3.org/2000/svg">
-                                                                            <g clipPath="url(#clip0_2354_34)">
-                                                                                <path
-                                                                                    d="M5.45996 20C4.11644 20 2.85691 19.4801 1.91322 18.536C0.969524 17.5919 0.449219 16.3328 0.449219 14.9893C0.449219 13.6461 0.969144 12.3866 1.91322 11.4429L12.2866 1.06951C13.7708 -0.413877 16.077 -0.347366 17.6508 1.22647C19.2247 2.80031 19.2923 5.10614 17.8082 6.59066L8.063 16.3358C7.14819 17.2506 5.65835 17.2522 4.74202 16.3358C3.82645 15.4199 3.82683 13.93 4.74202 13.0149L11.3433 6.41356C11.566 6.19084 11.9267 6.19084 12.1494 6.41356C12.3721 6.63627 12.3721 6.99695 12.1494 7.21967L5.54813 13.821C5.07723 14.2919 5.07723 15.0584 5.54813 15.5297C6.01979 16.0006 6.78599 15.9999 7.25689 15.5297L17.0021 5.78455C18.0263 4.75991 17.9591 3.14692 16.8447 2.03258C15.7304 0.918241 14.1174 0.85097 13.0927 1.87562L2.71933 12.249C1.99075 12.9776 1.5894 13.9509 1.5894 14.9893C1.5894 16.028 1.99075 17.0013 2.71933 17.7299C3.44791 18.4585 4.42125 18.8598 5.45996 18.8598C6.49828 18.8598 7.47162 18.4585 8.2002 17.7299L18.5736 7.35649C18.7963 7.13377 19.157 7.13377 19.3797 7.35649C19.6024 7.57921 19.6024 7.93988 19.3797 8.1626L9.00631 18.536C8.06262 19.4797 6.80309 20 5.45996 20Z"
-                                                                                    fill="#193651"/>
-                                                                            </g>
-                                                                            <defs>
-                                                                                <clipPath id="clip0_2354_34">
-                                                                                    <rect width="20" height="20"
-                                                                                          fill="white"/>
-                                                                                </clipPath>
-                                                                            </defs>
-                                                                        </svg>
-                                                                    </Button>
-                                                                </Form.Label>
-                                                            </Form.Group>
-                                                        )
-                                                    }
-                                                    <div className="flex-end">
-                                                        <button type="button" className=" add-btn btn-color"
-                                                                onClick={() => addSicknessFileArr()}
-                                                        >
-                                                            <svg width="12" height="12" viewBox="0 0 12 12"
-                                                                 fill="none"
-                                                                 xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
-                                                                    stroke="#3083DC" strokeWidth="1.3"
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"/>
-                                                            </svg>
-                                                            <span>əlavə et</span>
-                                                        </button>
-                                                    </div>
+                                                <div className="flex-end">
+                                                    <button type="button" className=" add-btn btn-color" onClick={()=> addSicknessFileArr()}
+                                                            >
+                                                        <svg width="12" height="12" viewBox="0 0 12 12"
+                                                             fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M0.667969 6.00033H11.3346M6.0013 0.666992V11.3337V0.666992Z"
+                                                                stroke="#3083DC" strokeWidth="1.3"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"/>
+                                                        </svg>
+                                                        <span>əlavə et</span>
+                                                    </button>
                                                 </div>
                                             </div>
-                                        </Col>
+                                        </div>
                                     </Col>
                                 </Row>
                             </div>
                             <div className="flex-vertical-center btn-block">
-                                <Button className="btn-effect" onClick={() => updateData()}>
+                                <Button className="btn-effect" onClick={() => sendData()}>
                                     Yadda saxla
                                 </Button>
                             </div>
@@ -662,4 +563,4 @@ function EditSickness() {
     );
 }
 
-export default EditSickness
+export default CreateSickness
