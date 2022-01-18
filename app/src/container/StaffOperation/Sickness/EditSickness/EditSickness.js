@@ -176,8 +176,9 @@ function EditSickness() {
         });
     }
 
-    const downloadSickFile = (fileName) => {
-        mainAxios({
+    const openSickFile = (fileName) => {
+        window.open(`https://hr-portal-api-v2.herokuapp.com/sick/file/${fileName}?token= ${localStorage.getItem('token')}`)
+      /*  mainAxios({
             method: 'get',
             url: `/sick/file/${fileName}`,
             params: {
@@ -188,7 +189,10 @@ function EditSickness() {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res) => {
-        });
+            const blobWithType = new Blob([res.data]);
+            const urlToPreview = URL.createObjectURL(blobWithType);
+            window.open(urlToPreview, "_blank").focus();
+        });*/
     }
 
     const sendSicknessFile = () => {
@@ -242,7 +246,6 @@ function EditSickness() {
                                                 placeholder="İşçinin adı, soyadı, atasının adı"
                                                 value={selectedStaff}
                                                 onChange={(val) => {
-                                                    console.log(val);
                                                     let id = val.id
                                                     getEmployeeDetail(id);
                                                     setSelectedStaff(val);
@@ -568,7 +571,7 @@ function EditSickness() {
                                                 {
                                                     sickFileNameArr.map((item, index) =>
                                                         <li className="fileList-item flex-center">
-                                                            <span className="fileList-item-name" onClick={()=> downloadSickFile(item)}>{item}</span>
+                                                            <span className="fileList-item-name" onClick={()=> openSickFile(item)}>{item}</span>
                                                             <button className="btn-transparent" type="button" onClick={()=> deleteSicknessFile(item)}>
                                                                 <svg width="14" height="14" viewBox="0 0 14 14"
                                                                      fill="none" xmlns="http://www.w3.org/2000/svg">
