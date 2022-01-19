@@ -111,9 +111,9 @@ function WorkDayModal(props) {
                                             <Form.Label className="relative m-0">
                                                 <TimePicker
                                                     onChange={(val) => {
-                                                        setStartTime(val);
+                                                        setStartTime(val);/*
                                                         setCheckChangeTime(true);
-                                                        setWorkHour(props.function(props.data.today, val, endTime));
+                                                        setWorkHour(props.function(props.data.today, val, endTime));*/
                                                     }}
                                                     disableClock={true}
                                                     clearIcon={false}
@@ -128,9 +128,9 @@ function WorkDayModal(props) {
                                             <Form.Label>
                                                 <TimePicker
                                                     onChange={(val) => {
-                                                        setEndTime(val);
+                                                        setEndTime(val);/*
                                                         setCheckChangeTime(true);
-                                                        setWorkHour(props.function(props.data.today, startTime, val));
+                                                        setWorkHour(props.function(props.data.today, startTime, val));*/
                                                     }}
                                                     disableClock={true}
                                                     clearIcon={false}
