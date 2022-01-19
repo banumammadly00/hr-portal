@@ -19,7 +19,7 @@ function WorkSchedule() {
 
     const [totalRecord, setTotalRecord] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [recordSize, setRecordSize] = useState(15);
+    const [recordSize, setRecordSize] = useState(10);
     const [loading, setLoading] = useState(false)
 
     let today = moment(new Date()).format('YYYY-MM-DD')
@@ -50,7 +50,8 @@ function WorkSchedule() {
             arr[i] = {
                 day: date.getDate(),
                 month: date.getMonth(),
-                date: moment(date).format('YYYY-MM-DD')
+                date: moment(date).format('YYYY-MM-DD'),
+                changeTime: false,
             }
         }
         setWeekdays(arr);
@@ -98,7 +99,6 @@ function WorkSchedule() {
     }
 
     const sendData = (breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData) => {
-        console.log(breakHour);
         let data = {
             "breakHour": breakHour,
             "dayId": propsData.dayId,
@@ -227,6 +227,8 @@ function WorkSchedule() {
                                                                         onClick={() => setData(Object.assign(employeeArr[item][day.date],
                                                                             {startDate: weekdays[0]}, {endDate: weekdays[6]},
                                                                             {name: item},
+                                                                            {today: `${day.date}`},
+                                                                            {changeTime: false},
                                                                             {weekday: `${day.day} ${months[day.month]}`},
                                                                             {workHour: timeDiffer(day.date, employeeArr[item][day.date].shiftFrom, employeeArr[item][day.date].shiftTo)},
                                                                         ))}
@@ -284,6 +286,7 @@ function WorkSchedule() {
                                         delete={(propsData) => {
                                             deleteDay(propsData)
                                         }}
+                                        function={(day, startTime, endTime)=> timeDiffer(day, startTime, endTime)}
                                     />
                                 </div>
                                 <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}

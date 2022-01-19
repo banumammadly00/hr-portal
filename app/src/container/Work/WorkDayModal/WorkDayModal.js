@@ -5,29 +5,50 @@ import TimePicker from "react-time-picker";
 
 
 function WorkDayModal(props) {
-/*
-    console.log(props)
-*/
+    console.log(props.data.changeTime)
     const [checkHoliday, setCheckHoliday] = useState(false);
     const [checkRepeat, setCheckRepeat] = useState(props.data.repeatFrom !== null ? 1 : 0);
     const [checkBreak, setCheckBreak] = useState(props.data.breakHour);
-    const [checkOverTime, setCheckOverTime] = useState(false);
+    const [checkOverTime, setCheckOverTime] = useState(props.data.jobOnOffDay);
     const [day, setDay] = useState('');
     const [repeatDay, setRepeatDay] = useState('');
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
-    const [workHour, setWorkHour] = useState('');
+    const [checkChangeTime, setCheckChangeTime] = useState(props.data.changeTime);
+    const [workHour, setWorkHour] = useState(props.data.workHour !== undefined ? props.data.workHour : '');
+    console.log(checkChangeTime)
 
     const setBreakHour = (checkBreak) => {
+        console.log(checkChangeTime);
+        console.log(props.data.workHour, workHour)
         if (props.data.workHour !== undefined) {
-            checkBreak ? setWorkHour(props.data.workHour - 1) : setWorkHour(props.data.workHour);
+            checkChangeTime ?
+                checkBreak ? setWorkHour(workHour - 1) : setWorkHour(workHour + 1)
+                :
+                checkBreak ? setWorkHour(props.data.workHour - 1) : setWorkHour(props.data.workHour);
         }
+    }
+
+    const resetData = ()=> {
+        setTimeout(() => {
+            setCheckHoliday(props.data.offDay);
+            setCheckBreak(props.data.breakHour);
+            setCheckOverTime(props.data.jobOnOffDay);
+            setDay(props.data.repeatFrom);
+            setRepeatDay(props.data.repeatFrom);
+            setCheckRepeat(props.data.repeatFrom !== null ? 1 : 0);
+            setStartTime(props.data.shiftFrom);
+            setEndTime(props.data.shiftTo);
+            setWorkHour(props.data.workHour !== undefined ? props.data.workHour : '');
+            setCheckChangeTime(props.data.changeTime);
+            setBreakHour(props.data.breakHour);
+        }, 500);
+
     }
 
     useEffect(() => {
         setCheckHoliday(props.data.offDay);
         setCheckBreak(props.data.breakHour);
-        console.log(props.data.breakHour, checkBreak);
         setCheckOverTime(props.data.jobOnOffDay);
         setDay(props.data.repeatFrom);
         setRepeatDay(props.data.repeatFrom);
@@ -35,8 +56,11 @@ function WorkDayModal(props) {
         setStartTime(props.data.shiftFrom);
         setEndTime(props.data.shiftTo);
         setWorkHour(props.data.workHour !== undefined ? props.data.workHour : '');
+        setCheckChangeTime(props.data.changeTime);
+        console.log(workHour);
+        resetData();
         setBreakHour(props.data.breakHour);
-    }, [props.data.offDay, props.data.breakHour, props.data.jobOnOffDay, props.data.repeatFrom, props.data.workHour, props.data.shiftFrom, props.data.shiftTo])
+    }, [props.data.offDay, props.data.breakHour, props.data.jobOnOffDay, props.data.repeatFrom, props.data.workHour, props.data.shiftFrom, props.data.shiftTo, props.data.changeTime])
 
     return (
         <Modal
@@ -44,6 +68,7 @@ function WorkDayModal(props) {
             size="md"
             aria-labelledby="contained-modal-title-vcenter"
             className="modal-work-schedule"
+            backdrop="static"
             centered>
             <Modal.Body>
                 <h4> {props.data.name}, {props.data.weekday} </h4>
@@ -88,6 +113,8 @@ function WorkDayModal(props) {
                                                 <TimePicker
                                                     onChange={(val) => {
                                                         setStartTime(val);
+                                           /*             setCheckChangeTime(true);
+                                                        setWorkHour(props.function(props.data.today, val, endTime));*/
                                                     }}
                                                     disableClock={true}
                                                     clearIcon={false}
@@ -103,6 +130,8 @@ function WorkDayModal(props) {
                                                 <TimePicker
                                                     onChange={(val) => {
                                                         setEndTime(val);
+                                                   /*     setCheckChangeTime(true);
+                                                        setWorkHour(props.function(props.data.today, startTime, val));*/
                                                     }}
                                                     disableClock={true}
                                                     clearIcon={false}
@@ -188,7 +217,6 @@ function WorkDayModal(props) {
                                             <Form.Label>
                                                 <Form.Control
                                                     type="number"
-                                                    disabled={props.data.repeatFrom !== null ? true : false}
                                                     value={props.data.repeatFrom !== null ? repeatDay : day}
                                                     onChange={(e => setDay(e.target.value))}/>
                                             </Form.Label>
@@ -211,7 +239,10 @@ function WorkDayModal(props) {
                     }
                     <ul className="flex-end list-unstyled m-0">
                         <li>
-                            <button type="button" className="btn-main-border" onClick={props.onHide}>
+                            <button type="button" className="btn-main-border" onClick={() => {
+                                props.onHide();
+                                resetData();
+                            }}>
                                 Bağla
                             </button>
                         </li>
