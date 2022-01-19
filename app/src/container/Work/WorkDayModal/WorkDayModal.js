@@ -41,6 +41,7 @@ function WorkDayModal(props) {
             setEndTime(props.data.shiftTo);
             setWorkHour(props.data.workHour !== undefined ? props.data.workHour : '');
             setCheckChangeTime(props.data.changeTime);
+            console.log(checkChangeTime)
             setBreakHour(props.data.breakHour);
         }, 500);
 
@@ -57,8 +58,6 @@ function WorkDayModal(props) {
         setEndTime(props.data.shiftTo);
         setWorkHour(props.data.workHour !== undefined ? props.data.workHour : '');
         setCheckChangeTime(props.data.changeTime);
-        console.log(workHour);
-        resetData();
         setBreakHour(props.data.breakHour);
     }, [props.data.offDay, props.data.breakHour, props.data.jobOnOffDay, props.data.repeatFrom, props.data.workHour, props.data.shiftFrom, props.data.shiftTo, props.data.changeTime])
 
@@ -113,8 +112,8 @@ function WorkDayModal(props) {
                                                 <TimePicker
                                                     onChange={(val) => {
                                                         setStartTime(val);
-                                           /*             setCheckChangeTime(true);
-                                                        setWorkHour(props.function(props.data.today, val, endTime));*/
+                                                        setCheckChangeTime(true);
+                                                        setWorkHour(props.function(props.data.today, val, endTime));
                                                     }}
                                                     disableClock={true}
                                                     clearIcon={false}
@@ -130,8 +129,8 @@ function WorkDayModal(props) {
                                                 <TimePicker
                                                     onChange={(val) => {
                                                         setEndTime(val);
-                                                   /*     setCheckChangeTime(true);
-                                                        setWorkHour(props.function(props.data.today, startTime, val));*/
+                                                        setCheckChangeTime(true);
+                                                        setWorkHour(props.function(props.data.today, startTime, val));
                                                     }}
                                                     disableClock={true}
                                                     clearIcon={false}
@@ -217,7 +216,7 @@ function WorkDayModal(props) {
                                             <Form.Label>
                                                 <Form.Control
                                                     type="number"
-                                                    value={props.data.repeatFrom !== null ? repeatDay : day}
+                                                    value={day}
                                                     onChange={(e => setDay(e.target.value))}/>
                                             </Form.Label>
                                         </Form.Group>
