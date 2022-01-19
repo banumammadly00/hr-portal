@@ -1783,6 +1783,10 @@ input::-webkit-inner-spin-button {
     cursor: pointer;
 }
 
+/*.table-weekly-calendar .react-time-picker__inputGroup__amPm {
+    display: none;
+}*/
+
 .table-weekly-calendar .td-weekday {
     width: 200px;
 }

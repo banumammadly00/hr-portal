@@ -8,7 +8,7 @@ function WorkDayModal(props) {
     console.log(props)
     const [checkHoliday, setCheckHoliday] = useState(false);
     const [checkRepeat, setCheckRepeat] = useState(props.data.repeatFrom !== null ? 1 : 0);
-    const [checkBreak, setCheckBreak] = useState(props.data.breakHour);
+    const [checkBreak, setCheckBreak] = useState(false);
     const [checkOverTime, setCheckOverTime] = useState(false);
     const [day, setDay] = useState('');
     const [repeatDay, setRepeatDay] = useState('');
@@ -88,6 +88,7 @@ function WorkDayModal(props) {
                                                     }}
                                                     disableClock={true}
                                                     clearIcon={false}
+                                                    locale="sv-sv"
                                                     value={startTime}
                                                 />
                                             </Form.Label>
@@ -102,6 +103,7 @@ function WorkDayModal(props) {
                                                     }}
                                                     disableClock={true}
                                                     clearIcon={false}
+                                                    locale="sv-sv"
                                                     value={endTime}
                                                 />
                                             </Form.Label>
