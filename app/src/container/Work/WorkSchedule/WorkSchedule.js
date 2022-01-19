@@ -100,14 +100,14 @@ function WorkSchedule() {
 
     const sendData = (breakHour, jobOnOffDay, offDay, shiftFrom, shiftTo, repeatFrom, propsData) => {
         let data = {
-            "breakHour": breakHour,
+            "breakHour": offDay ? null : breakHour,
             "dayId": propsData.dayId,
             "employeeId": propsData.employeeId,
-            "jobOnOffDay": jobOnOffDay,
+            "jobOnOffDay": offDay ? false : jobOnOffDay,
             "offDay": offDay,
-            "repeatFrom": parseFloat(repeatFrom),
-            "shiftFrom": shiftFrom !== '' ? shiftFrom : null,
-            "shiftTo": shiftTo !== '' ? shiftTo : null,
+            "repeatFrom": offDay ? null : parseFloat(repeatFrom),
+            "shiftFrom": shiftFrom == '' || offDay ? null : shiftFrom,
+            "shiftTo": shiftTo == '' || offDay ? null : shiftTo ,
         }
         mainAxios({
             method: propsData.id !== null ? 'put' : 'post',

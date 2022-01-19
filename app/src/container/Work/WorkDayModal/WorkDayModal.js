@@ -79,7 +79,7 @@ function WorkDayModal(props) {
                                        checked={checkHoliday}
                                        onChange={(e) => {
                                            setCheckHoliday(e.target.checked);
-                                           setDay('')
+                                           e.target.checked ? setDay('') : setDay(props.data.repeatFrom)
                                        }}/>
                                 <span className="checkmark"></span>
                             </label>
