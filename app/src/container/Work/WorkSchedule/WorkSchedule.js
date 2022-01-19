@@ -105,7 +105,7 @@ function WorkSchedule() {
             "employeeId": propsData.employeeId,
             "jobOnOffDay": offDay ? false : jobOnOffDay,
             "offDay": offDay,
-            "repeatFrom": offDay ? null : parseFloat(repeatFrom),
+            "repeatFrom": parseFloat(repeatFrom),
             "shiftFrom": shiftFrom == '' || offDay ? null : shiftFrom,
             "shiftTo": shiftTo == '' || offDay ? null : shiftTo ,
         }
@@ -287,6 +287,7 @@ function WorkSchedule() {
                                             deleteDay(propsData)
                                         }}
                                         function={(day, startTime, endTime)=> timeDiffer(day, startTime, endTime)}
+                                        rand={Math.random()}
                                     />
                                 </div>
                                 <Paginate count={totalRecord} recordSize={recordSize} currentPage={currentPage}
